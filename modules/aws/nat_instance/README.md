@@ -15,8 +15,8 @@ an ASG
 ## Example
 
 ```hcl
-module "apres_nat" {
-  source = "../apres_nat"
+module "nat_instance" {
+  source = "../nat_instance"
   name                 = "VPC-nat-"
   vpc_id               = "vpc-abc1234"
   subnet_id            = "subnet-abc1234"
@@ -75,7 +75,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_security_group_ids"></a> [additional\_security\_group\_ids](#input\_additional\_security\_group\_ids) | A list of identifiers of security groups to be added for the NAT instance | `list(string)` | `[]` | no |
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | AMI to use for the NAT instance. Uses fck-nat latest AMI in the region if none provided | `string` | `null` | no |
-| <a name="input_cloudwatch_agent_configuration"></a> [cloudwatch\_agent\_configuration](#input\_cloudwatch\_agent\_configuration) | CloudWatch configuration for the NAT instance | <pre>object({<br>    namespace           = optional(string, "fck-nat"),<br>    collection_interval = optional(number, 60),<br>    endpoint_override   = optional(string, "")<br>  })</pre> | <pre>{<br>  "collection_interval": 60,<br>  "endpoint_override": "",<br>  "namespace": "fck-nat"<br>}</pre> | no |
+| <a name="input_cloudwatch_agent_configuration"></a> [cloudwatch\_agent\_configuration](#input\_cloudwatch\_agent\_configuration) | CloudWatch configuration for the NAT instance | <pre>object({<br>    namespace           = optional(string, "nat-instance"),<br>    collection_interval = optional(number, 60),<br>    endpoint_override   = optional(string, "")<br>  })</pre> | <pre>{<br>  "collection_interval": 60,<br>  "endpoint_override": "",<br>  "namespace": "nat-instance"<br>}</pre> | no |
 | <a name="input_cloudwatch_agent_configuration_param_arn"></a> [cloudwatch\_agent\_configuration\_param\_arn](#input\_cloudwatch\_agent\_configuration\_param\_arn) | ARN of the SSM parameter containing the CloudWatch agent configuration. If none provided, creates one | `string` | `null` | no |
 | <a name="input_ebs_root_volume_size"></a> [ebs\_root\_volume\_size](#input\_ebs\_root\_volume\_size) | Size of the EBS root volume in GB | `number` | `8` | no |
 | <a name="input_encryption"></a> [encryption](#input\_encryption) | Whether or not to encrypt the EBS volume | `bool` | `true` | no |
@@ -97,16 +97,16 @@ No modules.
 | <a name="output_ami_id"></a> [ami\_id](#output\_ami\_id) | AMI to use for the NAT instance. Uses fck-nat latest arm64 AMI in the region if none provided |
 | <a name="output_autoscaling_group_arn"></a> [autoscaling\_group\_arn](#output\_autoscaling\_group\_arn) | The ARN of the autoscaling group if running in HA mode |
 | <a name="output_cw_agent_config_ssm_parameter_arn"></a> [cw\_agent\_config\_ssm\_parameter\_arn](#output\_cw\_agent\_config\_ssm\_parameter\_arn) | The ARN of the SSM parameter containing the Cloudwatch agent config |
-| <a name="output_encryption"></a> [encryption](#output\_encryption) | Whether or not NAT instance EBS volumes are encrypted |
-| <a name="output_eni_arn"></a> [eni\_arn](#output\_eni\_arn) | The ARN of the static ENI used by the NAT instance |
-| <a name="output_eni_id"></a> [eni\_id](#output\_eni\_id) | The ID of the static ENI used by the NAT instance |
-| <a name="output_instance_profile_arn"></a> [instance\_profile\_arn](#output\_instance\_profile\_arn) | The ARN of the instance profile used by the NAT instance |
-| <a name="output_instance_type"></a> [instance\_type](#output\_instance\_type) | Instance type used for the NAT instance |
-| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | KMS key ID to use for encrypting NAT instance EBS volumes |
-| <a name="output_launch_template_id"></a> [launch\_template\_id](#output\_launch\_template\_id) | The ID of the launch template used to spawn NAT instances |
+| <a name="output_encryption"></a> [encryption](#output\_encryption) | Whether or not fck-nat instance EBS volumes are encrypted |
+| <a name="output_eni_arn"></a> [eni\_arn](#output\_eni\_arn) | The ARN of the static ENI used by the fck-nat instance |
+| <a name="output_eni_id"></a> [eni\_id](#output\_eni\_id) | The ID of the static ENI used by the fck-nat instance |
+| <a name="output_instance_profile_arn"></a> [instance\_profile\_arn](#output\_instance\_profile\_arn) | The ARN of the instance profile used by the fck-nat instance |
+| <a name="output_instance_type"></a> [instance\_type](#output\_instance\_type) | Instance type used for the fck-nat instance |
+| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | KMS key ID to use for encrypting fck-nat instance EBS volumes |
+| <a name="output_launch_template_id"></a> [launch\_template\_id](#output\_launch\_template\_id) | The ID of the launch template used to spawn fck-nat instances |
 | <a name="output_name"></a> [name](#output\_name) | Name used for resources created within the module |
-| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | The ARN of the role used by the NAT instance profile |
-| <a name="output_security_group_ids"></a> [security\_group\_ids](#output\_security\_group\_ids) | List of security group IDs used by NAT ENIs |
-| <a name="output_subnet_id"></a> [subnet\_id](#output\_subnet\_id) | Subnet ID to which the NAT instance is deployed into |
-| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | VPC ID to which the NAT instance is deployed into |
+| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | The ARN of the role used by the fck-nat instance profile |
+| <a name="output_security_group_ids"></a> [security\_group\_ids](#output\_security\_group\_ids) | List of security group IDs used by fck-nat ENIs |
+| <a name="output_subnet_id"></a> [subnet\_id](#output\_subnet\_id) | Subnet ID to which the fck-nat instance is deployed into |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | VPC ID to which the fck-nat instance is deployed into |
 <!-- END_TF_DOCS -->
