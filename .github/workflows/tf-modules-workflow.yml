@@ -1,0 +1,75 @@
+name: validate-terraform-module
+
+# This workflow takes a Terraform module, validates that format and syntax are correct,
+# and runs checkov to check for security issues. It updates docs using terraform-docs on the README.md file.
+
+on:
+  workflow_call:
+    inputs:
+      module_directory:
+        description: Working directory of the Terraform module
+        required: true
+        type: string
+      checkov_skip_path:
+        description: Path relative to the module_directory skip.
+        required: false
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.module_directory }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: OpenTofu fmt
+        id: fmt
+        run: tofu fmt -check
+
+      - name: OpenTofu Init
+        id: init
+        run: pwd && tofu init -no-color
+
+      - name: OpenTofu Validate
+        id: validate
+        run: pwd && tofu validate -no-color
+
+      - name: Set up Python 3.8 for Checkov
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ inputs.module_directory }}
+          framework: terraform
+          output_format: cli
+          skip_path: ${{ inputs.checkov_skip_path }}
+
+  update-docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.module_directory }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Render terraform docs and push changes
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: ${{ inputs.module_directory }}
+          output-file: README.md
+          output-method: inject
+          git-push: "true"

@@ -1,0 +1,29 @@
+name: validate-modules
+
+on:
+  pull_request:
+    paths:
+      # Trigger on modules, self, and the reusable workflow.
+      - "modules/**"
+      - ".github/workflows/*.yml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  validate-tf-module-nat_instance:
+    uses: ./.github/workflows/tf-modules-workflow.yml
+    with:
+      module_directory: "./modules/aws/nat_instance"
+      checkov_skip_path: "templates"
+
+  validate-tf-module-vpc:
+    uses: ./.github/workflows/tf-modules-workflow.yml
+    with:
+      module_directory: "./modules/aws/vpc"
+
+  validate-tf-module-apres_ecr_private_repo:
+    uses: ./.github/workflows/tf-modules-workflow.yml
+    with:
+      module_directory: "./modules/aws/ecr_private_repo"
