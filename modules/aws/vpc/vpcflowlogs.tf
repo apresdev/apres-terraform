@@ -1,0 +1,67 @@
+# The following sets up VPC Flow Logs to CLoudWatch Logs
+resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
+  #checkov:skip=CKV_AWS_338:Flow Log Retention is set by the user.
+  #checkov:skip=CKV_AWS_158:Flow Logs encrypted by default KMS key is acceptable.
+  name = "vpc-flow-logs"
+  tags = merge(
+    local.tags,
+    {
+      Name = format("%s VPC Flow Logs", var.environment),
+    },
+  )
+  retention_in_days = var.vpc_flow_log_retention_days
+}
+
+resource "aws_flow_log" "vpc_flow_logs" {
+  iam_role_arn    = aws_iam_role.vpc_flow_logs.arn
+  log_destination = aws_cloudwatch_log_group.vpc_flow_logs.arn
+  traffic_type    = var.vpc_flow_log_traffic_type
+  vpc_id          = aws_vpc.vpc.id
+  tags = merge(
+    local.tags,
+    {
+      Name = format("%s VPC Flow Logs", var.environment),
+    },
+  )
+}
+
+data "aws_iam_policy_document" "vpc_flow_logs_assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "vpc_flow_logs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+    resources = ["arn:aws:logs:us-east-2:${data.aws_caller_identity.current.account_id}:log-group:vpc-flow-logs:*"]
+  }
+}
+resource "aws_iam_role" "vpc_flow_logs" {
+  name               = "VPCFlowLogsRole"
+  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role.json
+  inline_policy {
+    name   = "VPCFlowLogsPolicy"
+    policy = data.aws_iam_policy_document.vpc_flow_logs.json
+  }
+  tags = merge(
+    local.tags,
+    {
+      Name = format("%s VPC Flow Logs", var.environment),
+    },
+  )
+}
