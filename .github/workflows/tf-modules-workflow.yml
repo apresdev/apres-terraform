@@ -66,10 +66,31 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Render terraform docs and push changes
+      - name: Render terraform docs
+        id: terraform-docs
         uses: terraform-docs/gh-actions@main
         with:
           working-dir: ${{ inputs.module_directory }}
           output-file: README.md
           output-method: inject
-          git-push: "true"
+          # Don't push because the commits aren't signed, that happens in the next step
+          git-push: "false"
+
+      - name: Commit and push changes
+        if: steps.terraform-docs.outputs.num_changed < 0
+        # Based on https://gist.github.com/swinton/03e84635b45c78353b1f71e41007fc7c
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILE_TO_COMMIT: ${{ inputs.module_directory }}/README.md
+          DESTINATION_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          export TODAY=$( date -u '+%Y-%m-%d' )
+          export MESSAGE="terraform-docs: updating README.md $TODAY"
+          export SHA=$( git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT )
+          export CONTENT=$( base64 -i $FILE_TO_COMMIT )
+          gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
+            --field message="$MESSAGE" \
+            --field content="$CONTENT" \
+            --field encoding="base64" \
+            --field branch="$DESTINATION_BRANCH" \
+            --field sha="$SHA"
