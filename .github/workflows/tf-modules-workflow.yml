@@ -77,7 +77,8 @@ jobs:
           git-push: "false"
 
       - name: Commit and push changes
-        if: steps.terraform-docs.outputs.num_changed > 0
+        # Comparing to an integer doesn't appear to work, so we compare to a string
+        if: steps.terraform-docs.outputs.num_changed != '0'
         # Based on https://gist.github.com/swinton/03e84635b45c78353b1f71e41007fc7c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
