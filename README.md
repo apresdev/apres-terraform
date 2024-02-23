@@ -1,72 +1,37 @@
-# Apres ECR Private Repository Terraform module
+# Apres VPC Terraform module
 
 ## Overview
 
-Creates an ECR Private Repository, and IAM artifacts for the GitHub Repo to use to push/pull images.
-The role created has the pattern `GitHubActionsECRServiceRole${name}`, and is provided at an output. For example
-if the repo name provided is `acme` then the role name becomes `GitHubActionsECRServiceRoleAcme` with the capital A.
+This module will create a VPC, with subnets in three AZs. There are three tiers of subnets:
 
-For example, let's create an image called `acme` and grant the `apresdev/acme` repo permission to push to it.
-In the deploy tf (hint: [./aws-core/artifacts/us-east-2/variables.tf](./aws-core/artifacts/us-east-2/variables)) set the variable:
+| Subnet | Public IPs | Internet Access | Usage |
+|--------|------------|-----------------|-------|
+| Public | Yes | Yes  | Only internet-facing services are deployed here, typically API Gateway and public load balancers. |
+| Private | No | Yes | Most services are deployed here. These subnets have internet-access. |
+| Persistence | No | No | This subnet is used for deploying RDS, Kafka etc, and can only be accessed from the Private subnets, and has no direct internet access, both enforced by NACL’s. |
+
+Instead of the rather expensive Managed NAT Gateway, this VPC uses the [fck-nat](https://fck-nat.dev/stable/) AMI, which is an EC2 instance based on Amazon Linux 2 acting as a NAT instance, deployed in autoscale groups to handle rolling upgrades and terminations.
+
+VPC Flow Logs are enabled, writing to CloudWatch Logs.
+
+The module also creates a simple CloudWatch dashboard to monitor the NAT instances.
+
+CIDR ranges are purposely not set, accepting the defaults could be difficult to undo later.
+
+## Example
+
 ```hcl
-variable "managed_repos" {
-  # ...
-  default = [
-    {
-      ecr_repo_name                    = "etl"
-      github_repo_subject_claim_filter = "repo:apresdev/acme:*"
-      shared_aws_org_for_pull          = ["o-abc1234/r-a012/*"]
-    }
-  ]
+module "vpc" {
+  source                       = "../../../modules/apres_vpc"
+  environment                  = "Dev"
+  vpc_cidr                     = "10.100.0.0/16"
+  vpc_public_subnet_cidrs      = ["10.100.0.0/23", "10.100.2.0/23", "10.100.4.0/23"]
+  vpc_private_subnet_cidrs     = ["10.100.16.0/23", "10.100.32.0/23", "10.100.48.0/23"]
+  vpc_persistence_subnet_cidrs = ["10.100.64.0/20", "10.100.80.0/20", "10.100.96.0/20"]
+  vpc_nat_instance_type        = "t4g.nano"
+  vpc_flow_log_traffic_type    = "REJECT"
 }
 ```
-
-And then the sample workflow to push to ECR from a remote repo:
-```yaml
-jobs:
-  build-and-push:
-    name: Build and Push Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          # This role is created by the ecr_private_repo module, and only has permissions
-          # to push a container to the "acme" ECR repo.
-          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsECRServiceRoleEtl
-          # append workflow name to session name, max 64 characters. Repo name is already in the IAM event.
-          role-session-name: GitHubActionsAcmeBuildAndPush
-          aws-region: us-east-2
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build and tag Docker image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: etl # name of this repo
-          IMAGE_TAG: ${{ github.sha }}
-        run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-
-      - name: Push Docker image to ECR
-        # Only do this on push to main.
-        if: github.ref == 'refs/heads/main'
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: etl # name of this repo
-          IMAGE_TAG: ${{ github.sha }}
-        run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-dd
-```
-
-## Security Scanning
-
-Scanning is enabled at the account level, not at the repo level.
 
 
 <!-- BEGIN_TF_DOCS -->
@@ -81,42 +46,76 @@ Scanning is enabled at the account level, not at the repo level.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.35.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.34.0 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_nat_instance"></a> [nat\_instance](#module\_nat\_instance) | ../nat_instance | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aws_ecr_repository.repo](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
-| [aws_ecr_repository_policy.allow_pull](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy) | resource |
-| [aws_iam_policy.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy_attachment.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
-| [aws_iam_role.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_cloudwatch_dashboard.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_dashboard) | resource |
+| [aws_cloudwatch_log_group.vpc_flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_default_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
+| [aws_flow_log.vpc_flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log) | resource |
+| [aws_iam_role.vpc_flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_internet_gateway.internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
+| [aws_network_acl.persistence_network_acl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
+| [aws_network_acl_association.persistence](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_association) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_in_0](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_in_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_in_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_out_0](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_out_1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.allow_private_subnet_traffic_out_2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.block_internet_traffic_in](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.block_internet_traffic_out](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_route_table.persistence_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
+| [aws_route_table.private_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
+| [aws_route_table.public_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
+| [aws_route_table_association.persistence_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_route_table_association.private_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_route_table_association.public_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_security_group.vpc_service_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_subnet.persistence_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
+| [aws_subnet.private_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
+| [aws_subnet.public_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
+| [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
+| [aws_vpc_endpoint.service_endpoints](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
+| [aws_ami.fck_nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
+| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.allow_pull](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.github_actions_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.vpc_flow_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.vpc_flow_logs_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "ECR",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
+| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "VPC",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
-| <a name="input_github_repo_subject_claim_filter"></a> [github\_repo\_subject\_claim\_filter](#input\_github\_repo\_subject\_claim\_filter) | The GitHub repo to trust for GitHub Actions. Also known as the Subject claim filter for<br>  valid tokens. Must be in the format of<br>  repo:apresdev/repo-name:ref:refs/heads/branch-or-tag, can be a comma delimited<br>  list if there is more than one. Example:<br>  * repo:apresdev/iac:ref:refs/heads/main means only the main branch of the apresdev/iac repo can assume the role.<br>  * repo:apresdev/iac:* means any branch or tag of the apresdev/iac repo can assume the role.<br>  See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims<br>  for examples of filtering by branch or deployment environment. | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | Name of the ECR repo | `string` | n/a | yes |
-| <a name="input_shared_aws_org_for_pull"></a> [shared\_aws\_org\_for\_pull](#input\_shared\_aws\_org\_for\_pull) | Path to an AWS Organizations OU to share the repo to. This is translated to a condition using the<br>  aws:PrincipalOrgPaths condition key. See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalorgpaths for more information.<br>  A valid example might "org-id/root-ou-id/*" (Remember to use the Org ID as the root!) | `list(string)` | n/a | yes |
+| <a name="input_nat_instance_dashboard_name"></a> [nat\_instance\_dashboard\_name](#input\_nat\_instance\_dashboard\_name) | Name of the NAT Instance Dashboard | `string` | `"NATInstanceDashboard"` | no |
+| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR block for the VPC. For example '10.100.0.0/16' | `string` | n/a | yes |
+| <a name="input_vpc_flow_log_retention_days"></a> [vpc\_flow\_log\_retention\_days](#input\_vpc\_flow\_log\_retention\_days) | Retention days for the VPC flow logs, see CloudWatch Logs for valid values. | `number` | `365` | no |
+| <a name="input_vpc_flow_log_traffic_type"></a> [vpc\_flow\_log\_traffic\_type](#input\_vpc\_flow\_log\_traffic\_type) | Flow Logs Traffic Type, one of 'ACCEPT', 'REJECT', or 'ALL' | `string` | `"REJECT"` | no |
+| <a name="input_vpc_nat_instance_type"></a> [vpc\_nat\_instance\_type](#input\_vpc\_nat\_instance\_type) | Instance type for the NAT instance | `string` | `"t4g.nano"` | no |
+| <a name="input_vpc_persistence_subnet_cidrs"></a> [vpc\_persistence\_subnet\_cidrs](#input\_vpc\_persistence\_subnet\_cidrs) | The CIDR block for the persistence subnets. For example: ['10.100.64.0/20', '10.100.80.0/20', '10.100.96.0/20'] | `list(string)` | n/a | yes |
+| <a name="input_vpc_private_subnet_cidrs"></a> [vpc\_private\_subnet\_cidrs](#input\_vpc\_private\_subnet\_cidrs) | The CIDR block for the private subnets. For example: ['10.100.16.0/20', '10.100.32.0/20', '10.100.48.0/20'] | `list(string)` | n/a | yes |
+| <a name="input_vpc_public_subnet_cidrs"></a> [vpc\_public\_subnet\_cidrs](#input\_vpc\_public\_subnet\_cidrs) | List of 3 CIDR blocks for the private subnets. For example, ['10.100.0.0/23', '10.100.2.0/23', '10.100.4.0/23'] | `list(string)` | n/a | yes |
+| <a name="input_vpc_service_endpoints"></a> [vpc\_service\_endpoints](#input\_vpc\_service\_endpoints) | List of VPC endpoints of AWS Services to create, use the service name. For example  ["ec2messages", "ssm", "ssmmessages"]<br>    will setup VPC endpoints for SSM Session Manager to work without internet access. These will be interpreted into<br>    endpoints wiht the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported. Also S3 and DynamoDB<br>    are not supported in this provider since they are Gateway endpoints, not Interface endpoints.<br>    See https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html for the list<br>    of supported services. Note these cost $7 each per month plus bandwidth. | `list(string)` | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_github_iam_role_arn"></a> [github\_iam\_role\_arn](#output\_github\_iam\_role\_arn) | GitHub OIDC IAM Role ARN |
-| <a name="output_github_iam_role_name"></a> [github\_iam\_role\_name](#output\_github\_iam\_role\_name) | GitHub OIDC IAM Role Name |
-| <a name="output_repository_arn"></a> [repository\_arn](#output\_repository\_arn) | Repository ARN |
-| <a name="output_repository_url"></a> [repository\_url](#output\_repository\_url) | Repository URL |
+| <a name="output_nat_dashboard_url"></a> [nat\_dashboard\_url](#output\_nat\_dashboard\_url) | URL for the NAT Instance Dashboard |
+| <a name="output_persistence_subnet_ids"></a> [persistence\_subnet\_ids](#output\_persistence\_subnet\_ids) | List of Persistence Subnet IDs |
+| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | List of Private Subnet IDs |
+| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of Public Subnet IDs |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | VPC ID |
 <!-- END_TF_DOCS -->
