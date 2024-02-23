@@ -81,7 +81,7 @@ jobs:
         # Based on https://gist.github.com/swinton/03e84635b45c78353b1f71e41007fc7c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILE_TO_COMMIT: ${{ inputs.module_directory }}/README.md
+          FILE_TO_COMMIT: README.md
           DESTINATION_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           export TODAY=$( date -u '+%Y-%m-%d' )
