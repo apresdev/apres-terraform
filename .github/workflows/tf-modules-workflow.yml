@@ -83,9 +83,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FILE_TO_COMMIT: README.md
           DESTINATION_BRANCH: ${{ github.head_ref || github.ref_name }}
+          COMMIT_MESSAGE: "terraform-docs: updating ${{ inputs.module_directory }}/README.md"
         run: |
-          export TODAY=$( date -u '+%Y-%m-%d' )
-          export MESSAGE="terraform-docs: updating README.md $TODAY"
+          export MESSAGE=$COMMIT_MESSAGE
           export SHA=$( git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT )
           export CONTENT=$( base64 -i $FILE_TO_COMMIT )
           gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
