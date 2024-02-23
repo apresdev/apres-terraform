@@ -42,6 +42,8 @@ variable "ami_id" {
   default     = null
 }
 
+
+
 variable "ebs_root_volume_size" {
   description = "Size of the EBS root volume in GB"
   type        = number

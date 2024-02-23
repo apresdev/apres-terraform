@@ -54,22 +54,3 @@ jobs:
           framework: terraform
           output_format: cli
           skip_path: ${{ inputs.checkov_skip_path }}
-
-  update-docs:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ inputs.module_directory }}
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Render terraform docs and push changes
-        uses: terraform-docs/gh-actions@main
-        with:
-          working-dir: ${{ inputs.module_directory }}
-          output-file: README.md
-          output-method: inject
-          git-push: "true"
