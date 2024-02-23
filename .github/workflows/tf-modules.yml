@@ -14,16 +14,23 @@ permissions:
 jobs:
   validate-tf-module-nat_instance:
     uses: ./.github/workflows/tf-modules-workflow.yml
+    # Use concurrency, the update docs step tromp on each other.
+    concurrency:
+      group: tf-modules
     with:
       module_directory: "./modules/aws/nat_instance"
       checkov_skip_path: "templates"
 
   validate-tf-module-vpc:
     uses: ./.github/workflows/tf-modules-workflow.yml
+    concurrency:
+      group: tf-modules
     with:
       module_directory: "./modules/aws/vpc"
 
   validate-tf-module-apres_ecr_private_repo:
     uses: ./.github/workflows/tf-modules-workflow.yml
+    concurrency:
+      group: tf-modules
     with:
       module_directory: "./modules/aws/ecr_private_repo"
