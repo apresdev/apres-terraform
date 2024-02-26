@@ -18,7 +18,6 @@ variable "environment" {
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC. For example '10.100.0.0/16'"
   type        = string
-  #default     = "10.100.0.0/16"
   validation {
     condition     = can(cidrhost(var.vpc_cidr, 0))
     error_message = "Must be a valid IPv4 CIDR."

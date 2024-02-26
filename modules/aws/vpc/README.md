@@ -14,7 +14,7 @@ Instead of the rather expensive Managed NAT Gateway, this VPC uses the [fck-nat]
 
 VPC Flow Logs are enabled, writing to CloudWatch Logs.
 
-The module also creates a simple CloudWatch dashboard to monitor the NAT instances.
+The module also creates a simple CloudWatch dashboard to monitor the NAT instances, URL provided as an output.
 
 CIDR ranges are purposely not set, accepting the defaults could be difficult to undo later.
 
