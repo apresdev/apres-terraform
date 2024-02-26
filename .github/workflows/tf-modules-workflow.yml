@@ -14,6 +14,10 @@ on:
         description: Path relative to the module_directory skip.
         required: false
         type: string
+      module_name:
+        description: Name of the module, used for getting the version from the commit message, see README.md for details.
+        required: true
+        type: string
 
 jobs:
   validate:
@@ -25,6 +29,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Needed for versioning
+          fetch-depth: 0
 
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
@@ -54,3 +61,11 @@ jobs:
           framework: terraform
           output_format: cli
           skip_path: ${{ inputs.checkov_skip_path }}
+
+      - name: Semantic Version
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          major_pattern: "(MAJOR-${{ inputs.module_name}})"
+          minor_pattern: "(MINOR-${{ inputs.module_name}})"
+          change_path: ${{ inputs.module_directory }}
+          namespace: ${{ inputs.module_name}}

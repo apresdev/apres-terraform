@@ -16,14 +16,17 @@ jobs:
     uses: ./.github/workflows/tf-modules-workflow.yml
     with:
       module_directory: "./modules/aws/nat_instance"
+      module_name: "nat_instance"
       checkov_skip_path: "templates"
 
   validate-tf-module-vpc:
     uses: ./.github/workflows/tf-modules-workflow.yml
     with:
       module_directory: "./modules/aws/vpc"
+      module_name: "vpc"
 
   validate-tf-module-apres_ecr_private_repo:
     uses: ./.github/workflows/tf-modules-workflow.yml
     with:
       module_directory: "./modules/aws/ecr_private_repo"
+      module_name: "ecr_private_repo"
