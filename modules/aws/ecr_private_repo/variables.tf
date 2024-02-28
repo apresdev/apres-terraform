@@ -9,7 +9,7 @@ variable "default_tags" {
 }
 
 variable "environment" {
-  description = "Environment Name, used for tagging AWS resources."
+  description = "Environment name, used for tagging AWS resources."
   type        = string
   default     = "Dev"
 }
