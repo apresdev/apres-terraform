@@ -100,7 +100,7 @@ jobs:
     strategy:
       matrix: "${{ fromJson(needs.detect.outputs.directories) }}"
       fail-fast: false
-    name: "Module: ${{ matrix.module_name }}"
+    name: "Plan versions: ${{ matrix.module_name }}"
     steps:
       - name: Detect previous version number
         uses: actions/github-script@v4
@@ -159,7 +159,7 @@ jobs:
       - name: Upload result artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: "${{ matrix.directory }}"
+          name: "${{ matrix.module_directory }}"
           path: output
           retention-days: 5
 
