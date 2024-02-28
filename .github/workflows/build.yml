@@ -1,4 +1,11 @@
 # Original source: https://github.com/freight-hub/terraform-modules-demo/
+# This workflow depends on the existence of four labels:
+# - patch-version
+# - minor-version
+# - major-version
+# - no-version
+# and one of those (and only one) must be applied to the PR, and determines which version to bump.
+#
 name: Build and version Terraform Modules
 concurrency: #avoid concurrent runs on label events, might cause issues on super fast commits  ¯\_(ツ)_/¯
   group: ${{ github.head_ref }}
@@ -139,12 +146,14 @@ jobs:
             console.log('Release type is', RELEASE_TYPE);
 
             const numbers = PREV_VERSION.split('.');
-            const numberIdx = ['major', 'minor', 'patch'].indexOf(RELEASE_TYPE);
+            const numberIdx = ['major-version', 'minor-version', 'patch-version'].indexOf(RELEASE_TYPE);
             numbers[numberIdx] = parseInt(numbers[numberIdx]) + 1;
             for (let i = numberIdx + 1; i < numbers.length; i++) {
               numbers[i] = 0;
             }
-            return numbers.join('.');
+            const newVersion = numbers.join('.');
+            console.log('New version is: ', newVersion);
+            return newVersion;
           result-encoding: string
 
       - name: Store version numbers
