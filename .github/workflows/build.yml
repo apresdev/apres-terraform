@@ -269,7 +269,8 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const { sha, releases } = JSON.parse(process.env.RELEASE_LIST);
+            const sha = context.sha;
+            const releases = JSON.parse(process.env.RELEASE_LIST);
             for (const release of releases) {
               const tagName = `rel/${release.module}/${release.newVersion}`;
 
