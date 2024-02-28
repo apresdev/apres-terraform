@@ -73,7 +73,7 @@ jobs:
               if (item.startsWith("modules")) {
                 dir = path.dirname(item);
                 module_name = dir.split("/").slice(-1)[0];
-                module_paths.push({ module_name=module_name, module_directory=dir });
+                module_paths.push({ module_name: module_name, module_directory: dir });
               }
             }
             if (module_paths.length < 1) return {};
