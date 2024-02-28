@@ -201,7 +201,6 @@ jobs:
                 `**${await readText(`outputs/${folder.name}/new-version.txt`)}**`,
               ].join(' | ')+' |');
 
-              sections.push(`<details><summary>Changelog preview: ${folder.name}</summary>\n\n${await readText(`outputs/${folder.name}/changelog.md`)}\n</details>`);
             }
 
             const finalBody = [lines.join('\n'), ...sections].join('\n\n');
