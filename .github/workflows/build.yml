@@ -52,7 +52,7 @@ jobs:
           NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
           if [ "$NUMBER_OF_LABELS" -eq "1" ] ; then
             echo "Found: $LABELS"
-            echo "::set-output name=release-type::$LABELS"
+            echo "{release-type=$LABELS}" >> $GITHUB_OUTPUT
           elif [ "$NUMBER_OF_LABELS" -gt "1" ] ; then
             echo "::error ::Too many release type labels: $( echo $LABELS | tr '\n' ' ' )"
             exit 1
