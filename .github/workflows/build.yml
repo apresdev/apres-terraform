@@ -51,8 +51,8 @@ jobs:
           LABELS=$(gh pr view $PR_URL --json labels  --jq '.labels[]| select((.name=="minor-version") or (.name=="major-version") or (.name=="patch-version") or (.name=="no-version")) |.name')
           NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
           if [ "$NUMBER_OF_LABELS" -eq "1" ] ; then
-            echo "Found: $LABELS"
-            echo "{release-type=$LABELS}" >> $GITHUB_OUTPUT
+            echo "Found labels: $LABELS"
+            echo "release-type=$LABELS" >> $GITHUB_OUTPUT
           elif [ "$NUMBER_OF_LABELS" -gt "1" ] ; then
             echo "::error ::Too many release type labels: $( echo $LABELS | tr '\n' ' ' )"
             exit 1
