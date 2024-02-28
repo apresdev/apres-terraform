@@ -22,15 +22,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    name: "Setup"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
   detect:
-    needs: setup
     runs-on: ubuntu-latest
     name: "Detect pull request context"
     outputs:
@@ -98,6 +90,8 @@ jobs:
       fail-fast: false
     name: "Validate: ${{ matrix.module_name }}"
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - name: Validate Terraform ${{ matrix.module_name }}
         uses: ./.github/workflows/tf-modules-workflow.yml
         with:
