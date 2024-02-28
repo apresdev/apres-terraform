@@ -84,19 +84,14 @@ jobs:
   validate:
     needs: detect
     if: ${{ needs.detect.outputs.directories != '{}' }}
-    runs-on: ubuntu-latest
     strategy:
       matrix: "${{ fromJson(needs.detect.outputs.directories) }}"
       fail-fast: false
     name: "Validate: ${{ matrix.module_name }}"
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: Validate Terraform ${{ matrix.module_name }}
-        uses: ./.github/workflows/tf-modules-workflow.yml
-        with:
-          module_directory: ${{ matrix.module_directory }}
-          module_name: ${{ matrix.module_name }}
+    uses: ./.github/workflows/tf-modules-workflow.yml
+    with:
+      module_directory: ${{ matrix.module_directory }}
+      module_name: ${{ matrix.module_name }}
 
   plan:
     needs: [detect, validate]
