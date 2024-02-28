@@ -17,6 +17,10 @@ on:
       - modules/**
       - .github/workflows/build.yml
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   detect:
     runs-on: ubuntu-latest
@@ -46,7 +50,7 @@ jobs:
             echo "::error ::Too many release type labels: $( echo $LABELS | tr '\n' ' ' )"
             exit 1
           else
-            echo "::error ::No release type labels found(patch/minor/major/no-release)"
+            echo "::error ::No release type labels found(patch-version/minor-version/major-version/no-version)"
             exit 2
           fi
       - name: Get changed files
