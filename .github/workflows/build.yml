@@ -159,7 +159,7 @@ jobs:
       - name: Upload result artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: "${{ matrix.module_directory }}"
+          name: "${{ matrix.module_name }}"
           path: output
           retention-days: 5
 
