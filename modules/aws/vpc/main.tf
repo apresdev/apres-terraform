@@ -32,7 +32,7 @@ resource "aws_subnet" "public_subnet" {
   tags = merge(
     local.tags,
     {
-      Name        = "Public Subnet (AZ${count.index})",
+      Name        = "Public Subnet (AZ${count.index + 1})",
       subnet-tier = "public",
     },
   )
@@ -48,7 +48,7 @@ resource "aws_subnet" "private_subnet" {
   tags = merge(
     local.tags,
     {
-      Name        = "Private Subnet (AZ${count.index})"
+      Name        = "Private Subnet (AZ${count.index + 1})"
       subnet-tier = "private",
     },
   )
@@ -90,7 +90,7 @@ resource "aws_route_table" "private_route_table" {
   tags = merge(
     local.tags,
     {
-      Name = "Private Route Table ${count.index}",
+      Name = "Private Route Table ${count.index + 1}",
     },
   )
 }
@@ -103,7 +103,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 module "nat_instance" {
   source               = "../nat_instance"
   count                = 3
-  name                 = "vpc-nat-az${count.index}"
+  name                 = "vpc-nat-az${count.index + 1}"
   vpc_id               = aws_vpc.vpc.id
   subnet_id            = aws_subnet.public_subnet[count.index].id
   use_cloudwatch_agent = true
@@ -127,7 +127,7 @@ resource "aws_subnet" "persistence_subnet" {
   tags = merge(
     local.tags,
     {
-      Name        = "Persistence Subnet (AZ${count.index})"
+      Name        = "Persistence Subnet (AZ${count.index + 1})"
       subnet-tier = "persistence",
     },
   )
@@ -145,7 +145,7 @@ resource "aws_route_table" "persistence_route_table" {
   tags = merge(
     local.tags,
     {
-      Name = "Persistence Route Table ${count.index}",
+      Name = "Persistence Route Table ${count.index + 1}",
     },
   )
 }
@@ -159,7 +159,7 @@ resource "aws_network_acl" "persistence_network_acl" {
   tags = merge(
     local.tags,
     {
-      Name = "Persistence Network ACL ${count.index}",
+      Name = "Persistence Network ACL ${count.index + 1}",
     },
   )
 }
