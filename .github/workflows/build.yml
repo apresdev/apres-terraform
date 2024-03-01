@@ -75,14 +75,24 @@ jobs:
           script: |
             var path = require("path");
             const raw = JSON.parse(process.env.RAW_FILES);
-            var module_paths = [];
+
+            var modules = new Map();
             for (var item of raw) {
               if (item.startsWith("modules")) {
                 dir = path.dirname(item);
                 module_name = dir.split("/").slice(-1)[0];
-                module_paths.push({ module_name: module_name, module_directory: dir });
+                modules.set( module_name, dir );
               }
             }
+
+            module_paths = [];
+            for (const key of modules.keys()) {
+              module_paths.push({
+                module_name: key, 
+                module_directory: modules.get(key) 
+              });
+            }
+
             if (module_paths.length < 1) return {};
             return {
               include: module_paths,
