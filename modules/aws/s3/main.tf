@@ -1,4 +1,13 @@
-#
+locals {
+  tags = merge(
+    var.default_tags,
+    tomap({
+      environment = var.environment
+      managed-by  = "terraform"
+    })
+  )
+}
+
 # The following best practices are applied to the bucket
 #
 # Ensure AWS S3 object versioning is enabled
@@ -16,22 +25,23 @@
 # Ensure S3 buckets are encrypted with KMS by default
 # Ensure data stored in the S3 bucket is securely encrypted at rest
 # Ensure data is transported from the S3 bucket securely
-
 resource "aws_s3_bucket" "default" {
 
   # TODO: Address Checkov suppressions.
 
-
-  #checkov:skip=CKV2_AWS_62:Ensure S3 buckets should have event notifications enabled
+  #checkov:skip=CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
   #checkov:skip=CKV_AWS_18:Ensure the S3 bucket has access logging enabled
   #checkov:skip=CKV2_AWS_61:Ensure that an S3 bucket has a lifecycle configuration
   #checkov:skip=CKV_AWS_144:Ensure that S3 bucket has cross-region replication enabled
 
-  bucket = "${data.aws_caller_identity.current.account_id}-${var.environment}-${data.aws_region.current.name}-${var.name}"
+  bucket = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
 
-  tags = {
-    Name = "${var.environment}-${var.name}"
-  }
+  tags = merge(
+    local.tags,
+    tomap({
+      Name = "${var.environment}-${var.name}"
+    })
+  )
 
   depends_on = [data.aws_caller_identity.current]
 

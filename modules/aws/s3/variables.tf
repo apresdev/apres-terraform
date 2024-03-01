@@ -50,3 +50,9 @@ variable "mfa_delete" {
   type        = bool
   default     = true
 }
+
+variable "default_tags" {
+  description = "Default set of tags to be applied to all resources"
+  type        = map(string)
+  default     = {}
+}
