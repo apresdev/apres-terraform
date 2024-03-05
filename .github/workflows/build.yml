@@ -17,12 +17,14 @@ on:
     paths:
       - modules/**
       - .github/workflows/build.yml
+      - "!modules/**/README.md"
 
   pull_request_target:
     types: [closed]
     paths:
       - modules/**
       - .github/workflows/build.yml
+      - "!modules/**/README.md"
 
 permissions:
   contents: write
@@ -78,6 +80,12 @@ jobs:
 
             var modules = new Map();
             for (var item of raw) {
+              
+              // Ignore README.md updates.
+              if (item.endsWith("/README.md") ) {
+                continue;
+              }
+
               if (item.startsWith("modules")) {
                 dir = path.dirname(item);
                 module_name = dir.split("/").slice(-1)[0];
