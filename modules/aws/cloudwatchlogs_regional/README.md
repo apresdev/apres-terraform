@@ -1,6 +1,15 @@
 # CloudWatch Logs Group
 
-Sets up and configures CloudWatch Logs, with a KMS key for encryption. If the KMS Key ARN is not passed in as a variable, a new KMS Key will be generated.
+Sets up and configures regional resources for CloudWatch Logs (CWL). This is meant to be
+created once per AWS account and region.
+
+Resources created include:
+* A KMS key, to be used for encrypting CloudWatch Log Groups
+* An alias /aws/apres/cloudwatchlogs to be consumed by the apres/cloudwatchlogs module
+* Appropriate key policy for CWL to use the key.
+
+Future considerations:
+* A subscription to move CWL to S3 or OpenSearch automatically.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -24,7 +33,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_log_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_kms_alias.cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_kms_key_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
@@ -34,17 +43,13 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
+| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "cloudwatchlogs",<br>  "component": "cloudwatchlogs",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
-| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key to use when encrypting log data. If not specified a new KMS key will be generated. | `string` | `""` | no |
-| <a name="input_name"></a> [name](#input\_name) | Description name of the CloudWatch Logs Group, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_path"></a> [path](#input\_path) | Path of the CloudWatch Logs Group, should be a path like /acme/blah | `string` | n/a | yes |
-| <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | The number of days to retain the log events in the log group. Valid values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653. | `number` | `30` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cwl_arn"></a> [cwl\_arn](#output\_cwl\_arn) | The ARN of the CloudWatch Log Group |
+| <a name="output_kms_alias"></a> [kms\_alias](#output\_kms\_alias) | The ARN of the KMS alias used to encrypt the CloudWatch Log Group |
 | <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | The ARN of the KMS key used to encrypt the CloudWatch Log Group |
 <!-- END_TF_DOCS -->
