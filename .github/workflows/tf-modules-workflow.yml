@@ -2,6 +2,9 @@ name: validate-terraform-module
 
 # This workflow takes a Terraform module, validates that format and syntax are correct,
 # and runs checkov to check for security issues. It updates docs using terraform-docs on the README.md file.
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
 
 on:
   workflow_call:
@@ -63,3 +66,27 @@ jobs:
           framework: terraform
           output_format: cli
           skip_path: ${{ inputs.checkov_skip_path }}
+
+      # Not every module has a tests directory, so we guard the rest of the steps with the if line.
+      - name: Install go
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.21
+
+      - name: Install go modules
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        working-directory: "${{ inputs.module_directory }}/tests"
+        run: go mod download
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::381491850865:role/GitHubActionsDeployerRole-apresdev-apres-terraform
+          role-session-name: ${{ format('GitHub_AWS_OIDC_{0}', github.workflow) }}
+          aws-region: us-east-2
+
+      - name: Run terratest
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        working-directory: "${{ inputs.module_directory }}/tests"
+        run: go test -v
