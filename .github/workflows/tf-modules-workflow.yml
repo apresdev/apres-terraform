@@ -80,7 +80,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::381491850865:role/GitHubActionsDeployerRole-apresdev-apres-terraform
-          role-session-name: ${{ format('GitHub_AWS_OIDC_{0}', github.workflow) }}
+          role-session-name: GitHub_AWS_OIDC_apresdev-apres-terraform
           aws-region: us-east-2
 
       - name: Run terratest
