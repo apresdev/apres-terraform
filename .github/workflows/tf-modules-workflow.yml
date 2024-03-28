@@ -2,9 +2,6 @@ name: validate-terraform-module
 
 # This workflow takes a Terraform module, validates that format and syntax are correct,
 # and runs checkov to check for security issues. It updates docs using terraform-docs on the README.md file.
-permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
 
 on:
   workflow_call:
