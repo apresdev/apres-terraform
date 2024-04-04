@@ -63,3 +63,27 @@ jobs:
           framework: terraform
           output_format: cli
           skip_path: ${{ inputs.checkov_skip_path }}
+
+      # Not every module has a tests directory, so we guard the rest of the steps with the if line.
+      - name: Install go
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.21
+
+      - name: Install go modules
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        working-directory: "${{ inputs.module_directory }}/tests"
+        run: go mod download
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::381491850865:role/GitHubActionsDeployerRole-apresdev-apres-terraform
+          role-session-name: GitHub_AWS_OIDC_apresdev-apres-terraform
+          aws-region: us-east-2
+
+      - name: Run terratest
+        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        working-directory: "${{ inputs.module_directory }}/tests"
+        run: go test -v

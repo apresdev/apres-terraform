@@ -29,6 +29,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # This is required for requesting the JWT for AWS permissions
 
 jobs:
   detect:
@@ -80,13 +81,15 @@ jobs:
 
             var modules = new Map();
             for (var item of raw) {
-              
+
               // Ignore README.md updates.
               if (item.endsWith("/README.md") ) {
                 continue;
               }
 
               if (item.startsWith("modules")) {
+                //
+                if (item.includes("/tests/") || item.includes("/test/")) continue;
                 dir = path.dirname(item);
                 module_name = dir.split("/").slice(-1)[0];
                 modules.set( module_name, dir );
@@ -96,8 +99,8 @@ jobs:
             module_paths = [];
             for (const key of modules.keys()) {
               module_paths.push({
-                module_name: key, 
-                module_directory: modules.get(key) 
+                module_name: key,
+                module_directory: modules.get(key)
               });
             }
 
