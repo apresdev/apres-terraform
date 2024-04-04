@@ -47,7 +47,7 @@ to false.
 To skip this step, leave the `msteams_team_id` variable as default (empty string).
 
 In the Audit account, setup AWS Chatbot with Microsoft Teams integration. This is a manual step and requires
-both AWS permissions to create the Chatbot integration, and Microsoft TEams permissions to install the AWS application.
+both AWS permissions to create the Chatbot integration, and Microsoft Teams permissions to install the AWS application.
 
 Navigate in browser to the console of the Audit account, nagivate to AWS Chatbot in your primary region
 (hint: https://us-east-2.console.aws.amazon.com/chatbot/home?region=us-east-2) and click the "Configure new client" button.
