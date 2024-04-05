@@ -1,0 +1,50 @@
+locals {
+  # Need to remove the current region or else the deploy will throw an error.
+  security_hub_regions = setsubtract(var.security_hub_regions, [data.aws_region.current.name])
+  configuration_type   = length(local.security_hub_regions) > 0 ? "CENTRAL" : "LOCAL"
+}
+
+# Only create this if the list of regions, excluding the current one, is > 0, else it'll fail because there's nothing to aggregate.
+resource "aws_securityhub_finding_aggregator" "default" {
+  count             = length(local.security_hub_regions) > 0 ? 1 : 0
+  linking_mode      = var.security_hub_linking_mode
+  specified_regions = local.security_hub_regions
+}
+
+# From the docs: This is an advanced Terraform resource. Terraform will automatically assume management
+# of the Security Hub Organization Configuration without import and perform no actions
+# on removal from the Terraform configuration.
+resource "aws_securityhub_organization_configuration" "default" {
+  # Aggregator needs to be created first.
+  depends_on = [aws_securityhub_finding_aggregator.default]
+  # Central configuration requires this to be false.
+  auto_enable = false
+  organization_configuration {
+    configuration_type = local.configuration_type
+  }
+}
+
+resource "aws_securityhub_configuration_policy" "default" {
+  name        = "Default"
+  description = "This is the default configuration policy"
+
+  configuration_policy {
+    service_enabled = true
+    enabled_standard_arns = [
+      "arn:aws:securityhub:${data.aws_region.current.name}::standards/aws-foundational-security-best-practices/v/1.0.0",
+      "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0",
+    ]
+    security_controls_configuration {
+      disabled_control_identifiers = []
+    }
+  }
+
+  depends_on = [aws_securityhub_organization_configuration.default]
+}
+
+# Associate the policy with the whole organization
+resource "aws_securityhub_configuration_policy_association" "default" {
+  # There can only be one root, even though the return value of roots is an array.
+  target_id = data.aws_organizations_organization.current.roots[0].id
+  policy_id = aws_securityhub_configuration_policy.default.id
+}

@@ -16,4 +16,8 @@ repos:
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs_regional"]
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools_delegator"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools"]
 
