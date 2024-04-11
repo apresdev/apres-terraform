@@ -33,7 +33,44 @@ module "vpc" {
 }
 ```
 
+# AWS IAM Permissions
 
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
+Substitute `${AWS::Region}` with the region where this is deployed.
+
+```jsonc
+{
+  "Effect": "Allow",
+  "Action": [
+    "autoscaling:*",
+    "cloudwatch:*",
+    "ec2:*",
+    "kms:*",
+    "logs:*"
+  ],
+  "Resource": "*"
+},
+{
+  "Effect": "Allow",
+  "Action": "iam:*",
+  "Resource": [
+    "arn:aws:iam::*:role/vpc*",
+    "arn:aws:iam::${AWS::AccountId}:role/vpc*",
+    "arn:aws:iam::${AWS::AccountId}:instance-profile/vpc*",
+    "arn:aws:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+    "arn:aws:iam::${AWS::AccountId}:policy/GitHubActionsECRServicePolicy*",
+    "arn:aws:iam::${AWS::AccountId}:role/GitHubActionsECRServiceRole*",
+  ]
+},
+{
+  "Effect": "Allow",
+  // Allow managing SSM parameters for VPC Nat instances, but need to give "*" as the resource because
+  // how the Terraform AWS provider uses DescribeParameters.
+  "Action": "ssm:*",
+  "Resource": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:*"
+}
+```
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

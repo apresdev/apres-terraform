@@ -62,6 +62,32 @@ Once the Microsoft Teams integration is setup, set the `msteams_team_id`, `mstea
 
 The Chatbot is granted ReadOnly access to SecurityHub, and the ability to update findings (UpdateFindings and BatchUpdateFindings) from users in the channel. To disable the ability to update findings, set the `allow_chatbot_update_findings` to false.
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+     "chatbot:*",
+     "sns:*",
+     "organizations:Describe*",
+     "organizations:List*"
+  ],
+  "Resource": "*"
+},
+{
+  "Effect": "Allow",
+  "Action": "iam:*",
+  "Resource": [
+     "arn:aws:iam::${AWS::AccountId}:role/ChatBot*",
+     "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
+     "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:security_hub_findings"
+  ]
+}
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

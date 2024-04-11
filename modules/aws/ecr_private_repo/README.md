@@ -68,6 +68,25 @@ dd
 
 Scanning is enabled at the account level, not at the repo level.
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
+```json
+{
+  "Effect": "Allow",
+  "Action": "ecr:*",
+  "Resource": "*"
+},
+{
+  "Effect": "Allow",
+  "Action": "iam:*",
+  "Resource": [
+    "arn:aws:iam::${AWS::AccountId}:policy/GitHubActionsECRServicePolicy*",
+    "arn:aws:iam::${AWS::AccountId}:role/GitHubActionsECRServiceRole*"
+  ]
+}
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
