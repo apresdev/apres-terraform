@@ -31,7 +31,7 @@ both AWS permissions to create the Chatbot integration, and Slack permissions to
 Navigate in browser to the console of the Audit account, nagivate to AWS Chatbot in your primary region
 (hint: https://us-east-2.console.aws.amazon.com/chatbot/home?region=us-east-2) and click the "Configure new client" button.
 
-The full instructions are (here)[https://docs.aws.amazon.com/chatbot/latest/adminguide/slack-setup.html], only do Step 1.
+The full instructions are [here](https://docs.aws.amazon.com/chatbot/latest/adminguide/slack-setup.html), only do Step 1.
 
 We recommend turning off the _AWS Chatbot AI powered improvements_ in the Account Settings -> Data privacy section in the AWS Console.
 
@@ -52,7 +52,7 @@ both AWS permissions to create the Chatbot integration, and Microsoft Teams perm
 Navigate in browser to the console of the Audit account, nagivate to AWS Chatbot in your primary region
 (hint: https://us-east-2.console.aws.amazon.com/chatbot/home?region=us-east-2) and click the "Configure new client" button.
 
-The full instructions are (here)[https://docs.aws.amazon.com/chatbot/latest/adminguide/teams-setup.html], only do Step 1.
+The full instructions are [here](https://docs.aws.amazon.com/chatbot/latest/adminguide/teams-setup.html), only do Step 1.
 
 We recommend turning off the _AWS Chatbot AI powered improvements_ in the Account Settings -> Data privacy section in the AWS Console.
 
