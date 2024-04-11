@@ -15,6 +15,23 @@ Enable AWS Organizations. See [the docs](https://docs.aws.amazon.com/organizatio
 
 Enable AWS Control Tower. Limit the set of enabled regions to only the regions you _really_ need. See [the docs](https://docs.aws.amazon.com/controltower/latest/userguide/setting-up.html) on how to enable Control Tower.
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown in CloudFormation yaml format:
+
+```yaml
+  - Effect: Allow
+    Action:
+      - guardduty:*OrganizationAdminAccount
+      - guardduty:List*
+      - guardduty:Get*
+      - securityhub:*OrganizationAdminAccount
+      - securityhub:List*
+      - securityhub:Get*
+      - ec2:DescribeRegions
+      - organizations:DescribeOrganization
+    Resource: "*"
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

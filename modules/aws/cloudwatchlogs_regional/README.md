@@ -11,6 +11,22 @@ Resources created include:
 Future considerations:
 * A subscription to move CWL to S3 or OpenSearch automatically.
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+    "cloudwatch:*",
+    "kms:*",
+    "logs:*"
+  ],
+  "Resource": "*"
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

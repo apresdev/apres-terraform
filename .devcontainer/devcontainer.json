@@ -1,0 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu",
+
+	// Ubuntu 22.04 LTS
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/aws-cli:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers-contrib/features/yamllint:2": {},
+		"ghcr.io/dhoeric/features/terraform-docs:1": {},
+		"ghcr.io/robbert229/devcontainer-features/opentofu:1": {},
+		"ghcr.io/prulloac/devcontainer-features/pre-commit:1": {},
+		"ghcr.io/devcontainers-contrib/features/checkov:1": {}
+	},
+
+	// Install things that aren't features
+	"postCreateCommand": "bash .devcontainer/scripts/install-dependencies.sh",
+
+	// Bind to the user's AWS config, this works for Linux, OSX and Windows
+	"mounts": [
+		"source=${env:HOME}${env:USERPROFILE}/.aws,target=/root/.aws,type=bind"
+	]
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
