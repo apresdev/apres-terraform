@@ -72,9 +72,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
   "Effect": "Allow",
   "Action": [
      "chatbot:*",
-     "sns:*",
-     "organizations:Describe*",
-     "organizations:List*"
+     "sns:*"
   ],
   "Resource": "*"
 },
@@ -136,7 +134,6 @@ No modules.
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_guardduty_detector.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/guardduty_detector) | data source |
 | [aws_iam_policy_document.sns_topic_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_organizations_organization.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -153,6 +150,7 @@ No modules.
 | <a name="input_msteams_channel_id"></a> [msteams\_channel\_id](#input\_msteams\_channel\_id) | The Microsoft Teams Channel ID for Security Hub Findings.<br>    The Channel Id is buried in the URL to the channel, and can be found in Teams using the "Get link to channel"<br>    menu option. A resulting URL might look like<br>    `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990`<br>    and the Channel ID is between the slashes after `channel`, in this case the Channel ID i<br>    is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`. | `string` | `""` | no |
 | <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams Team ID for Security Hub Findings. This is displayed in the AWS Console" | `string` | `""` | no |
 | <a name="input_msteams_tenant_id"></a> [msteams\_tenant\_id](#input\_msteams\_tenant\_id) | The Microsoft Teams Tenant ID for Security Hub Findings. This is displayed in the AWS Console" | `string` | `""` | no |
+| <a name="input_organization_root_id"></a> [organization\_root\_id](#input\_organization\_root\_id) | ID of the Root of the organization to associate the Security Hub configuration policy with. | `string` | n/a | yes |
 | <a name="input_security_hub_linking_mode"></a> [security\_hub\_linking\_mode](#input\_security\_hub\_linking\_mode) | One of ALL\_REGIONS\_EXPECT\_SPECIFIED, SPECIFIED\_REGIONS, or ALL\_REGIONS. If you have an SCP restricting regions, then<br>    you must use ALL\_REGIONS\_EXPECT\_SPECIFIED or SPECIFIED\_REGIONS. If you do not have an SCP restricting regions, then<br>    you can use ALL\_REGIONS, and leave security\_hub\_regions empty.<br><br>    The recommended approach is to have Control Tower govern only the regions you want to use. Control Tower will enable<br>    AWS Config in those regions, which is required by Security Hub. Then specify the supported regions in the security\_hub\_regions<br>    variable. | `string` | `"ALL_REGIONS"` | no |
 | <a name="input_security_hub_regions"></a> [security\_hub\_regions](#input\_security\_hub\_regions) | A list of regions to link to the Security Hub master account. If you have an SCP restricting regions, then you must<br>    specify the regions here. If you do not have an SCP restricting regions, then you can leave this empty. | `list(string)` | `[]` | no |
 | <a name="input_slack_security_hub_events_channel_id"></a> [slack\_security\_hub\_events\_channel\_id](#input\_slack\_security\_hub\_events\_channel\_id) | The Slack channel ID for Security Hub Events. To find a channel ID, in Slack, right click on a channel<br>  and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N | `string` | `""` | no |
