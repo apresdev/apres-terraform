@@ -125,3 +125,12 @@ variable "allow_chatbot_update_findings" {
   type        = bool
   default     = true
 }
+
+variable "organization_root_id" {
+  description = "ID of the Root of the organization to associate the Security Hub configuration policy with."
+  type        = string
+  validation {
+    condition     = length(var.organization_root_id) > 0 && substr(var.organization_root_id, 0, 2) == "r-"
+    error_message = "organization_root_id must be a valid AWS Organization Root ID, and start with 'r-'"
+  }
+}

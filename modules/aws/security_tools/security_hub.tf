@@ -44,7 +44,6 @@ resource "aws_securityhub_configuration_policy" "default" {
 
 # Associate the policy with the whole organization
 resource "aws_securityhub_configuration_policy_association" "default" {
-  # There can only be one root, even though the return value of roots is an array.
-  target_id = data.aws_organizations_organization.current.roots[0].id
+  target_id = var.organization_root_id
   policy_id = aws_securityhub_configuration_policy.default.id
 }
