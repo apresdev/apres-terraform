@@ -84,7 +84,9 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
   "Resource": [
      "arn:aws:iam::${AWS::AccountId}:role/ChatBot*",
      "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
-     "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:security_hub_findings"
+     "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:security_hub_findings",
+     "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/management.chatbot.amazonaws.com/AWSServiceRoleForAWSChatbot"
+
   ]
 }
 ```
