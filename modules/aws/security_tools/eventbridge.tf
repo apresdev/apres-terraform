@@ -53,10 +53,10 @@ data "aws_iam_policy_document" "eventbridge_sns_topic_policy" {
 }
 
 resource "aws_iam_role" "eventbridge_sns_topic" {
-  name               = "eventbridge-sns-topic-role"
+  name               = "EventBridge-SNS-Topic-Role"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role_policy.json
   inline_policy {
-    name   = "eventbridge-sns-topic-policy"
+    name   = "EventBridge-SNS-Topic-Policy"
     policy = data.aws_iam_policy_document.eventbridge_sns_topic_policy.json
   }
 }
