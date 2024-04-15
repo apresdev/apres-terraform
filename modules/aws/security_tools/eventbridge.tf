@@ -8,7 +8,7 @@ resource "aws_cloudwatch_event_rule" "security_hub" {
     "detail" : {
       "findings" : {
         "Severity" : {
-          //filter only High and Critical serverity findings
+          //filter only High and Critical severity findings
           "Label" : ["HIGH", "CRITICAL"]
         },
         "Workflow" : {
@@ -30,35 +30,33 @@ resource "aws_cloudwatch_event_target" "security_hub" {
   rule      = aws_cloudwatch_event_rule.security_hub.name
   target_id = "SendToSNS"
   arn       = aws_sns_topic.security_hub.arn
+  role_arn  = aws_iam_role.eventbridge_sns_topic.arn
 }
 
-resource "aws_sns_topic" "security_hub" {
-  name              = "security_hub_findings"
-  kms_master_key_id = "alias/aws/sns"
-  tags = merge(
-    local.tags,
-    {
-      Name = "security_hub_findings"
-    },
-  )
-}
-
-resource "aws_sns_topic_policy" "security_hub" {
-  arn    = aws_sns_topic.security_hub.arn
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
-}
-
-data "aws_iam_policy_document" "sns_topic_policy" {
+data "aws_iam_policy_document" "eventbridge_assume_role_policy" {
   statement {
     effect  = "Allow"
-    actions = ["SNS:Publish"]
-
+    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["events.amazonaws.com"]
     }
+  }
+}
 
+data "aws_iam_policy_document" "eventbridge_sns_topic_policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["SNS:Publish"]
     resources = [aws_sns_topic.security_hub.arn]
   }
 }
 
+resource "aws_iam_role" "eventbridge_sns_topic" {
+  name               = "eventbridge-sns-topic-role"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role_policy.json
+  inline_policy {
+    name   = "eventbridge-sns-topic-policy"
+    policy = data.aws_iam_policy_document.eventbridge_sns_topic_policy.json
+  }
+}
