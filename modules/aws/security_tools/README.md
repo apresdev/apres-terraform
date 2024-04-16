@@ -82,12 +82,21 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
   "Resource": [
      "arn:aws:iam::${AWS::AccountId}:role/ChatBot*",
      "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
-     "arn:aws:iam::${AWS::AccountId}:role/EventBridge*",
-     "arn:aws:iam::${AWS::AccountId}:policy/EventBridge*",
      "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:security_hub_findings",
      "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/management.chatbot.amazonaws.com/AWSServiceRoleForAWSChatbot"
 
   ]
+},
+{
+  {
+    "Action": [
+      "kms:*"
+    ],
+    "Resource": [
+      "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:*"
+    ],
+      "Effect": "Allow"
+    }
 }
 ```
 
