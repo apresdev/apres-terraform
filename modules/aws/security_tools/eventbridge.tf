@@ -30,33 +30,4 @@ resource "aws_cloudwatch_event_target" "security_hub" {
   rule      = aws_cloudwatch_event_rule.security_hub.name
   target_id = "SendToSNS"
   arn       = aws_sns_topic.security_hub.arn
-  role_arn  = aws_iam_role.eventbridge_sns_topic.arn
-}
-
-data "aws_iam_policy_document" "eventbridge_assume_role_policy" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "eventbridge_sns_topic_policy" {
-  statement {
-    effect    = "Allow"
-    actions   = ["SNS:Publish"]
-    resources = [aws_sns_topic.security_hub.arn]
-  }
-}
-
-resource "aws_iam_role" "eventbridge_sns_topic" {
-  name               = "EventBridge-SNS-Topic-Role"
-  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role_policy.json
-  inline_policy {
-    name   = "EventBridge-SNS-Topic-Policy"
-    policy = data.aws_iam_policy_document.eventbridge_sns_topic_policy.json
-  }
 }
