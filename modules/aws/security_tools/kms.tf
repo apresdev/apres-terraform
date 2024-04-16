@@ -18,7 +18,7 @@ resource "aws_kms_key_policy" "default" {
         Sid    = "Allow SNS to use the key",
         Effect = "Allow",
         Principal = {
-          Service = "sns.${data.aws_region.current.name}.amazonaws.com"
+          Service = "sns.amazonaws.com"
         },
         Action = [
           "kms:Encrypt",
