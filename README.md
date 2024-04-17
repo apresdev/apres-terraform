@@ -2,7 +2,7 @@
 
 ## Development
 
-We recommend using the configured dv Container, which has all the prerequisite software installed.
+We recommend using the configured dev Container, which has all the prerequisite software installed.
 
 ### Setup
 
