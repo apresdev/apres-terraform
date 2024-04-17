@@ -46,9 +46,14 @@ variable "versioning" {
 }
 
 variable "mfa_delete" {
-  description = "Flag to indicate if MFA delete is enabled.  Defaults to true due to best practice: Ensure S3 bucket MFA Delete is enabled."
+  description = <<EOF
+  Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition
+  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then
+  you'll need to deploy it in two steps. First create the bucket with mfa_delete=false, then set mfa_delete=true
+  and deploy again.
+  EOF
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_tags" {
