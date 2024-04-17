@@ -1,4 +1,4 @@
-# S3 Logs Example
+# S3 Example
 
 This is an example on how to deploy the S3 module, used by the integration tests.
 
