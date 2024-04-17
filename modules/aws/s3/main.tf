@@ -82,8 +82,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 
 # Ensure data is transported from the S3 bucket securely
 resource "aws_s3_bucket_policy" "deny_unsecure_communications" {
-  bucket = aws_s3_bucket.default.id
-  policy = data.aws_iam_policy_document.deny_unsecure_communications.json
+  bucket     = aws_s3_bucket.default.id
+  policy     = data.aws_iam_policy_document.deny_unsecure_communications.json
   depends_on = [aws_s3_bucket.default, data.aws_iam_policy_document.deny_unsecure_communications]
 }
 
