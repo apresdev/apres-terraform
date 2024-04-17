@@ -51,7 +51,7 @@ func TestCloudWatchLogs(t *testing.T) {
 	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
 	// so we'll use the v2 SDK directly.
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(awsRegion))
-	assert.True(t, err == nil, "Expected no error for LoadDefaultConfig creating AWS session")
+	assert.Nil(t, err, "Expected no error for LoadDefaultConfig creating AWS session")
 
 	svc := cloudwatchlogs.NewFromConfig(cfg)
 	resp, err := svc.DescribeLogGroups(context.TODO(), &cloudwatchlogs.DescribeLogGroupsInput{LogGroupNamePrefix: &cwlPath})
@@ -61,9 +61,9 @@ func TestCloudWatchLogs(t *testing.T) {
 		if *logGroup.LogGroupName == cwlPath {
 			found = true
 			t.Logf("Found log group: %s", *logGroup.LogGroupName)
-			assert.True(t, *logGroup.Arn == expectedCwlArn, "Expected ARN to match: %s != %s", *logGroup.Arn, expectedCwlArn)
-			assert.True(t, *logGroup.RetentionInDays == retentionInDays, "Expected retention to match")
-			assert.True(t, *logGroup.KmsKeyId != "", "Expected KMS key ID to be set")
+			assert.Equal(t, *logGroup.Arn, expectedCwlArn, "Expected ARN to match: %s != %s", *logGroup.Arn, expectedCwlArn)
+			assert.Equal(t, *logGroup.RetentionInDays, retentionInDays, "Expected retention to match")
+			assert.Equal(t, *logGroup.KmsKeyId, "", "Expected KMS key ID to be set")
 		}
 	}
 	assert.True(t, found, "Did not find the CloudWatch log group in the list of log groups")
