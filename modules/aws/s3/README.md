@@ -2,7 +2,28 @@
 
 ## Overview
 
-This module will create an S3 bucket in accordance with best practices.
+This module will create an S3 bucket in accordance with best practices. Since bucket names must be globally unique in AWS,
+the resulting name will have the following pattern:
+
+  <account-id>-<environment>-<region>-<name>
+
+where:
+* `account-id` is the 12 digit AWS account where the bucket is deployed.
+* `environment` is the lower case `environment` variable passed into the terraform stack
+* `region` is the AWS region where the bucket is deployed
+* `name` is the lower case `name` variable passed into the terraform stack.
+
+For example, if the stack is deployed with:
+
+```hcl
+module "s3" {
+  source = "TBD" # value depends on your installation
+  name = "mytestbucket"
+  environment = "SystemTest"
+}
+```
+
+and the stack is deployed to the AWS account 12345689012 in us-east-2, the bucket name will be `123456789012-systemtest-us-east-2-mytestbucket`
 
 ### Enforced Best Practices
 
@@ -70,7 +91,6 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_s3_bucket.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_acl.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_policy.deny_unsecure_communications](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
@@ -84,7 +104,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources. | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled.  Defaults to true due to best practice: Ensure S3 bucket MFA Delete is enabled. | `bool` | `true` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Flag to indicate if object versioning is enabled.  Defaults to true due to best practice: Ensure AWS S3 object versioning is enabled. | `bool` | `true` | no |

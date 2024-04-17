@@ -1,0 +1,90 @@
+package test
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"testing"
+	"time"
+
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestS3(t *testing.T) {
+	// Define the AWS region we want to test in
+	awsRegion := "us-east-2"
+	environment := "UnitTest"
+
+	// Variables for the terraform module
+	now := time.Now().Unix()
+	bucketNameInput := fmt.Sprintf("testbucket%d", now)
+	// Terraform options
+	terraformOptions := &terraform.Options{
+		// The path to where your Terraform code is located
+		TerraformDir: "./fixtures",
+
+		// Variables to pass to our Terraform code using -var options
+		Vars: map[string]interface{}{
+			"name":           bucketNameInput,
+			"environment":    environment,
+		},
+	}
+
+	// At the end of the test, run `terraform destroy` to clean up any resources that were created
+	defer terraform.Destroy(t, terraformOptions)
+
+	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
+	terraform.InitAndApply(t, terraformOptions)
+
+	// Get the outputs
+	bucketArn := terraform.Output(t, terraformOptions, "bucket_arn")
+	bucketName := terraform.Output(t, terraformOptions, "bucket_name")
+	bucketDomainName := terraform.Output(t, terraformOptions, "bucket_domain_name")
+	bucketAccount := terraform.Output(t, terraformOptions, "aws_account_id")
+	bucketRegion := terraform.Output(t, terraformOptions, "aws_region")
+
+	// regions should match or things are weird
+	assert.Equal(t, bucketRegion, awsRegion, "Expected regions to match")
+
+	// Check expected bucket name pattern
+	expectedBucketName := fmt.Sprintf("%s-%s-%s-%s", bucketAccount, strings.ToLower(environment), awsRegion, strings.ToLower(bucketNameInput))
+	assert.Equal(t, bucketName, expectedBucketName, "Expected bucket name to match")
+
+	// Check the ARN. No reason to think this should change, but it's a good sanity check
+	expectedArn := fmt.Sprintf("arn:aws:s3:::%s", expectedBucketName)
+	assert.Equal(t, bucketArn, expectedArn, "Expected ARN to match")
+
+	// Check the domain
+	expectedDomainName := fmt.Sprintf("%s.s3.amazonaws.com", expectedBucketName)
+	assert.Equal(t, bucketDomainName, expectedDomainName, "Expected domain name to match")
+
+	// TODO: go to S3 and check versioning, public, etc.
+	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
+	// so we'll use the v2 SDK directly.
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(awsRegion))
+	assert.True(t, err == nil, "Expected no error for LoadDefaultConfig creating AWS session")
+
+	svc := s3.NewFromConfig(cfg)
+
+	// Check versioning
+	version_resp, err := svc.GetBucketVersioning(context.TODO(), &s3.GetBucketVersioningInput{Bucket: &expectedBucketName})
+	assert.Nil(t, err)
+	assert.Equal(t, version_resp.Status, types.BucketVersioningStatusEnabled, "Expected versioning to be enabled")
+	assert.Equal(t, version_resp.MFADelete, types.MFADeleteStatusDisabled, "Expected MFA delete to be disabled for testing")
+
+	// Public access
+	public_resp, err := svc.GetPublicAccessBlock(context.TODO(), &s3.GetPublicAccessBlockInput{Bucket: &expectedBucketName})
+	assert.Nil(t, err)
+	assert.True(t, *public_resp.PublicAccessBlockConfiguration.BlockPublicAcls, "Expected public ACLs to be blocked")
+
+	// Encryption
+	enc_resp, err := svc.GetBucketEncryption(context.TODO(), &s3.GetBucketEncryptionInput{Bucket: &expectedBucketName})
+	assert.Nil(t, err)
+	assert.True(t, len(enc_resp.ServerSideEncryptionConfiguration.Rules) > 0, "Expected server-side encryption to be enabled")
+	assert.True(t, enc_resp.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm == types.ServerSideEncryptionAwsKms, "Expected AWS KMS encryption")
+
+}
