@@ -69,6 +69,7 @@ resource "aws_s3_bucket_public_access_block" "default" {
 
 # Ensure data stored in the S3 bucket is securely encrypted at rest
 resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
+  #checkov:skip=CKV2_AWS_67:False positive, no CMK is used here to require rotation
   bucket = aws_s3_bucket.default.bucket
 
   rule {
