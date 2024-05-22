@@ -12,3 +12,8 @@ output "bucket_domain_name" {
   value       = aws_s3_bucket.default.bucket_domain_name
   description = "The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`."
 }
+
+output "bucket_regional_domain_name" {
+  value       = aws_s3_bucket.default.bucket_regional_domain_name
+  description = "The bucket regional domain name. Will be of format `bucketname.s3.region.amazonaws.com`."
+}
