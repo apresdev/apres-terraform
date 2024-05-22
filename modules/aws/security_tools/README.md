@@ -105,7 +105,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 | <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 0.72.1 |
 
