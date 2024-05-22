@@ -63,7 +63,7 @@ func TestCloudWatchLogs(t *testing.T) {
 			t.Logf("Found log group: %s", *logGroup.LogGroupName)
 			assert.Equal(t, *logGroup.Arn, expectedCwlArn, "Expected ARN to match: %s != %s", *logGroup.Arn, expectedCwlArn)
 			assert.Equal(t, *logGroup.RetentionInDays, retentionInDays, "Expected retention to match")
-			assert.Equal(t, *logGroup.KmsKeyId, "", "Expected KMS key ID to be set")
+			assert.NotEmpty(t, *logGroup.KmsKeyId, "Expected KMS key ID to be set")
 		}
 	}
 	assert.True(t, found, "Did not find the CloudWatch log group in the list of log groups")
