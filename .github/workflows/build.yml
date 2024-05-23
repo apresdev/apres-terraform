@@ -166,6 +166,11 @@ jobs:
             console.log('Previous version was', PREV_VERSION);
             console.log('Release type is', RELEASE_TYPE);
 
+            if (RELEASE_TYPE === 'no-version') {
+              console.log('No version bump needed');
+              return PREV_VERSION;
+            }
+
             const numbers = PREV_VERSION.split('.');
             const numberIdx = ['major-version', 'minor-version', 'patch-version'].indexOf(RELEASE_TYPE);
             numbers[numberIdx] = parseInt(numbers[numberIdx]) + 1;
