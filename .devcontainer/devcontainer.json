@@ -13,7 +13,7 @@
 		"ghcr.io/devcontainers-contrib/features/yamllint:2": {},
 		"ghcr.io/dhoeric/features/terraform-docs:1": {},
 		"ghcr.io/robbert229/devcontainer-features/opentofu:1": {
-			"version": "1.6.2"
+			"version": "1.7.1"
 		},
 		"ghcr.io/prulloac/devcontainer-features/pre-commit:1": {},
 		"ghcr.io/devcontainers-contrib/features/checkov:1": {},

@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.6.0"
+  required_version = ">= 1.6.0, < 2.0.0"
   # Chatbot is only supported in awscc so we include both.
   required_providers {
     aws = {

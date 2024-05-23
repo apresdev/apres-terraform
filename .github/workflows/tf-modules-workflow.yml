@@ -36,7 +36,7 @@ jobs:
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
-          tofu_version: 1.6.0
+          tofu_version: 1.7.1
 
       - name: OpenTofu fmt
         id: fmt
