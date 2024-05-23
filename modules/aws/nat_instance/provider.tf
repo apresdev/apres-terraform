@@ -5,5 +5,6 @@ terraform {
       version = ">= 4.0"
     }
   }
+  # Allow 1.6 to 2.0
   required_version = ">= 1.6.0, < 2.0.0"
 }
