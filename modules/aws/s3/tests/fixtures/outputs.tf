@@ -17,3 +17,7 @@ output "aws_account_id" {
 output "aws_region" {
     value = data.aws_region.current.name
 }
+
+output "default_bucket_policy" {
+    value = module.s3.default_bucket_policy
+}

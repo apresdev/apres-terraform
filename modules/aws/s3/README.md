@@ -107,6 +107,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
+| <a name="input_set_default_bucket_policy"></a> [set\_default\_bucket\_policy](#input\_set\_default\_bucket\_policy) | A bucket policy can only be set in one place, or it'll get overwritten. For some cases you may need to add statements<br>  that include ARN's of other resources. If that's the case, set this to false, and then use the output `default_bucket_policy`<br>  to include in your own policy. For example, in your code:<pre>hcl<br>    module "s3" {<br>      # ...<br>      set_default_bucket_policy = false<br>    }<br><br>    data "aws_iam_policy_document" "default" {<br>      # your statements here<br>    }<br><br>    resource "aws_s3_bucket_policy" "default" {<br>      bucket = module.s3.bucket_name<br>      policy = data.aws_iam_policy_document.default.json<br>      source_policy_documents = [ module.s3.default_bucket_policy ]<br>    }</pre>The statement SID's must be uniuqe, the SID used in the default policy is "DenyUnSecureCommunications". | `bool` | `true` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Flag to indicate if object versioning is enabled.  Defaults to true due to best practice: Ensure AWS S3 object versioning is enabled. | `bool` | `true` | no |
 
 ## Outputs
@@ -117,4 +118,5 @@ No modules.
 | <a name="output_bucket_domain_name"></a> [bucket\_domain\_name](#output\_bucket\_domain\_name) | The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`. |
 | <a name="output_bucket_name"></a> [bucket\_name](#output\_bucket\_name) | The name of the S3 bucket. |
 | <a name="output_bucket_regional_domain_name"></a> [bucket\_regional\_domain\_name](#output\_bucket\_regional\_domain\_name) | The bucket regional domain name. Will be of format `bucketname.s3.region.amazonaws.com`. |
+| <a name="output_default_bucket_policy"></a> [default\_bucket\_policy](#output\_default\_bucket\_policy) | See comment on the variable `set_default_bucket_policy` for how to use this output. |
 <!-- END_TF_DOCS -->
