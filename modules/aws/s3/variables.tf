@@ -61,3 +61,30 @@ variable "default_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "set_default_bucket_policy" {
+  description = <<EOF
+  A bucket policy can only be set in one place, or it'll get overwritten. For some cases you may need to add statements
+  that include ARN's of other resources. If that's the case, set this to false, and then use the output `default_bucket_policy`
+  to include in your own policy. For example, in your code:
+    ```hcl
+    module "s3" {
+      # ...
+      set_default_bucket_policy = false
+    }
+
+    data "aws_iam_policy_document" "default" {
+      # your statements here
+    }
+
+    resource "aws_s3_bucket_policy" "default" {
+      bucket = module.s3.bucket_name
+      policy = data.aws_iam_policy_document.default.json
+      source_policy_documents = [ module.s3.default_bucket_policy ]
+    }
+    ```
+    The statement SID's must be uniuqe, the SID used in the default policy is "DenyUnSecureCommunications".
+  EOF
+  type        = bool
+  default     = true
+}
