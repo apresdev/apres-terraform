@@ -104,6 +104,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
+| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
+| <a name="input_encryption_sse_algorithm"></a> [encryption\_sse\_algorithm](#input\_encryption\_sse\_algorithm) | The server-side encryption algorithm to use. Defaults to 'aws:kms'. | `string` | `"aws:kms"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
