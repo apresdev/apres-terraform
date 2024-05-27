@@ -88,3 +88,18 @@ variable "set_default_bucket_policy" {
   type        = bool
   default     = true
 }
+
+variable "encryption_sse_algorithm" {
+  description = "The server-side encryption algorithm to use. Defaults to 'aws:kms'."
+  type        = string
+  default     = "aws:kms"
+}
+
+variable "encryption_kms_key_id" {
+  description = <<EOF
+  The ARN of the KMS key to use for server-side encryption. If not provided,
+  the default AWS managed key 'aws/s3' will be used.
+  EOF
+  type        = string
+  default     = ""
+}
