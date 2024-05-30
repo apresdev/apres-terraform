@@ -27,7 +27,9 @@ variable "vpc_cidr" {
 
 # NOTE: Assumes 3 AZs and 3 Subnets in each!
 variable "vpc_public_subnet_cidrs" {
-  description = "List of 3 CIDR blocks for the private subnets. For example, ['10.100.0.0/23', '10.100.2.0/23', '10.100.4.0/23']"
+  description = <<EOF
+  List of 3 CIDR blocks for the private subnets. For example, ["10.100.0.0/23", "10.100.2.0/23", "10.100.4.0/23"]
+  EOF
   type        = list(string)
   validation {
     condition     = can([for cidr in var.vpc_public_subnet_cidrs : can(cidrhost(cidr, 0))])
@@ -40,7 +42,9 @@ variable "vpc_public_subnet_cidrs" {
 }
 
 variable "vpc_private_subnet_cidrs" {
-  description = "The CIDR block for the private subnets. For example: ['10.100.16.0/20', '10.100.32.0/20', '10.100.48.0/20']"
+  description = <<EOF
+  The CIDR block for the private subnets. For example: ["10.100.16.0/20", "10.100.32.0/20", "10.100.48.0/20"]
+  EOF
   type        = list(string)
   validation {
     condition     = can([for cidr in var.vpc_private_subnet_cidrs : can(cidrhost(cidr, 0))])
@@ -53,7 +57,9 @@ variable "vpc_private_subnet_cidrs" {
 }
 
 variable "vpc_persistence_subnet_cidrs" {
-  description = "The CIDR block for the persistence subnets. For example: ['10.100.64.0/20', '10.100.80.0/20', '10.100.96.0/20']"
+  description = <<EOF
+  The CIDR block for the persistence subnets. For example: ["10.100.64.0/20", "10.100.80.0/20", "10.100.96.0/20"]
+  EOF
   type        = list(string)
   validation {
     condition     = can([for cidr in var.vpc_persistence_subnet_cidrs : can(cidrhost(cidr, 0))])
@@ -99,14 +105,40 @@ variable "nat_instance_dashboard_name" {
 }
 
 variable "vpc_service_endpoints" {
-  description = <<DESCRIPTION
+  description = <<EOF
     List of VPC endpoints of AWS Services to create, use the service name. For example  ["ec2messages", "ssm", "ssmmessages"]
     will setup VPC endpoints for SSM Session Manager to work without internet access. These will be interpreted into
-    endpoints wiht the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported. Also S3 and DynamoDB
-    are not supported in this provider since they are Gateway endpoints, not Interface endpoints.
+    endpoints with the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported.
     See https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html for the list
-    of supported services. Note these cost $7 each per month plus bandwidth.
-  DESCRIPTION
+    of supported services.
+
+    Endpoints will be created as Interface endpoints, using AWS PrivateLinke. Interface endpoints cost $7 per AZ,
+    per month, plus bandwidth. A single endpoint deployed to 3 AZs will cost $21 per month.
+
+    S3 and Dynamodb endpoints are special cases, they can be setup as Interface and/or Gateway endpoints, both can
+    be deployed at the same time. See
+    https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html#types-of-vpc-endpoints-for-s3
+    for the details. To enable S3 or DynamoDB _service_ endpoints, add them to this list.
+    To enable the VPC Gateway endpoints, set the variables `enable_s3_vpc_endpoint` and `enable_dynamodb_vpc_endpoint`. The
+    Gateway endpoints are not billed, but use public IP addresses instead of private ones.
+
+    Note that Gateway endpoints are not applied to the "persistence" subnets, since those subnets do not have routes
+    to public IP addresses, and Gateway endpoints have public IP addresses. If you wish the persistence subnets
+    to access S3 and DynamoDB, use the Interface endpoints.
+  EOF
   type        = list(string)
   default     = []
+  # TODO: validate that s3 and dynamodb aren't set here
+}
+
+variable "enable_s3_gateway_endpoint" {
+  description = "Enable the S3 VPC Gateway endpoint. See notes on vpc_service_endpoints for details."
+  type        = bool
+  default     = false
+}
+
+variable "enable_dynamodb_gateway_endpoint" {
+  description = "Enable the DynamoDB VPC Gateway endpoint. See notes on vpc_service_endpoints for details."
+  type        = bool
+  default     = false
 }

@@ -18,6 +18,19 @@ The module also creates a simple CloudWatch dashboard to monitor the NAT instanc
 
 CIDR ranges are purposely not set, accepting the defaults could be difficult to undo later.
 
+## Service Endpoints
+
+Service Endpoints are supported, but note that S3, DynamoDB and Sagemaker are special cases.
+Sagemaker endpoints are not supported in this module because of the non-standard DNS names provided.
+S3 and DynamoDB are supported for both Interface and Gateway styles. See the notes for the variable `vpc_service_endpoints` for a more
+in-depth discussion, and these links:
+* [AWS Services that integrate with AWS PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html)
+* [AWS PrivateLink for Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html)
+* [AWS PrivateLink for DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/privatelink-interface-endpoints.html)
+
+Also take note of the cost of Service Endpoints, which at time of writing is roughly $7 per endpoint per subnet per month. Which
+in translates to $21 per month for a single endpoint, plus bandwidth costs.
+
 ## Example
 
 ```hcl
@@ -122,6 +135,8 @@ Substitute `${AWS::Region}` with the region where this is deployed.
 | [aws_subnet.private_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 | [aws_subnet.public_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
+| [aws_vpc_endpoint.dynamodb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
+| [aws_vpc_endpoint.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_vpc_endpoint.service_endpoints](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_ami.fck_nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
@@ -135,16 +150,18 @@ Substitute `${AWS::Region}` with the region where this is deployed.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "VPC",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
+| <a name="input_enable_dynamodb_gateway_endpoint"></a> [enable\_dynamodb\_gateway\_endpoint](#input\_enable\_dynamodb\_gateway\_endpoint) | Enable the DynamoDB VPC Gateway endpoint. See notes on vpc\_service\_endpoints for details. | `bool` | `false` | no |
+| <a name="input_enable_s3_gateway_endpoint"></a> [enable\_s3\_gateway\_endpoint](#input\_enable\_s3\_gateway\_endpoint) | Enable the S3 VPC Gateway endpoint. See notes on vpc\_service\_endpoints for details. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
 | <a name="input_nat_instance_dashboard_name"></a> [nat\_instance\_dashboard\_name](#input\_nat\_instance\_dashboard\_name) | Name of the NAT Instance Dashboard | `string` | `"NATInstanceDashboard"` | no |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR block for the VPC. For example '10.100.0.0/16' | `string` | n/a | yes |
 | <a name="input_vpc_flow_log_retention_days"></a> [vpc\_flow\_log\_retention\_days](#input\_vpc\_flow\_log\_retention\_days) | Retention days for the VPC flow logs, see CloudWatch Logs for valid values. | `number` | `365` | no |
 | <a name="input_vpc_flow_log_traffic_type"></a> [vpc\_flow\_log\_traffic\_type](#input\_vpc\_flow\_log\_traffic\_type) | Flow Logs Traffic Type, one of 'ACCEPT', 'REJECT', or 'ALL' | `string` | `"REJECT"` | no |
 | <a name="input_vpc_nat_instance_type"></a> [vpc\_nat\_instance\_type](#input\_vpc\_nat\_instance\_type) | Instance type for the NAT instance | `string` | `"t4g.nano"` | no |
-| <a name="input_vpc_persistence_subnet_cidrs"></a> [vpc\_persistence\_subnet\_cidrs](#input\_vpc\_persistence\_subnet\_cidrs) | The CIDR block for the persistence subnets. For example: ['10.100.64.0/20', '10.100.80.0/20', '10.100.96.0/20'] | `list(string)` | n/a | yes |
-| <a name="input_vpc_private_subnet_cidrs"></a> [vpc\_private\_subnet\_cidrs](#input\_vpc\_private\_subnet\_cidrs) | The CIDR block for the private subnets. For example: ['10.100.16.0/20', '10.100.32.0/20', '10.100.48.0/20'] | `list(string)` | n/a | yes |
-| <a name="input_vpc_public_subnet_cidrs"></a> [vpc\_public\_subnet\_cidrs](#input\_vpc\_public\_subnet\_cidrs) | List of 3 CIDR blocks for the private subnets. For example, ['10.100.0.0/23', '10.100.2.0/23', '10.100.4.0/23'] | `list(string)` | n/a | yes |
-| <a name="input_vpc_service_endpoints"></a> [vpc\_service\_endpoints](#input\_vpc\_service\_endpoints) | List of VPC endpoints of AWS Services to create, use the service name. For example  ["ec2messages", "ssm", "ssmmessages"]<br>    will setup VPC endpoints for SSM Session Manager to work without internet access. These will be interpreted into<br>    endpoints wiht the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported. Also S3 and DynamoDB<br>    are not supported in this provider since they are Gateway endpoints, not Interface endpoints.<br>    See https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html for the list<br>    of supported services. Note these cost $7 each per month plus bandwidth. | `list(string)` | `[]` | no |
+| <a name="input_vpc_persistence_subnet_cidrs"></a> [vpc\_persistence\_subnet\_cidrs](#input\_vpc\_persistence\_subnet\_cidrs) | The CIDR block for the persistence subnets. For example: ["10.100.64.0/20", "10.100.80.0/20", "10.100.96.0/20"] | `list(string)` | n/a | yes |
+| <a name="input_vpc_private_subnet_cidrs"></a> [vpc\_private\_subnet\_cidrs](#input\_vpc\_private\_subnet\_cidrs) | The CIDR block for the private subnets. For example: ["10.100.16.0/20", "10.100.32.0/20", "10.100.48.0/20"] | `list(string)` | n/a | yes |
+| <a name="input_vpc_public_subnet_cidrs"></a> [vpc\_public\_subnet\_cidrs](#input\_vpc\_public\_subnet\_cidrs) | List of 3 CIDR blocks for the private subnets. For example, ["10.100.0.0/23", "10.100.2.0/23", "10.100.4.0/23"] | `list(string)` | n/a | yes |
+| <a name="input_vpc_service_endpoints"></a> [vpc\_service\_endpoints](#input\_vpc\_service\_endpoints) | List of VPC endpoints of AWS Services to create, use the service name. For example  ["ec2messages", "ssm", "ssmmessages"]<br>    will setup VPC endpoints for SSM Session Manager to work without internet access. These will be interpreted into<br>    endpoints with the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported.<br>    See https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html for the list<br>    of supported services.<br><br>    Endpoints will be created as Interface endpoints, using AWS PrivateLinke. Interface endpoints cost $7 per AZ,<br>    per month, plus bandwidth. A single endpoint deployed to 3 AZs will cost $21 per month.<br><br>    S3 and Dynamodb endpoints are special cases, they can be setup as Interface and/or Gateway endpoints, both can<br>    be deployed at the same time. See<br>    https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html#types-of-vpc-endpoints-for-s3<br>    for the details. To enable S3 or DynamoDB _service_ endpoints, add them to this list.<br>    To enable the VPC Gateway endpoints, set the variables `enable_s3_vpc_endpoint` and `enable_dynamodb_vpc_endpoint`. The<br>    Gateway endpoints are not billed, but use public IP addresses instead of private ones.<br><br>    Note that Gateway endpoints are not applied to the "persistence" subnets, since those subnets do not have routes<br>    to public IP addresses, and Gateway endpoints have public IP addresses. If you wish the persistence subnets<br>    to access S3 and DynamoDB, use the Interface endpoints. | `list(string)` | `[]` | no |
 
 ## Outputs
 
