@@ -108,11 +108,11 @@ variable "vpc_service_endpoints" {
   description = <<EOF
     List of VPC endpoints of AWS Services to create, use the service name. For example  ["ec2messages", "ssm", "ssmmessages"]
     will setup VPC endpoints for SSM Session Manager to work without internet access. These will be interpreted into
-    endpoints with the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported.
+    endpoints with the name 'com.amazonaws.<region>.<service>' and as such Sagemaker is not supported, but not enforced.
     See https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html for the list
     of supported services.
 
-    Endpoints will be created as Interface endpoints, using AWS PrivateLinke. Interface endpoints cost $7 per AZ,
+    Endpoints will be created as Interface endpoints, using AWS PrivateLink. Interface endpoints cost $7 per AZ,
     per month, plus bandwidth. A single endpoint deployed to 3 AZs will cost $21 per month.
 
     S3 and Dynamodb endpoints are special cases, they can be setup as Interface and/or Gateway endpoints, both can
@@ -122,13 +122,12 @@ variable "vpc_service_endpoints" {
     To enable the VPC Gateway endpoints, set the variables `enable_s3_vpc_endpoint` and `enable_dynamodb_vpc_endpoint`. The
     Gateway endpoints are not billed, but use public IP addresses instead of private ones.
 
-    Note that Gateway endpoints are not applied to the "persistence" subnets, since those subnets do not have routes
-    to public IP addresses, and Gateway endpoints have public IP addresses. If you wish the persistence subnets
-    to access S3 and DynamoDB, use the Interface endpoints.
+    Note that Gateway endpoints are not enabled in the "persistence" subnets, since Gateway endpoints have public IP addresses
+    and the persistence subnets do not have routes to the public Internet.
+    If you _really_ need services in the persistence subnets to access S3 and DynamoDB, use the Interface endpoints.
   EOF
   type        = list(string)
   default     = []
-  # TODO: validate that s3 and dynamodb aren't set here
 }
 
 variable "enable_s3_gateway_endpoint" {
