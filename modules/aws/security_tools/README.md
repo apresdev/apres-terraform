@@ -114,11 +114,12 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.45.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 0.74.0 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_alerting"></a> [alerting](#module\_alerting) | ../alerting | n/a |
 
 ## Resources
 
@@ -131,30 +132,18 @@ No modules.
 | [aws_guardduty_detector_feature.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
 | [aws_guardduty_detector_feature.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
 | [aws_guardduty_organization_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration) | resource |
-| [aws_iam_policy.chatbot_guardrails](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_kms_alias.securityhubsns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
-| [aws_kms_key.securityhubsns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
-| [aws_kms_key_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
 | [aws_securityhub_configuration_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_configuration_policy) | resource |
 | [aws_securityhub_configuration_policy_association.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_configuration_policy_association) | resource |
 | [aws_securityhub_finding_aggregator.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_finding_aggregator) | resource |
 | [aws_securityhub_organization_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_organization_configuration) | resource |
-| [aws_sns_topic.security_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
-| [aws_sns_topic_policy.security_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_policy) | resource |
-| [awscc_chatbot_microsoft_teams_channel_configuration.security_hub](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/chatbot_microsoft_teams_channel_configuration) | resource |
-| [awscc_chatbot_slack_channel_configuration.security_hub](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/chatbot_slack_channel_configuration) | resource |
-| [awscc_iam_role.security_hub_msteams](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
-| [awscc_iam_role.security_hub_slack](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_guardduty_detector.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/guardduty_detector) | data source |
-| [aws_iam_policy_document.sns_topic_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_allow_chatbot_update_findings"></a> [allow\_chatbot\_update\_findings](#input\_allow\_chatbot\_update\_findings) | Allow Chatbot to update findings. This applies to Slack and/or Teams. | `bool` | `true` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "securitytools",<br>  "component": "securitytools",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
 | <a name="input_guardduty_enable_eks_protection"></a> [guardduty\_enable\_eks\_protection](#input\_guardduty\_enable\_eks\_protection) | Enable GuardDuty to monitor EKS clusters | `bool` | `true` | no |
