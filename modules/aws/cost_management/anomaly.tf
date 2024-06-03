@@ -30,14 +30,14 @@ resource "aws_ce_anomaly_subscription" "chat" {
       dimension {
         key           = "ANOMALY_TOTAL_IMPACT_PERCENTAGE"
         match_options = ["GREATER_THAN_OR_EQUAL"]
-        values        = [tostring(var.alert_on_percentage)]
+        values        = [tostring(var.anomaly_alert_on_percentage)]
       }
     }
     and {
       dimension {
         key           = "ANOMALY_TOTAL_IMPACT_ABSOLUTE"
         match_options = ["GREATER_THAN_OR_EQUAL"]
-        values        = [tostring(var.alert_on_dollars)]
+        values        = [tostring(var.anomaly_alert_on_dollars)]
 
       }
     }
@@ -79,14 +79,14 @@ resource "aws_ce_anomaly_subscription" "email" {
       dimension {
         key           = "ANOMALY_TOTAL_IMPACT_PERCENTAGE"
         match_options = ["GREATER_THAN_OR_EQUAL"]
-        values        = [tostring(var.alert_on_percentage)]
+        values        = [tostring(var.anomaly_alert_on_percentage)]
       }
     }
     and {
       dimension {
         key           = "ANOMALY_TOTAL_IMPACT_ABSOLUTE"
         match_options = ["GREATER_THAN_OR_EQUAL"]
-        values        = [tostring(var.alert_on_dollars)]
+        values        = [tostring(var.anomaly_alert_on_dollars)]
 
       }
     }

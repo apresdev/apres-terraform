@@ -29,28 +29,28 @@ variable "frequency" {
   }
 }
 
-variable "alert_on_percentage" {
+variable "anomaly_alert_on_percentage" {
   description = <<EOF
-    Alert if an anomaly is greater than or equal to this percentage. This condition will be combined with
-    the alert_on_dollars condition using an AND operator. Valid values are 0-100.
+    Alert if a Cost Anomaly is greater than or equal to this percentage. This condition will be combined with
+    the anomaly_alert_on_dollars condition using an AND operator. Valid values can be more than 100%.
   EOF
   type        = number
   default     = 10
   validation {
-    condition     = var.alert_on_percentage >= 0 && var.alert_on_percentage <= 100
-    error_message = "Alert on percentage must be between 0 and 100."
+    condition     = var.anomaly_alert_on_percentage > 0
+    error_message = "Alert on percentage must be higher than 0."
   }
 }
 
-variable "alert_on_dollars" {
+variable "anomaly_alert_on_dollars" {
   description = <<EOF
-    Alert if an anomaly is greater than or equal to this dollar amount. This condition will be combined with
-    the alert_on_percentage condition using an AND operator.
+    Alert if a Cost Anomaly is greater than or equal to this dollar amount. This condition will be combined with
+    the anomaly_alert_on_percentage condition using an AND operator.
   EOF
   type        = number
   default     = 100
   validation {
-    condition     = var.alert_on_dollars >= 0
+    condition     = var.anomaly_alert_on_dollars >= 0
     error_message = "Alert on dollars must be greater than or equal to 0."
   }
 }
@@ -67,7 +67,8 @@ variable "slack_workspace_id" {
 variable "slack_channel_id" {
   description = <<EOF
   The Slack channel ID for notifications. To find a channel ID, in Slack, right click on a channel
-  and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N
+  and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N. If left blank
+  Slack integration will not be enabled.
   EOF
   type        = string
   default     = ""
@@ -88,6 +89,8 @@ variable "msteams_channel_id" {
     `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990`
     and the Channel ID is between the slashes after `channel`, in this case the Channel ID i
     is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`.
+
+    If left blank, MS Teams integration will not be enabled.
     EOF
   type        = string
   default     = ""

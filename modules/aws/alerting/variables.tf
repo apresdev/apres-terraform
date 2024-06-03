@@ -1,6 +1,6 @@
 
 variable "name" {
-  description = "Name prepended to the SNS topic"
+  description = "Name appended to the SNS topic, and used to identify other resources"
   type        = string
 }
 
@@ -24,6 +24,8 @@ variable "slack_workspace_id" {
   description = <<EOF
   The Slack workspace ID for notifications,
   see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID on how to find it.
+
+  If not set, Slack integration will not be enabled.
   EOF
   type        = string
   default     = ""
@@ -40,7 +42,8 @@ variable "slack_channel_id" {
 
 variable "msteams_team_id" {
   description = <<EOF
-    The Microsoft Teams Team ID for notifications. This is displayed in the AWS Console"
+    The Microsoft Teams "Team ID" for notifications. This is displayed in the AWS Console. If not set,
+    Teams integration will not be enabled.
     EOF
   type        = string
   default     = ""
@@ -68,7 +71,7 @@ variable "msteams_tenant_id" {
 
 variable "email_addresses" {
   description = <<EOF
-    List of email addresses to send notifications to. At least one email address must be set.
+    List of email addresses to send notifications to.
     EOF
   type        = list(string)
   default     = []

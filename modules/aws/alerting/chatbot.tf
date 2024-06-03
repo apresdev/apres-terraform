@@ -1,6 +1,7 @@
 # If there are no policy arns or policy json defined, we need to create an empty statement else
 # the guardrail will be set to Administrator. While this looks alarming, the actual access the Chatbot gets
-# is an intersection of the role and the guardrail policy, but to prevent alarms we'll create an empty innocuous policy.
+# is an intersection of the role and the guardrail policy, but to prevent alarmed users we'll
+# create an empty innocuous policy.
 resource "aws_iam_policy" "chatbot_guardrails" {
   count       = length(var.chatbot_policy_arns) == 0 ? 1 : 0
   name_prefix = "ChatBot-Guardrails"
@@ -22,11 +23,6 @@ resource "aws_iam_policy" "chatbot_guardrails" {
     },
   )
 }
-
-#locals {
-#  # Set the arns to the one passed in, or else the one defined above. Do this so don't have an empty policy document
-#  chatbot_policy_arns = length(var.chatbot_policy_arns) > 0 ? var.chatbot_policy_arns : [aws_iam_policy.chatbot_guardrails.arn]
-#}
 
 data "aws_iam_policy_document" "chatbot_assume_role" {
   statement {
