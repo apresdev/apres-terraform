@@ -32,6 +32,40 @@ You have three options for alerting, and can use any or all as needed.
 
 Configuration for Microsoft Teams and Slack unfortunately requires a manual step, see the [alerting module](../alerting/README.md) for details.
 
+## AWS IAM Permissions
+
+The following permissions are required to use this module. This includes
+permissions required any submodules. Substitute `${AWS::AccountId}` with the Account ID where this is deployed, and `${AWS::Region}` with the correct region.
+
+```json
+{
+    "Effect": "Allow",
+    "Action": [
+        "budgets:*",
+        "ce:*",
+        "kms:*",
+    ],
+    "Resource": "*"
+},
+{
+    "Effect": "Allow",
+    "Action": [
+        "iam:*"
+    ],
+    "Resource": [
+        "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
+        "arn:aws:iam::${AWS::AccountId}:role/ChatBot*"
+    ]
+},
+{
+    "Effect": "Allow",
+    "Action": [
+        "sns:*"
+    ],
+    "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:apres-alerting-costmanagement"
+}
+
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

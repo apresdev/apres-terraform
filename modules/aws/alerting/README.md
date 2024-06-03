@@ -52,44 +52,6 @@ Once the Microsoft Teams integration is setup, set the `msteams_team_id`, `mstea
 * The AWS Console will conveniently show the Team ID and Tenant ID.
 * The Channel Id is buried in the URL to the channel, and can be found in Teams using the "Get link to channel" menu option. A resulting URL might look like `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990` and the Channel ID is between the slashes after `channel`, in this case the Channel ID is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`.
 
-## AWS IAM Permissions
-
-The following permissions are required to use this module, shown as a Policy snippet in JSON.
-Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
-
-```json
-{
-  "Effect": "Allow",
-  "Action": [
-     "chatbot:*",
-     "sns:*"
-  ],
-  "Resource": "*"
-},
-{
-  "Effect": "Allow",
-  "Action": "iam:*",
-  "Resource": [
-     "arn:aws:iam::${AWS::AccountId}:role/ChatBot*",
-     "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
-     "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:security_hub_findings",
-     "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/management.chatbot.amazonaws.com/AWSServiceRoleForAWSChatbot"
-
-  ]
-},
-{
-  {
-    "Action": [
-      "kms:*"
-    ],
-    "Resource": [
-      "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:*"
-    ],
-      "Effect": "Allow"
-    }
-}
-```
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
