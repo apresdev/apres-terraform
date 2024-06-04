@@ -120,12 +120,6 @@ variable "msteams_tenant_id" {
   default     = ""
 }
 
-variable "allow_chatbot_update_findings" {
-  description = "Allow Chatbot to update findings. This applies to Slack and/or Teams."
-  type        = bool
-  default     = true
-}
-
 variable "organization_root_id" {
   description = "ID of the Root of the organization to associate the Security Hub configuration policy with."
   type        = string

@@ -3,21 +3,25 @@ repos:
     rev: "v0.17.0"
     hooks:
       - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/vpc"]
-      - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/nat_instance"]
-      - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/ecr_private_repo"]
-      - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/s3"]
-      - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/acm_public_cert"]
       - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs_regional"]
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/alerting"]
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs"]
       - id: terraform-docs-go
-        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools_delegator"]
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs_regional"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cost_management"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/ecr_private_repo"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/nat_instance"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/s3"]
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools_delegator"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/vpc"]
 
