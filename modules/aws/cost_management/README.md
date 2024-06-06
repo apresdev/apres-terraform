@@ -37,12 +37,17 @@ Configuration for Microsoft Teams and Slack unfortunately requires a manual step
 The following permissions are required to use this module. This includes
 permissions required any submodules. Substitute `${AWS::AccountId}` with the Account ID where this is deployed, and `${AWS::Region}` with the correct region.
 
+CloudFormation permissions may look strange... the alerting module uses the `awscc` provider to configured ChatBot,
+which requires CloudFormation API access.
+
 ```json
 {
     "Effect": "Allow",
     "Action": [
         "budgets:*",
         "ce:*",
+        "chatbot:*",
+        "cloudformation:*"
         "kms:*",
     ],
     "Resource": "*"
