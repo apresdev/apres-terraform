@@ -47,7 +47,7 @@ func VerifyTagsValueFormat(tags []TagItem) (bool, []string) {
 	// Regex for all tag values except Name
 	valueRegex, _ := regexp.Compile("^[A-Z][a-zA-Z0-9]+$")
 	// Regex for Name tags
-	nameRegex, _ := regexp.Compile("^[A-Z][a-zA-Z0-9-_ ]+$")
+	nameRegex, _ := regexp.Compile("^[a-zA-Z0-9-_ ]+$")
 	for _, tag := range tags {
 		if *tag.Key == "Name" {
 			if !nameRegex.MatchString(*tag.Value) {

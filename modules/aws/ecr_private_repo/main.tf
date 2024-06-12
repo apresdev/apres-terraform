@@ -1,7 +1,13 @@
 locals {
   tags = merge(
     var.default_tags,
-    tomap({ "environment" = var.environment, component = "ECR" })
+    tomap({
+      "managed-by"  = "Terraform"
+      "application" = var.application
+      "component"   = var.component
+      "environment" = var.environment
+      "owner"       = var.owner
+    })
   )
 
   github_oidc_iam_role_name   = "GitHubActionsECRServiceRole${title(var.name)}"
@@ -90,9 +96,13 @@ resource "aws_iam_policy" "github_actions" {
   path        = "/"
   description = "IAM policy for GitHub Actions for ECR - ${var.name}"
   policy      = data.aws_iam_policy_document.github_actions.json
+  tags = merge(
+    local.tags,
+    {
+      Name = local.github_oidc_iam_policy_name
+    },
+  )
 }
-
-
 
 data "aws_iam_policy_document" "github_actions_trust" {
   #checkov:skip=CKV_AWS_358:False positive
@@ -122,14 +132,12 @@ resource "aws_iam_role" "github_actions" {
   name               = local.github_oidc_iam_role_name
   description        = "IAM Role for GitHub Actions for ECR"
   assume_role_policy = data.aws_iam_policy_document.github_actions_trust.json
-  tags = {
-    Name        = local.github_oidc_iam_role_name
-    application = "GitHub"
-    component   = "GitHubOIDC"
-    environment = var.environment
-    owner       = "Engineering"
-    managed-by  = "terraform"
-  }
+  tags = merge(
+    local.tags,
+    {
+      Name = local.github_oidc_iam_role_name
+    },
+  )
 }
 
 resource "aws_iam_policy_attachment" "github_actions" {

@@ -105,4 +105,19 @@ func TestS3(t *testing.T) {
 	valid, bad := awstagging.VerifyTagsValueFormat(tags)
 	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
 
+	// Check Tags
+	tagsResp, err = svc.GetBucketTagging(context.TODO(), &s3.GetBucketTaggingInput{Bucket: &expectedBucketName})
+	assert.Nil(t, err)
+
+	// Tag structs are specific to the service, so convert to awstagging.TagItem
+	tags = make([]awstagging.TagItem, 0)
+	for _, tag := range tagsResp.TagSet {
+		tags = append(tags, awstagging.TagItem{Key: tag.Key, Value: tag.Value})
+	}
+	valid, missing = awstagging.VerifyTagsExist(tags)
+	assert.True(t, valid, fmt.Sprintf("Expected tags not found: %v", missing))
+
+	valid, bad = awstagging.VerifyTagsValueFormat(tags)
+	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
+
 }
