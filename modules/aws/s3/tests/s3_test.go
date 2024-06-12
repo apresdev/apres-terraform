@@ -7,12 +7,15 @@ import (
 	"testing"
 	"time"
 
+	"apres.dev/awstagging"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
+
+// TODO: This should be pulled into a separate module
 
 func TestS3(t *testing.T) {
 	// Define the AWS region we want to test in
@@ -86,5 +89,21 @@ func TestS3(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, len(enc_resp.ServerSideEncryptionConfiguration.Rules) > 0, "Expected server-side encryption to be enabled")
 	assert.True(t, enc_resp.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm == types.ServerSideEncryptionAwsKms, "Expected AWS KMS encryption")
+
+	// Check Tags
+	tags_resp, err := svc.GetBucketTagging(context.TODO(), &s3.GetBucketTaggingInput{Bucket: &expectedBucketName})
+	assert.Nil(t, err)
+
+	// Tag structs are specific to the service, so convert to awstagging.TagItem
+	tags := make([]awstagging.TagItem, 0)
+	for _, tag := range tags_resp.TagSet {
+		tags = append(tags, awstagging.TagItem{Key: tag.Key, Value: tag.Value})
+	}
+	valid, missing := awstagging.VerifyTagsExist(tags)
+	assert.True(t, valid, fmt.Sprintf("Expected tags not found: %v", missing))
+
+	valid, bad := awstagging.VerifyTagsValueFormat(tags)
+	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
+
 
 }

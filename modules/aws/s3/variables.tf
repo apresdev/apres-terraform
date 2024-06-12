@@ -103,3 +103,18 @@ variable "encryption_kms_key_id" {
   type        = string
   default     = ""
 }
+
+variable "application" {
+  description = "Application name, used for tagging AWS resources."
+  type        = string
+}
+
+variable "component" {
+  description = "Component name, used for tagging AWS resources."
+  type        = string
+}
+
+variable "owner" {
+  description = "Owner of the resources, used for tagging AWS resources."
+  type        = string
+}

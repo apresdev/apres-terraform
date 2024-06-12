@@ -14,5 +14,5 @@ variable "name" {
 variable "environment" {
   description = "Environment name, used for tagging AWS resources."
   type        = string
-  default     = "dev"
+  default     = "unittest"
 }

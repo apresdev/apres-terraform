@@ -103,12 +103,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
 | <a name="input_encryption_sse_algorithm"></a> [encryption\_sse\_algorithm](#input\_encryption\_sse\_algorithm) | The server-side encryption algorithm to use. Defaults to 'aws:kms'. | `string` | `"aws:kms"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_set_default_bucket_policy"></a> [set\_default\_bucket\_policy](#input\_set\_default\_bucket\_policy) | A bucket policy can only be set in one place, or it'll get overwritten. For some cases you may need to add statements<br>  that include ARN's of other resources. If that's the case, set this to false, and then use the output `default_bucket_policy`<br>  to include in your own policy. For example, in your code:<pre>hcl<br>    module "s3" {<br>      # ...<br>      set_default_bucket_policy = false<br>    }<br><br>    data "aws_iam_policy_document" "default" {<br>      # your statements here<br>    }<br><br>    resource "aws_s3_bucket_policy" "default" {<br>      bucket = module.s3.bucket_name<br>      policy = data.aws_iam_policy_document.default.json<br>      source_policy_documents = [ module.s3.default_bucket_policy ]<br>    }</pre>The statement SID's must be uniuqe, the SID used in the default policy is "DenyUnSecureCommunications". | `bool` | `true` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Flag to indicate if object versioning is enabled.  Defaults to true due to best practice: Ensure AWS S3 object versioning is enabled. | `bool` | `true` | no |
 
