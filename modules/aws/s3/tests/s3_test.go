@@ -74,29 +74,29 @@ func TestS3(t *testing.T) {
 	svc := s3.NewFromConfig(cfg)
 
 	// Check versioning
-	version_resp, err := svc.GetBucketVersioning(context.TODO(), &s3.GetBucketVersioningInput{Bucket: &expectedBucketName})
+	versionResp, err := svc.GetBucketVersioning(context.TODO(), &s3.GetBucketVersioningInput{Bucket: &expectedBucketName})
 	assert.Nil(t, err)
-	assert.Equal(t, version_resp.Status, types.BucketVersioningStatusEnabled, "Expected versioning to be enabled")
-	assert.Equal(t, version_resp.MFADelete, types.MFADeleteStatusDisabled, "Expected MFA delete to be disabled for testing")
+	assert.Equal(t, versionResp.Status, types.BucketVersioningStatusEnabled, "Expected versioning to be enabled")
+	assert.Equal(t, versionResp.MFADelete, types.MFADeleteStatusDisabled, "Expected MFA delete to be disabled for testing")
 
 	// Public access
-	public_resp, err := svc.GetPublicAccessBlock(context.TODO(), &s3.GetPublicAccessBlockInput{Bucket: &expectedBucketName})
+	publicResp, err := svc.GetPublicAccessBlock(context.TODO(), &s3.GetPublicAccessBlockInput{Bucket: &expectedBucketName})
 	assert.Nil(t, err)
-	assert.True(t, *public_resp.PublicAccessBlockConfiguration.BlockPublicAcls, "Expected public ACLs to be blocked")
+	assert.True(t, *publicResp.PublicAccessBlockConfiguration.BlockPublicAcls, "Expected public ACLs to be blocked")
 
 	// Encryption
-	enc_resp, err := svc.GetBucketEncryption(context.TODO(), &s3.GetBucketEncryptionInput{Bucket: &expectedBucketName})
+	encResp, err := svc.GetBucketEncryption(context.TODO(), &s3.GetBucketEncryptionInput{Bucket: &expectedBucketName})
 	assert.Nil(t, err)
-	assert.True(t, len(enc_resp.ServerSideEncryptionConfiguration.Rules) > 0, "Expected server-side encryption to be enabled")
-	assert.True(t, enc_resp.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm == types.ServerSideEncryptionAwsKms, "Expected AWS KMS encryption")
+	assert.True(t, len(encResp.ServerSideEncryptionConfiguration.Rules) > 0, "Expected server-side encryption to be enabled")
+	assert.True(t, encResp.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm == types.ServerSideEncryptionAwsKms, "Expected AWS KMS encryption")
 
 	// Check Tags
-	tags_resp, err := svc.GetBucketTagging(context.TODO(), &s3.GetBucketTaggingInput{Bucket: &expectedBucketName})
+	tagsResp, err := svc.GetBucketTagging(context.TODO(), &s3.GetBucketTaggingInput{Bucket: &expectedBucketName})
 	assert.Nil(t, err)
 
 	// Tag structs are specific to the service, so convert to awstagging.TagItem
 	tags := make([]awstagging.TagItem, 0)
-	for _, tag := range tags_resp.TagSet {
+	for _, tag := range tagsResp.TagSet {
 		tags = append(tags, awstagging.TagItem{Key: tag.Key, Value: tag.Value})
 	}
 	valid, missing := awstagging.VerifyTagsExist(tags)
@@ -104,6 +104,5 @@ func TestS3(t *testing.T) {
 
 	valid, bad := awstagging.VerifyTagsValueFormat(tags)
 	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
-
 
 }
