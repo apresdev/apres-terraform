@@ -66,14 +66,14 @@ func TestEcrPrivateRepo(t *testing.T) {
 	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
 	// so we'll use the v2 SDK directly.
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(awsRegion))
-	assert.True(t, err == nil, "Expected no error for LoadDefaultConfig creating AWS session")
+	assert.NoError(t, err, "Expected no error for LoadDefaultConfig creating AWS session")
 
 	ecrSvc := ecr.NewFromConfig(cfg)
 	input := &ecr.DescribeRepositoriesInput{
 		RepositoryNames: []string{name},
 	}
 	resp, err := ecrSvc.DescribeRepositories(context.TODO(), input)
-	assert.True(t, err == nil, "Expected no error for DesribeRepositories")
+	assert.NoError(t, err, "Expected no error for DesribeRepositories")
 	found := false
 	for _, repo := range resp.Repositories {
 		if *repo.RepositoryName == name {
@@ -89,7 +89,7 @@ func TestEcrPrivateRepo(t *testing.T) {
 
 	// Get tags from repo
 	tagsResponse, err := ecrSvc.ListTagsForResource(context.TODO(), &ecr.ListTagsForResourceInput{ResourceArn: &repoArn})
-	assert.Nil(t, err, "Expected no error for ListTagsForResource")
+	assert.NoError(t, err, "Expected no error for ListTagsForResource")
 
 	// Convert tags to expected format
 	tags := make([]awstagging.TagItem, 0)
@@ -105,7 +105,7 @@ func TestEcrPrivateRepo(t *testing.T) {
 	// Check the IAM policy and role for tags
 	iamSvc := iam.NewFromConfig(cfg)
 	roleTags, err := iamSvc.ListRoleTags(context.TODO(), &iam.ListRoleTagsInput{RoleName: &githubRoleName})
-	assert.Nil(t, err, "Expected no error for ListRoleTags")
+	assert.NoError(t, err, "Expected no error for ListRoleTags")
 
 	tags = make([]awstagging.TagItem, 0)
 	for _, tag := range roleTags.Tags {
@@ -115,7 +115,7 @@ func TestEcrPrivateRepo(t *testing.T) {
 	assert.True(t, valid, fmt.Sprintf("Expected tags not found for IAM Role: %v", missing))
 
 	policyTags, err := iamSvc.ListPolicyTags(context.TODO(), &iam.ListPolicyTagsInput{PolicyArn: &githubPolicyArn})
-	assert.Nil(t, err, "Expected no error for ListPolicyTags")
+	assert.NoError(t, err, "Expected no error for ListPolicyTags")
 
 	tags = make([]awstagging.TagItem, 0)
 	for _, tag := range policyTags.Tags {
