@@ -7,7 +7,7 @@ variable "name" {
 variable "environment" {
   description = "Environment name, used for tagging AWS resources."
   type        = string
-  default     = "example"
+  default     = "Example"
 }
 
 variable "shared_aws_org_for_pull" {

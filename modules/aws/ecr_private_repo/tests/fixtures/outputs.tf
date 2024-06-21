@@ -17,3 +17,8 @@ output "github_iam_role_name" {
   description = "GitHub OIDC IAM Role Name"
   value       = module.ecr_repo.github_iam_role_name
 }
+
+output "github_iam_policy_arn" {
+  description = "GitHub OIDC IAM Policy ARN"
+  value       = module.ecr_repo.github_iam_policy_arn
+}

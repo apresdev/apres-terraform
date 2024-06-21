@@ -17,10 +17,11 @@ By convention:
 * Tag Values are in Pascal case - each word is upper case, no spaces between words. Acronyms like `VPC` are kept in upper case, numbers are allowed.
 
 Exceptions:
-* The `Name` tag is a special case, the Key is Pascal case and the value can have spaces. The `Name` tag is what is usually displayed in the AWS Console.
+* The `Name` tag is a special case, the Key is Pascal case and the value can have spaces. The `Name` tag is what is usually displayed in the AWS Console. The value in most cases should match the resource name, and since it is case sensitive we do not
+enforce it starting with a capital letter.
 
 Apres internal testing enforces the tag values are as follows, using golang regular expressions:
-* `Name` tag: `^[A-Z][a-zA-Z0-9-_ ]+$`
+* `Name` tag: `^[a-zA-Z0-9-_ ]+$`
 * All others: `^[A-Z][a-zA-Z0-9]+$`
 
 ## Apres Tags

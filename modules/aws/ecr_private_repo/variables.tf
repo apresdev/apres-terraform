@@ -1,11 +1,7 @@
 variable "default_tags" {
   description = "Default set of tags to be applied to all resources"
   type        = map(string)
-  default = {
-    "application" = "ECR"
-    "owner"       = "Engineering"
-    "managed-by"  = "terraform"
-  }
+  default     = {}
 }
 
 variable "environment" {
@@ -47,5 +43,21 @@ variable "github_repo_subject_claim_filter" {
   See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims
   for examples of filtering by branch or deployment environment.
   EOF
+  type        = string
+}
+
+variable "application" {
+  description = "Application name, used for tagging AWS resources."
+  type        = string
+}
+
+variable "component" {
+  description = "Component name, used for tagging AWS resources."
+  type        = string
+  default     = "ECR"
+}
+
+variable "owner" {
+  description = "Owner of the resources, used for tagging AWS resources."
   type        = string
 }

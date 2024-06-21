@@ -69,30 +69,30 @@ func TestS3(t *testing.T) {
 	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
 	// so we'll use the v2 SDK directly.
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(awsRegion))
-	assert.True(t, err == nil, "Expected no error for LoadDefaultConfig creating AWS session")
+	assert.NoError(t, err, "Expected no error for LoadDefaultConfig creating AWS session")
 
 	svc := s3.NewFromConfig(cfg)
 
 	// Check versioning
 	versionResp, err := svc.GetBucketVersioning(context.TODO(), &s3.GetBucketVersioningInput{Bucket: &expectedBucketName})
-	assert.Nil(t, err)
+	assert.NoError(t, err, "Expected no error for GetBucketVersioning")
 	assert.Equal(t, versionResp.Status, types.BucketVersioningStatusEnabled, "Expected versioning to be enabled")
 	assert.Equal(t, versionResp.MFADelete, types.MFADeleteStatusDisabled, "Expected MFA delete to be disabled for testing")
 
 	// Public access
 	publicResp, err := svc.GetPublicAccessBlock(context.TODO(), &s3.GetPublicAccessBlockInput{Bucket: &expectedBucketName})
-	assert.Nil(t, err)
+	assert.NoError(t, err, "Expected no error on GetPublicAccessBlock")
 	assert.True(t, *publicResp.PublicAccessBlockConfiguration.BlockPublicAcls, "Expected public ACLs to be blocked")
 
 	// Encryption
 	encResp, err := svc.GetBucketEncryption(context.TODO(), &s3.GetBucketEncryptionInput{Bucket: &expectedBucketName})
-	assert.Nil(t, err)
+	assert.NoError(t, err, "Expected no error on GetBucketEncryption")
 	assert.True(t, len(encResp.ServerSideEncryptionConfiguration.Rules) > 0, "Expected server-side encryption to be enabled")
 	assert.True(t, encResp.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm == types.ServerSideEncryptionAwsKms, "Expected AWS KMS encryption")
 
 	// Check Tags
 	tagsResp, err := svc.GetBucketTagging(context.TODO(), &s3.GetBucketTaggingInput{Bucket: &expectedBucketName})
-	assert.Nil(t, err)
+	assert.NoError(t, err, "Expected no error on GetBucketTagging")
 
 	// Tag structs are specific to the service, so convert to awstagging.TagItem
 	tags := make([]awstagging.TagItem, 0)
