@@ -9,7 +9,6 @@ These tags are used for:
 * Tags are occasionally used for service discovery
 * Tags are used in Cost Explorer and other FinOps tools to determine the cost of parts of the service.
 
-
 ## Apres Tags Conventions
 
 By convention:
@@ -36,6 +35,9 @@ These are the tags set by Apres Terraform Modules.
 | [environment](#environment) |
 | [owner](#owner) |
 | [managed-by](#managed-by) |
+
+Best practice is to keep the values of `Name` and `environment` short, otherwise you could hit AWS name lenght limits in
+unexpected places.
 
 ### Name
 
