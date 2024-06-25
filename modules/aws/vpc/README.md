@@ -149,11 +149,13 @@ Substitute `${AWS::Region}` with the region where this is deployed.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "application": "VPC",<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
+| <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"VPC"` | no |
 | <a name="input_enable_dynamodb_gateway_endpoint"></a> [enable\_dynamodb\_gateway\_endpoint](#input\_enable\_dynamodb\_gateway\_endpoint) | Enable the DynamoDB VPC Gateway endpoint. See notes on vpc\_service\_endpoints for details. | `bool` | `false` | no |
 | <a name="input_enable_s3_gateway_endpoint"></a> [enable\_s3\_gateway\_endpoint](#input\_enable\_s3\_gateway\_endpoint) | Enable the S3 VPC Gateway endpoint. See notes on vpc\_service\_endpoints for details. | `bool` | `false` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_nat_instance_dashboard_name"></a> [nat\_instance\_dashboard\_name](#input\_nat\_instance\_dashboard\_name) | Name of the NAT Instance Dashboard | `string` | `"NATInstanceDashboard"` | no |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR block for the VPC. For example '10.100.0.0/16' | `string` | n/a | yes |
 | <a name="input_vpc_flow_log_retention_days"></a> [vpc\_flow\_log\_retention\_days](#input\_vpc\_flow\_log\_retention\_days) | Retention days for the VPC flow logs, see CloudWatch Logs for valid values. | `number` | `365` | no |
 | <a name="input_vpc_flow_log_traffic_type"></a> [vpc\_flow\_log\_traffic\_type](#input\_vpc\_flow\_log\_traffic\_type) | Flow Logs Traffic Type, one of 'ACCEPT', 'REJECT', or 'ALL' | `string` | `"REJECT"` | no |

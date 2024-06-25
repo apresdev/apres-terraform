@@ -1,17 +1,41 @@
-variable "default_tags" {
-  description = "Default tags to be applied to all resources"
+variable "extra_tags" {
+  description = "Extra tags to be applied to all resources"
   type        = map(string)
-  default = {
-    "application" = "VPC"
-    "owner"       = "Engineering"
-    "managed-by"  = "terraform"
+  default     = {}
+  validation {
+    condition     = alltrue([for x in var.extra_tags : can(regex("^[A-Z][a-zA-Z0-9]+$", x))])
+    error_message = "Tag values must be alphanumeric and capitalized."
+  }
+}
+
+variable "application" {
+  description = "Application name, used for tagging AWS resources."
+  type        = string
+  default     = "VPC"
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.application))
+    error_message = "Application name must be alphanumeric and capitalized."
+  }
+}
+
+variable "owner" {
+  description = "Owner of the resources, used for tagging AWS resources."
+  type        = string
+  default     = "Engineering"
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.owner))
+    error_message = "Owner must be alphanumeric and capitalized."
   }
 }
 
 variable "environment" {
-  description = "Environment Name, used for tagging AWS resources."
+  description = "Environment Name, used for naming and tagging AWS resources."
   type        = string
-  default     = "Dev"
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.environment))
+    error_message = "Environment name must be alphanumeric and capitalized."
+
+  }
 }
 
 # Not giving details for the CIDR ranges, just examples, because getting it wrong is very bad.
