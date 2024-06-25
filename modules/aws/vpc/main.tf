@@ -1,7 +1,13 @@
 locals {
   tags = merge(
-    var.default_tags,
-    tomap({ "environment" = var.environment, component = "VPC" })
+    var.extra_tags,
+    tomap({
+      "application" = var.application
+      "component"   = "VPC"
+      "owner"       = var.owner
+      "environment" = var.environment
+      "managed-by"  = "Terraform"
+    })
   )
 }
 

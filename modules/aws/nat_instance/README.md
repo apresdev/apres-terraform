@@ -4,6 +4,8 @@
 
 This is based on the good work at https://github.com/RaJiska/terraform-aws-fck-nat but modified for our use, including changing the name from fck-nat to NAT Instance.
 
+This module is meant only to be used by the VPC module, not as a standalone module.
+
 A Terraform module for deploying NAT Instances using [fck-nat](https://github.com/AndrewGuenther/fck-nat). The (f)easible (c)ost (k)onfigurable NAT!
 The following is a list of features available with this module:
 - High-availability mode achieved through a floating internal ENI automatically attached to instances being started by
