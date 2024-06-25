@@ -1,7 +1,13 @@
 locals {
   tags = merge(
-    var.default_tags,
-    tomap({ "environment" = var.environment })
+    var.extra_tags,
+    tomap({
+      "application" = var.application,
+      "component"   = "SecurityTools"
+      "owner"       = var.owner,
+      "environment" = var.environment
+      "managed-by"  = "Terraform"
+    })
   )
   securityhub_sns_key_alias = "alias/apres/securityhub-sns"
 }
