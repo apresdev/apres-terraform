@@ -15,4 +15,8 @@ module "alerting" {
   msteams_team_id     = var.msteams_team_id
   msteams_channel_id  = var.msteams_channel_id
   msteams_tenant_id   = var.msteams_tenant_id
+  application         = var.application
+  component           = "Alerting"
+  owner               = var.owner
+  extra_tags          = var.extra_tags
 }
