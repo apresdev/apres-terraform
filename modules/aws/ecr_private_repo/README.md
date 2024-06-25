@@ -126,8 +126,8 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"ECR"` | no |
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources. | `string` | `"Dev"` | no |
+| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_github_repo_subject_claim_filter"></a> [github\_repo\_subject\_claim\_filter](#input\_github\_repo\_subject\_claim\_filter) | The GitHub repo to trust for GitHub Actions. Also known as the Subject claim filter for<br>  valid tokens. Must be in the format of<br>  repo:apresdev/repo-name:ref:refs/heads/branch-or-tag, can be a comma delimited<br>  list if there is more than one. Example:<br>  * repo:apresdev/iac:ref:refs/heads/main means only the main branch of the apresdev/iac repo can assume the role.<br>  * repo:apresdev/iac:* means any branch or tag of the apresdev/iac repo can assume the role.<br>  See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims<br>  for examples of filtering by branch or deployment environment. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the ECR repo | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |

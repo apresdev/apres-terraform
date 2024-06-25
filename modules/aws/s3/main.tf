@@ -9,6 +9,7 @@ locals {
       owner       = var.owner
     })
   )
+  bucket_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
 }
 
 # The following best practices are applied to the bucket
@@ -37,12 +38,12 @@ resource "aws_s3_bucket" "default" {
   #checkov:skip=CKV2_AWS_61:Ensure that an S3 bucket has a lifecycle configuration
   #checkov:skip=CKV_AWS_144:Ensure that S3 bucket has cross-region replication enabled
 
-  bucket = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+  bucket = local.bucket_name
 
   tags = merge(
     local.tags,
     tomap({
-      Name = "${var.environment}-${var.name}"
+      Name = local.bucket_name
     })
   )
   depends_on = [data.aws_caller_identity.current]

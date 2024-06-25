@@ -107,14 +107,26 @@ variable "encryption_kms_key_id" {
 variable "application" {
   description = "Application name, used for tagging AWS resources."
   type        = string
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.application))
+    error_message = "Application name must be alphanumeric and capitalized."
+  }
 }
 
 variable "component" {
   description = "Component name, used for tagging AWS resources."
   type        = string
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.component))
+    error_message = "Component name must be alphanumeric and capitalized."
+  }
 }
 
 variable "owner" {
   description = "Owner of the resources, used for tagging AWS resources."
   type        = string
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.owner))
+    error_message = "Owner must be alphanumeric and capitalized."
+  }
 }
