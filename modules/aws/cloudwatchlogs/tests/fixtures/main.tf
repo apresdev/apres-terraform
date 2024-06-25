@@ -5,5 +5,8 @@ module "cloudwatchlogs" {
   name              = var.name
   path              = var.path
   retention_in_days = var.retention_in_days
-  environment = var.environment
+  environment       = var.environment
+  component         = "SomeComponent"
+  owner             = "Engineering"
+  application       = "SomeApplication"
 }

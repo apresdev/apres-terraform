@@ -51,6 +51,5 @@ variable "environment" {
   validation {
     condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.environment))
     error_message = "Environment name must be alphanumeric and capitalized."
-
   }
 }

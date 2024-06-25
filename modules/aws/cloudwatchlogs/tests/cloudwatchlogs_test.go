@@ -3,9 +3,11 @@ package test
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
+	"apres.dev/awstagging"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -21,7 +23,6 @@ func TestCloudWatchLogs(t *testing.T) {
 	cwlName := fmt.Sprintf("unit-test-log-group-%d", now)
 	cwlPath := fmt.Sprintf("/%s/%d", cwlName, now)
 	var retentionInDays int32 = 3
-	// TODO: environment
 	// Terraform options
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
@@ -55,16 +56,35 @@ func TestCloudWatchLogs(t *testing.T) {
 
 	svc := cloudwatchlogs.NewFromConfig(cfg)
 	resp, err := svc.DescribeLogGroups(context.TODO(), &cloudwatchlogs.DescribeLogGroupsInput{LogGroupNamePrefix: &cwlPath})
-	assert.True(t, err == nil)
+	assert.NoError(t, err, "Expected no error for DescribeLogGroups")
 	found := false
 	for _, logGroup := range resp.LogGroups {
 		if *logGroup.LogGroupName == cwlPath {
 			found = true
-			t.Logf("Found log group: %s", *logGroup.LogGroupName)
+			t.Logf("Found log group: %s with ARN %s", *logGroup.LogGroupName, *logGroup.Arn)
 			assert.Equal(t, *logGroup.Arn, expectedCwlArn, "Expected ARN to match: %s != %s", *logGroup.Arn, expectedCwlArn)
 			assert.Equal(t, *logGroup.RetentionInDays, retentionInDays, "Expected retention to match")
 			assert.NotEmpty(t, *logGroup.KmsKeyId, "Expected KMS key ID to be set")
 		}
 	}
 	assert.True(t, found, "Did not find the CloudWatch log group in the list of log groups")
+
+	// Use the ARN without the ":*" appended
+	tagsResp, err := svc.ListTagsForResource(context.TODO(), &cloudwatchlogs.ListTagsForResourceInput{ResourceArn: &cwlArn})
+	assert.NoError(t, err, "Expected no error for ListTagsForResource")
+
+	tags := make([]awstagging.TagItem, 0)
+	for k, v := range tagsResp.Tags {
+		// Need to clone the strings or we end up with a map of points to the same thing
+		key := strings.Clone(k)
+		val := strings.Clone(v)
+		tags = append(tags, awstagging.TagItem{Key: &key, Value: &val})
+	}
+
+	valid, missing := awstagging.VerifyTagsExist(tags)
+	assert.True(t, valid, fmt.Sprintf("Expected tags not found: %v", missing))
+
+	valid, bad := awstagging.VerifyTagsValueFormat(tags)
+	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
+
 }

@@ -16,5 +16,5 @@ variable "retention_in_days" {
 variable "environment" {
   description = "Environment name, used for tagging AWS resources."
   type        = string
-  default     = "example"
+  default     = "Example"
 }

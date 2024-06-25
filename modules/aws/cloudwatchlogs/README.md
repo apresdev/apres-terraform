@@ -47,10 +47,13 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_cwl_kms_alias_name"></a> [cwl\_kms\_alias\_name](#input\_cwl\_kms\_alias\_name) | The alias name of the KMS key used to encrypt the CloudWatch Log Group. The full ARN will be constructed using the current region and account id. | `string` | `"alias/apres/cloudwatchlogs"` | no |
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags to be applied to all resources | `map(string)` | <pre>{<br>  "managed-by": "terraform",<br>  "owner": "Engineering"<br>}</pre> | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for tagging AWS resources. | `string` | `"Dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | Description name of the CloudWatch Logs Group, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 | <a name="input_path"></a> [path](#input\_path) | Path of the CloudWatch Logs Group, should be a path like /acme/blah | `string` | n/a | yes |
 | <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | The number of days to retain the log events in the log group. Valid values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653. | `number` | `30` | no |
 
