@@ -23,5 +23,7 @@ repos:
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/security_tools_delegator"]
       - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/template"]
+      - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/vpc"]
 
