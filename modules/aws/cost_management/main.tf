@@ -1,6 +1,12 @@
 locals {
   tags = merge(
-    var.default_tags,
-    tomap({ "environment" = var.environment, component = "CostAnomalyDetection" })
+    var.extra_tags,
+    tomap({
+      "application" = var.application,
+      "component"   = "CostManagement"
+      "owner"       = var.owner,
+      "environment" = var.environment
+      "managed-by"  = "Terraform"
+    })
   )
 }

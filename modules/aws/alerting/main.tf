@@ -1,7 +1,13 @@
 locals {
-  sns_key_alias = "alias/apres/alerting-sns"
+  sns_key_alias = "alias/apres/alerting-${lower(var.name)}-${lower(var.environment)}-sns"
   tags = merge(
-    var.default_tags,
-    tomap({ "environment" = var.environment })
+    var.extra_tags,
+    tomap({
+      "application" = var.application,
+      "component"   = var.component,
+      "owner"       = var.owner,
+      "environment" = var.environment
+      "managed-by"  = "Terraform"
+    })
   )
 }
