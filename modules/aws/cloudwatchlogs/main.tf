@@ -1,7 +1,13 @@
 locals {
   tags = merge(
-    var.default_tags,
-    tomap({ "environment" = var.environment, "component" = var.name, "application" = var.name }),
+    var.extra_tags,
+    tomap({
+      "application" = var.application
+      "component"   = var.component
+      "owner"       = var.owner
+      "environment" = var.environment
+      "managed-by"  = "Terraform"
+    })
   )
   kms_alias_arn = "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.cwl_kms_alias_name}"
 }
@@ -15,7 +21,7 @@ resource "aws_cloudwatch_log_group" "default" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name} CloudWatch Logs"
+      Name = "${title(var.name)} ${var.environment} CloudWatch Logs"
     },
   )
 }

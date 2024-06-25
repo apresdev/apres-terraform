@@ -1,8 +1,9 @@
 module test
 
-go 1.21.1
+go 1.21.9
 
 require (
+	apres.dev/awstagging v0.0.0-00010101000000-000000000000
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.35.0
 	github.com/gruntwork-io/terratest v0.46.13
 	github.com/stretchr/testify v1.9.0
@@ -75,3 +76,5 @@ require (
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace apres.dev/awstagging => ../../../../testhelpers/awstagging
