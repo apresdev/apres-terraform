@@ -1,5 +1,5 @@
 locals {
-  sns_key_alias = "alias/apres/alerting-sns"
+  sns_key_alias = "alias/apres/alerting-${lower(var.name)}-${lower(var.environment)}-sns"
   tags = merge(
     var.extra_tags,
     tomap({
