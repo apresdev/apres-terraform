@@ -8,6 +8,7 @@ This module sets up:
 * AWS Chatbot
   * subscribes to the SNS topic
   * publishes to Slack and/or Teams
+* IAM Roles/Polies for Chatbot. The names are prepended with "ChatBot" for easier permissions management.
 * Optionally an email subscription to the SNS topic.
 
 ## Email Discussion

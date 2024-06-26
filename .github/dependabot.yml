@@ -6,7 +6,21 @@
 
 version: 2
 updates:
- - package-ecosystem: "devcontainers"
-   directory: "/"
-   schedule:
-     interval: weekly
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: "terraform"
+    directories:
+      - "/modules/aws/*"
+    schedule:
+    interval: "daily"
+    registries: # point dependabot to use the PAT
+      - github-octocat
+
+registries:
+  github-octocat:
+    type: git
+    url: https://github.com
+    username: x-access-token
+    password: ${{secrets.APRESDEV_RTKMHART_TOKEN}}

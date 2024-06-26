@@ -1,5 +1,6 @@
 module "alerting" {
-  source              = "../alerting"
+  # Use remote source so we can keep versioning correctly, even though the module is in the same repo.
+  source              = "git@github.com:apresdev/apres-terraform.git//modules/aws/alerting?ref=rel/alerting/1.0.0"
   name                = "securityhub"
   publishing_services = ["events.amazonaws.com"]
   environment         = var.environment
