@@ -4,7 +4,7 @@
 # create an empty innocuous policy.
 resource "aws_iam_policy" "chatbot_guardrails" {
   count       = length(var.chatbot_policy_arns) == 0 ? 1 : 0
-  name_prefix = "${title(var.name)}-${var.environment}-Chatbot-Guardrails"
+  name_prefix = "Chatbot-${title(var.name)}-${var.environment}-Guardrails"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -19,7 +19,7 @@ resource "aws_iam_policy" "chatbot_guardrails" {
   tags = merge(
     local.tags,
     {
-      Name = "${title(var.name)}-${var.environment}-Chatbot-Guardrails"
+      Name = "ChatBot-${title(var.name)}-${var.environment}-Guardrails"
     },
   )
 }
@@ -50,14 +50,14 @@ resource "awscc_chatbot_slack_channel_configuration" "default" {
 
 resource "aws_iam_role" "slack" {
   count              = var.slack_workspace_id != "" ? 1 : 0
-  name_prefix        = "${title(var.name)}-${var.environment}-ChatBot-Slack"
+  name_prefix        = "ChatBot-${title(var.name)}-${var.environment}-Slack"
   assume_role_policy = data.aws_iam_policy_document.chatbot_assume_role.json
   # include any arns if they are passed in
   managed_policy_arns = length(var.chatbot_policy_arns) > 0 ? var.chatbot_policy_arns : [aws_iam_policy.chatbot_guardrails[0].arn]
   tags = merge(
     local.tags,
     {
-      Name = "${title(var.name)}-${var.environment}-ChatBot-Slack"
+      Name = "ChatBot-${title(var.name)}-${var.environment}-Slack"
     },
   )
 }
@@ -77,14 +77,14 @@ resource "awscc_chatbot_microsoft_teams_channel_configuration" "default" {
 
 resource "aws_iam_role" "msteams" {
   count       = var.msteams_team_id != "" ? 1 : 0
-  name_prefix = "${title(var.name)}-${var.environment}-ChatBot-MSTeams"
+  name_prefix = "ChatBot-${title(var.name)}-${var.environment}-MSTeams"
   # include any arns if they are passed in
   assume_role_policy  = data.aws_iam_policy_document.chatbot_assume_role.json
   managed_policy_arns = length(var.chatbot_policy_arns) > 0 ? var.chatbot_policy_arns : [aws_iam_policy.chatbot_guardrails[0].arn]
   tags = merge(
     local.tags,
     {
-      Name = "${title(var.name)}-${var.environment}-ChatBot-MSTeams"
+      Name = "ChatBot-${title(var.name)}-${var.environment}-MSTeams"
     },
   )
 }
