@@ -14,7 +14,7 @@ updates:
     directories:
       - "/modules/aws/*"
     schedule:
-    interval: "daily"
+      interval: "daily"
     registries: # point dependabot to use the PAT
       - github-octocat
 
