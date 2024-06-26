@@ -1,0 +1,202 @@
+# CloudFront Distribution with S3 origin
+
+Create a CloudFront Distribution with an S3 bucket as origin (serving content).
+
+The S3 bucket is created with a customer managed KMS key, and the CloudFront Distribution is given
+access to use that KMS key.
+
+The CloudFront Distribution writes to logs to a second bucket, using the same name as the primary bucket
+but with "-logs" appended.
+
+The WAF, for now, has three default rulesets, managed by AWS:
+
+- AWSManagedRulesCommonRuleSet
+- AWSManagedRulesKnownBadInputsRuleSet
+- AWSManagedRulesAnonymousIpList
+
+Note that it typically takes five minutes to create or destroy a distribution. The unit
+tests take at least 10 minutes to run because of that, and if run manually you
+should add a `-timeout 30m` on the CLI.
+
+Once the stack has deployed, upload your static files to the S3 bucket named in output `s3_bucket_name`,
+including the file specified by the `default_root_object` variable, and then browse to the URL given in
+the output `cloudfront_domain_name`.
+
+## Prerequisites
+
+If you do not specifiy the `waf_arn` variable, the WAF will be created in us-east-1, because that's where a CloudFront
+WAF must be created, see the discussion at [WAF and us-east-1](#waf-and-us-east-1). You must deploy the Apres `cloudwatchlogs_regional` in us-east-1 for successful deployment of this
+module.
+
+## WAF and us-east-1
+
+A CloudFront WAF can only be created in the us-east-1 region, regardless where the other resources are deployed,
+this module implements that.
+Because of that and limitations in how Terraform handles multiple providers, the WAF configuration, if not overridden
+by setting the `waf_arn` variable, is done in a sub-module so that a provider alias can be passed in.
+
+## TODO
+
+* Examine WAF rules: is the default set enough?
+* Not sure CloudFront logging is working, verify that.
+* Investigate real-time logging for CloudFront: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html
+* Not sure about caching
+
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute the following:
+* `${AWS::AccountId}` with the Account ID where this stack is deployed.
+* `${AWS::Region}` with the AWS Region where this stack is deployed, like `us-east-2`
+* `${environment}` with the lower case of the variable `var.environment`
+* `${name}` with the lower case of the variable `var.name`
+
+Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see discussion at
+[WAF and us-east-1](#waf-and-us-east-1)
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+     "s3:*"
+  ],
+  "Resource": [
+    "arn:aws:s3:::${AWS::AccountId}-${environment}-${AWS::Region}-${name}*"
+    "arn:aws:s3:::${AWS::AccountId}-${environment}-${AWS::Region}-${name}*/*"
+  ]
+},
+{
+  "Effect": "Allow",
+  "Action": "kms:*",
+  "Resource": [
+    "arn:aws:kms:${AWS:Region}:key/*",
+    "arn:aws:kms:us-east-1:key/*"
+  ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "wafv2:*"
+  ],
+  "Resource": [
+    "arn:aws:wafv2:us-east-1:${AWS::AccountId}:*"
+  ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "iam:CreateServiceLinkedRole"
+  ],
+  "Resource": [
+    "arn:aws:iam::${AWS::AccountId}:role/*"
+  ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "cloudfront:*"
+  ],
+  "Resource": [
+    "arn:aws:cloudfront::${AWS::AccountId}:distribution/*"
+  ]
+}
+{
+  "Effect": "Allow",
+  "Action": [
+    "logs:*"
+  ],
+  "Resource": [
+    "arn:aws:cloudfront:us-east-1:${AWS::AccountId}:log-group:aws-waf-logs-*"
+  ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "logs:*"
+  ],
+  "Resource": [
+    "arn:aws:cloudfront:${AWS::Region}:${AWS::AccountId}:log-group:*"
+  ]
+}
+```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.55.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_s3"></a> [s3](#module\_s3) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/2.0.1 |
+| <a name="module_s3_logs"></a> [s3\_logs](#module\_s3\_logs) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/2.0.1 |
+| <a name="module_waf"></a> [waf](#module\_waf) | ./modules/waf | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_cloudfront_cache_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_cache_policy) | resource |
+| [aws_cloudfront_distribution.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) | resource |
+| [aws_cloudfront_origin_access_control.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_access_control) | resource |
+| [aws_kms_alias.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_kms_key_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
+| [aws_s3_bucket_acl.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_lifecycle_configuration.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
+| [aws_s3_bucket_ownership_controls.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_policy.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_canonical_user_id.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/canonical_user_id) | data source |
+| [aws_cloudfront_log_delivery_canonical_user_id.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_log_delivery_canonical_user_id) | data source |
+| [aws_iam_policy_document.cloudfront](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_acm_certificate_arn"></a> [acm\_certificate\_arn](#input\_acm\_certificate\_arn) | The ARN of an ACM SSL Certificate to use with the distribution. If not set, the default<br>    CloudFront certificate will be used. Note the ACM Certificate must be in us-east-1! | `string` | `""` | no |
+| <a name="input_aliases"></a> [aliases](#input\_aliases) | List of aliases to apply to the CloudFront distribution. The first alias in the list will be<br>    the primary domain name for the distribution. | `list(string)` | `[]` | no |
+| <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_cloudfront_cache_allowed_methods"></a> [cloudfront\_cache\_allowed\_methods](#input\_cloudfront\_cache\_allowed\_methods) | List of allowed HTTP methods for the CloudFront cache policy. Must be one of:<br>  * ["HEAD", "GET"] or<br>  * ["HEAD", "GET", "OPTIONS"] or<br>  * ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] | `list(string)` | <pre>[<br>  "HEAD",<br>  "DELETE",<br>  "POST",<br>  "GET",<br>  "OPTIONS",<br>  "PUT",<br>  "PATCH"<br>]</pre> | no |
+| <a name="input_cloudfront_cache_cached_methods"></a> [cloudfront\_cache\_cached\_methods](#input\_cloudfront\_cache\_cached\_methods) | List of cached HTTP methods for the CloudFront cache policy. | `list(string)` | <pre>[<br>  "GET",<br>  "HEAD",<br>  "OPTIONS"<br>]</pre> | no |
+| <a name="input_cloudfront_geo_restrictions_locations"></a> [cloudfront\_geo\_restrictions\_locations](#input\_cloudfront\_geo\_restrictions\_locations) | List of locations to apply to the CloudFront distribution, in form of ISO-3166 Country Codes, see<br>  http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.html for a list.<br>  Only valid if cloudfront\_geo\_restrictions\_type is 'blacklist' or 'whitelist'.<br><br>  Example: ["US", "CA"] | `list(string)` | `[]` | no |
+| <a name="input_cloudfront_geo_restrictions_type"></a> [cloudfront\_geo\_restrictions\_type](#input\_cloudfront\_geo\_restrictions\_type) | Type of geo restrictions to apply to the CloudFront distribution, one of 'none', 'blacklist', or 'whitelist'. | `string` | `"none"` | no |
+| <a name="input_cloudfront_logs_expiration"></a> [cloudfront\_logs\_expiration](#input\_cloudfront\_logs\_expiration) | Number of days before logs are deleted. | `number` | `365` | no |
+| <a name="input_cloudfront_logs_transition_glacier"></a> [cloudfront\_logs\_transition\_glacier](#input\_cloudfront\_logs\_transition\_glacier) | Number of days before logs are transitioned to Glacier storage class. | `number` | `90` | no |
+| <a name="input_cloudfront_logs_transition_ia"></a> [cloudfront\_logs\_transition\_ia](#input\_cloudfront\_logs\_transition\_ia) | Number of days before logs are transitioned to IA storage class. | `number` | `30` | no |
+| <a name="input_cloudfront_price_class"></a> [cloudfront\_price\_class](#input\_cloudfront\_price\_class) | Price class for the CloudFront distribution. See<br>  https://aws.amazon.com/cloudfront/pricing/ for details | `string` | `"PriceClass_200"` | no |
+| <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"CloudFrontS3"` | no |
+| <a name="input_default_root_object"></a> [default\_root\_object](#input\_default\_root\_object) | Default root file to serve. See<br>  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html | `string` | `"index.html"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name of the distribution, used to create resources including the S3 bucket | `string` | n/a | yes |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
+| <a name="input_waf_arn"></a> [waf\_arn](#input\_waf\_arn) | ARN of the WAF to attach to the CloudFront distribution. The provided ARN must be of a WAF v2<br>    with scope "CLOUDFRONT" deployed in us-east-1.<br><br>    If not set, a default WAF with the following rulesets will be created:<br>    * AWSManagedRulesCommonRuleSet<br>    * AWSManagedRulesKnownBadInputsRuleSet<br>    * AWSManagedRulesAnonymousIpList | `string` | `""` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_cloudfront_distribution_arn"></a> [cloudfront\_distribution\_arn](#output\_cloudfront\_distribution\_arn) | ARN of the CloudFront distribution |
+| <a name="output_cloudfront_distribution_domain_name"></a> [cloudfront\_distribution\_domain\_name](#output\_cloudfront\_distribution\_domain\_name) | Domain name of the CloudFront distribution |
+| <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | ID of the CloudFront distribution |
+| <a name="output_s3_bucket_domain_name"></a> [s3\_bucket\_domain\_name](#output\_s3\_bucket\_domain\_name) | Global domain name of the S3 bucket containing the website content |
+| <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of the S3 bucket containing the website content |
+| <a name="output_s3_bucket_regional_domain_name"></a> [s3\_bucket\_regional\_domain\_name](#output\_s3\_bucket\_regional\_domain\_name) | Regional domain name of the S3 bucket containing the website content |
+| <a name="output_s3_logs_bucket_domain_name"></a> [s3\_logs\_bucket\_domain\_name](#output\_s3\_logs\_bucket\_domain\_name) | Global domain name of the S3 bucket containing the CloudFront logs |
+| <a name="output_s3_logs_bucket_name"></a> [s3\_logs\_bucket\_name](#output\_s3\_logs\_bucket\_name) | Name of the S3 bucket containing the CloudFront logs |
+| <a name="output_s3_logs_bucket_regional_domain_name"></a> [s3\_logs\_bucket\_regional\_domain\_name](#output\_s3\_logs\_bucket\_regional\_domain\_name) | Regional domain name of the S3 bucket containing the CloudFront logs |
+| <a name="output_waf_arn"></a> [waf\_arn](#output\_waf\_arn) | ARN of the WAF attached to the CloudFront distribution |
+<!-- END_TF_DOCS -->

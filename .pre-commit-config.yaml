@@ -7,6 +7,10 @@ repos:
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/alerting"]
       - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudfront_s3"]
+      - id: terraform-docs-go
+        args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudfront_s3/modules/waf"]
+      - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs"]
       - id: terraform-docs-go
         args: ["markdown", "--output-file", "README.md", "--output-mode", "inject", "./modules/aws/cloudwatchlogs_regional"]
