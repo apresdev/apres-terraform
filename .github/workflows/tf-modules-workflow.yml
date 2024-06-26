@@ -42,6 +42,12 @@ jobs:
         id: fmt
         run: tofu fmt -check
 
+      # Setup GitHub Credentials for Terraform/Tofu to import modules from apresdev/apres-terraform
+      - name: Setup GitHub Creds
+        uses: de-vri-es/setup-git-credentials@v2
+        with:
+          credentials: https://x-access-token:${{ secrets.APRESDEV_RTKMHART_TOKEN }}@github.com
+
       - name: OpenTofu Init
         id: init
         run: pwd && tofu init -no-color

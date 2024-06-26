@@ -5,7 +5,7 @@ locals {
 
 # Setup cost management alerts, for both anomalies and budget alerts.
 module "alerting" {
-  count               = local.enable_chat_alerts ? 1 : 0
+  count = local.enable_chat_alerts ? 1 : 0
   # Use remote source so we can keep versioning correctly, even though the module is in the same repo.
   source              = "git@github.com:apresdev/apres-terraform.git//modules/aws/alerting?ref=rel/alerting/1.0.0"
   name                = "costmanagement"
