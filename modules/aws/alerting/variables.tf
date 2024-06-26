@@ -1,11 +1,11 @@
 
 variable "name" {
-  description = "Name appended to the SNS topic, and used to identify other resources"
+  description = "Name appended to the SNS topic, and used to identify other resources."
   type        = string
 }
 
 variable "extra_tags" {
-  description = "Extra tags to be applied to all resources"
+  description = "Extra tags to be applied to all resources."
   type        = map(string)
   default     = {}
   validation {
