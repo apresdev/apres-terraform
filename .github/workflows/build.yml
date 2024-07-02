@@ -84,10 +84,11 @@ jobs:
             var modules = new Map();
             for (var item of raw) {
 
-              // Ignore README.md updates.
-              if (item.endsWith("/README.md") ) {
+              // Ignore README.md or CHANGELOG.md updates.
+              if (item.endsWith("/README.md") || item.endsWith("/CHANGELOG.md")){
                 continue;
               }
+
 
               if (item.startsWith("modules")) {
                 //
