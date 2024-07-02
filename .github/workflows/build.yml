@@ -134,6 +134,10 @@ jobs:
       fail-fast: false
     name: "Plan versions: ${{ matrix.module_name }}"
     steps:
+      # Need the code to manage the changelog steps
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Detect previous version number
         uses: actions/github-script@v4
         id: prev-version
