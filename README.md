@@ -23,6 +23,11 @@ To run the pre-commit hooks before you commit:
 pre-commit run terraform-docs-go -a -v
 ```
 
+### Changelogs
+
+The CHANGELOG.md files are generated automatically in the build workflows. Set the changelog message correctly in the PR
+and the workflow will take care of the rest.
+
 ### Determining AWS Permissions
 
 Determining what AWS permissions are required for a module can be a nice game of whackamole. There is however a sweet tool (iamlive)[https://github.com/iann0036/iamlive] that can help determine what they should be.
@@ -37,3 +42,4 @@ Determining what AWS permissions are required for a module can be a nice game of
   export AWS_CA_BUNDLE=~/.iamlive/ca.pem
   ```
 1. Run your terraform plan/apply/destroy, and iamlive should output set of policies. Note that this may not capture _everything_ as updating resources may use a different set of API calls than creating does, but this should at least get you started.
+
