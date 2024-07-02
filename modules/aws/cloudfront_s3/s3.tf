@@ -84,7 +84,7 @@ resource "aws_s3_bucket_acl" "logging" {
 resource "aws_s3_bucket_ownership_controls" "logging" {
   #checkov:skip=CKV2_AWS_65:Correct check, but the ownership controls are required to allow CloudFront to write to the bucket.
   depends_on = [module.s3_logs]
-  bucket = module.s3_logs.bucket_name
+  bucket     = module.s3_logs.bucket_name
 
   rule {
     object_ownership = "ObjectWriter"
@@ -93,7 +93,7 @@ resource "aws_s3_bucket_ownership_controls" "logging" {
 
 # Lifecycle for logs in the logs bucket
 resource "aws_s3_bucket_lifecycle_configuration" "logging" {
-  bucket = module.s3_logs.bucket_name
+  bucket     = module.s3_logs.bucket_name
   depends_on = [module.s3_logs]
 
   rule {
