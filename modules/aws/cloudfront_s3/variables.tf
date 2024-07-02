@@ -3,7 +3,7 @@ variable "name" {
   type        = string
   validation {
     condition     = can(regex("^[a-zA-Z0-9-_ ]+$", var.name))
-    error_message = "Name must be alphanumeric and can contain hyphens and underscores."
+    error_message = "Name must be alphanumeric and can contain hyphens, spaces and underscores."
   }
 }
 

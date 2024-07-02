@@ -9,11 +9,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
-// ---------------------------------
-// There is no way in the AWS SDK v2 to empty a bucket, so we're borrowing this code from
+// S3EmptyBucket will completely empty an S3 bucket of all objects, object versions, and delete markers.
+//
+// There is no way in the AWS SDK v2 to empty a bucket in a single call, so we're borrowing this code from
 // https://www.codershaven.com/posts/empty-s3-bucket-and-dynamodb-table-using-the-aws-sdk/
 //
-// S3EmptyBucket will completely empty an S3 bucket of all objects, object versions, and delete markers.
 func S3EmptyBucket(s3Client *s3.Client, bucketName string) error {
 	// iterate over all objects and delete them
 	listObjectsInput := &s3.ListObjectsV2Input{

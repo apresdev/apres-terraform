@@ -52,23 +52,21 @@ func TestCloudFrontS3(t *testing.T) {
 	cloudfrontDistDomainName := terraform.Output(t, terraformOptions, "cloudfront_distribution_domain_name")
 	cloudfrontDistArn := terraform.Output(t, terraformOptions, "cloudfront_distribution_arn")
 	s3BucketName := terraform.Output(t, terraformOptions, "s3_bucket_name")
-	//s3LogsBucketName := terraform.Output(t, terraformOptions, "s3_logs_bucket_name")
-	//wafArn := terraform.Output(t, terraformOptions, "waf_arn")
 
 	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
 	// so we'll use the v2 SDK directly.
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(awsRegion))
+	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(awsRegion))
 	assert.NoError(t, err, "Expected no error for LoadDefaultConfig creating AWS session")
 
 	// create cloudfront client
 	cfSvc := cloudfront.NewFromConfig(cfg)
 
-	distResp, err := cfSvc.GetDistribution(context.TODO(), &cloudfront.GetDistributionInput{Id: &cloudfrontDistId})
+	distResp, err := cfSvc.GetDistribution(context.Background(), &cloudfront.GetDistributionInput{Id: &cloudfrontDistId})
 	assert.NoError(t, err, "Expected no error on GetDistribution")
 
 	assert.Equal(t, *distResp.Distribution.DomainName, cloudfrontDistDomainName, "Expected domain name to match")
 
-	tagsResp, err := cfSvc.ListTagsForResource(context.TODO(), &cloudfront.ListTagsForResourceInput{Resource: &cloudfrontDistArn})
+	tagsResp, err := cfSvc.ListTagsForResource(context.Background(), &cloudfront.ListTagsForResourceInput{Resource: &cloudfrontDistArn})
 	assert.NoError(t, err, "Expected no error on ListTagsForResource")
 
 	tags := make([]awstagging.TagItem, 0)
@@ -88,7 +86,7 @@ func TestCloudFrontS3(t *testing.T) {
 	s3svc := s3.NewFromConfig(cfg)
 	file, err := os.Open(fileName)
 	assert.NoError(t, err, "Expected no error opening file index.html")
-	_, err = s3svc.PutObject(context.TODO(), &s3.PutObjectInput{
+	_, err = s3svc.PutObject(context.Background(), &s3.PutObjectInput{
 		Bucket: &s3BucketName,
 		Key: &fileName,
 		Body: file,

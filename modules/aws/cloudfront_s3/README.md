@@ -5,7 +5,7 @@ Create a CloudFront Distribution with an S3 bucket as origin (serving content).
 The S3 bucket is created with a customer managed KMS key, and the CloudFront Distribution is given
 access to use that KMS key.
 
-The CloudFront Distribution writes to logs to a second bucket, using the same name as the primary bucket
+The CloudFront Distribution writes logs to a second bucket, using the same name as the primary bucket
 but with "-logs" appended.
 
 The WAF, for now, has three default rulesets, managed by AWS:

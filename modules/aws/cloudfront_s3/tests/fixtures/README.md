@@ -15,5 +15,4 @@ This is an example on how to deploy the S3 module, used by the integration tests
 1. Install [Golang](https://golang.org/) and make sure this code is checked out into your `GOPATH`.
 1. Login to AWS on the CLI (hint: AWS_PROFILE=<some-predefined-profile> aws sso login)
 1. `cd test`
-1. `dep ensure`
 1. `AWS_PROFILE=<some-predefined-profile> go test`
