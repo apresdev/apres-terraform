@@ -12,4 +12,5 @@ rm ${ARCHIVE_FILE}
 echo "alias rebase='git checkout main && git fetch origin && git rebase origin/main'" >> /home/vscode/.bashrc
 
 # Save some disk space by reusing the plugin cache directory
+mkdir -p /home/vscode/.terraform.d/plugin-cache
 echo 'plugin_cache_dir   = "$HOME/.terraform.d/plugin-cache"' >/home/vscode/.tofurc
