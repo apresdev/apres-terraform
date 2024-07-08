@@ -15,7 +15,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
-      - modules/**
+      - modules/aws/*
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
@@ -23,7 +23,7 @@ on:
   pull_request_target:
     types: [closed]
     paths:
-      - modules/**
+      - modules/aws/*
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
@@ -94,7 +94,9 @@ jobs:
                 //
                 if (item.includes("/tests/") || item.includes("/test/")) continue;
                 dir = path.dirname(item);
-                module_name = dir.split("/").slice(-1)[0];
+                // dir at this point should start with "modules/aws/thing/..."
+                // Take the 2nd element else we end up with module names for embedded directories
+                module_name = dir.split("/")[2]
                 modules.set( module_name, dir );
               }
             }
