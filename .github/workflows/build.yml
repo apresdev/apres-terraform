@@ -15,7 +15,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
-      - modules/**
+      - modules/aws/*
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
@@ -23,7 +23,7 @@ on:
   pull_request_target:
     types: [closed]
     paths:
-      - modules/**
+      - modules/aws/*
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
