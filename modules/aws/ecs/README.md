@@ -52,6 +52,34 @@ The following environment variables are passed to the container by default:
 | APPLICATION | Application passed into the stack, used to tag all resources |
 | COMPONENT | Component passed into the stack, used to tag all resources |
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute `${AWS::AccountId}` with the Account ID where this is deployed, and `${name}` with
+the name passed in.
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+      "application-autoscaling:*",
+      "autoscaling:*",
+      "ec2:*",
+      "ecs:*",
+      "elasticloadbalancing:*",
+      "logs:*",
+  ]
+  "Resource": "*"
+},
+{
+  "Effect": "Allow",
+  "Action": "iam:*",
+  "Resource": [
+    "arn:aws:iam::${AWS::AccountId}:policy/${name}-*",
+    "arn:aws:iam::${AWS::AccountId}:role/${name}-*"
+  ]
+}
+```
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
