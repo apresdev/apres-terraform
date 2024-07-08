@@ -27,6 +27,14 @@ Private subnets that were created using the Apres VPC module.
 
 The network mode is always `awsvpc`. Windows is not supported.
 
+## First Time Deployment
+
+The ECS service depends on a service role named `AWSServiceRoleForECS`. This role is created behind the scenes
+by ECS, but frequently only via the console, not when deploying with Terraform. If you see an error message like
+_"Unable to assume the service linked role. Please verify that the ECS service linked role exists"_
+on first deploy, use the console to create a fake cluster. It may fail, but check in IAM for the role
+ `AWSServiceRoleForECS`. If it appears, try the terraform deploy again.
+
 ## TODO Items
 
 * Determine why NVMe drives (instance storage) can't be mounted consistently before docker starts.
