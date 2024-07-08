@@ -19,7 +19,7 @@ func TestVerifyTagsExist(t *testing.T) {
 	goodNameTag := "Asfd-_ 2134"
 	badNameTag := "Asfd-_ 2134$"
 
-	var tags = []awstagging.TagItem{}
+	tags := []awstagging.TagItem{}
 	valid, missing := awstagging.VerifyTagsExist(tags)
 	assert.False(t, valid)
 	assert.Len(t, missing, 6)
@@ -74,4 +74,36 @@ func TestVerifyTagsExist(t *testing.T) {
 	valid, badTags = awstagging.VerifyTagsValueFormat(tags)
 	assert.False(t, valid)
 	assert.Len(t, badTags, 2)
+}
+
+func TestVerifyTagsValueFormat(t *testing.T) {
+	appKey := "application"
+	compKey := "component"
+	nameKey := "Name"
+	goodVal := "UnitTest"
+	goodNameTag := "Asfd-_ 2134"
+	awsKey := "AmazonECSManaged"
+	badVal := "true"
+
+	var tags = []awstagging.TagItem{}
+	tags = append(tags, awstagging.TagItem{Key: &appKey, Value: &goodVal})
+	tags = append(tags, awstagging.TagItem{Key: &nameKey, Value: &goodNameTag})
+
+	valid, badFormat := awstagging.VerifyTagsValueFormat(tags)
+	assert.True(t, valid)
+	assert.Len(t, badFormat, 0)
+
+	// Add a tag that we should be ignoring with "bad" value
+	tags = append(tags, awstagging.TagItem{Key: &awsKey, Value: &badVal})
+	valid, badFormat = awstagging.VerifyTagsValueFormat(tags)
+	assert.True(t, valid)
+	assert.Len(t, badFormat, 0)
+
+	// now add one that has a bad format that we should be checking
+	tags = append(tags, awstagging.TagItem{Key: &compKey, Value: &badVal})
+	valid, badFormat = awstagging.VerifyTagsValueFormat(tags)
+	assert.False(t, valid)
+	assert.Len(t, badFormat, 1)
+	assert.Equal(t, "Tag component has invalid value true", badFormat[0])
+
 }
