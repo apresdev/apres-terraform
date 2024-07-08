@@ -49,7 +49,7 @@ variable "make_volume" {
 variable "vpc_environment_tag" {
   description = "Environment tag for the VPC. CICD requires Test, developers should use Dev"
   type        = string
-  default     = "Dev" # TODO: wtf
+  default     = "Test"
 }
 
 variable "container_port" {
