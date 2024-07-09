@@ -7,3 +7,7 @@ output "kms_alias" {
   value       = aws_kms_alias.cwl.arn
   description = "The ARN of the KMS alias used to encrypt the CloudWatch Log Group"
 }
+
+output "api_gateway_cloudwatch_logs_role_arn" {
+  value = aws_iam_role.apigw_cwl[0].arn
+}
