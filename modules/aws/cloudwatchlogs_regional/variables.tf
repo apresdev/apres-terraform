@@ -52,6 +52,6 @@ variable "enable_api_gateway_logging" {
     Enable API Gateway logging to CloudWatch Logs. This requires an IAM Role and an API Gateway
     configuration per region. By default this is enabled.
   EOF
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
