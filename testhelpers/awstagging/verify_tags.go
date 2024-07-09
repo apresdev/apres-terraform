@@ -1,6 +1,10 @@
 package awstagging
 
-import "regexp"
+import (
+	"regexp"
+
+	"golang.org/x/exp/slices"
+)
 
 // Unfortunately each AWS service in the go SDK has its own Tag struct, so we need to define our own
 // and users of this library will need to convert the tags from the SDK to this struct.
@@ -42,6 +46,7 @@ func VerifyTagsExist(tags []TagItem) (bool, []string) {
 	}
 }
 
+// Verify Tags Value Format for the Apres tags, ignore the rest
 func VerifyTagsValueFormat(tags []TagItem) (bool, []string) {
 	badTags := make([]TagItem, 0)
 	// Regex for all tag values except Name
@@ -49,6 +54,11 @@ func VerifyTagsValueFormat(tags []TagItem) (bool, []string) {
 	// Regex for Name tags
 	nameRegex, _ := regexp.Compile("^[a-zA-Z0-9-_ ]+$")
 	for _, tag := range tags {
+		// Ignore tags not in the expected list, we only care about Apres tags
+		// Some of the AWS tags will not follow the Apres format
+		if (! slices.Contains(ExpectedTags, *tag.Key)) {
+			continue
+		}
 		if *tag.Key == "Name" {
 			if !nameRegex.MatchString(*tag.Value) {
 				badTags = append(badTags, tag)
