@@ -4,7 +4,7 @@ Sets up and configures regional resources for CloudWatch Logs (CWL). This is mea
 deployed once per AWS account and region.
 
 API Gateway logging to CloudWatch Logs is also included here, since it follows the same requirement
-to configure a single item per account/region. That can be disabled by setting the `enable_api_gateway_logging`
+to configure a single item per account/region. That can be disabled by setting `enable_api_gateway_logging`
 to false. The configuration consists of a role per region, and setting the API Gateway Logging setting to use
 the role. See [Set up CloudWatch logging for REST APIs in API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html) for details.
 
