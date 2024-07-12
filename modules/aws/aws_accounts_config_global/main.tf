@@ -1,0 +1,13 @@
+# Set a password policy for the account. This matches the two standards:
+# * AWS Foundational Security Best Practices v1.0.0,
+# * CIS AWS Foundations Benchmark v1.2.0
+resource "aws_iam_account_password_policy" "strict" {
+  minimum_password_length        = 14
+  require_lowercase_characters   = true
+  require_uppercase_characters   = true
+  require_numbers                = true
+  require_symbols                = true
+  allow_users_to_change_password = true
+  max_password_age               = 90
+  password_reuse_prevention      = 24
+}
