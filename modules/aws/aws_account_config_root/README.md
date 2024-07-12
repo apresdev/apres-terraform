@@ -23,70 +23,54 @@ Configuration for Microsoft Teams and Slack unfortunately requires a manual step
 
 ## AWS IAM Permissions
 
-The following permissions are required to use this module, substitute `${AWS::AccountId}` with the Account ID of the root account:
+The following permissions are required to use this module, substitute `${AWS::AccountId}` with the Account ID of the root account. This snippet is in CloudFormation yaml format:
 
-```json
-{
-    "Sid": "AllowManageContactInfo",
-    "Effect": "Allow",
-    "Action": "account:*",
-    "Resource": "*"
-},
-{
-    "Sid": "AllowManageCostAlerts",
-    "Effect": "Allow",
-    "Action": [
-        "budgets:*",
-        "ce:*",
-        "chatbot:*",
-        "cloudformation:*"
-        "kms:*",
-    ],
-    "Resource": "*"
-},
-{
-    "Sid": "AllowManageCostAlertsIAM",
-    "Effect": "Allow",
-    "Action": [
-        "iam:*"
-    ],
-    "Resource": [
-        "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*",
-        "arn:aws:iam::${AWS::AccountId}:role/ChatBot*"
-    ]
-},
-{
-    "Sid": "AllowManageCostAlertsSNS",
-    "Effect": "Allow",
-    "Action": [
-        "sns:*"
-    ],
-    "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:apres-alerting-costmanagement"
-},
-{
-    "Sid": "AllowDelegateSecurityConfig",
-    "Effect": "Allow",
-    "Action": [
-        "guardduty:*OrganizationAdminAccount",
-        "guardduty:List*",
-        "guardduty:Get*",
-        "securityhub:*OrganizationAdminAccount",
-        "securityhub:List*",
-        "securityhub:Get*",
-        "ec2:DescribeRegions",
-        "organizations:DescribeOrganization"
-    ],
-    "Resource": "*"
-},
-{
-    "Effect": "Allow",
-    "Action": [
-        "iam:DeleteAccountPasswordPolicy",
-        "iam:GetAccountPasswordPolicy",
-        "iam:UpdateAccountPasswordPolicy"
-    ],
-    "Resource: "*"
-}
+```yaml
+- Sid: AllowManageContactInfo
+  Effect: Allow
+  Action: account:*
+  Resource: "*"
+- Sid: AllowManageCostAlerts
+  Effect: Allow
+  Action:
+    - budgets:*
+    - ce:*
+    - chatbot:*
+    - cloudformation:*
+    - kms:*
+  Resource: "*"
+- Sid: AllowManageCostAlertsIAM
+  Effect: Allow
+  Action:
+    - iam:*
+  Resource:
+    - !Sub "arn:aws:iam::${AWS::AccountId}:policy/ChatBot*"
+    - !Sub "arn:aws:iam::${AWS::AccountId}:role/ChatBot*"
+- Sid: AllowManageCostAlertsSNS
+  Effect: Allow
+  Action:
+    - sns:*
+  Resource:
+    - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:apres-alerting-costmanagement"
+- Sid: AllowDelegateSecurityConfig
+  Effect: Allow
+  Action:
+    - guardduty:*OrganizationAdminAccount
+    - guardduty:List*
+    - guardduty:Get*
+    - securityhub:*OrganizationAdminAccount
+    - securityhub:List*
+    - securityhub:Get*
+    - ec2:DescribeRegions
+    - organizations:DescribeOrganization
+  Resource: "*"
+- Sid: AllowManageIAMPasswordPolicy
+  Effect: Allow
+  Action:
+    - iam:DeleteAccountPasswordPolicy
+    - iam:GetAccountPasswordPolicy
+    - iam:UpdateAccountPasswordPolicy
+  Resource: "*"
 ```
 
 <!-- BEGIN_TF_DOCS -->
