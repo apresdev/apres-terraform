@@ -15,7 +15,7 @@ several private repositories in the `apresdev` GitHub Organization:
 
 * `apresdev/apres-terraform` - this is where the Apres Terraform Modules required for Foundations are stored.
 * `apresdev/cftc-template` - the template for the Custom Control Tower Configuration
-* `apresdev/keystone-template` - the template for deploying the core configuration and service across your AWS accounts
+* `apresdev/foundations-template` - the template for deploying the core configuration and service across your AWS accounts
 
 ## Next Steps
 

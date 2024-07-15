@@ -61,7 +61,7 @@ Which one you enable depends on your organization. A few key points when making 
 ## 4. Select the primary (home) region
 
 Several of the next few steps have dependencies on selecting a primary region, and it is very difficult to change later on.  Your workloads can still be deployed in other regions, but the resources in steps 5 and 7 MUST be in the same region.
-Apres recommends `us-east-2` (Ohio) as the default.
+Apres recommends `us-east-2` (Ohio) as the default, and never using `us-east-1`.
 
 ## 5. Enable IAM Identity Center and create a user account
 
