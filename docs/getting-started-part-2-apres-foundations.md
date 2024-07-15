@@ -1,4 +1,4 @@
-# Getting Started with Apres - Part 1 - Apres Keystone
+# Getting Started with Apres - Part 1 - Apres Foundations
 
 ## Table of Contents
 1. [Setup Control Tower Customizations (CfCT)](#1-setup-control-tower-customizations-cfct)
@@ -52,7 +52,7 @@ Navigate to [https://github.com/apresdev/foundations-template](https://github.co
 at GitHub's [Creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
 instructions to create a repository in _your_ GitHub organization based on the template.
 
-The name for this repository is your choice, Apres recommends using the repository name `keystone` or `core-infrastructure`.
+The name for this repository is your choice, Apres recommends using the repository name `foundations` or `core-infrastructure`.
 
 ## 3. Create a GitHub repository to manage CfCT
 
@@ -75,7 +75,9 @@ Let's review what you've setup so far:
   * AWS IAM Roles and permissions to allow the Apres Foundations repository to deploy
 
 You are ready to start deploying the Apres Foundations. Follow the instructions in the README.md file in
-the GitHub repository you created in [Step 3](#3-create-a-github-repository-to-manage-cfct).
+the GitHub repository you created in [Step 3](#3-create-a-github-repository-to-manage-cfct), also
+available [here](https://github.com/apresdev/foundations-template/blob/main/README.md).
 
-## 4. Begin deploying your services
- ...
+## Next Steps
+
+Follow the directions in [Part 3 - Deploying your services](./getting-started-part-3-deploy-your-services.md)

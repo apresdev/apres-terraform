@@ -61,7 +61,7 @@ Which one you enable depends on your organization. A few key points when making 
 ## 4. Select the primary (home) region
 
 Several of the next few steps have dependencies on selecting a primary region, and it is very difficult to change later on.  Your workloads can still be deployed in other regions, but the resources in steps 5 and 7 MUST be in the same region.
-Apres recommends `us-east-2` (Ohio) as the default.
+Apres recommends `us-east-2` (Ohio) as the default, and never using `us-east-1`.
 
 ## 5. Enable IAM Identity Center and create a user account
 
@@ -92,6 +92,25 @@ Notes:
 * Control Tower will setup two accounts `log archive` and `audit`. Apres recommends using the defaults for these.
 * Step 2a is to review and select AWS regions. Apres recommends only enabling regions where you know your workloads will be deployed and disabling the rest. That will both prevent accidental deploys into those regions, and save cost on some tooling in the future.
 
+### Control Tower VPCs
+
+Control Tower will by default create VPCs in your new accounts in each of the enabled regions. There are three problems
+with the Control Tower VPC's:
+1. They use the NAT Gateways, which are extremely expensive to run.
+2. They only have two subnets by default, which means any workload deployed there can only run in two Availability
+   Zones instead of the recommended three.
+3. The VPC's in all accounts and regions share the same CIDR (IP Address) range, which will cause problems if any
+   connections are required between VPC's (Peering or Transit Gateway)
+
+Apres recommends disabling the Control Tower VPC's. The way to do so is not straight forward:
+1. In the AWS Console in the root account, navigate tot he AWS Control Tower service.
+2. Select the "Account Factory" link on the left.
+3. Under "Network Configuration" click the "Edit" button.
+4. In the "Maximum number of private subnets" dropdown, select `0`.
+5. Click the "Save" button at the bottom. VPC creation has now been disabled.
+
+### Configure the Organization Unit and create AWS Accounts.
+
 Once Control Tower is setup, Apres recommends following AWS's recommended Organizational Units (OUs) structure,
 [outlined here](https://docs.aws.amazon.com/controltower/latest/userguide/aws-multi-account-landing-zone.html#guidelines-for-multi-account-setup), namely:
 
@@ -102,7 +121,8 @@ Once Control Tower is setup, Apres recommends following AWS's recommended Organi
 
 Create the new OU's following the [Create a new OU](https://docs.aws.amazon.com/controltower/latest/userguide/create-new-ou.html) steps.
 
-Create new AWS accounts in the OU's following the [Provision accounts with the AWS Service Catalog Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html) steps.
+Create new AWS accounts in the OU's following the [Provision accounts with the AWS Service Catalog Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html) steps. When asked for email
+addresses, use the email address(es) created in [Step 1](#1-create-email-addresses-for-your-aws-accounts).
 
 A typical recommended OU structure, shown with AWS accounts and associated email addresses looks as follows, with
 a detailed explanation of the recommended accounts documented in [Recommended AWS Account Structure](./getting-started-aws-account-structure.md):
@@ -132,7 +152,8 @@ See [AWS Account Structure](./getting-started-aws-account-structure.md) for furt
 ## 8. Enable IAM access to billing
 
 By default access to the billing information, including Cost Explorer used to determine where your spend is,
-is not enabled for non-root users. To fix that, as the root user, follow the [Granting access to your billing information and tools](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/control-access-billing.html#grantaccess) steps.
+is not enabled for non-root users, meaning you will not be able see any cost analysis or bills unless you login
+as the root user. To fix that, as the root user, follow the [Granting access to your billing information and tools](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/control-access-billing.html#grantaccess) steps.
 
 ## 9. Enable Integration to your Identity Provider
 
@@ -143,5 +164,6 @@ Linking your new AWS Organization to your Identity Provider (IDP), such as Googl
 
 This setup is highly dependant on your organization's IDP. Both AWS and the major IDPs have documented the process, with AWS's documents [here](https://docs.aws.amazon.com/singlesignon/latest/userguide/tutorials.html). The process will take 2-3 hours to complete, and requires privileged access to the IDP, and root user access to AWS. The Apres team has experience with both Google Workspace and Microsoft 365 and can help with the integration.
 
+## Next Steps
 
-Continue to [Getting Started Part 2](./getting-started-part-2-apres-keystone.md)
+Continue to [Getting Started Part 2](./getting-started-part-2-apres-foundations.md)
