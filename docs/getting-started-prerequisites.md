@@ -1,4 +1,4 @@
-# Getting Started with Apres
+# Getting Started with Apres Foundations
 
 ## Prerequisites
 
@@ -16,6 +16,7 @@ several private repositories in the `apresdev` GitHub Organization:
 * `apresdev/apres-terraform` - this is where the Apres Terraform Modules required for Keystone are stored.
 * `apresdev/cftc-template` - the template for the Custom Control Tower Configuration
 * `apresdev/keystone-template` - the template for deploying the core configuration and service across your AWS accounts
-* TODO: `apresdev/...` - the repository with documentation
-* TODO: `apresdev/...` - the repository containing reusable GitHub Actions
 
+## Next Steps
+
+Follow the directions in [Part 1 - AWS Bootstrap](./getting-started-part-1-aws-bootstrap.md)

@@ -10,10 +10,14 @@ NOTE: These docs should be moved to a public site at some point in the future.
 * [Apres AWS Tagging](./tagging.md) - Details on how Apres Keystone terraform modules handle tagging
 * [Keep Apres Terraform Modules up to date with Dependabot](./dependabot.md)
 
-## Overview
+## Apres Foundations Overview
 
 Setting up a new AWS Organization with Apres Keystone has the following high level steps:
 
 1. Setup a new AWS Organization using AWS documentation and tooling - [Part 1](./getting-started-part-1-aws-bootstrap.md)
 2. Setup Apres Keystone - [Part 2](./getting-started-part-2-apres-keystone.md)
 3. Begin deploying your services.
+
+## Next Steps
+
+To get started, read the [Getting Started with Apres Foundations](./getting-started-prerequisites.md).

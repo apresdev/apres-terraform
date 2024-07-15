@@ -77,5 +77,6 @@ Let's review what you've setup so far:
 You are ready to start deploying the Apres Foundations. Follow the instructions in the README.md file in
 the GitHub repository you created in [Step 3](#3-create-a-github-repository-to-manage-cfct).
 
-## 4. Begin deploying your services
- ...
+## Next Steps
+
+Follow the directions in [Part 3 - Deploying your services](./getting-started-part-3-deploy-your-services.md)
