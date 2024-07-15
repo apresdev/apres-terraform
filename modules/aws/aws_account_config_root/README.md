@@ -67,9 +67,7 @@ The following permissions are required to use this module, substitute `${AWS::Ac
 - Sid: AllowManageIAMPasswordPolicy
   Effect: Allow
   Action:
-    - iam:DeleteAccountPasswordPolicy
-    - iam:GetAccountPasswordPolicy
-    - iam:UpdateAccountPasswordPolicy
+    - iam:*PasswordPolicy
   Resource: "*"
 ```
 
