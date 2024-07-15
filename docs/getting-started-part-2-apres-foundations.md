@@ -1,4 +1,4 @@
-# Getting Started with Apres - Part 1 - Apres Keystone
+# Getting Started with Apres - Part 1 - Apres Foundations
 
 ## Table of Contents
 1. [Setup Control Tower Customizations (CfCT)](#1-setup-control-tower-customizations-cfct)
@@ -52,7 +52,7 @@ Navigate to [https://github.com/apresdev/foundations-template](https://github.co
 at GitHub's [Creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
 instructions to create a repository in _your_ GitHub organization based on the template.
 
-The name for this repository is your choice, Apres recommends using the repository name `keystone` or `core-infrastructure`.
+The name for this repository is your choice, Apres recommends using the repository name `foundations` or `core-infrastructure`.
 
 ## 3. Create a GitHub repository to manage CfCT
 

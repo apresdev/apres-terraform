@@ -166,4 +166,4 @@ This setup is highly dependant on your organization's IDP. Both AWS and the majo
 
 ## Next Steps
 
-Continue to [Getting Started Part 2](./getting-started-part-2-apres-keystone.md)
+Continue to [Getting Started Part 2](./getting-started-part-2-apres-foundations.md)

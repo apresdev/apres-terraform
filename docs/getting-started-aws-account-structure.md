@@ -53,13 +53,13 @@ The artifacts account is mean to be a single point to store artifacts that are b
 For example, if your CI pipeline builds a docker container, it should be pushed to an ECR repository in your Artifacts
 account, so it can be re-used in all your workload accounts. The goal is to build an artifact once, publish it, and then re-use it where needed. Examples:
 * Docker images pushed to ECR
-* AMI images pushed to EC2 (not yet supported by Apres Keystone)
-* Binaries published to S3 (not yet supported by Apres Keystone)
+* AMI images pushed to EC2 (not yet supported by Apres Foundations)
+* Binaries published to S3 (not yet supported by Apres Foundations)
 
 ## Deploy Account
 
 The Deploy account is to host any Continuous Integration or Continuous Deployment (CI/CD) activities. At time of writing
-the Apres Keystone modules do not use the Deploy account.
+the Apres Foundations modules do not use the Deploy account.
 
 ## Sandbox Account
 
