@@ -15,7 +15,7 @@ The following permissions are required to use this module, shown as a Policy sni
         "iam:GetAccountPasswordPolicy",
         "iam:UpdateAccountPasswordPolicy"
     ],
-    "Resource: "*"
+    "Resource": "*"
 }
 ```
 
