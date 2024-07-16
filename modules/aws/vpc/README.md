@@ -2,7 +2,7 @@
 
 ## Overview
 
-This module will create a VPC, with subnets in three AZs. There are three tiers of subnets:
+This module will create a VPC, with subnets in three AZs. The module creates three tiers of subnets:
 
 | Subnet | Public IPs | Internet Access | Usage |
 |--------|------------|-----------------|-------|
@@ -16,7 +16,58 @@ VPC Flow Logs are enabled, writing to CloudWatch Logs.
 
 The module also creates a simple CloudWatch dashboard to monitor the NAT instances.
 
-CIDR ranges are purposely not set, accepting the defaults could be difficult to undo later.
+### CIDR Ranges and VPC Layout
+
+A default CIDR range is not set on purpose, ranges should be carefully planned ahead of time.
+
+Apres _strongly_ recommends selecting unique CIDR ranges for each VPC in your organization, for two main reasons:
+1. If at any point in the future you need to connect your VPC's with VPC Peering or Transit Gateway, it will not be
+   possible of CIDR ranges overlap. Changing CIDR ranges in a VPC is not possible, and it would require rebuilding
+   all your services in a new VPC.
+2. It is much easier to reason about separate ranges especially when investigating security incidents.
+
+Apres recommends using a layout as follows, and uses the same internally. There is no real reason
+for leaving gaps in ranges other than convention and ease of reading:
+
+| Account Name | Region      | CIDR      |
+| ------------ | ----------- | --------- |
+| Sandbox      | us-east-2   | 10.90/16  |
+| Dev          | us-east-2   | 10.100/16 |
+| Test         | us-east-2   | 10.110/16 |
+| Prod         | us-east-2   | 10.120/16 |
+
+Using the Dev/us-east-2 CIDR range of 10.100/16 as an example, deploying this module will result in the following
+subnet layout:
+
+Subnet ranges are the same in each VPC, showing Dev here for an example. [Source](https://www.davidc.net/sites/default/subnets/subnets.html?network=10.100.0.0&mask=16&division=45.f72399c98c40)
+
+| CIDR | Number of IPs | Purpose |
+| ---- | ------------- | ------- |
+| 10.100.0.0/23   | 510  | Public Subnet 1 |
+| 10.100.2.0/23   | 510  | Public Subnet 2 |
+| 10.100.4.0/23   | 510  | Public Subnet 3 |
+| 10.100.6.0/23   | 510  | Reserved Public Subnet 4 |
+| 10.100.8.0/23   | 510  | Reserved Public Subnet 5 |
+| 10.100.10.0/23  | 510  | Reserved Public Subnet 6|
+| 10.100.12.0/23  | 510  | Unused |
+| 10.100.14.0/23  | 510  | Unused |
+| 10.100.16.0/22  | 1022 | Persistence Subnet 1 |
+| 10.100.20.0/22  | 1022 | Persistence Subnet 2 |
+| 10.100.24.0/22  | 1022 | Persistence Subnet 3 |
+| 10.100.28.0/22  | 1022 | Reserved Persistence Subnet 4 |
+| 10.100.32.0/22  | 1022 | Reserved Persistence Subnet 5 |
+| 10.100.36.0/22  | 1022 | Reserved Persistence Subnet 6 |
+| 10.100.40.0/22  | 4096 | Unused |
+| 10.100.44.0/22  | 4096 | Unused |
+| 10.100.48.0/20  | 4096 | Unused |
+| 10.100.64.0/19  | 8190 | Private Subnet 1 |
+| 10.100.96.0/19  | 8190 | Private Subnet 2 |
+| 10.100.128.0/19 | 8190 | Private Subnet 3 |
+| 10.100.160.0/19 | 8190 | Reserved Private Subnet 4 |
+| 10.100.192.0/19 | 8190 | Reserved Private Subnet 5 |
+| 10.100.224.0/19 | 8190 | Reserved Private Subnet 6 |
+
+The _Reserved_ subnets are not deployed, but the ranges are listed future expansion.
 
 ## Service Endpoints
 
