@@ -215,8 +215,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // if the trigger is dependabot, use the PR title as the changelog
+            if (github.actor == 'dependabot[bot]') {
+              return github.event.pull_request.title;
+            }
             lines = context.payload.pull_request.body.split('\n');
-            let changelogText = '';
             // Match all cases of "changelog:"
             const re = /changelog: (.*)/i;
             for(const line of lines) {
@@ -224,6 +227,7 @@ jobs:
                 // greedily get everything after the first colon and space
                 // sometimes we get a \r in there so trim it off
                 changelog = line.split(': ',2)[1].trim();
+                break;
               }
             }
             console.log("Changelog: '" + changelog + "'");
