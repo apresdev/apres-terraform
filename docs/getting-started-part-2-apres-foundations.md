@@ -75,7 +75,7 @@ Let's review what you've setup so far:
   * AWS IAM Roles and permissions to allow the Apres Foundations repository to deploy
 
 You are ready to start deploying the Apres Foundations. Follow the instructions in the README.md file in
-the GitHub repository you created in [Step 3](#3-create-a-github-repository-to-manage-cfct), also
+the GitHub repository you created in [Step 2](#2-create-a-github-repository-to-manage-core-infrastructure), also
 available [here](https://github.com/apresdev/foundations-template/blob/main/README.md).
 
 ## Next Steps
