@@ -39,6 +39,13 @@ function setup_nvme_storage {
     uuid=$(blkid "${device}" | awk '{print $2}' | sed 's/"//g')
     log "Mount complete, adding ${device} to fstab with UUID: ${uuid}."
     echo "${uuid} /var/lib/docker xfs defaults 0 2" >> /etc/fstab
+
+    # Docker does not depend on cloud-init to finish to start, so it may (on some instance types)
+    # already be running using /var/lib/docker on the root filesystem, which we just mounted over.
+    # So we restart docker to make sure it uses the new mount.
+    log "Restarting docker."
+    systemctl restart docker
+    log "Docker restarted."
 }
 
 # If we have NVMe storage, mount it to /var/lib/docker so that Docker will use it.

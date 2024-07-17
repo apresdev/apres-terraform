@@ -6,8 +6,6 @@ locals {
   # existing bash variables need to be escaped which makes editting the script difficult. So we
   # load it here with nested replace() functions. The strings can be whatever you want, but using
   # the format of %THING% format to be obvious.
-  #
-  # TODO: USE_NVME_STORAGE is disabled, see https://github.com/apresdev/apres-terraform/issues/107
   user_data = replace(
     replace(
       file("${path.module}/templates/user_data.sh"),
@@ -15,8 +13,7 @@ locals {
       aws_ecs_cluster.default.name
     ),
     "%USE_NVME_STORAGE%",
-    # var.ec2_use_instance_nvme_storage ? "true" : "false"
-    "false"
+    var.ec2_use_instance_nvme_storage ? "true" : "false"
   )
 }
 

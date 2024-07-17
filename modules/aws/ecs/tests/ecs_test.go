@@ -150,7 +150,6 @@ func validateLoadBalancer(t *testing.T, lbClient *elasticloadbalancingv2.Client,
 		ResourceArns: []string{tfOut.loadBalancerArn, tfOut.loadBalancerTargetGroupArn},
 	})
 	assert.NoError(t, err, "Expected no error for DescribeTags")
-
 	for _, tagDescription := range tagsResp.TagDescriptions {
 		tags := make([]awstagging.TagItem, 0)
 		for _, tag := range tagDescription.Tags {
@@ -161,6 +160,23 @@ func validateLoadBalancer(t *testing.T, lbClient *elasticloadbalancingv2.Client,
 
 		valid, bad := awstagging.VerifyTagsValueFormat(tags)
 		assert.True(t, valid, fmt.Sprintf("Tags have invalid values for %s: %v", *tagDescription.ResourceArn, bad))
+	}
+
+	// check the health of the target group. We're going to wait for one to be healthy.
+	// since it can take a bit of time after service startup
+	healthy := false
+	for !healthy {
+		tgResp, err := lbClient.DescribeTargetHealth(context.Background(), &elasticloadbalancingv2.DescribeTargetHealthInput{
+			TargetGroupArn: &tfOut.loadBalancerTargetGroupArn,
+		})
+		assert.NoError(t, err, "Expected no error for DescribeTargetHealth")
+		assert.GreaterOrEqual(t, len(tgResp.TargetHealthDescriptions), 1, "Expected at least one target health description")
+		for _, targetHealth := range tgResp.TargetHealthDescriptions {
+			if targetHealth.TargetHealth.State == elbTypes.TargetHealthStateEnum("healthy") {
+				healthy = true
+				break
+			}
+		}
 	}
 }
 
@@ -278,10 +294,10 @@ func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 
 }
 
-// Test ECS on EC2 with no volumes and a load balancer
+// Test ECS on EC2 with an NVMe volume and a load balancer
 func TestECSEc2WithLoadBalancer(t *testing.T) {
 	name := getName()
-	terraformOptions := getTfOpts(name, "EC2", true, false, "t4g.small", false, 8080)
+	terraformOptions := getTfOpts(name, "EC2", true, true, "c7gd.medium", false, 8080)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
