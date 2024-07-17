@@ -177,6 +177,7 @@ func validateLoadBalancer(t *testing.T, lbClient *elasticloadbalancingv2.Client,
 				break
 			}
 		}
+		time.Sleep(5 * time.Second)
 	}
 }
 
