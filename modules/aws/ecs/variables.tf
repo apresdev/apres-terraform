@@ -363,11 +363,10 @@ variable "ec2_autoscale_max" {
 
 variable "ec2_use_instance_nvme_storage" {
   description = <<EOF
-  NOTE this is not supported at this time, setting this to true will be ignored! See
-  https://github.com/apresdev/apres-terraform/issues/107
+  If true and deployment_target is EC2, the instance will use NVMe storage for ephemeral storage, mounting
+  it as /var/lib/docker on the host.
 
-  If true and deployment_target is EC2, the instance will use NVMe storage for ephemeral storage. This is to
-  be used together with the `ephemeral_volumes` variable.
+  This is to be used together with the `ephemeral_volumes` variable.
 
   For example, an m7gd.medium has an NVMe SSD of 59GB, and using that as ephemeral storage has significant
   performance benefits over using EBS.
