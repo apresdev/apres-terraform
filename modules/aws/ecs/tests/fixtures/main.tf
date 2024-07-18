@@ -34,6 +34,9 @@ module "ecs" {
   container_health_check_retries      = 3 # 3 * 5 = 15 seconds before failure
   container_health_check_start_period = 5
 
+  # same with load balancers, setting this if create_load_balancer=false has no effect
+  load_balancer_health_check_interval = 10
+
   # Use defaults explicitly to make it easier to debug tests
   cpu                  = 256
   memory               = 512

@@ -119,7 +119,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/1.0.0 |
+| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/1.0.1 |
 
 ## Resources
 

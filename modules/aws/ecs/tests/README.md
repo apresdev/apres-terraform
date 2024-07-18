@@ -9,4 +9,3 @@ Can handle adding storage & network together to limit use cases.
 * ECS on EC2, no NVMe, no LB.
 * ECS on EC2, NVMe, LB.
 
-How do we know when a service is active?
