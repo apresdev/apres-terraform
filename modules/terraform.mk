@@ -73,14 +73,19 @@ deploy: apply
 clean:
 	rm -rf .terraform .external_modules .build
 
+# Not every module has a ./tests directory, so we need to check for it.
+TESTS_DIR = $(wildcard ./tests/*)
+
 test: .build/test
 
 # This will require AWS credentials but we don't check for that here.
+# ifeq ($(strip $(TESTS_DIR)),)
 .build/test: $(TFFILES) .terraform.lock.hcl
-	@if [ -d ./tests ]; then aws sts get-caller-identity || (echo "AWS credentials are required for testing." && false); fi
-	@if [ -d ./tests ]; then cd tests && go test; fi
-	@mkdir -p .build
-	@touch .build/test
+ifeq ($(strip $(TESTS_DIR)),)
+	@echo "No tests directory found."
+else
+	cd tests && go mod download && go mod tidy && go test -v -timeout 30m $(TEST_FLAGS)
+endif
 
 update-readme: .build/update-readme
 
