@@ -219,6 +219,7 @@ jobs:
             if (github.actor == 'dependabot[bot]') {
               return github.event.pull_request.title;
             }
+            changelog = '';
             lines = context.payload.pull_request.body.split('\n');
             // Match all cases of "changelog:"
             const re = /changelog: (.*)/i;
@@ -229,6 +230,10 @@ jobs:
                 changelog = line.split(': ',2)[1].trim();
                 break;
               }
+            }
+            if (changelog === '') {
+              // Fail because we should have had a Changelog.
+              core.error('No changelog found in PR body!');
             }
             console.log("Changelog: '" + changelog + "'");
             return changelog;
