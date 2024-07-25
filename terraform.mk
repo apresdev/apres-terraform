@@ -79,7 +79,6 @@ TESTS_DIR = $(wildcard ./tests/*)
 test: .build/test
 
 # This will require AWS credentials but we don't check for that here.
-# ifeq ($(strip $(TESTS_DIR)),)
 .build/test: $(TFFILES) .terraform.lock.hcl
 ifeq ($(strip $(TESTS_DIR)),)
 	@echo "No tests directory found."
