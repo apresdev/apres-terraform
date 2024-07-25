@@ -4,24 +4,11 @@
 
 We recommend using the configured dev Container, which has all the prerequisite software installed.
 
-### Setup
+### README Updates
 
-You will want pre-commit hooks setup, which will lint your terraform code and update docs before committing.
+In each module running `make`, `make all`, or `make update-readme` will update the README file with the
+latest terraform steps.
 
-On OSX:
-```shell
-brew install pre-commit`
-```
-
-And then install the hooks (it will install `.git/hooks/pre-commit`):
-```shell
-pre-commit install
-```
-
-To run the pre-commit hooks before you commit:
-```shell
-pre-commit run terraform-docs-go -a -v
-```
 
 ### Changelogs
 

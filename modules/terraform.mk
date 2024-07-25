@@ -77,8 +77,8 @@ test: .build/test
 
 # This will require AWS credentials but we don't check for that here.
 .build/test: $(TFFILES) .terraform.lock.hcl
-	@aws sts get-caller-identity || (echo "AWS credentials are required for testing." && false)
-	if [ -d ./tests ]; then cd tests && go test; fi
+	@if [ -d ./tests ]; then aws sts get-caller-identity || (echo "AWS credentials are required for testing." && false); fi
+	@if [ -d ./tests ]; then cd tests && go test; fi
 	@mkdir -p .build
 	@touch .build/test
 

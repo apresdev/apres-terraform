@@ -8,7 +8,9 @@ upgrade-providers: $(addsuffix .upgrade-providers,$(TARGETS))
 
 validate: $(addsuffix .validate,$(TARGETS))
 
-.PHONY: all clean upgrade-providers validate
+update-readme: $(addsuffix .update-readme,$(TARGETS))
+
+.PHONY: all clean upgrade-providers validate update-readme
 
 # Create dynamic targets, based on the good work at
 # https://github.com/enspirit/makefile-for-monorepos/blob/master/README.md
@@ -35,6 +37,10 @@ $1.upgrade-providers:
 	@echo "Upgrading backend for $1"
 	$(MAKE) -C $1 upgrade-providers
 	$(MAKE) -C $1 validate
+
+$1.update-readme:
+	@echo "Updating README for $1"
+	$(MAKE) -C $1 update-readme
 
 endef
 $(foreach target,$(TARGETS),$(eval $(call make-terraform-targets,$(target))))
