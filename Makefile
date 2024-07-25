@@ -1,0 +1,40 @@
+TARGETS = $(wildcard modules/*/*)
+
+all: $(addsuffix .all,$(TARGETS))
+
+clean: $(addsuffix .clean,$(TARGETS))
+
+upgrade-providers: $(addsuffix .upgrade-providers,$(TARGETS))
+
+validate: $(addsuffix .validate,$(TARGETS))
+
+.PHONY: all clean upgrade-providers validate
+
+# Create dynamic targets, based on the good work at
+# https://github.com/enspirit/makefile-for-monorepos/blob/master/README.md
+# The targets will be like "terraform/artifacts/us-east-2.clean" etc.
+define make-terraform-targets
+
+.PHONY: $1.clean $1.all
+
+$1.clean:
+	@echo "Cleaning $1"
+	$(MAKE) -C $1 clean
+
+$1.all:
+	@echo "Preflight $1"
+	$(MAKE) -C $1 preflight
+
+$1.validate:
+	@echo "Validating $1"
+	$(MAKE) -C $1 preflight
+	$(MAKE) -C $1 init-no-backend
+	$(MAKE) -C $1 validate
+
+$1.upgrade-providers:
+	@echo "Upgrading backend for $1"
+	$(MAKE) -C $1 upgrade-providers
+	$(MAKE) -C $1 validate
+
+endef
+$(foreach target,$(TARGETS),$(eval $(call make-terraform-targets,$(target))))

@@ -1,6 +1,12 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Checkov directory for external modules
+**/.external_modules/*
+
+# Sentinel files for Make
+**/.build/*
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
