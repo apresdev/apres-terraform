@@ -116,38 +116,6 @@ variable "alternate_contact_info" {
   EOF
 }
 
-variable "enable_regions" {
-  type = map(list(string))
-  default = {
-    "default" = ["us-east-1", "us-east-2"]
-  }
-  description = <<EOF
-    A map of regions to enable for the organization. This applies to regions introduced after March 20, 2019
-    as the previous regions are enabled by default, and cannot be disabled. The default is to enable
-    us-east-1 and us-east-2, it's actually a noop since they are already enabled.
-
-    The key of the variable is the name of the account, and the value is a list of
-    region names to enable in that account. If the region is not listed, it will not be enabled, with the
-    caveat of the regions that are enabled by default.
-
-    See the AWS Doc [Considerations before enabling and disabling Regions](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html?icmpid=docs_orgs_console#manage-acct-regions-considerations)
-    for particulars on enabling or disabling regions.
-
-    A combination of default and specific accounts may be used. In the following example all accounts
-    will have us-east-1 and us-east-2 enabled, except for the account with the ID 123456789012 which will have
-    four regions enabled.
-    ```hcl
-    module "organizations" {
-      # ...
-      enable_regions = {
-        "default" = ["us-east-1", "us-east-2"],
-        "123456789012"    = ["us-east-1", "us-west-2", "us-west-1", "ca-west-1"]
-      }
-    }
-    ```
-  EOF
-}
-
 variable "cost_anomaly_alerts_frequency" {
   description = <<EOF
   Frequency of the cost_anomaly alerts, one of DAILY, IMMEDIATE, or WEEKLY. Note that IMMEDIATE alerts are not supported for email
