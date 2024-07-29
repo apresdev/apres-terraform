@@ -24,6 +24,15 @@ The following permissions are required to use this module, shown as a Policy sni
     "iam:*"
   ],
   "Resource": "arn:aws:iam::${AWS::AccountID}:role/ApresAPIGatewayCloudWatchLogsRole*"
+},
+{
+  "Sid": "AllowManageAPIGWAccountSettings",
+  "Effect": "Allow",
+  "Action": [
+    "apigateway:*"
+  ],
+  "Resource": "arn:aws:apigateway:${AWS::Region}::/account"
+
 }
 ```
 
