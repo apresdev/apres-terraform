@@ -89,7 +89,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_gateway_cloudwatch_logs_role_arn"></a> [api\_gateway\_cloudwatch\_logs\_role\_arn](#output\_api\_gateway\_cloudwatch\_logs\_role\_arn) | n/a |
+| <a name="output_api_gateway_cloudwatch_logs_role_arn"></a> [api\_gateway\_cloudwatch\_logs\_role\_arn](#output\_api\_gateway\_cloudwatch\_logs\_role\_arn) | ARN of the API Gateway CloudWatch Logs role, or empty string if enable\_api\_gateway\_logging = false |
 | <a name="output_kms_alias"></a> [kms\_alias](#output\_kms\_alias) | The ARN of the KMS alias used to encrypt the CloudWatch Log Group |
 | <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | The ARN of the KMS key used to encrypt the CloudWatch Log Group |
 <!-- END_TF_DOCS -->
