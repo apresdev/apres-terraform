@@ -159,10 +159,10 @@ No modules.
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | (Optional) Enables deletion protection for table. Defaults to true. | `bool` | `true` | no |
-| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
+| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/dynamodb' will be used. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_hash_key"></a> [hash\_key](#input\_hash\_key) | The attribute to use as the hash (partition) key. Must also be defined as an attribute | `string` | `null` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name of the table | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | Name of the table, must be between 3 and 255 characters long and can contain only the following characters: a-z, A-Z, 0-9, \_, -, and . | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_point_in_time_recovery_enabled"></a> [point\_in\_time\_recovery\_enabled](#input\_point\_in\_time\_recovery\_enabled) | (Optional) Whether to enable Point In Time Recovery for the replica. Default is true. | `bool` | `true` | no |
 | <a name="input_range_key"></a> [range\_key](#input\_range\_key) | (Optional) The attribute to use as the range (sort) key. Must also be defined as an attribute | `string` | `null` | no |
