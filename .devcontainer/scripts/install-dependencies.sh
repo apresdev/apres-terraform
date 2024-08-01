@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 IAMLIVE_VERSION=v1.1.8
-IAMLIVE_ARCH=arm64
+arch=$(uname -m)
+if [ ${arch} == "x86_64" ]; then
+    IAMLIVE_ARCH=amd64
+elif [ ${arch} == "aarch64" ]; then
+    IAMLIVE_ARCH=arm64
+else
+    echo "Unsupported architecture: ${arch}"
+    exit 1
+fi
 
 ARCHIVE_FILE=iamlive-${IAMLIVE_VERSION}-linux-${IAMLIVE_ARCH}.tar.gz
 wget https://github.com/iann0036/iamlive/releases/download/${IAMLIVE_VERSION}/${ARCHIVE_FILE}
