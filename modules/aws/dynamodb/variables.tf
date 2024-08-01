@@ -12,7 +12,7 @@ variable "environment" {
 #  - - (dash)
 #  - . (dot)
 variable "name" {
-  description = "Name of the table"
+  description = "Name of the table, must be between 3 and 255 characters long and can contain only the following characters: a-z, A-Z, 0-9, _, -, and ."
   type        = string
   validation {
     condition     = length(var.name) >= 3 && length(var.name) < 255
