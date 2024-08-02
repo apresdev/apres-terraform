@@ -246,7 +246,8 @@ jobs:
         uses: stefanzweifel/changelog-updater-action@v1
         with:
           latest-version: ${{ steps.new-version.outputs.result }}
-          release-notes: ${{ jobs.detect.outputs.changelog-text }}
+          # Get release notes from the detect job output
+          release-notes: ${{ needs.detect.outputs.changelog-text }}
           path-to-changelog: ${{ matrix.module_directory }}/CHANGELOG.md
 
       - name: Commit with signed
