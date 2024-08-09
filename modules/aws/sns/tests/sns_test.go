@@ -141,7 +141,7 @@ func (s *SnsTestSuite) getAttributes(topicArn string) map[string]string {
 	return resp.Attributes
 }
 
-// assertTags ensures that the table has all required tags set with appropriate values by default.
+// assertTags ensures that the topic has all required tags set with appropriate values by default.
 func (s *SnsTestSuite) assertTags(topicArn string) {
 	resp, err := s.sns.ListTagsForResource(s.ctx, &sns.ListTagsForResourceInput{ResourceArn: aws.String(topicArn)})
 	s.Assert().NoError(err, "expected no error on GetBucketTagging")

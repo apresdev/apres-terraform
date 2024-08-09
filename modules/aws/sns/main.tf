@@ -1,4 +1,4 @@
-# The following best practices are applied to the table by default:
+# The following best practices are applied to the topic by default:
 #
 # CKV_AWS_26 : Ensure all data stored in the SNS topic is encrypted
 # CKV_AWS_169: Ensure SNS topic policy is not public by only allowing specific services or principals to access it

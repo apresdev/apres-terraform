@@ -1,5 +1,5 @@
 variable "name" {
-  description = "Name of the table"
+  description = "Name of the topic"
   type        = string
   validation {
     condition     = length(var.name) >= 3 && length(var.name) < 255
