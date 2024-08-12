@@ -1,30 +1,8 @@
-# Apres DynamoDb Terraform module
+# Apres SNS SQS Subscription module
 
 ## Overview
 
-This module will create an SNS topic in accordance with best practices. SNS topic names do not need to be globally unique in AWS; however, to match
-similar resources that must be unique (such as S3 buckets), the resulting name will have the following pattern:
-
-`account-id`-`environment`-`region`-`name`
-
-where:
-
-* `account-id` is the 12 digit AWS account where the bucket is deployed.
-* `environment` is the lower case `environment` variable passed into the terraform stack
-* `region` is the AWS region where the bucket is deployed
-* `name` is the lower case `name` variable passed into the terraform stack.
-
-For example, if the stack is deployed with:
-
-```hcl
-module "sns_sqs_subscriber" {
-  source      = "TBD" # value depends on your installation
-  name        = "mytesttopic"
-  environment = "SystemTest"
-}
-```
-
-and the stack is deployed to the AWS account 12345689012 in us-east-2, the SNS topic name will be `123456789012-systemtest-us-east-2-mytesttopic`
+This module will create an SNS subscription for a given SQS queue in accordance with best practices. 
 
 ### Enforced Best Practices
 
@@ -46,9 +24,9 @@ The following best practices ARE NOT implemented:
 module "sns_sqs_subscriber" {
   source      = "../../../modules/sns_sqs_subscriber"
   environment = "Dev"
-  sns_topic_arn = "mytesttopic"
-  sqs_queue_arn = "mytesttopic"
-  sqs_queue_url = "mytesttopic"
+  sns_topic_arn = "<myTopicArn>"
+  sqs_queue_arn = "<myQueueArn>"
+  sqs_queue_url = "<myQueueUrl>"
 }
 ```
 
