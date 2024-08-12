@@ -1,19 +1,21 @@
 # Apres AWS Security Tools
 
-This module configures the security tools for your AWS organization. The module must ONLY be run on what AWS Organizations calls the "Audit" account!
+This module configures the global security tools for your AWS organization. The module must ONLY be run on what AWS Organizations calls the "Audit" account!
 
 This module sets up:
 * AWS Security Hub
-* Amazon GuardDuty, publishing to Security Hub
 * Amazon EventBridge - subscribes to events from Security Hub, pushes to an SNS topic.
 * AWS Chatbot
   * subscribes to the SNS topic
   * publishes to Slack and/or Teams
 
-## Future enhancements
-1. Add other services like Inspector, Detective, etc will be added in future versions.
-2. Export GuardDuty events to S3. See [Export findings](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html)
+## Typical Deployment
 
+If your AWS Organization is setup in the standard way with an account called `Audit` for security tools,
+then you should deploy the following modules in the following order:
+* [security_tools_delegator](../security_tools_delegator/README.md) - deploy to the root account in your primary region.
+* [security_tools](../security_tools/README.md) (this module) - deploy to the Audit account in your primary region.
+* [security_tools_regional](../security_tools_regional/README.md) - deploy to the Audit account in every active region, including the primary region.
 
 ## Prerequisites
 
@@ -127,17 +129,11 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 |------|------|
 | [aws_cloudwatch_event_rule.security_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.security_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
-| [aws_guardduty_detector_feature.eks_runtime_monitoring](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
-| [aws_guardduty_detector_feature.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
-| [aws_guardduty_detector_feature.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
-| [aws_guardduty_detector_feature.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector_feature) | resource |
-| [aws_guardduty_organization_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration) | resource |
 | [aws_securityhub_configuration_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_configuration_policy) | resource |
 | [aws_securityhub_configuration_policy_association.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_configuration_policy_association) | resource |
 | [aws_securityhub_finding_aggregator.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_finding_aggregator) | resource |
 | [aws_securityhub_organization_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_organization_configuration) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_guardduty_detector.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/guardduty_detector) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -147,10 +143,6 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"SecurityTools"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
-| <a name="input_guardduty_enable_eks_protection"></a> [guardduty\_enable\_eks\_protection](#input\_guardduty\_enable\_eks\_protection) | Enable GuardDuty to monitor EKS clusters | `bool` | `true` | no |
-| <a name="input_guardduty_enable_lambda_protection"></a> [guardduty\_enable\_lambda\_protection](#input\_guardduty\_enable\_lambda\_protection) | Enable GuardDuty to monitor Lambda functions | `bool` | `true` | no |
-| <a name="input_guardduty_enable_rds_protection"></a> [guardduty\_enable\_rds\_protection](#input\_guardduty\_enable\_rds\_protection) | Enable GuardDuty to monitor RDS instances | `bool` | `true` | no |
-| <a name="input_guardduty_enable_s3_protection"></a> [guardduty\_enable\_s3\_protection](#input\_guardduty\_enable\_s3\_protection) | Enable GuardDuty to monitor S3 buckets | `bool` | `true` | no |
 | <a name="input_msteams_channel_id"></a> [msteams\_channel\_id](#input\_msteams\_channel\_id) | The Microsoft Teams Channel ID for Security Hub Findings.<br>    The Channel Id is buried in the URL to the channel, and can be found in Teams using the "Get link to channel"<br>    menu option. A resulting URL might look like<br>    `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990`<br>    and the Channel ID is between the slashes after `channel`, in this case the Channel ID i<br>    is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`. | `string` | `""` | no |
 | <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams Team ID for Security Hub Findings. This is displayed in the AWS Console" | `string` | `""` | no |
 | <a name="input_msteams_tenant_id"></a> [msteams\_tenant\_id](#input\_msteams\_tenant\_id) | The Microsoft Teams Tenant ID for Security Hub Findings. This is displayed in the AWS Console" | `string` | `""` | no |
