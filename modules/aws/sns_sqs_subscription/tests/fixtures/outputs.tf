@@ -9,11 +9,3 @@ output "queue_arn" {
 output "queue_url" {
   value = module.sqs.queue_url
 }
-
-output "cmk_arn" {
-  value = module.kms_messaging.cmk_arn
-}
-
-output "cmk_alias" {
-  value = module.kms_messaging.cmk_alias
-}

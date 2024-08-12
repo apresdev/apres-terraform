@@ -78,17 +78,14 @@ func (s *SnsSqsSubscriptionTestSuite) TestSqs() {
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	topicArn := terraform.Output(s.T(), terraformOptions, "topic_arn")
 	queueUrl := terraform.Output(s.T(), terraformOptions, "queue_url")
-	keyAlias := terraform.Output(s.T(), terraformOptions, "cmk_alias")
-
-	s.Assert().NotEmpty(keyAlias, "expected key alias to be non-empty")
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Ensure that we are testing encrypted SNS topics and SQS queues
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	attributes := s.getQueueAttributes(queueUrl)
 
-	s.assertTopicEncrypted(topicArn, keyAlias)
-	s.assertQueueEncrypted(keyAlias, attributes)
+	s.assertTopicEncrypted(topicArn)
+	s.assertQueueEncrypted(attributes)
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Publish a message to the topic and ensure the queue receives the message
@@ -138,7 +135,7 @@ func (s *SnsSqsSubscriptionTestSuite) getQueueAttributes(queueUrl string) map[st
 }
 
 // assertTopicEncrypted ensures that the topic is encrypted
-func (s *SnsSqsSubscriptionTestSuite) assertTopicEncrypted(topicArn string, keyAlias string) {
+func (s *SnsSqsSubscriptionTestSuite) assertTopicEncrypted(topicArn string) {
 
 	resp, err := s.sns.GetTopicAttributes(s.ctx, &sns.GetTopicAttributesInput{
 		TopicArn: aws.String(topicArn),
@@ -147,13 +144,13 @@ func (s *SnsSqsSubscriptionTestSuite) assertTopicEncrypted(topicArn string, keyA
 	s.Require().NotNil(resp, "attributes must not be nil")
 
 	keyId := optional("KmsMasterKeyId", resp.Attributes, "")
-	s.Assert().Equal(keyAlias, keyId, "expected to use KMS key")
+	s.Assert().Equal("alias/apres/messaging", keyId, "expected to use KMS key")
 }
 
 // assertQueueEncrypted ensures that the queue is encrypted
-func (s *SnsSqsSubscriptionTestSuite) assertQueueEncrypted(keyAlias string, attributes map[string]string) {
+func (s *SnsSqsSubscriptionTestSuite) assertQueueEncrypted(attributes map[string]string) {
 	keyId := optional("KmsMasterKeyId", attributes, "")
-	s.Assert().Equal(keyAlias, keyId, "expected to use KMS key")
+	s.Assert().Equal("alias/apres/messaging", keyId, "expected to use KMS key")
 }
 
 // assertQueuePolicy ensures that the queue policy is created

@@ -8,10 +8,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 )
 
-require golang.org/x/exp v0.0.0-20240707233637-46b078467d37 // indirect
-
 require (
-	apres.dev/awstagging v0.0.0-00010101000000-000000000000
 	apres.dev/awspolicy v0.0.0-00010101000000-000000000000
 	cloud.google.com/go v0.110.0 // indirect
 	cloud.google.com/go/compute v1.19.1 // indirect
@@ -78,4 +75,5 @@ require (
 )
 
 replace apres.dev/awstagging => ../../../../testhelpers/awstagging
+
 replace apres.dev/awspolicy => ../../../../testhelpers/awspolicy

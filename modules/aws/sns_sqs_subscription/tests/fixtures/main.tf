@@ -16,15 +16,14 @@ locals {
 module "sns" {
   source = "../../../sns"
 
-  name                  = var.name
-  display_name          = var.name
+  name         = var.name
+  display_name = var.name
 
   environment = var.environment
   owner       = local.owner
   application = local.application
   component   = local.component
 
-  depends_on = [module.kms_messaging]
 }
 
 # The creates the SQS queue.
@@ -32,23 +31,22 @@ module "sns" {
 module "sqs" {
   source = "../../../sqs"
 
-  name                  = var.name
+  name = var.name
 
   environment = var.environment
   owner       = local.owner
   application = local.application
   component   = local.component
 
-  depends_on = [module.kms_messaging]
 }
 
 # This auto-wires the SQS queue to be a subscriber to the SNS topic.
 module "sns_sqs_subscription" {
   source = "../../"
 
-  sns_topic_arn = module.sns.topic_arn
-  sqs_queue_arn = module.sqs.queue_arn
-  sqs_queue_url = module.sqs.queue_url
+  sns_topic_arn        = module.sns.topic_arn
+  sqs_queue_arn        = module.sqs.queue_arn
+  sqs_queue_url        = module.sqs.queue_url
   raw_message_delivery = true
 
   environment = var.environment
