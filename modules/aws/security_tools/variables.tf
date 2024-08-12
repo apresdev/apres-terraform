@@ -25,37 +25,6 @@ variable "security_hub_regions" {
   default     = []
 }
 
-variable "guardduty_enable_s3_protection" {
-  description = "Enable GuardDuty to monitor S3 buckets"
-  type        = bool
-  default     = true
-}
-
-variable "guardduty_enable_eks_protection" {
-  description = "Enable GuardDuty to monitor EKS clusters"
-  type        = bool
-  default     = true
-}
-
-# Not supported yet, there's a manual setting in the management account that needs to get set somehow.
-# variable "guardduty_enable_malware_protection" {
-#   description = "Enable GuardDuty to monitor EBS volumes for malware.""
-#   type        = bool
-#   default     = true
-# }
-
-variable "guardduty_enable_rds_protection" {
-  description = "Enable GuardDuty to monitor RDS instances"
-  type        = bool
-  default     = true
-}
-
-variable "guardduty_enable_lambda_protection" {
-  description = "Enable GuardDuty to monitor Lambda functions"
-  type        = bool
-  default     = true
-}
-
 variable "extra_tags" {
   description = "Extra tags to be applied to all resources"
   type        = map(string)
