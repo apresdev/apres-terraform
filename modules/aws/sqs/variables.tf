@@ -97,11 +97,12 @@ variable "delay_seconds" {
 
 variable "encryption_kms_key_id" {
   description = <<EOF
-  The ARN of the KMS key to use for server-side encryption. If not provided,
-  the default AWS managed key 'aws/sqs' will be used.
+  The ARN of the KMS key to use for server-side encryption. 
+  If not provided, the default customer managed key 'alias/apres/messaging' will be used.
   EOF
   type        = string
-  default     = null
+  nullable    = false
+  default     = "alias/apres/messaging"
 }
 
 variable "policy" {

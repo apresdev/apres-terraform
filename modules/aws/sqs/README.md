@@ -1,11 +1,11 @@
-# Apres DynamoDb Terraform module
+# Apres SQS Terraform module
 
 ## Overview
 
-This module will create an SQS queue in accordance with best practices. SQS queue names do not need to be globally unique in AWS; however, to match
-similar resources that must be unique (such as S3 buckets), the resulting name will have the following pattern:
+This module will create an SQS queue in accordance with best practices. SQS queue names do not need to be globally unique in AWS; as such, the
+resulting name will have the following pattern:
 
-`account-id`-`environment`-`region`-`name`
+`environment`-`name`
 
 where:
 
@@ -24,11 +24,11 @@ module "sqs" {
 }
 ```
 
-and the stack is deployed to the AWS account 12345689012 in us-east-2, the SQS queue name will be `123456789012-systemtest-us-east-2-mytestqueue`
+and the stack is deployed to the AWS account 12345689012 in us-east-2, the SQS queue name will be `systemtest-mytestqueue`
 
 ### Enforced Best Practices
 
-The following best practices are applied to the queue:
+The following best practices are applied:
 
 | Id         | Policy                                                |
 |------------|-------------------------------------------------------|
@@ -76,8 +76,8 @@ The following permissions are required to use this module, shown as a Policy sni
       "sqs:ListQueueTags"
     ],
     "Resource": [
-      "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${AWS::AccountId}-${environment}-${AWS::Region}-${name}",
-      "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${AWS::AccountId}-${environment}-${AWS::Region}-${name}-deadletter"
+      "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${environment}-${name}",
+      "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${environment}-${name}-deadletter"
     ]
   },
   {
@@ -88,9 +88,9 @@ The following permissions are required to use this module, shown as a Policy sni
       "cloudwatch:DeleteAlarms"
     ],
     "Resource": [
-      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${AWS::AccountId}-${environment}-${AWS::Region}-${name}-error-rate-*",
-      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${AWS::AccountId}-${environment}-${AWS::Region}-${name}-projected-latency-*",
-      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${AWS::AccountId}-${environment}-${AWS::Region}-${name}-historical-latency-*"
+      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${environment}-${name}-error-rate-*",
+      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${environment}-${name}-projected-latency-*",
+      "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:${environment}-${name}-historical-latency-*"
     ]
   },
   {
@@ -143,7 +143,7 @@ No modules.
 | <a name="input_component"></a> [component](#input\_component)                                                        | Component name, used for tagging AWS resources.                                                                                                                                                                 | `string`                                                                                                                                                                                                              | n/a                                                                                                                                                                    |   yes    |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags)                                             | Default set of tags to be applied to all resources                                                                                                                                                              | `map(string)`                                                                                                                                                                                                         | `{}`                                                                                                                                                                   |    no    |
 | <a name="input_delay_seconds"></a> [delay\_seconds](#input\_delay\_seconds)                                          | (Optional) The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 seconds."                             | `number`                                                                                                                                                                                                              | `0`                                                                                                                                                                    |    no    |
-| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id)              | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/sqs' will be used.                                                                             | `string`                                                                                                                                                                                                              | `null`                                                                                                                                                                 |    no    |
+| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id)              | The ARN of the KMS key to use for server-side encryption. <br>  If not provided, the default customer managed key 'alias/apres/messaging' will be used.                                                         | `string`                                                                                                                                                                                                              | `"alias/apres/messaging"`                                                                                                                                              |    no    |
 | <a name="input_environment"></a> [environment](#input\_environment)                                                  | Environment name, used for tagging AWS resources, and in the bucket name.                                                                                                                                       | `string`                                                                                                                                                                                                              | `"dev"`                                                                                                                                                                |    no    |
 | <a name="input_error_rate_alarms"></a> [error\_rate\_alarms](#input\_error\_rate\_alarms)                            | n/a                                                                                                                                                                                                             | <pre>list(object({<br>    severity            = number<br>    datapoints_to_alarm = number<br>    evaluation_periods  = number<br>    period              = number<br>    threshold           = number<br>  }))</pre> | <pre>[<br>  {<br>    "datapoints_to_alarm": 15,<br>    "evaluation_periods": 15,<br>    "period": 60,<br>    "severity": 3,<br>    "threshold": 10<br>  }<br>]</pre>   |    no    |
 | <a name="input_historical_latency_alarms"></a> [historical\_latency\_alarms](#input\_historical\_latency\_alarms)    | n/a                                                                                                                                                                                                             | <pre>list(object({<br>    severity            = number<br>    datapoints_to_alarm = number<br>    evaluation_periods  = number<br>    period              = number<br>    threshold           = number<br>  }))</pre> | <pre>[<br>  {<br>    "datapoints_to_alarm": 15,<br>    "evaluation_periods": 15,<br>    "period": 60,<br>    "severity": 2,<br>    "threshold": 1800<br>  }<br>]</pre> |    no    |
@@ -166,5 +166,6 @@ No modules.
 | <a name="output_projected_latency_alarm_arns"></a> [projected\_latency\_alarm\_arns](#output\_projected\_latency\_alarm\_arns)    | The ARN of error rate alarms. |
 | <a name="output_queue_arn"></a> [queue\_arn](#output\_queue\_arn)                                                                 | The ARN of the SQS queue.     |
 | <a name="output_queue_name"></a> [queue\_name](#output\_queue\_name)                                                              | The name of the SQS queue.    |
+| <a name="output_queue_url"></a> [queue\_url](#output\_queue\_url)                                                                 | The ARN of the SQS queue.     |
 
 <!-- END_TF_DOCS -->

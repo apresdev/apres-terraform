@@ -71,11 +71,11 @@ variable "display_name" {
 
 variable "encryption_kms_key_id" {
   description = <<EOF
-  The ARN of the KMS key to use for server-side encryption. If not provided,
-  the default AWS managed key 'alias/aws/sns' will be used.
+  The ARN of the KMS key to use for server-side encryption. 
+  If not provided, the default customer managed key 'alias/apres/messaging' will be used.
   EOF
   type        = string
-  default     = "alias/aws/sns"
+  default     = "alias/apres/messaging"
   nullable    = false
   validation {
     condition     = length(var.encryption_kms_key_id) > 0
