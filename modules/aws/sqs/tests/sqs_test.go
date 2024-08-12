@@ -157,7 +157,7 @@ func (s *SqsTestSuite) assertAlarm(arn string) {
 
 // assertQueueName verifies that all output variables are set correctly.
 func (s *SqsTestSuite) assertQueueNameAndArn(account string, queueNameInput string, queueName string, queueArn string) {
-	expectedQueueName := s.asQueueName(account, queueNameInput)
+	expectedQueueName := s.asQueueName(queueNameInput)
 	s.Assert().Equal(expectedQueueName, queueName, "expected queue name to match")
 
 	expectedQueueArn := s.asQueueArn(account, expectedQueueName)
@@ -165,8 +165,8 @@ func (s *SqsTestSuite) assertQueueNameAndArn(account string, queueNameInput stri
 }
 
 // asQueueName generates the expected structure of a queue name.
-func (s *SqsTestSuite) asQueueName(account string, queueName string) string {
-	return fmt.Sprintf("%s-%s-%s-%s", account, strings.ToLower(s.environment), s.awsRegion, strings.ToLower(queueName))
+func (s *SqsTestSuite) asQueueName(queueName string) string {
+	return fmt.Sprintf("%s-%s", strings.ToLower(s.environment), strings.ToLower(queueName))
 }
 
 // asQueueArn generates the expected structure of a queue ARN.
@@ -249,10 +249,10 @@ func splitArns(arns string) []string {
 func assertEncryption(t *testing.T, attributes map[string]string) {
 
 	sseEnabled := required(t, "SqsManagedSseEnabled", attributes)
-	assert.Equal(t, "true", sseEnabled, "expected encryption to be enabled")
+	assert.Equal(t, "false", sseEnabled, "expected SQS managed encryption to be disabled")
 
 	keyId := optional("KmsMasterKeyId", attributes, "")
-	assert.Equal(t, "", keyId, "expected to use SQS key by default")
+	assert.Equal(t, "alias/apres/messaging", keyId, "expected to use KMS encryption with the messaging key by default")
 }
 
 // assertMaxMessageSize verifies that the max message size defaults to 256K.

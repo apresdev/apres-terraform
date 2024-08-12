@@ -8,6 +8,11 @@ output "queue_arn" {
   description = "The ARN of the SQS queue."
 }
 
+output "queue_url" {
+  value       = aws_sqs_queue.default.id
+  description = "The ARN of the SQS queue."
+}
+
 output "deadletter_queue_name" {
   value       = aws_sqs_queue.deadletter.name
   description = "The name of the SQS queue."

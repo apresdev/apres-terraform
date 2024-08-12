@@ -9,5 +9,5 @@ locals {
       owner       = var.owner
     })
   )
-  queue_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+  queue_name = "${lower(var.environment)}-${lower(var.name)}"
 }
