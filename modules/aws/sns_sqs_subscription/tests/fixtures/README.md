@@ -1,6 +1,6 @@
-# KMS Messaging Example
+# S3 Example
 
-This is an example on how to deploy the KMS messaging module, used by the integration tests.
+This is an example on how to deploy the S3 module, used by the integration tests.
 
 ## Running this module manually
 
@@ -16,4 +16,4 @@ This is an example on how to deploy the KMS messaging module, used by the integr
 1. Login to AWS on the CLI (hint: AWS_PROFILE=<some-predefined-profile> aws sso login)
 1. `cd test`
 1. `dep ensure`
-1. `AWS_PROFILE=<some-predefined-profile> go test -v -run TestKmsMessagingTestSuite`
+1. `AWS_PROFILE=<some-predefined-profile> go test -v -run TestS3`

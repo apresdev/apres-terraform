@@ -8,10 +8,8 @@ require (
 	github.com/stretchr/testify v1.9.0
 )
 
-require golang.org/x/exp v0.0.0-20240707233637-46b078467d37 // indirect
-
 require (
-	apres.dev/awstagging v0.0.0-00010101000000-000000000000
+	apres.dev/awspolicy v0.0.0-00010101000000-000000000000
 	cloud.google.com/go v0.110.0 // indirect
 	cloud.google.com/go/compute v1.19.1 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
@@ -28,7 +26,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.17 // indirect
-	github.com/aws/aws-sdk-go-v2/service/kms v1.35.3
+	github.com/aws/aws-sdk-go-v2/service/sns v1.31.3
+	github.com/aws/aws-sdk-go-v2/service/sqs v1.34.3
 	github.com/aws/aws-sdk-go-v2/service/sso v1.22.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.3 // indirect
@@ -76,3 +75,5 @@ require (
 )
 
 replace apres.dev/awstagging => ../../../../testhelpers/awstagging
+
+replace apres.dev/awspolicy => ../../../../testhelpers/awspolicy
