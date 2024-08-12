@@ -7,6 +7,6 @@ module "cloudwatchlogs_regional" {
 
 module "messaging_regional" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source                     = "git@github.com:apresdev/apres-terraform.git//modules/aws/messaging_regional?ref=rel/messaging_regional/0.1.0"
-  environment                = "WorkloadConfig"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/messaging_regional?ref=rel/messaging_regional/0.1.0"
+  environment = "WorkloadConfig"
 }
