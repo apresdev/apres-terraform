@@ -1,11 +1,11 @@
-# Apres SNS Terraform module
+# Apres DynamoDb Terraform module
 
 ## Overview
 
-This module will create an SNS topic in accordance with best practices. SNS topic names do not need to be globally unique in AWS; as such, the
-resulting name will have the following pattern:
+This module will create an SNS topic in accordance with best practices. SNS topic names do not need to be globally unique in AWS; however, to match
+similar resources that must be unique (such as S3 buckets), the resulting name will have the following pattern:
 
-`environment`-`name`
+`account-id`-`environment`-`region`-`name`
 
 where:
 
@@ -17,7 +17,7 @@ where:
 For example, if the stack is deployed with:
 
 ```hcl
-module "sns" {
+module "sns_sqs_subscriber" {
   source      = "TBD" # value depends on your installation
   name        = "mytesttopic"
   environment = "SystemTest"
@@ -32,8 +32,6 @@ The following best practices are applied to the topic:
 
 | Id          | Policy                                                                                               |
 |-------------|------------------------------------------------------------------------------------------------------|
-| CKV_AWS_26  | Ensure all data stored in the SNS topic is encrypted.                                                |
-| CKV_AWS_169 | Ensure SNS topic policy is not public by only allowing specific services or principals to access it. |
 
 ### Suppressed Best Practices
 
@@ -45,10 +43,12 @@ The following best practices ARE NOT implemented:
 ## Example
 
 ```hcl
-module "sns" {
-  source      = "../../../modules/SNS"
+module "sns_sqs_subscriber" {
+  source      = "../../../modules/sns_sqs_subscriber"
   environment = "Dev"
-  name        = "mytesttopic"
+  sns_topic_arn = "mytesttopic"
+  sqs_queue_arn = "mytesttopic"
+  sqs_queue_url = "mytesttopic"
 }
 ```
 
@@ -60,20 +60,10 @@ The following permissions are required to use this module, shown as a Policy sni
 - `${AWS::Region}` with the AWS Region where this stack is deployed, like `us-east-2`
 - `${environment}` with the lower case of the variable `var.environment`
 - `${name}` with the lower case of the variable `var.name`
+- `${encryption_kms_key_id}` with the lower case of the variable `var.encryption_kms_key_id` (if specified)
 
 ```json
 [
-  {
-    "Effect": "Allow",
-    "Action": [
-      "sns:CreateTopic",
-      "sns:SetTopicAttributes",
-      "sns:GetTopicAttributes",
-      "sns:ListTagsForResource",
-      "sns:DeleteTopic"
-    ],
-    "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${environment}-${name}"
-  }
 ]
 ```
 
@@ -99,9 +89,10 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_sns_topic.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
+| [aws_sns_topic_subscription.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
+| [aws_sqs_queue_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.sns-topic-policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -111,17 +102,16 @@ No modules.
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
-| <a name="input_display_name"></a> [display\_name](#input\_display\_name) | The human-readable name used in the From field for notifications to email and email-json endpoints | `string` | n/a | yes |
-| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. <br>  If not provided, the default customer managed key 'alias/apres/messaging' will be used. | `string` | `"alias/apres/messaging"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name of the queue, must be between 3 and 40 characters long and can contain only the following characters: a-z, A-Z, 0-9, \_, and - | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_policy"></a> [policy](#input\_policy) | (Optional) The JSON policy for the SQS queue. | `string` | `null` | no |
+| <a name="input_raw_message_delivery"></a> [raw\_message\_delivery](#input\_raw\_message\_delivery) | (Optional) Whether to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property). Default is true. | `bool` | `true` | no |
+| <a name="input_sns_topic_arn"></a> [sns\_topic\_arn](#input\_sns\_topic\_arn) | The AWS ARN of the SNS topic to subscribe to. | `string` | n/a | yes |
+| <a name="input_sqs_queue_arn"></a> [sqs\_queue\_arn](#input\_sqs\_queue\_arn) | The AWS ARN of the SQS subscriber queue. | `string` | n/a | yes |
+| <a name="input_sqs_queue_url"></a> [sqs\_queue\_url](#input\_sqs\_queue\_url) | The URL of the SQS subscriber queue. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_topic_arn"></a> [topic\_arn](#output\_topic\_arn) | The ARN of the SNS topic. |
-| <a name="output_topic_name"></a> [topic\_name](#output\_topic\_name) | The name of the SNS topic. |
+| <a name="output_subscription_name"></a> [subscription\_name](#output\_subscription\_name) | The ARN of the subcription. |
 <!-- END_TF_DOCS -->

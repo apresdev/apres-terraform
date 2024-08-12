@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "cmk" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "arn:aws:iam::${local.account_id}:root"
       ]
     }
 
@@ -34,14 +34,14 @@ data "aws_iam_policy_document" "cmk" {
 # This is needed to allow SNS to send messages to an encrypted SQS queue.
 # See: https://docs.aws.amazon.com/sns/latest/dg/sns-enable-encryption-for-topic-sqs-queue-subscriptions.html
 resource "aws_kms_key" "messaging" {
-  description             = "A CMK that is shared between messaging services (SNS and SQS)"
+  description             = "Messaging Key"
   enable_key_rotation     = true
   deletion_window_in_days = 20
 
   tags = merge(
     local.tags,
     tomap({
-      Name = local.name
+      Name = "Messaging Key"
     })
   )
 }
@@ -56,7 +56,7 @@ resource "aws_kms_key_policy" "default" {
 
 # Give the CMK a messaging alias
 resource "aws_kms_alias" "messaging" {
-  name          = "alias/${local.name}"
+  name          = "alias/apres/messaging"
   target_key_id = aws_kms_key.messaging.id
 
   depends_on = [aws_kms_key.messaging]

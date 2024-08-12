@@ -15,7 +15,7 @@ resource "aws_sqs_queue" "default" {
   policy                     = var.policy
 
   # CKV_AWS_27: Ensure all data stored in the SQS queue is encrypted
-  sqs_managed_sse_enabled = true
+  # sqs_managed_sse_enabled = false
   kms_master_key_id       = var.encryption_kms_key_id
 
   # For future reference, there appears to be a bug in the SQS terraform provider and/or the SQS Apis regarding configuring the 

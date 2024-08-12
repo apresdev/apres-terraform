@@ -101,7 +101,7 @@ func (s *SnsTestSuite) TestSqs() {
 
 // assertQueueName verifies that all output variables are set correctly.
 func (s *SnsTestSuite) assertTopicNameAndArn(account string, topicNameInput string, topicName string, topicArn string) {
-	expectedQueueName := s.asTopicName(account, topicNameInput)
+	expectedQueueName := s.asTopicName(topicNameInput)
 	s.Assert().Equal(expectedQueueName, topicName, "expected queue name to match")
 
 	expectedQueueArn := s.asTopicArn(account, expectedQueueName)
@@ -109,8 +109,8 @@ func (s *SnsTestSuite) assertTopicNameAndArn(account string, topicNameInput stri
 }
 
 // asTopicName generates the expected structure of a queue name.
-func (s *SnsTestSuite) asTopicName(account string, queueName string) string {
-	return fmt.Sprintf("%s-%s-%s-%s", account, strings.ToLower(s.environment), s.awsRegion, strings.ToLower(queueName))
+func (s *SnsTestSuite) asTopicName(queueName string) string {
+	return fmt.Sprintf("%s-%s", strings.ToLower(s.environment), strings.ToLower(queueName))
 }
 
 // asTopicArn generates the expected structure of a queue ARN.
@@ -161,7 +161,7 @@ func (s *SnsTestSuite) assertTags(topicArn string) {
 // assertEncryption verifies that encryption is always enabled on all queues.
 func assertEncryption(t *testing.T, attributes map[string]string) {
 	keyId := optional("KmsMasterKeyId", attributes, "")
-	assert.Equal(t, "alias/aws/sns", keyId, "expected to use SNS KMS key by default")
+	assert.Equal(t, "alias/apres/messaging", keyId, "expected to use SNS KMS key by default")
 }
 
 // assertDisplayName verifies that display name is set correctly.
