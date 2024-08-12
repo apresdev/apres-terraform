@@ -9,5 +9,4 @@ locals {
       "managed-by"  = "Terraform"
     })
   )
-  securityhub_sns_key_alias = "alias/apres/securityhub-sns"
 }
