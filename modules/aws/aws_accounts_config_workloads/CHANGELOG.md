@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2024-08-13
+
+Adding lambda regional to workload accounts..
+
 ## 0.3.0 - 2024-08-12
 
 Adding messaging_regional to the workload accounts.
