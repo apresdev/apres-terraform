@@ -10,3 +10,9 @@ module "messaging_regional" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/messaging_regional?ref=rel/messaging_regional/0.1.0"
   environment = "WorkloadConfig"
 }
+
+module "lambda_regional" {
+  #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional?ref=rel/lambda_regional/0.1.0"
+  environment = "WorkloadConfig"
+}
