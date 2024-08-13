@@ -5,6 +5,14 @@ to a different account. Control Tower refers to this account as the Audit accoun
 
 The [security_tools](../security_tools/README.md) module should then be applied to the Audit account.
 
+AWS Organizations and regions are not straight forward.
+* AWS Organizations is a global service, only needs to be configured in the primary region.
+* Security Hub is a global service, and should only be configured in the primary region.
+* GuardDuty is a regional service and should be configured in all active regions.
+
+For that reason, this module should be applied to every active region. It uses the `primary_region` variable to
+determine which services to delegate.
+
 # Prerequisites
 
 ## AWS Organizations
@@ -45,7 +53,7 @@ The following permissions are required to use this module, shown in CloudFormati
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.62.0 |
 
 ## Modules
 
@@ -65,6 +73,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_audit_account_id"></a> [audit\_account\_id](#input\_audit\_account\_id) | The AWS account ID of the Audit account, which will be used to delegate configuration of the Security Tools | `string` | n/a | yes |
+| <a name="input_primary_region"></a> [primary\_region](#input\_primary\_region) | The primary region for the security tools. This is used to determine which services need to be delegated<br>  and which not based on the region where this is deployed. For example. GuardDuty needs to be delegated in<br>  every region, but Security Hub only in the primary region. | `string` | n/a | yes |
 
 ## Outputs
 
