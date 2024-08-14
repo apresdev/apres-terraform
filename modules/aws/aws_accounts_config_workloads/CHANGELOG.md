@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.1 - 2024-08-14
+
+Fixes a naming issue with the lambda regional config parameter name.
+
 ## 0.5.0 - 2024-08-14
 
 Upgrading lambda_regional to store code signing arn in SSM.
