@@ -11,3 +11,12 @@ variable "audit_account_id" {
     error_message = "Audit account ID must only contain digits"
   }
 }
+
+variable "primary_region" {
+  type        = string
+  description = <<EOF
+  The primary region for the security tools. This is used to determine which services need to be delegated
+  and which not based on the region where this is deployed. For example. GuardDuty needs to be delegated in
+  every region, but Security Hub only in the primary region.
+  EOF
+}
