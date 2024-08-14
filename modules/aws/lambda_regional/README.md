@@ -7,6 +7,7 @@ Resources created include:
 * An S3 bucket used to deploy lambda-artifacts
 * A code signing profile for lambda
 * A code signing configuration that requires the code signing profile
+* An SSM parameter with the ARN of the code signing configuration
 
 # A note on Code Signing Profiles
 
@@ -33,7 +34,8 @@ The following permissions are required to use this module, shown as a Policy sni
     "Effect": "Allow",
     "Action": [
       "signer:PutSigningProfile",
-      "lambda:CreateCodeSigningConfig"
+      "lambda:CreateCodeSigningConfig",
+      "ssm:DescribeParameters"
     ],
     "Resource": "*"
   },
@@ -80,6 +82,15 @@ The following permissions are required to use this module, shown as a Policy sni
       "lambda:DeleteCodeSigningConfig"
     ],
     "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:code-signing-config:*"
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "ssm:PutParameter",
+      "ssm:DeleteParameter",
+      "ssm:GetParameter"
+    ],
+    "Resource": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/apres/lambda/lambda-signing-config-arn"
   }
 ]
 ```
