@@ -38,7 +38,7 @@ resource "aws_lambda_code_signing_config" "default" {
 # The id csc-0f6c334abcdea4d8b is completely random, as such there is no way to look this up based on convention.  So we need a paramter to 
 # store and retrieve this at deploy time.
 resource "aws_ssm_parameter" "default" {
-  name        = "apres/lambda/lambda-signing-config-arn"
+  name        = "/apres/lambda/signing-config-arn"
   description = "The ARN for the lambda signing configuration."
   type        = "SecureString"
   value       = aws_lambda_code_signing_config.default.arn
@@ -48,7 +48,7 @@ resource "aws_ssm_parameter" "default" {
   tags = merge(
     local.tags,
     tomap({
-      Name = "apres/lambda/lambda-signing-config-arn"
+      Name = "/apres/lambda/signing-config-arn"
     })
   )
 }
