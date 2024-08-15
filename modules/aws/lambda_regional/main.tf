@@ -15,7 +15,7 @@ resource "aws_signer_signing_profile" "default" {
 resource "aws_lambda_code_signing_config" "default" {
   allowed_publishers {
     signing_profile_version_arns = [
-      aws_signer_signing_profile.default.arn,
+      aws_signer_signing_profile.default.version_arn,
     ]
   }
 
