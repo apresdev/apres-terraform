@@ -38,7 +38,7 @@ resource "aws_lambda_code_signing_config" "default" {
 # The id csc-0f6c334abcdea4d8b is completely random, as such there is no way to look this up based on convention.  So we need a parameter to
 # store and retrieve this at deploy time, as the lambda module needs the code signing configuration to ensure that the lambda function only uses
 # functions signed using the given configuration.
-resource "aws_ssm_parameter" "signing_config_arn" {
+resource "aws_ssm_parameter" "default" {
   name        = "/apres/lambda/signing-config-arn"
   description = "The ARN for the lambda signing configuration."
   type        = "SecureString"
