@@ -91,7 +91,7 @@ The following permissions are required to use this module, substitute `${AWS::Ac
 |------|--------|---------|
 | <a name="module_aws_accounts_config_global"></a> [aws\_accounts\_config\_global](#module\_aws\_accounts\_config\_global) | git@github.com:apresdev/apres-terraform.git//modules/aws/aws_accounts_config_global | rel/aws_accounts_config_global/0.1.0 |
 | <a name="module_costmanagement"></a> [costmanagement](#module\_costmanagement) | git@github.com:apresdev/apres-terraform.git//modules/aws/cost_management | rel/cost_management/1.0.2 |
-| <a name="module_security_tools_delegator"></a> [security\_tools\_delegator](#module\_security\_tools\_delegator) | git@github.com:apresdev/apres-terraform.git//modules/aws/security_tools_delegator | rel/security_tools_delegator/0.2.1 |
+| <a name="module_security_tools_delegator"></a> [security\_tools\_delegator](#module\_security\_tools\_delegator) | git@github.com:apresdev/apres-terraform.git//modules/aws/security_tools_delegator | rel/security_tools_delegator/0.3.0 |
 
 ## Resources
 
@@ -130,6 +130,7 @@ The following permissions are required to use this module, substitute `${AWS::Ac
 | <a name="input_msteams_tenant_id"></a> [msteams\_tenant\_id](#input\_msteams\_tenant\_id) | The Microsoft Teams Tenant ID for notifications. This is displayed in the AWS Console" | `string` | `""` | no |
 | <a name="input_primary_contact_full_name"></a> [primary\_contact\_full\_name](#input\_primary\_contact\_full\_name) | Name of the primary contact, may be the same as given in the alternate contact info. | `string` | n/a | yes |
 | <a name="input_primary_contact_phone_number"></a> [primary\_contact\_phone\_number](#input\_primary\_contact\_phone\_number) | Phone number of the primay contact, may be the same as given in the alternate contact info.<br>  See https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-update-contact-primary.html#manage-acct-update-contact-primary-requirements<br>  for requirements of format. | `string` | n/a | yes |
+| <a name="input_primary_region"></a> [primary\_region](#input\_primary\_region) | The primary region where the AWS Organization is located, and where SecurityHub will be running in the audit account. | `string` | n/a | yes |
 | <a name="input_slack_channel_id"></a> [slack\_channel\_id](#input\_slack\_channel\_id) | The Slack channel ID for notifications. To find a channel ID, in Slack, right click on a channel<br>  and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N. If left blank<br>  Slack integration will not be enabled. | `string` | `""` | no |
 | <a name="input_slack_workspace_id"></a> [slack\_workspace\_id](#input\_slack\_workspace\_id) | The Slack workspace ID for notifications,<br>  see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID on how to find it. | `string` | `""` | no |
 

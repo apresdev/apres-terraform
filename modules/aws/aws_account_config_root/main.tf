@@ -25,8 +25,9 @@ locals {
 
 module "security_tools_delegator" {
   #checkov:skip=CKV_TF_1: Not using a commit hash because we're using a tag
-  source           = "git@github.com:apresdev/apres-terraform.git//modules/aws/security_tools_delegator?ref=rel/security_tools_delegator/0.2.1"
+  source           = "git@github.com:apresdev/apres-terraform.git//modules/aws/security_tools_delegator?ref=rel/security_tools_delegator/0.3.0"
   audit_account_id = local.audit_account_id
+  primary_region   = var.primary_region
 }
 
 module "aws_accounts_config_global" {
