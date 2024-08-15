@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.3 - 2024-08-15
+
+Updating lambda_regional. Rename the original ssm parameter back to default.
+
 ## 0.5.2 - 2024-08-15
 
 Include the signing profile name in SSM.
