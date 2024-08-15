@@ -310,3 +310,11 @@ variable "audit_account_id" {
     given the module will attempt to lookup the account by the case-insensitive name "audit" in the organization.
   EOF
 }
+
+variable "primary_region" {
+  type        = string
+  description = <<EOF
+  The primary region where the AWS Organization is located, and where SecurityHub will be running in the audit account.
+  EOF
+
+}
