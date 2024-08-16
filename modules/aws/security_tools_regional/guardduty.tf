@@ -17,34 +17,34 @@ resource "aws_guardduty_organization_configuration" "default" {
   detector_id                      = aws_guardduty_detector.default.id
 }
 
-resource "aws_guardduty_detector_feature" "eks_runtime_monitoring" {
+resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitoring" {
   count       = var.guardduty_enable_eks_protection ? 1 : 0
   detector_id = aws_guardduty_detector.default.id
   name        = "EKS_RUNTIME_MONITORING"
-  status      = "ENABLED"
+  auto_enable = "ALL"
   additional_configuration {
-    name   = "EKS_ADDON_MANAGEMENT"
-    status = "ENABLED"
+    name        = "EKS_ADDON_MANAGEMENT"
+    auto_enable = "ALL"
   }
 }
 
-resource "aws_guardduty_detector_feature" "s3" {
+resource "aws_guardduty_organization_configuration_feature" "s3" {
   count       = var.guardduty_enable_s3_protection ? 1 : 0
   detector_id = aws_guardduty_detector.default.id
   name        = "S3_DATA_EVENTS"
-  status      = "ENABLED"
+  auto_enable = "ALL"
 }
 
-resource "aws_guardduty_detector_feature" "rds" {
+resource "aws_guardduty_organization_configuration_feature" "rds" {
   count       = var.guardduty_enable_rds_protection ? 1 : 0
   detector_id = aws_guardduty_detector.default.id
   name        = "RDS_LOGIN_EVENTS"
-  status      = "ENABLED"
+  auto_enable = "ALL"
 }
 
-resource "aws_guardduty_detector_feature" "lambda" {
+resource "aws_guardduty_organization_configuration_feature" "lambda" {
   count       = var.guardduty_enable_lambda_protection ? 1 : 0
   detector_id = aws_guardduty_detector.default.id
   name        = "LAMBDA_NETWORK_LOGS"
-  status      = "ENABLED"
+  auto_enable = "ALL"
 }
