@@ -122,6 +122,14 @@ variable "reserved_concurrent_executions" {
   default     = -1
 }
 
+variable "skip_zip" {
+  description = <<EOF
+  (Optional) Set to true to skip zip archive creation.  If set, this assumes that `source_path` points to an existing zip archive.
+  EOF
+  type        = bool
+  default     = false
+}
+
 # #########################################################################################################################################
 # Regional variables
 # #########################################################################################################################################
