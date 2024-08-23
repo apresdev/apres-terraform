@@ -3,7 +3,7 @@
 resource "aws_s3_object" "unsigned" {
   bucket = data.aws_s3_bucket.lambda_artifacts.id
   key    = "unsigned/${local.name}.zip"
-  source = data.archive_file.lambda.output_path
+  source = local.artifact
 
   tags = merge(
     local.tags,

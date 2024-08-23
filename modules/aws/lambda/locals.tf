@@ -20,5 +20,9 @@ locals {
 
   log_group = "/apres/lambda/${local.name}"
 
+  # The actual artifact to upload for code signing
+  artifact      = var.skip_zip ? var.binary_path : data.archive_file.lambda[0].output_path
+  artifact_hash = var.skip_zip ? filebase64sha256(var.binary_path) : data.archive_file.lambda[0].output_base64sha256
+
 
 }

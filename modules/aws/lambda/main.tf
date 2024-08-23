@@ -16,7 +16,7 @@ resource "aws_lambda_function" "default" {
   role          = aws_iam_role.default.arn
   description   = var.description
 
-  source_code_hash = data.archive_file.lambda.output_base64sha256
+  source_code_hash = local.artifact_hash
 
   architectures = var.architectures
   handler       = coalesce(var.handler, basename(var.binary_path))
