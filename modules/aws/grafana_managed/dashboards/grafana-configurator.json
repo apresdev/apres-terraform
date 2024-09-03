@@ -1,0 +1,519 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Apres Grafana Configurator",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 12,
+    "links": [],
+    "panels": [
+      {
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This dashboard monitors the Grafana Configurator Lambda, created by \nApres's [grafana_managed](https://github.com/apresdev/apres-terraform/tree/main/modules/aws/grafana_managed)\nTerraform module.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "10.4.1",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "${AWSAccount}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Errors"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 2
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "${AWSAccount}"
+            },
+            "dimensions": {
+              "FunctionName": "$LambdaName"
+            },
+            "expression": "",
+            "id": "",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "Invocations",
+            "metricQueryType": 0,
+            "namespace": "AWS/Lambda",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "default",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "${AWSAccount}"
+            },
+            "dimensions": {
+              "FunctionName": "$LambdaName"
+            },
+            "expression": "",
+            "hide": false,
+            "id": "",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "Errors",
+            "metricQueryType": 0,
+            "namespace": "AWS/Lambda",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "default",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          }
+        ],
+        "title": "Lambda Rates",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "${AWSAccount}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "ms"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Errors"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 2
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "${AWSAccount}"
+            },
+            "dimensions": {
+              "FunctionName": "$LambdaName"
+            },
+            "expression": "",
+            "id": "",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "Duration",
+            "metricQueryType": 0,
+            "namespace": "AWS/Lambda",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "default",
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "title": "Execution Duration",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "${AWSAccount}"
+        },
+        "description": "From CloudWatch Logs",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "left",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 195
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 4,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "enablePagination": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "10.4.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "${AWSAccount}"
+            },
+            "dimensions": {},
+            "expression": "fields @timestamp, @message |\n sort @timestamp desc |\n limit 50",
+            "id": "",
+            "label": "",
+            "logGroups": [
+              {
+                "arn": "$LambdaLogGroup",
+                "name": "$LambdaLogGroup"
+              }
+            ],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "",
+            "metricQueryType": 0,
+            "namespace": "",
+            "period": "",
+            "queryMode": "Logs",
+            "refId": "A",
+            "region": "default",
+            "sqlExpression": "",
+            "statistic": "Average",
+            "statsGroups": []
+          }
+        ],
+        "title": "Lambda Logs",
+        "type": "table"
+      }
+    ],
+    "refresh": "30m",
+    "schemaVersion": 39,
+    "tags": [
+      "Apres"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "Sandbox (533267011653)",
+            "value": "de50ps2bmkg00c"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "AWSAccount",
+          "options": [],
+          "query": "cloudwatch",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "Test-GrafanaConfigurator",
+            "value": "Test-GrafanaConfigurator"
+          },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${AWSAccount}"
+          },
+          "definition": "",
+          "description": "Name of the Lambda",
+          "hide": 0,
+          "includeAll": false,
+          "label": "LambdaName",
+          "multi": false,
+          "name": "LambdaName",
+          "options": [],
+          "query": {
+            "dimensionKey": "FunctionName",
+            "metricName": "Duration",
+            "namespace": "AWS/Lambda",
+            "queryType": "dimensionValues",
+            "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+            "region": "default"
+          },
+          "refresh": 1,
+          "regex": "/.*GrafanaConfigurator$/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "/apres/lambda/Test-GrafanaConfigurator",
+            "value": "arn:aws:logs:us-east-2:533267011653:log-group:/apres/lambda/Test-GrafanaConfigurator:*"
+          },
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${AWSAccount}"
+          },
+          "definition": "",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "LambdaLogGroup",
+          "options": [],
+          "query": {
+            "logGroupPrefix": "/apres/lambda/",
+            "queryType": "logGroups",
+            "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+            "region": "default"
+          },
+          "refresh": 1,
+          "regex": "/.*GrafanaConfigurator/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Grafana Configurator",
+    "uid": "ee516knwhs000e",
+    "version": 8,
+    "weekStart": ""
+  }
