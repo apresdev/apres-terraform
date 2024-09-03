@@ -129,8 +129,9 @@ jobs:
                 dir = path.dirname(item);
                 // dir at this point should start with "modules/aws/thing/..."
                 // Take the 2nd element else we end up with module names for embedded directories
-                module_name = dir.split("/")[2]
-                modules.set( module_name, dir );
+                parts = dir.split("/");
+                module_name = parts[2];
+                modules.set( module_name, parts[0] + "/" + parts[1] + "/" + parts[2] );
               }
             }
 
