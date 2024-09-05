@@ -1,0 +1,1597 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 1,
+    "links": [],
+    "panels": [
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 12,
+            "panels": [],
+            "title": "Core",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 0,
+                "y": 1
+            },
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az2"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "B",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az3"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "C",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "CPU Utilization",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 8,
+                "y": 1
+            },
+            "id": 3,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUCreditBalance",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az2"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUCreditBalance",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "B",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az3"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "CPUCreditBalance",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "C",
+                    "region": "default",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "CPU Credit Balance",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 16,
+                "y": 1
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT AVG(MemoryUsed) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "Memory Utilization",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 8
+            },
+            "id": 11,
+            "panels": [],
+            "title": "Network",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 9
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(BytesIn) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "bps",
+                    "type": "math"
+                }
+            ],
+            "title": "Bytes In",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "pps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 9
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(PacketsInCount) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "packets/sec",
+                    "type": "math"
+                }
+            ],
+            "title": "Packets In",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "pps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 9
+            },
+            "id": 8,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(PacketsDropInCount) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "dropped",
+                    "type": "math"
+                }
+            ],
+            "title": "Packets Dropped In",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "Bps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 17
+            },
+            "id": 5,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(BytesOut) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "bps",
+                    "type": "math"
+                }
+            ],
+            "title": "Bytes Out",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "pps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 17
+            },
+            "id": 7,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(PacketsOutCount) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "packets/sec",
+                    "type": "math"
+                }
+            ],
+            "title": "Packets Out",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "bdwsppmym8fswf"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "pps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 17
+            },
+            "id": 9,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "dimensions": {
+                        "AutoScalingGroupName": "vpc-nat-az1"
+                    },
+                    "expression": "",
+                    "hide": true,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 1,
+                    "metricName": "CPUUtilization",
+                    "metricQueryType": 1,
+                    "namespace": "AWS/EC2",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "default",
+                    "sqlExpression": "SELECT SUM(PacketsDropOutCount) FROM \"nat-instance\" GROUP BY AutoScalingGroupName",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "name": "Expression",
+                        "type": "__expr__",
+                        "uid": "__expr__"
+                    },
+                    "expression": "$A / 60",
+                    "hide": false,
+                    "refId": "dropped",
+                    "type": "math"
+                }
+            ],
+            "title": "Packets Dropped Out",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 25
+            },
+            "id": 10,
+            "panels": [
+                {
+                    "gridPos": {
+                        "h": 2,
+                        "w": 24,
+                        "x": 0,
+                        "y": 19
+                    },
+                    "id": 15,
+                    "options": {
+                        "code": {
+                            "language": "plaintext",
+                            "showLineNumbers": false,
+                            "showMiniMap": false
+                        },
+                        "content": "These metrics are rates but shown as cumulative amounts.",
+                        "mode": "markdown"
+                    },
+                    "pluginVersion": "10.4.1",
+                    "title": "Ethtool Notes",
+                    "type": "text"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "description": "The number of packets queued and/or dropped because the inbound aggregate bandwidth exceeded the maximum for the instance.",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 0,
+                        "y": 21
+                    },
+                    "id": 13,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "bdwsppmym8fswf"
+                            },
+                            "dimensions": {
+                                "AutoScalingGroupName": "vpc-nat-az1"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 1,
+                            "metricName": "CPUUtilization",
+                            "metricQueryType": 1,
+                            "namespace": "AWS/EC2",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "default",
+                            "sqlExpression": "SELECT AVG(ethtool_bw_in_allowance_exceeded) FROM \"nat-instance\" GROUP BY AutoScalingGroupName, interface",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Ethtool BW In Allowance Exceeded",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "description": "The number of packets queued and/or dropped because the outbound aggregate bandwidth exceeded the maximum for the instance.",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 8,
+                        "y": 21
+                    },
+                    "id": 14,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "bdwsppmym8fswf"
+                            },
+                            "dimensions": {
+                                "AutoScalingGroupName": "vpc-nat-az1"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 1,
+                            "metricName": "CPUUtilization",
+                            "metricQueryType": 1,
+                            "namespace": "AWS/EC2",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "default",
+                            "sqlExpression": "SELECT AVG(ethtool_bw_out_allowance_exceeded) FROM \"nat-instance\" GROUP BY AutoScalingGroupName, interface",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Ethtool BW Out Allowance Exceeded",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "bdwsppmym8fswf"
+                    },
+                    "description": "The number of tracked connections that can be established by the instance before hitting the Connections Tracked allowance of that instance type. ",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 8,
+                        "x": 16,
+                        "y": 21
+                    },
+                    "id": 16,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "bdwsppmym8fswf"
+                            },
+                            "dimensions": {
+                                "AutoScalingGroupName": "vpc-nat-az1"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 1,
+                            "metricName": "CPUUtilization",
+                            "metricQueryType": 1,
+                            "namespace": "AWS/EC2",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "default",
+                            "sqlExpression": "SELECT AVG(ethtool_conntrack_allowance_exceeded) FROM \"nat-instance\" GROUP BY AutoScalingGroupName, interface",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Ethtool BW Conntrack Allowance Exceeded",
+                    "type": "timeseries"
+                }
+            ],
+            "title": "Ethtool",
+            "type": "row"
+        }
+    ],
+    "refresh": "1m",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-30m",
+        "to": "now"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ]
+    },
+    "timezone": "browser",
+    "title": "NAT Instances",
+    "uid": "edwt5vjccbchsf",
+    "version": 23,
+    "weekStart": ""
+}

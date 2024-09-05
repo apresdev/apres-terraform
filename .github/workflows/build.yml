@@ -199,7 +199,7 @@ jobs:
           result-encoding: string
 
       - name: Determine new version number
-        uses: actions/github-script@v4
+        uses: actions/github-script@v7
         id: new-version
         env:
           PREV_VERSION: "${{ steps.prev-version.outputs.result }}"
@@ -236,9 +236,9 @@ jobs:
           echo '${{ steps.new-version.outputs.result }}' > output/new-version.txt
 
       - name: Upload result artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4.4.0
         with:
-          name: "${{ matrix.module_name }}"
+          name: ${{ matrix.module_name }}
           path: output
           retention-days: 5
 
@@ -270,11 +270,12 @@ jobs:
       - uses: actions/download-artifact@v4.1.7
         with:
           path: outputs
+
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: outputs
 
-      - uses: actions/github-script@v2
+      - uses: actions/github-script@v7
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -290,6 +291,7 @@ jobs:
             const sections = [];
 
             for (const folder of await readdir('outputs', { withFileTypes: true })) {
+              console.log("Looking at folder: ", folder.name);
               if (!folder.isDirectory()) continue;
               const readText = (name) => readFile(name, utf8).then(x => x.trim());
 
@@ -303,7 +305,8 @@ jobs:
 
             const finalBody = [lines.join('\n'), ...sections].join('\n\n');
 
-            const {data: allComments} = await github.issues.listComments({ issue_number, owner, repo });
+            // Comments on PR's are issue comments, even though that looks odd.
+            const {data: allComments} = await github.rest.issues.listComments({ issue_number, owner, repo });
             const ourComments = allComments
               .filter(comment => comment.user.login === 'github-actions[bot]')
               .filter(comment => comment.body.startsWith(lines[0]+'\n'));
@@ -314,13 +317,13 @@ jobs:
               return;
             }
 
-            const {data: newComment} = await github.issues.createComment({ issue_number, owner, repo, body: finalBody });
+            const {data: newComment} = await github.rest.issues.createComment({ issue_number, owner, repo, body: finalBody });
             console.log('Posted comment', newComment.id, '@', newComment.html_url);
             // Delete all our previous comments
             for (const comment of ourComments) {
               if (comment.id === newComment.id) continue;
               console.log('Deleting previous PR comment from', comment.created_at);
-              await github.issues.deleteComment({ comment_id: comment.id, owner, repo });
+              await github.rest.issues.deleteComment({ comment_id: comment.id, owner, repo });
             }
 
   trigger-release:
