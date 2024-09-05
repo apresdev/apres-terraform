@@ -305,7 +305,8 @@ jobs:
 
             const finalBody = [lines.join('\n'), ...sections].join('\n\n');
 
-            const {data: allComments} = await github.issues.listComments({ issue_number, owner, repo });
+            // Comments on PR's are issue comments, even though that looks odd.
+            const {data: allComments} = await github.rest.issues.listComments({ issue_number, owner, repo });
             const ourComments = allComments
               .filter(comment => comment.user.login === 'github-actions[bot]')
               .filter(comment => comment.body.startsWith(lines[0]+'\n'));
@@ -316,13 +317,13 @@ jobs:
               return;
             }
 
-            const {data: newComment} = await github.issues.createComment({ issue_number, owner, repo, body: finalBody });
+            const {data: newComment} = await github.rest.issues.createComment({ issue_number, owner, repo, body: finalBody });
             console.log('Posted comment', newComment.id, '@', newComment.html_url);
             // Delete all our previous comments
             for (const comment of ourComments) {
               if (comment.id === newComment.id) continue;
               console.log('Deleting previous PR comment from', comment.created_at);
-              await github.issues.deleteComment({ comment_id: comment.id, owner, repo });
+              await github.rest.issues.deleteComment({ comment_id: comment.id, owner, repo });
             }
 
   trigger-release:
