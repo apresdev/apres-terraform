@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-09-05
+
+Add permissions for the NAT instances to view its own tags. Also remove the filter for the cloudwatch agent network metrics, since the interface names differ on various instance types.
+
 ## 1.0.2 - 2024-09-03
 
 Add all dimensions to custom CloudWatch metrics.
