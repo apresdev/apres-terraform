@@ -86,4 +86,6 @@ jobs:
 
       - name: Run terratest
         if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.APRESDEV_RTKMHART_TOKEN }}
         run: make test

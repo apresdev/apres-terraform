@@ -22,11 +22,12 @@ Determining what AWS permissions are required for a module can be a nice game of
 1. The iamlive tool is installed in the Dev Container in /usr/local/bin. If not using the Dev Container, install the tool using your installation method of choice.
 1. In your test terraform stack, run `tofu init` first.
 1. Assuming you have an profile in `~/.aws/config` named `test-aws-perms`, in a terminal window (in the Dev Container) run this command: `iamlive --provider aws --set-ini --profile test-aws-perms --mode proxy --refresh-rate 60 --output-file iamlive.log`. Note that while the CSM method claims to work with AWS, the author could only get proxy working.
-1. In a new window set three environment variables (Windows may have different paths)
+1. In a new window set four environment variables (Windows may have different paths)
   ```
   export HTTP_PROXY=http://127.0.0.1:10080
   export HTTPS_PROXY=http://127.0.0.1:10080
   export AWS_CA_BUNDLE=~/.iamlive/ca.pem
+  export SSL_CERT_FILE=~/.iamlive/ca.pem
   ```
 1. Run your terraform plan/apply/destroy, and iamlive should output set of policies. Note that this may not capture _everything_ as updating resources may use a different set of API calls than creating does, but this should at least get you started.
 
