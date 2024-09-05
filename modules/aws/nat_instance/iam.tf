@@ -23,6 +23,22 @@ data "aws_iam_policy_document" "main" {
     }
   }
 
+  # Allow the intstance to fetch tags so it can use them for extra CloudWatch metrics
+  dynamic "statement" {
+
+    for_each = var.use_cloudwatch_agent ? ["x"] : []
+    content {
+      sid    = "AllowFetchTags"
+      effect = "Allow"
+      actions = [
+        "ec2:DescribeTags"
+      ]
+      resources = [
+        "*"
+      ]
+    }
+  }
+
   dynamic "statement" {
     for_each = var.use_cloudwatch_agent ? ["x"] : []
 
