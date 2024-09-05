@@ -92,6 +92,11 @@ resource "aws_launch_template" "main" {
     TERRAFORM_CWAGENT_CFG_PARAM_NAME = local.cwagent_param_name != null ? local.cwagent_param_name : ""
   }))
 
+  # enhanced metrics
+  monitoring {
+    enabled = true
+  }
+
   tags = var.tags
 }
 
