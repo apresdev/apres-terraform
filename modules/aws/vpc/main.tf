@@ -108,7 +108,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 
 module "nat_instance" {
   #checkov:skip=CKV_TF_1: Explicitly using versions, not a hash.
-  source               = "git@github.com:apresdev/apres-terraform.git//modules/aws/nat_instance?ref=rel/nat_instance/1.0.2"
+  source               = "git@github.com:apresdev/apres-terraform.git//modules/aws/nat_instance?ref=rel/nat_instance/1.1.0"
   count                = 3
   name                 = "vpc-nat-az${count.index + 1}"
   vpc_id               = aws_vpc.vpc.id
