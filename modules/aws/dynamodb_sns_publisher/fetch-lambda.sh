@@ -47,4 +47,5 @@ fi
 
 # Return a JSON result, needed for the "external" terraform resource
 echo '{ "download": "false" }'
+
 exit 0
