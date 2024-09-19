@@ -16,6 +16,7 @@ on:
     types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
       - modules/aws/**
+      - modules/github/**
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
@@ -24,6 +25,7 @@ on:
     types: [closed]
     paths:
       - modules/aws/**
+      - modules/github/**
       - .github/workflows/build.yml
       - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"

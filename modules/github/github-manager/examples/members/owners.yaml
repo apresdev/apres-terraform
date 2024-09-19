@@ -1,0 +1,4 @@
+# An example list of members for the organization. Users must exist here to be added to teams.
+# The filename is arbitrary and can be used to organize the members.
+- username: exampleuser
+  role: admin
