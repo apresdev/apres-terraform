@@ -1,0 +1,23 @@
+type: array
+description: >
+  A list of team members, made up of the GitHub usernames.
+default: []
+items:
+  type: object
+  additionalProperties: false
+  properties:
+    username:
+      type: string
+      description: >
+        The GitHub username of the team member.
+      minLength: 1
+      pattern: "[a-zA-Z0-9]+(-[a-z0-9]*)*"
+    role:
+      type: string
+      description: >
+        The role of the team member, either `member` or `admin`. `admin` shows as `owner` in the GitHub UI.
+        See https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/roles-in-an-organization#permissions-for-organization-roles
+      default: member
+      enum:
+        - member
+        - admin

@@ -1,0 +1,60 @@
+type: object
+description: >
+  Creates a descriptor for a team in GitHub.
+
+required:
+  - name
+  - description
+
+additionalProperties: false
+properties:
+  name:
+    type: string
+    description: >
+      The name of the team.
+    minLength: 1
+    maxLength: 255
+    pattern: "[a-zA-Z0-9-]+"
+
+  description:
+    type: string
+    description: >
+      A description of the team.
+    minLength: 20
+    pattern: ^[^\r\n]+$
+
+  privacy:
+    type: string
+    description: >
+      The privacy of the team, either `secret` (no other team can see it) or `closed`.
+
+    default: closed
+    enum:
+      - closed
+      - secret
+
+  members:
+    type: array
+    description: >
+      The list of members of the team, made up of the GitHub usernames.
+    default: []
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+          description: >
+            The GitHub username of the team member.
+          minLength: 1
+          pattern: "[a-zA-Z0-9]+(-[a-z0-9]*)*"
+        role:
+          type: string
+          description: >
+            The role of the team member, either `member` or `maintainer`.
+          default: member
+          enum:
+            - member
+            - maintainer
+      description: >
+        Alphanumeric with hyphens.

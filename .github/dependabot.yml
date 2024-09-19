@@ -13,6 +13,7 @@ updates:
   - package-ecosystem: "terraform"
     directories:
       - "/modules/aws/*"
+      - "/modules/github/*"
     schedule:
       interval: "daily"
     registries: # point dependabot to use the PAT

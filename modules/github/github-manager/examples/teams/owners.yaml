@@ -1,0 +1,7 @@
+# Defines a team, with the list of team members.
+name: owners
+description: Example owners of the repository
+privacy: closed
+members:
+  - username: exampleuser
+    role: maintainer
