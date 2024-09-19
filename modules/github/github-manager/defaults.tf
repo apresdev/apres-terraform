@@ -1,5 +1,5 @@
 locals {
-  repo_schema = yamldecode(file("schemas/repo.yaml"))
+  repo_schema = yamldecode(file("${path.module}/schemas/repo.yaml"))
 
   defaults = {
 
@@ -26,7 +26,7 @@ locals {
     labels     = local.repo_schema.properties.labels.default
   }
 
-  team_schema = yamldecode(file("schemas/team.yaml"))
+  team_schema = yamldecode(file("${path.module}/schemas/team.yaml"))
   team_defaults = {
     privacy = local.team_schema.properties.privacy.default
   }
