@@ -1,0 +1,12 @@
+# A sample repository configuration file. The name of the file is the repository name.
+description: Example repository
+labels:
+- color: 5319f7
+  name: example-label
+teams:
+- name: owners
+  permission: admin
+topics:
+- example
+- terraform
+- github

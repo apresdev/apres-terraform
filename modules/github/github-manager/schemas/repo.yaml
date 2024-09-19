@@ -1,0 +1,233 @@
+type: object
+description: >
+  Creates a descriptor for a repository in GitHub.
+
+  The only required field is the repository description, all other settings and features have their defaults set to  sane or best practice
+  values.
+
+required:
+  - description
+
+additionalProperties: false
+properties:
+  description:
+    type: string
+    description: >
+      A description of the repository.
+    minLength: 20
+    pattern: ^[^\r\n]+$
+
+  visibility:
+    type: string
+    description: >
+      The visibility of the repository, can be public or private.
+
+    default: private
+    enum:
+      - private
+      - public
+
+  defaultBranch:
+    type: string
+    description: >
+      This allows you to set the default branch for a given repository.
+
+    default: main
+    minLength: 1
+
+  topics:
+    type: array
+    description: >
+      With topics, you can explore repositories in a particular subject area, find projects to contribute to, and discover new solutions to
+      a specific problem. Topics appear on the main page of a repository. You can click a topic name to see related topics and a list of
+      other repositories classified with that topic.
+    default: []
+    maxItems: 20
+    uniqueItems: true
+    items:
+      type: string
+      description: >
+        use lowercase letters, numbers, and hyphens. use 50 characters or less. add no more than 20 topics.
+      maxLength: 50
+      pattern: "[a-z0-9]+(-[a-z0-9]*)*"
+
+  requiredStatusChecks:
+    type: array
+    description: >
+      The list of status checks to require in order to merge into this branch. No status checks are required by default
+    items:
+      type: string
+      minLength: 1
+
+  teams:
+    type: array
+    description: >
+      The list of teams that have access to the repository with permissions.
+    default: []
+    items:
+      type: object
+      properties:
+        additionalProperties: false
+        name:
+          type: string
+          description: >
+            The team id or slug name of the team.
+          minLength: 1
+          maxLength: 255
+          pattern: "[a-zA-Z0-9-]+"
+        permission:
+          type: string
+          description: >
+            The permission level of the team.
+          default: pull
+          enum:
+            - pull
+            - push
+            - triage
+            - maintain
+            - admin
+
+  pullRequests:
+    type: object
+    description: >
+      Contains all of the settings to manage pull requests in the repository.
+
+    additionalProperties: false
+    properties:
+      allowMergeCommit:
+        type: boolean
+        description: >
+          Set to false to disable merge commits on the repository.
+
+          All commits from the feature branch are added to the base branch in a merge commit. The pull request is  merged using the --no-ff
+          option.
+
+        default: true
+
+      allowSquashMerge:
+        type: boolean
+        description: >
+          Set to false to disable squash merges on the repository.
+
+          The pull request's commits are squashed into a single commit. Instead of seeing all of a contributor's  individual commits from a
+          topic branch, the commits are combined into one commit and merged into the default  branch. Pull requests with squashed commits
+          are merged using the fast-forward option.
+
+        default: true
+
+      allowRebaseMerge:
+        type: boolean
+        description: >
+          Set to false to disable rebase merges on the repository.
+
+          All commits from the topic branch (or head branch) are added onto the base branch individually without a  merge commit. In that
+          way, the rebase and merge behavior resembles a fast-forward merge by maintaining a  linear project history. However, rebasing
+          achieves this by re-writing the commit history on the base branch  with new commits.
+
+        default: false
+
+      allowAutoMerge:
+        type: boolean
+        description: >
+          Set to true to allow auto-merging pull requests on the repository.
+
+          If you enable auto-merge for a pull request, the pull request will merge automatically when all required  reviews are met and all
+          required status checks have passed. Auto-merge prevents you from waiting around for  requirements to be met, so you can move on to
+          other tasks.
+
+        default: true
+
+      deleteBranchOnMerge:
+        type: boolean
+        description: >
+          Automatically delete head branch after a pull request is merged.
+
+        default: true
+
+  features:
+    type: object
+    description: >
+      Contains all of the settings to enable GitHub features in the repository.
+
+    additionalProperties: false
+    properties:
+      hasIssues:
+        type: boolean
+        description: >
+          Set to true to enable the GitHub Issues features on the repository.
+
+          GitHub Issues are items you can create in a repository to plan, discuss and track work.
+
+          Issues are simple to create and flexible to suit a variety of scenarios. You can use issues to track work,  give or receive
+          feedback, collaborate on ideas or tasks, and efficiently communicate with others.
+
+        default: true
+
+      hasProjects:
+        type: boolean
+        description: >
+          Set to true to enable the GitHub Projects features on the repository.
+
+          A project is an adaptable spreadsheet, task-board, and road map that integrates with your issues and pull  requests on GitHub to
+          help you plan and track your work effectively. You can create and customize multiple  views by filtering, sorting, grouping your
+          issues and pull requests, visualize work with configurable charts,  and add custom fields to track metadata specific to your team.
+          Rather than enforcing a specific methodology,  a project provides flexible features you can customize to your team’s needs and
+          processes.
+
+        default: true
+
+      hasDownloads:
+        type: boolean
+        description: >
+          Set to true to enable the (deprecated) downloads features on the repository.
+
+        default: false
+
+      hasDiscussions:
+        type: boolean
+        description: >
+          Set to true to enable GitHub Discussions on the repository.
+
+          GitHub Discussions is a collaborative communication forum for the community around an open source or internal  project.
+          Discussions are for conversations that need to be transparent and accessible but do not need to be  tracked on a project and are
+          not related to code, unlike GitHub Issues. Discussions enable fluid, open  conversation in a public forum.
+
+          Discussions give a space for more collaborative conversations by connecting and giving a more centralized  area to connect and
+          find information.
+
+        default: false
+
+  labels:
+    type: array
+    description: >
+      Labels to add to the repostitory. See https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels for
+      details.
+    default: []
+    maxItems: 20
+    uniqueItemProperties: ["name"]
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          description: >
+            The name of the label.
+          minLength: 1
+          maxLength: 50
+          pattern: "^[a-zA-Z0-9-]+$"
+        color:
+          type: string
+          description: >
+            The color of the label, in hexidecimal, without the leading #. See https://www.color-hex.com/
+          pattern: "^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+          default: "ffffff"
+
+  isTemplate:
+    type: boolean
+    description: >
+      Set to true to enable the repository as a template repository.
+
+      A template repository is a repository that you can use to generate new repositories with the same directory structure and files. You
+      can use repository templates to create new repositories with repository files and directories that you define.
+
+    default: false
