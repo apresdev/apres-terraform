@@ -144,10 +144,12 @@ resource "github_issue_labels" "default" {
 }
 
 
-# Add the team members to the repo
+# Add the teams to the repo
 resource "github_team_repository" "default" {
-  count      = length(local.repo_teams_assignments)
-  team_id    = module.teams[local.repo_teams_assignments[count.index].team].id
-  repository = local.repo_teams_assignments[count.index].repo
-  permission = local.repo_teams_assignments[count.index].permission
+  for_each = {
+    for assignment in local.repo_teams_assignments : "${assignment.repo}-${assignment.team}" => assignment
+  }
+  team_id    = module.teams[each.value.team].id
+  repository = each.value.repo
+  permission = each.value.permission
 }
