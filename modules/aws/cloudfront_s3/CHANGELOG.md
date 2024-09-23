@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.1 - 2024-09-23
+
+fix default SPA error responses in cloudfront_s3 module
+
 ## 0.2.0 - 2024-09-23
 
 Add variable for custom error responses and default behaviour for SPA
