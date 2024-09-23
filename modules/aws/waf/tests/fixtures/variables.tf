@@ -24,7 +24,7 @@ variable "vpc_environment_tag" {
     if it was configured that way.
   EOF
   type        = string
-  default     = "Sandbox"
+  default     = "Test"
   validation {
     condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.vpc_environment_tag))
     error_message = "VPC Environment Tag must be alphanumeric and capitalized."

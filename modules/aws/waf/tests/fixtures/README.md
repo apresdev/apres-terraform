@@ -1,6 +1,6 @@
-# S3 Example
+# WAF Example
 
-This is an example on how to deploy the S3 module, used by the integration tests.
+This is an example on how to deploy the WAF module, used by the integration tests.
 
 ## Running this module manually
 
@@ -16,4 +16,4 @@ This is an example on how to deploy the S3 module, used by the integration tests
 1. Login to AWS on the CLI (hint: AWS_PROFILE=<some-predefined-profile> aws sso login)
 1. `cd test`
 1. `dep ensure`
-1. `AWS_PROFILE=<some-predefined-profile> go test -v -run TestS3`
+1. `AWS_PROFILE=<some-predefined-profile> go test -v -run TestWaf`

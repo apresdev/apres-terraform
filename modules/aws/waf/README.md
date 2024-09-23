@@ -55,5 +55,7 @@ This was in part borrowed from and inspired by https://github.com/trussworks/ter
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_waf_arn"></a> [waf\_arn](#output\_waf\_arn) | The ARN of the WAF ACL |
 <!-- END_TF_DOCS -->
