@@ -6,4 +6,5 @@ module "cloudfront_s3" {
   component                             = var.component
   cloudfront_geo_restrictions_locations = ["US", "CA"] # US is where GHA runs, CA is where Apres works
   cloudfront_geo_restrictions_type      = "whitelist"
+  is_spa                                = true
 }
