@@ -5,13 +5,13 @@ locals {
       error_code            = 403
       response_code         = 200
       error_caching_min_ttl = 10
-      response_page_path    = "/var.default_root_object"
+      response_page_path    = "/${var.default_root_object}"
     },
     {
       error_code            = 404
       response_code         = 200
       error_caching_min_ttl = 10
-      response_page_path    = "/var.default_root_object"
+      response_page_path    = "/${var.default_root_object}"
     }
   ]
   cloudfront_custom_error_responses = var.is_spa == true ? length(var.cloudfront_custom_spa_error_responses) == 0 ? length(var.cloudfront_custom_error_responses) == 0 ? local.default_spa_error_responses : var.cloudfront_custom_error_responses : var.cloudfront_custom_spa_error_responses : var.cloudfront_custom_error_responses

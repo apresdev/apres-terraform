@@ -103,7 +103,7 @@ func TestCloudFrontS3(t *testing.T) {
 	missingUrl := fmt.Sprintf("https://%s/missing", cloudfrontDistDomainName)
 	resp, err = http.Get(missingUrl)
 	assert.NoErrorf(t, err, "Expected no error getting URL: %s", missingUrl)
-	// todo assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected 200 OK response from CloudFront for missing path")
+	assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected 200 OK response from CloudFront for missing path")
 
 	// empty the buckets.
 	err = s3utils.S3EmptyBucket(s3svc, s3BucketName)
