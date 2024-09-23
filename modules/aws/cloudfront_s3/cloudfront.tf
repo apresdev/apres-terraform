@@ -48,6 +48,8 @@ resource "aws_cloudfront_distribution" "default" {
   is_ipv6_enabled     = true
   default_root_object = var.default_root_object
 
+  cloudfront_custom_error_responses = var.spa == true ? local.cloudfront_custom_spa_error_responses : var.cloudfront_custom_error_responses
+
   logging_config {
     include_cookies = false
     bucket          = module.s3_logs.bucket_regional_domain_name
@@ -94,4 +96,3 @@ resource "aws_cloudfront_distribution" "default" {
 
   aliases = var.aliases
 }
-
