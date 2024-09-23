@@ -64,6 +64,32 @@ variable "default_root_object" {
   default     = "index.html"
 }
 
+variable "is_spa" {
+  description = <<EOF
+  Whether the site is a Single Page Application and 403, 404 error messages should be re-directed to the root object
+  EOF
+  type        = bool
+  default     = false
+}
+
+variable "cloudfront_custom_error_responses" {
+  description = <<EOF
+  Custom error responses. See
+  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GeneratingCustomErrorResponses.html
+  EOF
+  type        = list(any)
+  default     = []
+}
+
+variable "cloudfront_custom_spa_error_responses" {
+  description = <<EOF
+  Custom error responses for SPA applications. See
+  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GeneratingCustomErrorResponses.html
+  EOF
+  type        = list(any)
+  default     = []
+}
+
 variable "cloudfront_logs_transition_ia" {
   description = "Number of days before logs are transitioned to IA storage class."
   type        = number

@@ -1,5 +1,20 @@
 locals {
   s3_origin_id = "s3-${lower(var.name)}"
+  default_spa_error_responses = [
+    {
+      error_code            = 403
+      response_code         = 200
+      error_caching_min_ttl = 10
+      response_page_path    = "/var.default_root_object"
+    },
+    {
+      error_code            = 404
+      response_code         = 200
+      error_caching_min_ttl = 10
+      response_page_path    = "/var.default_root_object"
+    }
+  ]
+  cloudfront_custom_error_responses = var.is_spa == true ? length(var.cloudfront_custom_spa_error_responses) == 0 ? length(var.cloudfront_custom_error_responses) == 0 ? local.default_spa_error_responses : var.cloudfront_custom_error_responses : var.cloudfront_custom_spa_error_responses : var.cloudfront_custom_error_responses
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {
@@ -48,6 +63,16 @@ resource "aws_cloudfront_distribution" "default" {
   is_ipv6_enabled     = true
   default_root_object = var.default_root_object
 
+  dynamic "custom_error_response" {
+    for_each = local.cloudfront_custom_error_responses
+    content {
+      error_code            = custom_error_response.value["error_code"]
+      response_page_path    = custom_error_response.value["response_page_path"]
+      response_code         = custom_error_response.value["response_code"]
+      error_caching_min_ttl = custom_error_response.value["error_caching_min_ttl"]
+    }
+  }
+
   logging_config {
     include_cookies = false
     bucket          = module.s3_logs.bucket_regional_domain_name
@@ -94,4 +119,3 @@ resource "aws_cloudfront_distribution" "default" {
 
   aliases = var.aliases
 }
-

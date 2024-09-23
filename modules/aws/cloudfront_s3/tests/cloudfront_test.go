@@ -97,11 +97,15 @@ func TestCloudFrontS3(t *testing.T) {
 	url := fmt.Sprintf("https://%s/%s", cloudfrontDistDomainName, fileName)
 	resp, err := http.Get(url)
 	assert.NoErrorf(t, err, "Expected no error getting URL: %s", url)
-	assert.Equal(t, resp.StatusCode, http.StatusOK, "Expected 200 OK response from CloudFront")
+	assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected 200 OK response from CloudFront")
+
+	// check that a missing file is redirected to the default path
+	missingUrl := fmt.Sprintf("https://%s/missing", cloudfrontDistDomainName)
+	resp, err = http.Get(missingUrl)
+	assert.NoErrorf(t, err, "Expected no error getting URL: %s", missingUrl)
+	// todo assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected 200 OK response from CloudFront for missing path")
 
 	// empty the buckets.
 	err = s3utils.S3EmptyBucket(s3svc, s3BucketName)
 	assert.NoError(t, err, "Expected no error emptying S3 bucket")
 }
-
-
