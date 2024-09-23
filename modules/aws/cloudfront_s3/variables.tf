@@ -81,28 +81,13 @@ variable "cloudfront_custom_error_responses" {
   default     = []
 }
 
-locals {
-  cloudfront_custom_spa_error_responses = {
-    description = <<EOF
-    Custom error responses. See
-    https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GeneratingCustomErrorResponses.html
-    EOF
-    type        = list(any)
-    default = [
-      {
-        error_code            = 403
-        response_code         = 200
-        error_caching_min_ttl = 10
-        response_page_path    = "/${var.default_root_object}"
-      },
-      {
-        error_code            = 404
-        response_code         = 200
-        error_caching_min_ttl = 10
-        response_page_path    = "/${var.default_root_object}"
-      }
-    ]
-  }
+variable "cloudfront_custom_spa_error_responses" {
+  description = <<EOF
+  Custom error responses for SPA applications. See
+  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GeneratingCustomErrorResponses.html
+  EOF
+  type        = list(any)
+  default     = []
 }
 
 variable "cloudfront_logs_transition_ia" {
