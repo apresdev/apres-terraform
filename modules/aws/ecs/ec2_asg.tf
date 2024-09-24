@@ -181,14 +181,16 @@ resource "aws_security_group" "ecs_asg" {
   )
 }
 
-# If the load balancer is created, allow traffic from the NLB to the instances,
-# on all high numbered ports.
+# If the load balancer is created and the deployment is EC2, allow traffic from the NLB to the instances,
+# on all high numbered ports, one rule per security group id.
 resource "aws_security_group_rule" "ecs_asg_ingress" {
-  count                    = var.deployment_target == "EC2" && var.create_load_balancer ? 1 : 0
-  type                     = "ingress"
-  from_port                = 1024
-  to_port                  = 65535
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.ecs_asg[0].id
-  source_security_group_id = aws_security_group.nlb[0].id
+  count             = var.create_load_balancer && local.use_ec2 == 1 ? 1 : 0
+  type              = "ingress"
+  description       = "Allow traffic from the load balancer to the ECS instances"
+  from_port         = 1024
+  to_port           = 65535
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_asg[0].id
+  # if we're given a security group id use that, else use the one we created for the load balancer
+  source_security_group_id = var.load_balancer_security_group != "" ? var.load_balancer_security_group : aws_security_group.load_balancer[0].id
 }

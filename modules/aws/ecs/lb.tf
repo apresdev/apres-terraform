@@ -17,16 +17,18 @@ resource "aws_lb" "default" {
   }
 
   name                             = local.name
-  load_balancer_type               = "network"
+  load_balancer_type               = var.load_balancer_type
   enable_cross_zone_load_balancing = "true"
 
   # launch lbs in private subnets
-  internal        = true
-  subnets         = data.aws_subnets.private.ids
-  security_groups = [aws_security_group.nlb[0].id]
+  internal = true
+  subnets  = var.load_balancer_is_public ? data.aws_subnets.public.ids : data.aws_subnets.private.ids
+  # Use the security group given if it exists, else the one created in this module.
+  security_groups = var.load_balancer_security_group != "" ? [var.load_balancer_security_group] : [aws_security_group.load_balancer[0].id]
 
   # This is required for NLB to accept connections from Private Link, which is what API Gateway uses.
-  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
+  # Only applicable for NLB so we set it to null.
+  enforce_security_group_inbound_rules_on_private_link_traffic = var.load_balancer_type == "network" ? "off" : null
 
   tags = merge(
     local.tags,
@@ -36,12 +38,28 @@ resource "aws_lb" "default" {
   )
 }
 
-# adds a tcp listener to the load balancer and allows ingress
-resource "aws_lb_listener" "tcp" {
+locals {
+  # Convoluted way to figure out the protocol, based on if there's an SSL cert and if it's
+  # an ALB or NLB.
+  lb_protocols = {
+    "application" : {
+      "ssl" : "HTTPS"
+      "nossl" : "HTTP"
+    }
+    "network" : {
+      "ssl" : "TLS"
+      "nossl" : "TCP"
+    }
+  }
+  lb_protocol = var.load_balancer_ssl_cert_arn == "" ? local.lb_protocols[var.load_balancer_type]["nossl"] : local.lb_protocols[var.load_balancer_type]["ssl"]
+}
+
+# adds a listener to the load balancer and allows ingress
+resource "aws_lb_listener" "default" {
   count             = var.create_load_balancer ? 1 : 0
   load_balancer_arn = aws_lb.default[0].id
   port              = var.load_balancer_port
-  protocol          = "TCP" # Only option for NLB
+  protocol          = local.lb_protocol
 
   default_action {
     target_group_arn = aws_lb_target_group.default[0].id
@@ -59,7 +77,7 @@ resource "aws_lb_target_group" "default" {
   count                = var.create_load_balancer ? 1 : 0
   name                 = local.name
   port                 = var.load_balancer_port
-  protocol             = "TCP"
+  protocol             = local.lb_protocol
   vpc_id               = data.aws_vpc.default.id
   target_type          = "ip"
   deregistration_delay = 30
@@ -80,10 +98,18 @@ resource "aws_lb_target_group" "default" {
   )
 }
 
-resource "aws_security_group" "nlb" {
-  count       = var.create_load_balancer ? 1 : 0
-  name        = "${local.name}-NLB"
-  description = "Security group for NLB ${local.name}"
+locals {
+  # If we are creating a load balancer and no security groups are given, create a security group.
+  create_lb_security_group = var.create_load_balancer && var.load_balancer_security_group == ""
+  # Set CIDR range for security group based on where load balancer is.
+  sg_cidrs = var.load_balancer_is_public ? ["0.0.0.0/0"] : [for s in data.aws_subnet.private : s.cidr_block]
+}
+
+# Create a security group based on the variables set above.
+resource "aws_security_group" "load_balancer" {
+  count       = local.create_lb_security_group ? 1 : 0
+  name        = "${local.name}-${var.environment}-LB"
+  description = "Security group for LB ${local.name}-${var.environment}"
   vpc_id      = data.aws_vpc.default.id
 
   egress {
@@ -94,14 +120,11 @@ resource "aws_security_group" "nlb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "Allow all traffic in from the Private subnets"
+    description = "Allow traffic in on port ${var.load_balancer_port}"
     from_port   = var.load_balancer_port
     to_port     = var.load_balancer_port
     protocol    = "tcp"
-    # TODO: This is what we want to use when we add the API Gateway. For now we just limit traffic
-    # to the private subnets.
-    #security_groups = [aws_security_group.api.id]
-    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
+    cidr_blocks = local.sg_cidrs
   }
 
   tags = merge(

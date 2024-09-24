@@ -63,3 +63,13 @@ variable "create_load_balancer" {
   type        = bool
   default     = false
 }
+
+variable "load_balancer_type" {
+  description = "Type of load balancer to create"
+  type        = string
+}
+
+variable "load_balancer_is_public" {
+  description = "Is the load balancer public"
+  type        = bool
+}

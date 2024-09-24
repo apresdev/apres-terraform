@@ -29,7 +29,8 @@ func getName() string {
 }
 
 // Get Terraform Options for all tests
-func getTfOpts(name string, target string, enableLB bool, ec2UseNVMe bool, ec2InstanceType string, makeVolume bool, port int) *terraform.Options {
+func getTfOpts(name string, target string, enableLB bool, ec2UseNVMe bool, ec2InstanceType string,
+	makeVolume bool, port int, lbType string, lbIsPublic bool) *terraform.Options {
 	return &terraform.Options{
 		// The path to where your Terraform code is located
 		TerraformDir: "./fixtures",
@@ -44,6 +45,8 @@ func getTfOpts(name string, target string, enableLB bool, ec2UseNVMe bool, ec2In
 			"make_volume":                   makeVolume,
 			"container_port":                port,
 			"create_load_balancer":          enableLB,
+			"load_balancer_type":            lbType,
+			"load_balancer_is_public":       lbIsPublic,
 		},
 	}
 }
@@ -131,7 +134,7 @@ func waitForServiceToStabilize(t *testing.T, ecsClient *ecs.Client, clusterName 
 }
 
 // Validate a load balancer deployment
-func validateLoadBalancer(t *testing.T, lbClient *elasticloadbalancingv2.Client, tfOut *tfOutputs) {
+func validateLoadBalancer(t *testing.T, lbType string, lbClient *elasticloadbalancingv2.Client, tfOut *tfOutputs) {
 	lbResp, err := lbClient.DescribeLoadBalancers(context.Background(),
 		&elasticloadbalancingv2.DescribeLoadBalancersInput{
 			LoadBalancerArns: []string{tfOut.loadBalancerArn},
@@ -140,8 +143,15 @@ func validateLoadBalancer(t *testing.T, lbClient *elasticloadbalancingv2.Client,
 	assert.Equal(t, 1, len(lbResp.LoadBalancers), "Expected exactly one load balancer returned")
 	assert.Equal(t, tfOut.loadBalancerDnsName, *lbResp.LoadBalancers[0].DNSName,
 		"Expected the Load Balancer DNS Name to match the output")
-	assert.Equal(t, "off", aws.ToString(lbResp.LoadBalancers[0].EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic),
-		"Expected EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic to be true")
+	if lbType == "network" {
+		assert.Equal(t, "off", aws.ToString(lbResp.LoadBalancers[0].EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic),
+			"Expected EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic to be true")
+	} else {
+		// only network LBs have this setting
+		assert.Equal(t, "", aws.ToString(lbResp.LoadBalancers[0].EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic),
+			"Expected EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic to be true")
+	}
+
 	assert.Equal(t, elbTypes.LoadBalancerSchemeEnum("internal"), lbResp.LoadBalancers[0].Scheme,
 		"Expected the Load Balancer Scheme to be internet-facing")
 
@@ -187,7 +197,7 @@ func TestECSFargateNoLoadBalancer(t *testing.T) {
 	name := getName()
 
 	// Terraform options
-	terraformOptions := getTfOpts(name, "FARGATE", false, false, "", false, -1)
+	terraformOptions := getTfOpts(name, "FARGATE", false, false, "", false, -1, "network", false)
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer terraform.Destroy(t, terraformOptions)
@@ -227,10 +237,11 @@ func TestECSFargateNoLoadBalancer(t *testing.T) {
 	assert.Equal(t, "ACTIVE", *cluster.Status, "Expected the cluster to have ACTIVE Status")
 }
 
-// Test ECS on Fargate with ephemeral volumes  - no LB for now
+// Test ECS on Fargate with ephemeral volumes
 func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 	name := getName()
-	terraformOptions := getTfOpts(name, "FARGATE", true, false, "", true, 8080)
+	lbType := "network"
+	terraformOptions := getTfOpts(name, "FARGATE", true, false, "", true, 8080, lbType, false)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
@@ -291,14 +302,15 @@ func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 
 	// Check the LB configs and tags
 	lbClient := elasticloadbalancingv2.NewFromConfig(cfg)
-	validateLoadBalancer(t, lbClient, tfOut)
+	validateLoadBalancer(t, lbType, lbClient, tfOut)
 
 }
 
-// Test ECS on EC2 with an NVMe volume and a load balancer
+// Test ECS on EC2 with an NVMe volume and an application load balancer
 func TestECSEc2WithLoadBalancer(t *testing.T) {
 	name := getName()
-	terraformOptions := getTfOpts(name, "EC2", true, true, "c7gd.medium", false, 8080)
+	lbType := "application"
+	terraformOptions := getTfOpts(name, "EC2", true, true, "c7gd.medium", false, 8080, lbType, false)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
@@ -399,5 +411,5 @@ func TestECSEc2WithLoadBalancer(t *testing.T) {
 
 	// Check the LB configs and tags
 	lbClient := elasticloadbalancingv2.NewFromConfig(cfg)
-	validateLoadBalancer(t, lbClient, tfOut)
+	validateLoadBalancer(t, lbType, lbClient, tfOut)
 }
