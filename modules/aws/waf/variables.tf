@@ -207,6 +207,9 @@ variable "associate_resource_arn" {
   description = <<EOF
     The ARN of the resource to associate with the web ACL. The resource can be any supported
     service such as an Application Load Balancer, API Gateway, AWS AppSync, or an Amazon CloudFront.
+
+    Note: the README contains a list of IAM permissions, this ARN needs to be added to the statement
+    with the Sid `AssociateWAF` else the association will fail.
   EOF
   validation {
     condition     = can(regex("arn:aws.*", var.associate_resource_arn))
