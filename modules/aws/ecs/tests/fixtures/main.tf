@@ -35,12 +35,14 @@ module "ecs" {
   container_health_check_start_period = 5
 
   # same with load balancers, setting this if create_load_balancer=false has no effect
+  create_load_balancer                = var.create_load_balancer
   load_balancer_health_check_interval = 10
+  load_balancer_type                  = var.load_balancer_type
+  load_balancer_is_public             = var.load_balancer_is_public
 
   # Use defaults explicitly to make it easier to debug tests
-  cpu                  = 256
-  memory               = 512
-  create_load_balancer = var.create_load_balancer
+  cpu    = 256
+  memory = 512
   # saving for later - not for Fargate!
   #   container_tmpfs = [
   #     {

@@ -1,8 +1,14 @@
-# Lookup private subnets for the VPC. This gets back a list of subnet IDs.
+# Lookup private and public subnets for the VPC. This gets back a list of subnet IDs.
 data "aws_subnets" "private" {
   tags = {
     environment = var.vpc_environment_tag
     subnet-tier = "private"
+  }
+}
+data "aws_subnets" "public" {
+  tags = {
+    environment = var.vpc_environment_tag
+    subnet-tier = "public"
   }
 }
 
@@ -11,6 +17,10 @@ data "aws_subnets" "private" {
 # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html
 data "aws_subnet" "private" {
   for_each = toset(data.aws_subnets.private.ids)
+  id       = each.value
+}
+data "aws_subnet" "public" {
+  for_each = toset(data.aws_subnets.public.ids)
   id       = each.value
 }
 

@@ -5,21 +5,16 @@ Creates an ECS cluster, service and task using the specified container image.
 Supports:
 * ephemeral volumes
 * Fargate and EC2 Deployment
-* Creation of an NLB to front the service.
+* Creation of a Load Balancer - Network or Application - to load balance traffic to the service.
+* SSL termination on the load balancer
 
-The goal of this module is to setup an ECS cluster that has API Gateway in front of it.
-The private connection from API Gateway to the ECS cluster is via VPC Links, and only
-NLB's support that at time of writing.
-
-Because API Gateway VPC Links do not have a security group attached, the NLB allows traffic in from
-the private subnets.
+If setting up an ECS cluster with API Gateway in front, you will want:
+* An NLB - set var.load_balancer_type to `network` since API Gateway can only talk to an NLB.
+* A non-public NLB - no need to make it public. See the Apres api_gateway_rest README on how to set up the VPC Link.
+* Do not add a security group - the API Gateway does not have a security group attached, there is no way to limit
+  which the traffic to just the API Gateway. A security group allowing the private subnets will be added for you.
 
 Not supported at this time:
-* Public-facing Load Balancers
-* Classic Load Balancers
-* Application Load Balancers
-* HTTPS termination on the Load Balancer - while relatively simple to do this immediately gets into
-  the question of which domain to use for private resources for which we don't have a good answer yet
 * Only HTTP health checks are supported, TCP based health checks are not supported
 
 If the deployment target is EC2, the instances are setup in an Autoscale group, deployed to the
@@ -37,10 +32,6 @@ on first deploy, use the console to create a fake cluster. It may fail, but chec
 
 ## TODO Items
 
-* Support certs and HTTPS on the Load Balancers
-  [Issue 108](https://github.com/apresdev/apres-terraform/issues/108)
-* Support inbound security groups on the Load Balancer
-  [Issue 109](https://github.com/apresdev/apres-terraform/issues/109)
 * Add access logging to the Load Balancer
   [Issue 110](https://github.com/apresdev/apres-terraform/issues/110)
 * Add ability to scale up/down by more than 1 EC2 instance
@@ -129,11 +120,11 @@ the name passed in.
 | [aws_iam_role_policy_attachment.ec2_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_launch_template.ecs_launch_template](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_lb.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) | resource |
-| [aws_lb_listener.tcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
+| [aws_lb_listener.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
 | [aws_lb_target_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
 | [aws_security_group.ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group.ecs_asg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_security_group.nlb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_security_group.load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.ecs_asg_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.ecs_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_ami.ecs_ami](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
@@ -142,7 +133,9 @@ the name passed in.
 | [aws_iam_policy_document.task_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 | [aws_subnet.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
+| [aws_subnet.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
 | [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
+| [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_vpc.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
 
 ## Inputs
@@ -182,7 +175,11 @@ the name passed in.
 | <a name="input_load_balancer_health_check_interval"></a> [load\_balancer\_health\_check\_interval](#input\_load\_balancer\_health\_check\_interval) | The time in seconds between health checks. See<br>  https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-health-checks.html#health-check-settings<br>  for details. | `number` | `30` | no |
 | <a name="input_load_balancer_health_check_path"></a> [load\_balancer\_health\_check\_path](#input\_load\_balancer\_health\_check\_path) | The path to check for the load balancer health check.<br>  https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-health-checks.html#health-check-settings<br>  for details. | `string` | `"/"` | no |
 | <a name="input_load_balancer_health_check_unhealthy_threshold"></a> [load\_balancer\_health\_check\_unhealthy\_threshold](#input\_load\_balancer\_health\_check\_unhealthy\_threshold) | The number of consecutive failed health checks required before considering the target unhealthy. See<br>  https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-health-checks.html#health-check-settings<br>  for details. | `number` | `2` | no |
+| <a name="input_load_balancer_is_public"></a> [load\_balancer\_is\_public](#input\_load\_balancer\_is\_public) | If true, the load balancer will be public, if false, it will be private. If public and no security groups<br>  are passed in through the `load_balancer_security_groups` variable, then a security group will be created<br>  allowing traffic through on 0.0.0.0/0! | `bool` | `false` | no |
 | <a name="input_load_balancer_port"></a> [load\_balancer\_port](#input\_load\_balancer\_port) | Port the load balancer should listen on | `number` | `80` | no |
+| <a name="input_load_balancer_security_group"></a> [load\_balancer\_security\_group](#input\_load\_balancer\_security\_group) | A security group ID to attach to the load balancer. If not specified, the following<br>    choices are made:<br>    - If the load balancer is public, 0.0.0.0/0 on the load balancer will be allowed.<br>    - If the load balancer is private, the private subnets CIDR's will be allowed.<br><br>    For network load balancers, adding or removing a security group will force a recreation of<br>    the load balancer. | `string` | `""` | no |
+| <a name="input_load_balancer_ssl_cert_arn"></a> [load\_balancer\_ssl\_cert\_arn](#input\_load\_balancer\_ssl\_cert\_arn) | ARN of the SSL certificate to use for the load balancer.<br>    If specified, the protocol on the listener will be set to:<br>    - HTTPS for application load balancers<br>    - TLS for network load balancers<br>    If not specified, the load balancer will not use SSL, and protocol will be set to:<br>    - HTTP for application load balancers<br>    - TCP for network load balancers | `string` | `""` | no |
+| <a name="input_load_balancer_type"></a> [load\_balancer\_type](#input\_load\_balancer\_type) | Load balancer type, can be either 'application' or 'network',<br>    for Application Load Balancer or Network Load Balancer. This is ignored if create\_load\_balancer is false.<br>    Default is 'network' for backwards compatibility. | `string` | `"network"` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | The amount of memory to reserve for the container. Default is the smallest possible Fargate size.<br><br>  If using Fargate, CPU and Memory settings must be paired correctly. They are not enforced here,<br>  see the description at<br>  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html | `number` | `512` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name used to create resources | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
