@@ -18,7 +18,6 @@ on:
       - modules/aws/**
       - modules/github/**
       - .github/workflows/build.yml
-      - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
 
   pull_request_target:
@@ -27,7 +26,6 @@ on:
       - modules/aws/**
       - modules/github/**
       - .github/workflows/build.yml
-      - "!modules/**/README.md"
       - "!modules/**/CHANGELOG.md"
 
 permissions:
