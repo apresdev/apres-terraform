@@ -117,8 +117,8 @@ jobs:
             var modules = new Map();
             for (var item of raw) {
 
-              // Ignore README.md or CHANGELOG.md updates.
-              if (item.endsWith("/README.md") || item.endsWith("/CHANGELOG.md")){
+              // Ignore CHANGELOG.md updates.
+              if (item.endsWith("/CHANGELOG.md")){
                 continue;
               }
 
