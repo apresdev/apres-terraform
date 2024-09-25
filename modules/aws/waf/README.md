@@ -67,7 +67,7 @@ is not listed in the example, you will need to add it else the association will 
                 "wafv2:DisassociateWebACL"
             ],
             "Resource": [
-                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:regional/webacl/unittestmike-Unittest/459718a3-c79b-4c72-be17-cb81c08134b6"
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:regional/webacl/${name}*"
             ]
         }
     ]
