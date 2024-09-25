@@ -425,6 +425,58 @@ variable "create_load_balancer" {
   type        = bool
 }
 
+variable "load_balancer_type" {
+  description = <<EOF
+    Load balancer type, can be either 'application' or 'network',
+    for Application Load Balancer or Network Load Balancer. This is ignored if create_load_balancer is false.
+    Default is 'network' for backwards compatibility.
+  EOF
+  type        = string
+  default     = "network"
+  validation {
+    condition     = var.load_balancer_type == "application" || var.load_balancer_type == "network"
+    error_message = "Load balancer type must be either 'application' or 'network'"
+  }
+}
+
+variable "load_balancer_is_public" {
+  description = <<EOF
+  If true, the load balancer will be public, if false, it will be private. If public and no security groups
+  are passed in through the `load_balancer_security_groups` variable, then a security group will be created
+  allowing traffic through on 0.0.0.0/0!
+  EOF
+  type        = bool
+  default     = false
+}
+
+variable "load_balancer_security_group" {
+  description = <<EOF
+    A security group ID to attach to the load balancer. If not specified, the following
+    choices are made:
+    - If the load balancer is public, 0.0.0.0/0 on the load balancer will be allowed.
+    - If the load balancer is private, the private subnets CIDR's will be allowed.
+
+    For network load balancers, adding or removing a security group will force a recreation of
+    the load balancer.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "load_balancer_ssl_cert_arn" {
+  description = <<EOF
+    ARN of the SSL certificate to use for the load balancer.
+    If specified, the protocol on the listener will be set to:
+    - HTTPS for application load balancers
+    - TLS for network load balancers
+    If not specified, the load balancer will not use SSL, and protocol will be set to:
+    - HTTP for application load balancers
+    - TCP for network load balancers
+  EOF
+  type        = string
+  default     = ""
+}
+
 variable "load_balancer_port" {
   description = "Port the load balancer should listen on"
   type        = number

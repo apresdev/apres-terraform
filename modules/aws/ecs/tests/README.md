@@ -5,7 +5,7 @@ Need unit tests with the following:
 Can handle adding storage & network together to limit use cases.
 
 * ECS on Fargate, no LB.
-* ECS on Fargate, ephemeral volume, LB.
+* ECS on Fargate, ephemeral volume, Network LB.
 * ECS on EC2, no NVMe, no LB.
-* ECS on EC2, NVMe, LB.
+* ECS on EC2, NVMe, Application LB.
 

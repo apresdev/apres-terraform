@@ -188,7 +188,7 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-# Add an ingress rule, only if the load balancer is created
+# Add an ingress rule to allow traffic in from the load balancer security group, but only if the load balancer is created
 resource "aws_security_group_rule" "ecs_ingress" {
   count                    = var.create_load_balancer ? 1 : 0
   type                     = "ingress"
@@ -196,7 +196,7 @@ resource "aws_security_group_rule" "ecs_ingress" {
   to_port                  = var.container_port
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
-  source_security_group_id = aws_security_group.nlb[0].id
+  source_security_group_id = var.load_balancer_security_group != "" ? var.load_balancer_security_group : aws_security_group.load_balancer[0].id
 }
 
 resource "aws_ecs_cluster" "default" {
