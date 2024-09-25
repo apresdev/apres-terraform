@@ -5,6 +5,75 @@ to as "WAF" throughout but only supports v2.
 
 This was in part borrowed from and inspired by https://github.com/trussworks/terraform-aws-wafv2/tree/main.
 
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Substitute `${AWS::AccountId}` with the Account ID where this is deployed, `${AWS::Region}` with
+the region such as `us-east-2`, and `${name}` with the name passed in.
+
+NOTE: The statement with Sid `AssociateWAF` allows the association of the WAF to another resource, but that other resource
+is not listed in the example, you will need to add it else the association will fail.
+
+```json
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ManageCWLforWAF",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:PutRetentionPolicy",
+                "logs:ListTagsForResource",
+                "logs:DeleteLogGroup"
+            ],
+            "Resource": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:aws-waf-logs-*"
+        },
+        {
+            "Sid": "ManageWAF",
+            "Effect": "Allow",
+            "Action": [
+                "wafv2:CreateWebACL",
+                "wafv2:GetWebACL",
+                "wafv2:DeleteWebACL",
+                "wafv2:ListTagsForResource",
+                "wafv2:PutLoggingConfiguration",
+                "wafv2:GetLoggingConfiguration",
+                "wafv2:DeleteLoggingConfiguration"
+            ],
+            "Resource": [
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/ipset/${name}*",
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/managedruleset/${name}*",
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/regexpatternset/${name}*",
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/rulegroup/${name}*",
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/webacl/${name}*"
+            ]
+        },
+        {
+            "Sid": "WAFandIAMforCWL",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateServiceLinkedRole"
+            ],
+            "Resource": "arn:aws:iam::${AWS::AccountId}:role/*"
+        },
+        {
+            "Sid": "AssociateWAF",
+            "Effect": "Allow",
+            "Action": [
+                "wafv2:AssociateWebACL"
+                "wafv2:GetWebACLForResource",
+                "wafv2:DisassociateWebACL"
+            ],
+            "Resource": [
+                "arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:*/webacl/${name}*"
+            ]
+        }
+    ]
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -38,7 +107,7 @@ This was in part borrowed from and inspired by https://github.com/trussworks/ter
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_associate_resource_arn"></a> [associate\_resource\_arn](#input\_associate\_resource\_arn) | The ARN of the resource to associate with the web ACL. The resource can be any supported<br>    service such as an Application Load Balancer, API Gateway, AWS AppSync, or an Amazon CloudFront. | `string` | n/a | yes |
+| <a name="input_associate_resource_arn"></a> [associate\_resource\_arn](#input\_associate\_resource\_arn) | The ARN of the resource to associate with the web ACL. The resource can be any supported<br>    service such as an Application Load Balancer, API Gateway, AWS AppSync, or an Amazon CloudFront.<br><br>    Note: the README contains a list of IAM permissions, this ARN needs to be added to the statement<br>    with the Sid `AssociateWAF` else the association will fail. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_default_action"></a> [default\_action](#input\_default\_action) | The action to perform if none of the rules contained in the WebACL match. | `string` | `"allow"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
