@@ -8,6 +8,24 @@ locals {
       size_in_gb = 21 # min is 21GB
     }
   ] : []
+
+}
+
+resource "aws_secretsmanager_secret" "default" {
+  #checkov:skip=CKV_AWS_149: Ignore CMS key for testing
+  #checkov:skip=CKV2_AWS_57: Ignore rotation for testing
+  count                   = var.create_secret ? 1 : 0
+  name                    = var.name
+  recovery_window_in_days = 0 # don't care about recovery
+}
+
+resource "aws_secretsmanager_secret_version" "default" {
+  count     = var.create_secret ? 1 : 0
+  secret_id = aws_secretsmanager_secret.default[0].id
+  secret_string = jsonencode({
+    "username" = "admin"
+    "password" = var.name
+  })
 }
 
 module "ecs" {
@@ -56,4 +74,15 @@ module "ecs" {
   #         mountOptions = ["rw"]
   #     }
   #   ]
+  container_secrets = var.create_secret ? [
+    {
+      name          = var.name
+      secret_arn    = aws_secretsmanager_secret.default[0].arn
+      kms_key_alias = "aws/secretsmanager"
+    }
+  ] : []
+
+  container_environment_variables = {
+    TEST_ENV_VAR = "test"
+  }
 }

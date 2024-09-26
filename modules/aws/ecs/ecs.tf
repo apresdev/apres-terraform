@@ -11,6 +11,13 @@ locals {
     var.container_environment_variables
   )
   container_environment_variables = [for k, v in local.merged_env_vars : { name = k, value = v }]
+
+  container_secrets = length(var.container_secrets) == 0 ? [] : [
+    for secret in var.container_secrets : {
+      name      = secret.name
+      valueFrom = secret.secret_arn
+    }
+  ]
 }
 
 # Ideally we'd use an EBS volume for /tmp but the aws provider doesn't support that yet, so we use a docker volume
@@ -43,6 +50,7 @@ resource "aws_ecs_task_definition" "default" {
         }
         portMappings = local.container_port_mappings
         environment  = local.container_environment_variables
+        secrets      = local.container_secrets
         linuxParameters = {
           tmpfs : var.container_tmpfs
         }
