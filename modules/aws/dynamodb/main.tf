@@ -10,6 +10,11 @@ locals {
     })
   )
   table_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+
+  # Auto-scaling defaults
+  autoscaling_enabled = var.billing_mode == "PROVISIONED" && var.autoscaling_enabled
+  write_capacity      = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
+  read_capacity       = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
 }
 
 # The following best practices are applied to the table by default:
@@ -25,8 +30,8 @@ resource "aws_dynamodb_table" "default" {
   name                        = local.table_name
   billing_mode                = var.billing_mode
   table_class                 = var.table_class
-  write_capacity              = var.write_capacity
-  read_capacity               = var.read_capacity
+  write_capacity              = local.write_capacity
+  read_capacity               = local.read_capacity
   deletion_protection_enabled = var.deletion_protection_enabled
 
   ttl {
@@ -75,7 +80,7 @@ resource "aws_dynamodb_table" "default" {
 
 #CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
 resource "aws_appautoscaling_target" "table_read" {
-  count = var.autoscaling_enabled && length(var.autoscaling_read) > 0 ? 1 : 0
+  count = local.autoscaling_enabled && length(var.autoscaling_read) > 0 ? 1 : 0
 
   max_capacity       = var.autoscaling_read["max_capacity"]
   min_capacity       = var.read_capacity
@@ -88,7 +93,7 @@ resource "aws_appautoscaling_target" "table_read" {
 
 #CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
 resource "aws_appautoscaling_policy" "table_read_policy" {
-  count = var.autoscaling_enabled && length(var.autoscaling_read) > 0 ? 1 : 0
+  count = local.autoscaling_enabled && length(var.autoscaling_read) > 0 ? 1 : 0
 
   name               = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.table_read[0].resource_id}"
   policy_type        = "TargetTrackingScaling"
@@ -111,7 +116,7 @@ resource "aws_appautoscaling_policy" "table_read_policy" {
 
 #CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
 resource "aws_appautoscaling_target" "table_write" {
-  count = var.autoscaling_enabled && length(var.autoscaling_write) > 0 ? 1 : 0
+  count = local.autoscaling_enabled && length(var.autoscaling_write) > 0 ? 1 : 0
 
   max_capacity       = var.autoscaling_write["max_capacity"]
   min_capacity       = var.write_capacity
@@ -124,7 +129,7 @@ resource "aws_appautoscaling_target" "table_write" {
 
 #CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
 resource "aws_appautoscaling_policy" "table_write_policy" {
-  count = var.autoscaling_enabled && length(var.autoscaling_write) > 0 ? 1 : 0
+  count = local.autoscaling_enabled && length(var.autoscaling_write) > 0 ? 1 : 0
 
   name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.table_write[0].resource_id}"
   policy_type        = "TargetTrackingScaling"

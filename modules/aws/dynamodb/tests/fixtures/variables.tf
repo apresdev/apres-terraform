@@ -17,3 +17,9 @@ variable "environment" {
   type        = string
   default     = "unittest"
 }
+
+
+variable "billing_mode" {
+  description = "The billing mode for the table."
+  type        = string
+}

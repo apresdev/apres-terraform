@@ -6,6 +6,8 @@ module "dynamodb" {
   application = "UnitTests"
   component   = "DDB"
 
+  billing_mode = var.billing_mode
+
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
