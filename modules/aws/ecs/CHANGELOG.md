@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-09-26
+
+Add support for securely delivering container secrets using Secrets Manager.
+
 ## 1.0.0 - 2024-09-25
 
 Add support for public load balancers, and support both network/application load balancers.
