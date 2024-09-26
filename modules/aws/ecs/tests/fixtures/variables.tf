@@ -73,3 +73,8 @@ variable "load_balancer_is_public" {
   description = "Is the load balancer public"
   type        = bool
 }
+
+variable "create_secret" {
+  description = "Create a secret for the service to consume"
+  type        = bool
+}

@@ -273,6 +273,63 @@ variable "container_port" {
   }
 }
 
+variable "container_secrets" {
+  description = <<EOF
+    To avoid passing in secrets in clear text, provide a list of ARNs of secrets in Secrets Manager to be securely
+    injected as environment variables into the container.
+
+    ARN's may include the secret ARN, or have the key name or a specific version appended. See the docs at
+    https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html for
+    details, with two examples following.
+
+    The kms_key_alias it the KMS key alias that was used to encrypt the secret.
+
+    Secrets are stored with key/value pairs in Secret Manager. If you want the full JSON object as the
+    environment variable, the ARN should not incluce a key, for example:
+    ```
+    {
+      name          = "DATABASE_CONFIG"
+      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig"
+      kms_key_alias = "aws/secretsmanager"
+    }
+    ```
+    and the resulting environment variable, stored as a string, might be:
+    ```
+    DATABASE_CONFIG={"username":"mydbuser","password":"asdf","engine":"mariadb","host":"127.0.0.1","port":"12345","dbname":"asdf"}
+    ```
+    If you want just the password, which in this example is in Secrets Manager with the key `password`, the ARN should
+    look like:
+    ```
+    {
+      name          = "DATABASE_PASSWORD"
+      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig:password"
+      kms_key_alias = "aws/secretsmanager"
+    }
+    ```
+    and the resulting environment variable, stored as a string, might be:
+    ```
+    DATABASE_PASSWORD=asdf
+    ```
+
+    The IAM permissions to read the secret ARN will be automatically added to the task execution role, including
+    a statement to allow decryption using the KMS key(s) identified by their aliases.
+  EOF
+  type = list(object({
+    name          = string
+    secret_arn    = string
+    kms_key_alias = string
+  }))
+  default = []
+  validation {
+    condition     = alltrue([for x in var.container_secrets : can(regex("^[a-zA-Z0-9_]+$", x.name))])
+    error_message = "Secret names must be alphanumeric and can contain underscores."
+  }
+  validation {
+    condition     = alltrue([for x in var.container_secrets : can(regex("^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:[a-zA-Z0-9-].+$", x.secret_arn))])
+    error_message = "Secret ARNs must be in the format arn:aws:secretsmanager:region:account:secret:secret-name"
+  }
+}
+
 variable "ecs_cpu_low_threshold_percent" {
   description = <<EOF
   If the average CPU utilization over a two minutes drops to this threshold,
