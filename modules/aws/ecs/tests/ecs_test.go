@@ -30,7 +30,7 @@ func getName() string {
 
 // Get Terraform Options for all tests
 func getTfOpts(name string, target string, enableLB bool, ec2UseNVMe bool, ec2InstanceType string,
-	makeVolume bool, port int, lbType string, lbIsPublic bool) *terraform.Options {
+	makeVolume bool, port int, lbType string, lbIsPublic bool, createSecret bool) *terraform.Options {
 	return &terraform.Options{
 		// The path to where your Terraform code is located
 		TerraformDir: "./fixtures",
@@ -47,6 +47,7 @@ func getTfOpts(name string, target string, enableLB bool, ec2UseNVMe bool, ec2In
 			"create_load_balancer":          enableLB,
 			"load_balancer_type":            lbType,
 			"load_balancer_is_public":       lbIsPublic,
+			"create_secret":                 createSecret,
 		},
 	}
 }
@@ -191,13 +192,33 @@ func validateLoadBalancer(t *testing.T, lbType string, lbClient *elasticloadbala
 	}
 }
 
+// getFirstTask retrieves the first running task to run checks against
+func getFirstTask(t *testing.T, ecsClient *ecs.Client, tfOut *tfOutputs) *ecsTypes.Task {
+	tasksInput := &ecs.ListTasksInput{
+		Cluster:     &tfOut.ecsClusterName,
+		ServiceName: &tfOut.ecsServiceName,
+	}
+	listTasksResp, err := ecsClient.ListTasks(context.Background(), tasksInput)
+	assert.NoError(t, err, "Expected no error for ListTasks")
+	assert.Greater(t, len(listTasksResp.TaskArns), 0, "Expected at least one task running")
+
+	describeInput := &ecs.DescribeTasksInput{
+		Cluster: &tfOut.ecsClusterName,
+		Tasks:   []string{listTasksResp.TaskArns[0]},
+	}
+	taskResp, err := ecsClient.DescribeTasks(context.Background(), describeInput)
+	assert.NoError(t, err, "Expected no error for DescribeTasks")
+	assert.Greater(t, len(taskResp.Tasks), 0, "Expected at least one task running")
+	return &taskResp.Tasks[0]
+}
+
 // Test ECS running on Fargate with no volumes or load balancer
 func TestECSFargateNoLoadBalancer(t *testing.T) {
 	// Variables for the terraform module, includes a timestamp
 	name := getName()
 
 	// Terraform options
-	terraformOptions := getTfOpts(name, "FARGATE", false, false, "", false, -1, "network", false)
+	terraformOptions := getTfOpts(name, "FARGATE", false, false, "", false, -1, "network", false, true)
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer terraform.Destroy(t, terraformOptions)
@@ -235,13 +256,30 @@ func TestECSFargateNoLoadBalancer(t *testing.T) {
 	waitForServiceToStabilize(t, ecsClient, tfOut.ecsClusterName, tfOut.ecsServiceArn)
 
 	assert.Equal(t, "ACTIVE", *cluster.Status, "Expected the cluster to have ACTIVE Status")
+
+	// Get the task definition
+	tdResp, err := ecsClient.DescribeTaskDefinition(context.Background(),
+		&ecs.DescribeTaskDefinitionInput{
+			TaskDefinition: &tfOut.ecsTaskDefinitionArn})
+	assert.NoError(t, err, "Expected no error for DescribeTaskDefinition")
+	// CPU and memory are hardcoded in the test fixture
+	assert.Equal(t, *tdResp.TaskDefinition.Cpu, "256", "Expected 256 CPU units")
+	assert.Equal(t, *tdResp.TaskDefinition.Memory, "512", "Expected 256 CPU units")
+	assert.Len(t, tdResp.TaskDefinition.ContainerDefinitions, 1, "Expected exactly one container definition")
+
+	// check environment variables on the first container
+	assert.Len(t, tdResp.TaskDefinition.ContainerDefinitions[0].Environment, 6, "Expected exactly six environment variable in container definition")
+
+	// The five standard plus an extra one for testing.
+	assert.Len(t, tdResp.TaskDefinition.ContainerDefinitions[0].Secrets, 1, "Expected exactly one secret in container definition")
+    assert.Equal(t, *tdResp.TaskDefinition.ContainerDefinitions[0].Secrets[0].Name, name, "Expected secret name to be %s", name)
 }
 
 // Test ECS on Fargate with ephemeral volumes
 func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 	name := getName()
 	lbType := "network"
-	terraformOptions := getTfOpts(name, "FARGATE", true, false, "", true, 8080, lbType, false)
+	terraformOptions := getTfOpts(name, "FARGATE", true, false, "", true, 8080, lbType, false, false)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
@@ -275,30 +313,15 @@ func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 	validateEcsTags(t, ecsClient, tfOut.ecsServiceArn, "ECS Service")
 	validateEcsTags(t, ecsClient, tfOut.ecsTaskDefinitionArn, "ECS Task")
 
-	// Get a list of tasks to check
-	tasksInput := &ecs.ListTasksInput{
-		Cluster:     &tfOut.ecsClusterName,
-		ServiceName: &tfOut.ecsServiceName,
-	}
-	listTasksResp, err := ecsClient.ListTasks(context.Background(), tasksInput)
-	assert.NoError(t, err, "Expected no error for ListTasks")
-	assert.Greater(t, len(listTasksResp.TaskArns), 0, "Expected at least one task running")
-
-	// Use the first task to check the volume definition
-	describeInput := &ecs.DescribeTasksInput{
-		Cluster: &tfOut.ecsClusterName,
-		Tasks:   []string{listTasksResp.TaskArns[0]},
-	}
-	taskResp, err := ecsClient.DescribeTasks(context.Background(), describeInput)
-	assert.NoError(t, err, "Expected no error for DescribeTasks")
-	assert.Greater(t, len(taskResp.Tasks), 0, "Expected at least one task running")
+	// Get the first running task to check against
+	task := getFirstTask(t, ecsClient, tfOut)
 
 	// Look at first task. Yes CPU and memory are strings.
-	assert.Equal(t, "256", aws.ToString(taskResp.Tasks[0].Cpu), "Expected 256 CPU units")
-	assert.Equal(t, "512", aws.ToString(taskResp.Tasks[0].Memory), "Expected 512 Memory units")
-	assert.Equal(t, int32(21), taskResp.Tasks[0].EphemeralStorage.SizeInGiB, "Expected 21 GiB ephemeral storage")
-	assert.Equal(t, int32(21), taskResp.Tasks[0].FargateEphemeralStorage.SizeInGiB, "Expected 21 GiB Fargate ephemeral storage")
-	assert.Equal(t, ecsTypes.LaunchType("FARGATE"), taskResp.Tasks[0].LaunchType, "Expected Fargate launch type")
+	assert.Equal(t, "256", aws.ToString(task.Cpu), "Expected 256 CPU units")
+	assert.Equal(t, "512", aws.ToString(task.Memory), "Expected 512 Memory units")
+	assert.Equal(t, int32(21), task.EphemeralStorage.SizeInGiB, "Expected 21 GiB ephemeral storage")
+	assert.Equal(t, int32(21), task.FargateEphemeralStorage.SizeInGiB, "Expected 21 GiB Fargate ephemeral storage")
+	assert.Equal(t, ecsTypes.LaunchType("FARGATE"), task.LaunchType, "Expected Fargate launch type")
 
 	// Check the LB configs and tags
 	lbClient := elasticloadbalancingv2.NewFromConfig(cfg)
@@ -310,7 +333,7 @@ func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 func TestECSEc2WithLoadBalancer(t *testing.T) {
 	name := getName()
 	lbType := "application"
-	terraformOptions := getTfOpts(name, "EC2", true, true, "c7gd.medium", false, 8080, lbType, false)
+	terraformOptions := getTfOpts(name, "EC2", true, true, "c7gd.medium", false, 8080, lbType, false, false)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
@@ -341,28 +364,13 @@ func TestECSEc2WithLoadBalancer(t *testing.T) {
 	validateEcsTags(t, ecsClient, tfOut.ecsServiceArn, "ECS Service")
 	validateEcsTags(t, ecsClient, tfOut.ecsTaskDefinitionArn, "ECS Task")
 
-	// Get a list of tasks to check
-	tasksInput := &ecs.ListTasksInput{
-		Cluster:     &tfOut.ecsClusterName,
-		ServiceName: &tfOut.ecsServiceName,
-	}
-	listTasksResp, err := ecsClient.ListTasks(context.Background(), tasksInput)
-	assert.NoError(t, err, "Expected no error for ListTasks")
-	assert.Greater(t, len(listTasksResp.TaskArns), 0, "Expected at least one task running")
-
-	// Use the first task to check the volume definition
-	describeInput := &ecs.DescribeTasksInput{
-		Cluster: &tfOut.ecsClusterName,
-		Tasks:   []string{listTasksResp.TaskArns[0]},
-	}
-	taskResp, err := ecsClient.DescribeTasks(context.Background(), describeInput)
-	assert.NoError(t, err, "Expected no error for DescribeTasks")
-	assert.Greater(t, len(taskResp.Tasks), 0, "Expected at least one task running")
+	// Get the first running task to check against
+	task := getFirstTask(t, ecsClient, tfOut)
 
 	// Look at first task. Yes CPU and memory are strings.
-	assert.Equal(t, "256", aws.ToString(taskResp.Tasks[0].Cpu), "Expected 256 CPU units")
-	assert.Equal(t, "512", aws.ToString(taskResp.Tasks[0].Memory), "Expected 512 Memory units")
-	assert.Equal(t, ecsTypes.LaunchType("EC2"), taskResp.Tasks[0].LaunchType, "Expected Fargate launch type")
+	assert.Equal(t, "256", aws.ToString(task.Cpu), "Expected 256 CPU units")
+	assert.Equal(t, "512", aws.ToString(task.Memory), "Expected 512 Memory units")
+	assert.Equal(t, ecsTypes.LaunchType("EC2"), task.LaunchType, "Expected Fargate launch type")
 
 	// get the ASG and check it
 	asgClient := autoscaling.NewFromConfig(cfg)
