@@ -11,7 +11,7 @@ locals {
   # For example:
   #   arn:aws:secretsmanager:us-west-2:123456789012:secret:my-secret-123456::AWSPREVIOUS:
   # becomes:
-  #   arn:aws:secretsmanager:us-west-2:123456789012:secret:my-secret-123
+  #   arn:aws:secretsmanager:us-west-2:123456789012:secret:my-secret-123456
   secret_arns = [
     for secret in var.container_secrets : join(":",
       slice(split(":", secret.secret_arn), 0, 7)
