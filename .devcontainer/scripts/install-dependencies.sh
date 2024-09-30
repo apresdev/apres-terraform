@@ -22,3 +22,6 @@ echo "alias rebase='git checkout main && git fetch origin && git rebase origin/m
 # Save some disk space by reusing the plugin cache directory
 mkdir -p /home/vscode/.terraform.d/plugin-cache
 echo 'plugin_cache_dir   = "$HOME/.terraform.d/plugin-cache"' >/home/vscode/.tofurc
+
+# Dubious ownership fix
+it config --global --add safe.directory /workspaces/apres-terraform
