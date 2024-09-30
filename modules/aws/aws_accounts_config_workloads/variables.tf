@@ -7,3 +7,12 @@ variable "enable_api_gateway_logging" {
   type        = bool
   default     = false
 }
+
+variable "retain_load_balancer_logs_days" {
+  description = <<EOF
+    Number of days to retain the load balancer logs in the S3 bucket. By default, this is set to 365.
+    Setting this to -1 will retain logs indefinitely.
+  EOF
+  type        = number
+  default     = 365
+}
