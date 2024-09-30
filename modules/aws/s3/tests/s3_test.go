@@ -32,8 +32,8 @@ func TestS3(t *testing.T) {
 
 		// Variables to pass to our Terraform code using -var options
 		Vars: map[string]interface{}{
-			"name":           bucketNameInput,
-			"environment":    environment,
+			"name":        bucketNameInput,
+			"environment": environment,
 		},
 	}
 
@@ -105,4 +105,17 @@ func TestS3(t *testing.T) {
 	valid, bad := awstagging.VerifyTagsValueFormat(tags)
 	assert.True(t, valid, fmt.Sprintf("Tags have invalid values: %v", bad))
 
+	// Check Lifecycle Rule
+	lfcResp, err := svc.GetBucketLifecycleConfiguration(context.TODO(), &s3.GetBucketLifecycleConfigurationInput{Bucket: &expectedBucketName})
+	assert.NoError(t, err, "Expected no error on GetBucketLifecycleConfiguration")
+	assert.Len(t, lfcResp.Rules, 1, "Expected one lifecycle rule")
+	rule := lfcResp.Rules[0]
+	assert.Equal(t, rule.Status, types.ExpirationStatusEnabled, "Expected lifecycle rule to be enabled")
+	assert.Equal(t, types.LifecycleRuleFilter(&types.LifecycleRuleFilterMemberPrefix{Value: ""}), rule.Filter, "Expected no filter on lifecycle rule")
+	assert.Equal(t, int32(7), *rule.AbortIncompleteMultipartUpload.DaysAfterInitiation, "Expected 7 days for incomplete multipart upload")
+	assert.Nil(t, rule.Expiration.Date, "Expected no expiration date")
+	assert.Nil(t, rule.NoncurrentVersionTransitions, "Expected no noncurrent version transitions")
+	assert.Len(t, rule.Transitions, 1, "Expected one transition")
+	assert.Equal(t, int32(0), *rule.Transitions[0].Days, "Expected 0 days for transition")
+	assert.Equal(t, types.TransitionStorageClassIntelligentTiering, rule.Transitions[0].StorageClass, "Expected Intelligent Tiering for transition")
 }

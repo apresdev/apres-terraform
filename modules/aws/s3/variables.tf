@@ -130,3 +130,57 @@ variable "owner" {
     error_message = "Owner must be alphanumeric and capitalized."
   }
 }
+
+variable "lifecycle_rule" {
+  description = <<EOF
+  S3 Lifecycle rules are very complex, this module supports only a subset of the rules. Since there can
+  only be one set of Lifecycle Rules on a bucket, you have two options:
+  1. Set the `enabled` flag to true (the default) and use the values here to configure the rules.
+  2. Set the `enabled` flag to false and provide your own rules using the aws_s3_bucket_lifecycle_configuration
+     resource. Do this if your requirements are more complex than what is supported here.
+
+  Attempting to use both the default rule and your own rule will result a perpetual difference in configuration.
+
+  Further reading:
+  * AWS Docs: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+  * Terraform Docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration
+
+  This is a map of the following keys:
+  * enabled: Enable the rules, defaults to true. if you are providing your own rules set this to false
+    and the remainder of the values will be ignored.
+  * abort_incomplete_multipart_upload_days: Number of days after which to abort
+    incomplete multipart uploads. Defaults to 7. -1 means never. See the
+    abort_incomplete_multipart_upload.days_after_initiation field in the life cycle configuration for details.
+  * transition_to_intelligent_tier_days: Number of days after which to transition objects
+    to the Intelligent Tier storage class. Defaults to 0 which means immediately. -1 means never.
+  * object_delete_days: Number of days after which to delete objects. Valid values are -1 to disable,
+    or greater than 0. See the expiration.days field in the life cycle configuration for details.
+  * prefix: The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"
+  * old_versions_delete_days: Number of days after which to expire old versions of objects. Defaults to 30.
+    -1 means never. See the noncurrent_version_expiration.days field in the life cycle configuration for details.
+  EOF
+  type = object({
+    enabled                                = bool
+    abort_incomplete_multipart_upload_days = number
+    transition_to_intelligent_tier_days    = number
+    object_delete_days                     = number
+    prefix                                 = string
+    old_versions_delete_days               = number
+  })
+  default = {
+    enabled                                = true
+    abort_incomplete_multipart_upload_days = 7
+    transition_to_intelligent_tier_days    = 0
+    object_delete_days                     = -1
+    prefix                                 = ""
+    old_versions_delete_days               = 30
+  }
+  validation {
+    condition     = var.lifecycle_rule.old_versions_delete_days == -1 || var.lifecycle_rule.old_versions_delete_days > 0
+    error_message = "old_versions_delete_days must be -1 to disable, or greater than 0."
+  }
+  validation {
+    condition     = var.lifecycle_rule.object_delete_days == -1 || var.lifecycle_rule.object_delete_days > 0
+    error_message = "object_delete_days must be -1 to disable, or greater than 0."
+  }
+}

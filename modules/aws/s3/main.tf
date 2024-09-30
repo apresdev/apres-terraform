@@ -117,3 +117,29 @@ data "aws_iam_policy_document" "deny_unsecure_communications" {
   }
   depends_on = [aws_s3_bucket.default]
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "default" {
+  count  = var.lifecycle_rule.enabled ? 1 : 0
+  bucket = aws_s3_bucket.default.bucket
+  rule {
+    id     = "ApresS3DefaultRule"
+    status = "Enabled"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = var.lifecycle_rule.abort_incomplete_multipart_upload_days == -1 ? null : var.lifecycle_rule.abort_incomplete_multipart_upload_days
+    }
+    expiration {
+      days = var.lifecycle_rule.object_delete_days == -1 ? null : var.lifecycle_rule.object_delete_days
+    }
+    filter {
+      prefix = var.lifecycle_rule.prefix
+    }
+    noncurrent_version_expiration {
+      noncurrent_days = var.lifecycle_rule.old_versions_delete_days == -1 ? null : var.lifecycle_rule.old_versions_delete_days
+    }
+    transition {
+      # Transition to Intelligent Tier
+      days          = var.lifecycle_rule.transition_to_intelligent_tier_days == -1 ? null : var.lifecycle_rule.transition_to_intelligent_tier_days
+      storage_class = var.lifecycle_rule.transition_to_intelligent_tier_days == -1 ? null : "INTELLIGENT_TIERING"
+    }
+  }
+}

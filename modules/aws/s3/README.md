@@ -74,13 +74,13 @@ module "s3" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.68.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.39.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.69.0 |
 
 ## Modules
 
@@ -91,6 +91,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_s3_bucket.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_lifecycle_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_policy.deny_unsecure_communications](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
@@ -109,6 +110,7 @@ No modules.
 | <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
 | <a name="input_encryption_sse_algorithm"></a> [encryption\_sse\_algorithm](#input\_encryption\_sse\_algorithm) | The server-side encryption algorithm to use. Defaults to 'aws:kms'. | `string` | `"aws:kms"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
+| <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | S3 Lifecycle rules are very complex, this module supports only a subset of the rules. Since there can<br>  only be one set of Lifecycle Rules on a bucket, you have two options:<br>  1. Set the `enabled` flag to true (the default) and use the values here to configure the rules.<br>  2. Set the `enabled` flag to false and provide your own rules using the aws\_s3\_bucket\_lifecycle\_configuration<br>     resource. Do this if your requirements are more complex than what is supported here.<br><br>  Attempting to use both the default rule and your own rule will result a perpetual difference in configuration.<br><br>  Further reading:<br>  * AWS Docs: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html<br>  * Terraform Docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration<br><br>  This is a map of the following keys:<br>  * enabled: Enable the rules, defaults to true. if you are providing your own rules set this to false<br>    and the remainder of the values will be ignored.<br>  * abort\_incomplete\_multipart\_upload\_days: Number of days after which to abort<br>    incomplete multipart uploads. Defaults to 7. -1 means never. See the<br>    abort\_incomplete\_multipart\_upload.days\_after\_initiation field in the life cycle configuration for details.<br>  * transition\_to\_intelligent\_tier\_days: Number of days after which to transition objects<br>    to the Intelligent Tier storage class. Defaults to 0 which means immediately. -1 means never.<br>  * object\_delete\_days: Number of days after which to delete objects. Valid values are -1 to disable,<br>    or greater than 0. See the expiration.days field in the life cycle configuration for details.<br>  * prefix: The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"<br>  * old\_versions\_delete\_days: Number of days after which to expire old versions of objects. Defaults to 30.<br>    -1 means never. See the noncurrent\_version\_expiration.days field in the life cycle configuration for details. | <pre>object({<br>    enabled                                = bool<br>    abort_incomplete_multipart_upload_days = number<br>    transition_to_intelligent_tier_days    = number<br>    object_delete_days                     = number<br>    prefix                                 = string<br>    old_versions_delete_days               = number<br>  })</pre> | <pre>{<br>  "abort_incomplete_multipart_upload_days": 7,<br>  "enabled": true,<br>  "object_delete_days": -1,<br>  "old_versions_delete_days": 30,<br>  "prefix": "",<br>  "transition_to_intelligent_tier_days": 0<br>}</pre> | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
