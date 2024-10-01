@@ -46,7 +46,6 @@ resource "aws_s3_bucket" "default" {
       Name = local.bucket_name
     })
   )
-  depends_on = [data.aws_caller_identity.current]
 }
 
 resource "aws_s3_bucket_versioning" "default" {
@@ -56,25 +55,21 @@ resource "aws_s3_bucket_versioning" "default" {
     status     = var.versioning ? "Enabled" : "Disabled" # Ensure AWS S3 object versioning is enabled
     mfa_delete = var.mfa_delete ? "Enabled" : "Disabled" # Ensure S3 bucket MFA Delete is enabled
   }
-
-  depends_on = [aws_s3_bucket.default]
 }
 
 resource "aws_s3_bucket_public_access_block" "default" {
-  bucket = aws_s3_bucket.default.bucket
+  bucket = aws_s3_bucket.default.id
 
   restrict_public_buckets = true # Ensure S3 bucket RestrictPublicBucket is set to True
   ignore_public_acls      = true # Ensure S3 bucket IgnorePublicAcls is set to True
   block_public_policy     = true # Ensure S3 Bucket BlockPublicPolicy is set to True
   block_public_acls       = true # Ensure S3 bucket has block public ACLS enabled
-
-  depends_on = [aws_s3_bucket.default]
 }
 
 # Ensure data stored in the S3 bucket is securely encrypted at rest
 resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
   #checkov:skip=CKV2_AWS_67:False positive, no CMK is used here to require rotation
-  bucket = aws_s3_bucket.default.bucket
+  bucket = aws_s3_bucket.default.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -82,8 +77,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
       kms_master_key_id = var.encryption_kms_key_id
     }
   }
-
-  depends_on = [aws_s3_bucket.default]
 }
 
 # Ensure data is transported from the S3 bucket securely
@@ -115,5 +108,31 @@ data "aws_iam_policy_document" "deny_unsecure_communications" {
       values   = ["false"]
     }
   }
-  depends_on = [aws_s3_bucket.default]
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "default" {
+  #checkov:skip=CKV_AWS_300:False positive, abort failed uploads is configured by default.
+  count  = var.lifecycle_rule.enabled ? 1 : 0
+  bucket = aws_s3_bucket.default.id
+  rule {
+    id     = "ApresDefaultLifecycleRule"
+    status = "Enabled"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = var.lifecycle_rule.abort_incomplete_multipart_upload_days == -1 ? null : var.lifecycle_rule.abort_incomplete_multipart_upload_days
+    }
+    expiration {
+      days = var.lifecycle_rule.object_delete_days == -1 ? null : var.lifecycle_rule.object_delete_days
+    }
+    filter {
+      prefix = var.lifecycle_rule.prefix
+    }
+    noncurrent_version_expiration {
+      noncurrent_days = var.lifecycle_rule.old_versions_delete_days == -1 ? null : var.lifecycle_rule.old_versions_delete_days
+    }
+    transition {
+      # Transition to Intelligent Tier
+      days          = var.lifecycle_rule.transition_to_intelligent_tier_days == -1 ? null : var.lifecycle_rule.transition_to_intelligent_tier_days
+      storage_class = var.lifecycle_rule.transition_to_intelligent_tier_days == -1 ? null : "INTELLIGENT_TIERING"
+    }
+  }
 }

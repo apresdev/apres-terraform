@@ -6,4 +6,7 @@ module "s3" {
   owner       = "Testing"
   application = "UnitTests"
   component   = "S3"
+  lifecycle_rule = {
+    enabled = true
+  }
 }
