@@ -116,6 +116,6 @@ func TestS3(t *testing.T) {
 	assert.Nil(t, rule.Expiration.Date, "Expected no expiration date")
 	assert.Nil(t, rule.NoncurrentVersionTransitions, "Expected no noncurrent version transitions")
 	assert.Len(t, rule.Transitions, 1, "Expected one transition")
-	assert.Equal(t, int32(0), *rule.Transitions[0].Days, "Expected 0 days for transition")
+	assert.Equal(t, int32(1), *rule.Transitions[0].Days, "Expected 1 day for transition")
 	assert.Equal(t, types.TransitionStorageClassIntelligentTiering, rule.Transitions[0].StorageClass, "Expected Intelligent Tiering for transition")
 }

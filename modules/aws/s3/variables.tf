@@ -145,42 +145,47 @@ variable "lifecycle_rule" {
   * AWS Docs: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
   * Terraform Docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration
 
+  Note that lifecycle rules are only executed once per day. In addition S3 rounds transition or expiration dates
+  up to midnight UTC the next day. So if you set a transition to intelligent tier to 1 day, it may take up
+  to three days for the transition to complete. See https://repost.aws/knowledge-center/s3-lifecycle-rule-delay
+  for a detailed explanation.
+
   This is a map of the following keys:
-  * enabled: Enable the rules, defaults to true. if you are providing your own rules set this to false
+  * enabled - (Optional) Enable the rules, defaults to true. if you are providing your own rules set this to false
     and the remainder of the values will be ignored.
-  * abort_incomplete_multipart_upload_days: Number of days after which to abort
+  * abort_incomplete_multipart_upload_days - (Optional) Number of days after which to abort
     incomplete multipart uploads. Defaults to 7. -1 means never. See the
     abort_incomplete_multipart_upload.days_after_initiation field in the life cycle configuration for details.
-  * transition_to_intelligent_tier_days: Number of days after which to transition objects
-    to the Intelligent Tier storage class. Defaults to 0 which means immediately. -1 means never.
-  * object_delete_days: Number of days after which to delete objects. Valid values are -1 to disable,
+  * object_delete_days - (Optional) Number of days after which to delete objects. Valid values are -1 to disable,
     or greater than 0. See the expiration.days field in the life cycle configuration for details.
-  * prefix: The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"
-  * old_versions_delete_days: Number of days after which to expire old versions of objects. Defaults to 30.
+  * old_versions_delete_days - (Optional) Number of days after which to expire old versions of objects. Defaults to 30.
     -1 means never. See the noncurrent_version_expiration.days field in the life cycle configuration for details.
+  * prefix - (Optional) The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"
+  * transition_to_intelligent_tier_days - (Optional) Number of days after which to transition objects
+    to the Intelligent Tier storage class. Defaults to 1. -1 means never.
   EOF
   type = object({
-    enabled                                = bool
-    abort_incomplete_multipart_upload_days = number
-    transition_to_intelligent_tier_days    = number
-    object_delete_days                     = number
-    prefix                                 = string
-    old_versions_delete_days               = number
+    enabled                                = optional(bool, true)
+    abort_incomplete_multipart_upload_days = optional(number, 7)
+    object_delete_days                     = optional(number, -1)
+    old_versions_delete_days               = optional(number, 30)
+    prefix                                 = optional(string, "")
+    transition_to_intelligent_tier_days    = optional(number, 1)
   })
-  default = {
-    enabled                                = true
-    abort_incomplete_multipart_upload_days = 7
-    transition_to_intelligent_tier_days    = 0
-    object_delete_days                     = -1
-    prefix                                 = ""
-    old_versions_delete_days               = 30
+  validation {
+    condition     = var.lifecycle_rule.abort_incomplete_multipart_upload_days == -1 || var.lifecycle_rule.abort_incomplete_multipart_upload_days > 0
+    error_message = "abort_incomplete_multipart_upload_days must be -1 to disable, or greater than 0."
+  }
+  validation {
+    condition     = var.lifecycle_rule.object_delete_days == -1 || var.lifecycle_rule.object_delete_days > 0
+    error_message = "object_delete_days must be -1 to disable, or greater than 0."
   }
   validation {
     condition     = var.lifecycle_rule.old_versions_delete_days == -1 || var.lifecycle_rule.old_versions_delete_days > 0
     error_message = "old_versions_delete_days must be -1 to disable, or greater than 0."
   }
   validation {
-    condition     = var.lifecycle_rule.object_delete_days == -1 || var.lifecycle_rule.object_delete_days > 0
-    error_message = "object_delete_days must be -1 to disable, or greater than 0."
+    condition     = var.lifecycle_rule.transition_to_intelligent_tier_days == -1 || var.lifecycle_rule.transition_to_intelligent_tier_days > 0
+    error_message = "transition_to_intelligent_tier_days must be -1 to disable, or greater than 0."
   }
 }

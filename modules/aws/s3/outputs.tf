@@ -4,8 +4,13 @@ output "bucket_arn" {
 }
 
 output "bucket_name" {
-  value       = aws_s3_bucket.default.bucket
+  value       = aws_s3_bucket.default.id
   description = "The name of the S3 bucket."
+}
+
+output "bucket_id" {
+  value       = aws_s3_bucket.default.id
+  description = "The ID of the bucket, same as the name."
 }
 
 output "bucket_domain_name" {
