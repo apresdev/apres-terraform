@@ -134,10 +134,12 @@ variable "owner" {
 variable "lifecycle_rule" {
   description = <<EOF
   S3 Lifecycle rules are very complex, this module supports only a subset of the rules. Since there can
-  only be one set of Lifecycle Rules on a bucket, you have two options:
-  1. Set the `enabled` flag to true (the default) and use the values here to configure the rules.
-  2. Set the `enabled` flag to false and provide your own rules using the aws_s3_bucket_lifecycle_configuration
-     resource. Do this if your requirements are more complex than what is supported here.
+  only be one set of Lifecycle Rules on a bucket, you have three options:
+  1. Do not use this variable and accept the defaults.
+  1. Use the attributes in this variable to configure the rules.
+  2. Set the `enabled` attribute to false and provide your own rules using the
+     aws_s3_bucket_lifecycle_configuration resource. Do this if your requirements are
+     more complex than what is supported here.
 
   Attempting to use both the default rule and your own rule will result a perpetual difference in configuration.
 

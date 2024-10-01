@@ -59,13 +59,15 @@ The following best practices ARE NOT implemented:
 
 ## Example
 
-### Simple bucket
+### Simple bucket with all the defaults
 ```hcl
 module "s3" {
-  source        = ""git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
-  environment   = "Dev"
-  name          = "my-bucket"
-  versioning    = true
+  source       = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
+  name         = "my-bucket"
+  environment  = "Dev"
+  application  = "MyApplication"
+  component    = "Storage"
+  owner        = "Engineering"
 }
 ```
 
@@ -74,8 +76,11 @@ Delete objects after 365 days, do not transition to Intelligent Tiering
 ```hcl
 module "s3" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
-  environment = "Dev"
   name        = "my-bucket"
+  environment = "Dev"
+  application = "MyApplication"
+  component   = "Storage"
+  owner       = "Engineering"
   lifecycle_rule = {
     enabled                                = true
     object_delete_days                     = 365
@@ -88,8 +93,11 @@ module "s3" {
 ```hcl
 module "s3" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
-  environment = "Dev"
   name        = "my-bucket"
+  environment = "Dev"
+  application = "MyApplication"
+  component   = "Storage"
+  owner       = "Engineering"
   lifecycle_rule = {
     enabled = false
   }
@@ -149,7 +157,7 @@ No modules.
 | <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
 | <a name="input_encryption_sse_algorithm"></a> [encryption\_sse\_algorithm](#input\_encryption\_sse\_algorithm) | The server-side encryption algorithm to use. Defaults to 'aws:kms'. | `string` | `"aws:kms"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
-| <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | S3 Lifecycle rules are very complex, this module supports only a subset of the rules. Since there can<br>  only be one set of Lifecycle Rules on a bucket, you have two options:<br>  1. Set the `enabled` flag to true (the default) and use the values here to configure the rules.<br>  2. Set the `enabled` flag to false and provide your own rules using the aws\_s3\_bucket\_lifecycle\_configuration<br>     resource. Do this if your requirements are more complex than what is supported here.<br><br>  Attempting to use both the default rule and your own rule will result a perpetual difference in configuration.<br><br>  Further reading:<br>  * AWS Docs: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html<br>  * Terraform Docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration<br><br>  Note that lifecycle rules are only executed once per day. In addition S3 rounds transition or expiration dates<br>  up to midnight UTC the next day. So if you set a transition to intelligent tier to 1 day, it may take up<br>  to three days for the transition to complete. See https://repost.aws/knowledge-center/s3-lifecycle-rule-delay<br>  for a detailed explanation.<br><br>  This is a map of the following keys:<br>  * enabled - (Optional) Enable the rules, defaults to true. if you are providing your own rules set this to false<br>    and the remainder of the values will be ignored.<br>  * abort\_incomplete\_multipart\_upload\_days - (Optional) Number of days after which to abort<br>    incomplete multipart uploads. Defaults to 7. -1 means never. See the<br>    abort\_incomplete\_multipart\_upload.days\_after\_initiation field in the life cycle configuration for details.<br>  * object\_delete\_days - (Optional) Number of days after which to delete objects. Valid values are -1 to disable,<br>    or greater than 0. See the expiration.days field in the life cycle configuration for details.<br>  * old\_versions\_delete\_days - (Optional) Number of days after which to expire old versions of objects. Defaults to 30.<br>    -1 means never. See the noncurrent\_version\_expiration.days field in the life cycle configuration for details.<br>  * prefix - (Optional) The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"<br>  * transition\_to\_intelligent\_tier\_days - (Optional) Number of days after which to transition objects<br>    to the Intelligent Tier storage class. Defaults to 1. -1 means never. | <pre>object({<br>    enabled                                = optional(bool, true)<br>    abort_incomplete_multipart_upload_days = optional(number, 7)<br>    object_delete_days                     = optional(number, -1)<br>    old_versions_delete_days               = optional(number, 30)<br>    prefix                                 = optional(string, "")<br>    transition_to_intelligent_tier_days    = optional(number, 1)<br>  })</pre> | n/a | yes |
+| <a name="input_lifecycle_rule"></a> [lifecycle\_rule](#input\_lifecycle\_rule) | S3 Lifecycle rules are very complex, this module supports only a subset of the rules. Since there can<br>  only be one set of Lifecycle Rules on a bucket, you have three options:<br>  1. Do not use this variable and accept the defaults.<br>  1. Use the attributes in this variable to configure the rules.<br>  2. Set the `enabled` attribute to false and provide your own rules using the<br>     aws\_s3\_bucket\_lifecycle\_configuration resource. Do this if your requirements are<br>     more complex than what is supported here.<br><br>  Attempting to use both the default rule and your own rule will result a perpetual difference in configuration.<br><br>  Further reading:<br>  * AWS Docs: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html<br>  * Terraform Docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration<br><br>  Note that lifecycle rules are only executed once per day. In addition S3 rounds transition or expiration dates<br>  up to midnight UTC the next day. So if you set a transition to intelligent tier to 1 day, it may take up<br>  to three days for the transition to complete. See https://repost.aws/knowledge-center/s3-lifecycle-rule-delay<br>  for a detailed explanation.<br><br>  This is a map of the following keys:<br>  * enabled - (Optional) Enable the rules, defaults to true. if you are providing your own rules set this to false<br>    and the remainder of the values will be ignored.<br>  * abort\_incomplete\_multipart\_upload\_days - (Optional) Number of days after which to abort<br>    incomplete multipart uploads. Defaults to 7. -1 means never. See the<br>    abort\_incomplete\_multipart\_upload.days\_after\_initiation field in the life cycle configuration for details.<br>  * object\_delete\_days - (Optional) Number of days after which to delete objects. Valid values are -1 to disable,<br>    or greater than 0. See the expiration.days field in the life cycle configuration for details.<br>  * old\_versions\_delete\_days - (Optional) Number of days after which to expire old versions of objects. Defaults to 30.<br>    -1 means never. See the noncurrent\_version\_expiration.days field in the life cycle configuration for details.<br>  * prefix - (Optional) The prefix to apply the lifecycle rule to. Defaults to "". An example is "logs/"<br>  * transition\_to\_intelligent\_tier\_days - (Optional) Number of days after which to transition objects<br>    to the Intelligent Tier storage class. Defaults to 1. -1 means never. | <pre>object({<br>    enabled                                = optional(bool, true)<br>    abort_incomplete_multipart_upload_days = optional(number, 7)<br>    object_delete_days                     = optional(number, -1)<br>    old_versions_delete_days               = optional(number, 30)<br>    prefix                                 = optional(string, "")<br>    transition_to_intelligent_tier_days    = optional(number, 1)<br>  })</pre> | n/a | yes |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
