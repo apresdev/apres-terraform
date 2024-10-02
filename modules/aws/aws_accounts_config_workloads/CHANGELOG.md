@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.3 - 2024-10-02
+
+Fix typos in NLB region lookup.
+
 ## 0.6.2 - 2024-10-02
 
 NLBs use a different policy than ALBs, so add that and set encryption to AES256.

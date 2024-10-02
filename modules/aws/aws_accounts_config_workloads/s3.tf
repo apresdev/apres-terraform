@@ -3,28 +3,29 @@
 # for the discussion. For regions prior to 2022, the bucket policy includes an account ID.
 locals {
   pre2022_regions = {
-    "us-east-1" : "127311923021",
-    "us-east-2" : "033677994240",
-    "us-west-1" : "027434742980",
-    "us-east-2" : "797873946194",
-    "af-south-1" : "098369216593",
-    "ap-east-1" : "754344448648",
-    "ap-southeast-3" : "589379963580",
-    "ap-south=1" : "718504428378",
-    "ap-northeast-3" : "383597477331",
-    "ap-northeast-2" : "600734575887",
-    "ap-southeast-1" : "114774131450",
-    "ap-southeast-2" : "783225319266",
-    "ap-northeast-1" : "582318560864",
-    "ca-central-1" : "985666609251",
-    "eu-central-1" : "054676820928",
-    "eu-west-1" : "156460612806",
-    "eu-west-2" : "652711504416",
-    "eu-south-1" : "635631232127",
-    "eu-west-3" : "009996457667",
-    "eu-north-1" : "897822967062",
-    "me-south-1" : "076674570225",
-    "sa-east-1" : "507241528517",
+    "us-east-1" : "127311923021",      # US East (N. Virginia) – 127311923021
+    "us-east-2" : "033677994240",      # US East (Ohio) – 033677994240
+    "us-west-1" : "027434742980",      # US West (N. California) – 027434742980
+    "us-west-2" : "797873946194",      # US West (Oregon) – 797873946194
+    "af-south-1" : "098369216593",     # Africa (Cape Town) – 098369216593
+    "ap-east-1" : "754344448648",      # Asia Pacific (Hong Kong) – 754344448648
+    "ap-southeast-3" : "589379963580", # Asia Pacific (Jakarta) – 589379963580
+    "ap-south-1" : "718504428378",     # Asia Pacific (Mumbai) – 718504428378
+    "ap-northeast-3" : "383597477331", # Asia Pacific (Osaka) – 383597477331
+    "ap-northeast-2" : "600734575887", # Asia Pacific (Seoul) – 600734575887
+    "ap-southeast-1" : "114774131450", # Asia Pacific (Singapore) – 114774131450
+    "ap-southeast-2" : "783225319266", # Asia Pacific (Sydney) – 783225319266
+    "ap-northeast-1" : "582318560864", # Asia Pacific (Tokyo) – 582318560864
+    "ca-central-1" : "985666609251",   # Canada (Central) – 985666609251
+    "eu-central-1" : "054676820928",   # Europe (Frankfurt) – 054676820928
+    "eu-west-1" : "156460612806",      # Europe (Ireland) – 156460612806
+    "eu-west-2" : "652711504416",      # Europe (London) – 652711504416
+    "eu-south-1" : "635631232127",     # Europe (Milan) – 635631232127
+    "eu-west-3" : "009996457667",      # Europe (Paris) – 009996457667
+    "eu-north-1" : "897822967062",     # Europe (Stockholm) – 897822967062
+    "me-south-1" : "076674570225",     # Middle East (Bahrain) – 076674570225
+    "sa-east-1" : "507241528517",      # South America (São Paulo) – 507241528517
+
   }
   is_pre2022_region = contains(keys(local.pre2022_regions), data.aws_region.current.name)
 }
@@ -85,6 +86,7 @@ data "aws_iam_policy_document" "pre2022_lb_bucket_policy" {
   source_policy_documents = [data.aws_iam_policy_document.nlb_bucket_policy.json]
   # Statement for ALB's prior to 2022
   statement {
+    sid    = "AllowALBToWriteAccessLogsPre2022"
     effect = "Allow"
     principals {
       type        = "AWS"
@@ -106,6 +108,7 @@ data "aws_iam_policy_document" "post2022_lb_bucket_policy" {
   source_policy_documents = [data.aws_iam_policy_document.nlb_bucket_policy.json]
   # Statement for ALB's prior to 2022
   statement {
+    sid    = "AllowALBToWriteAccessLogsPost2022"
     effect = "Allow"
     principals {
       type        = "Service"
