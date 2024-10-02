@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.0 - 2024-10-02
+
+Add a regional bucket for load balancer logs.
+
 ## 0.5.4 - 2024-08-15
 
 Bumping lambda_regional version.
