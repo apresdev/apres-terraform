@@ -1,4 +1,4 @@
-# The bucket policy differs depending if a region was available before 2022 or not.
+# The bucket policy statement for ALBs differs depending if a region was available before 2022 or not.
 # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html#attach-bucket-policy
 # for the discussion. For regions prior to 2022, the bucket policy includes an account ID.
 locals {
@@ -29,9 +29,61 @@ locals {
   is_pre2022_region = contains(keys(local.pre2022_regions), data.aws_region.current.name)
 }
 
+# This is the bucket policy for NLBs to log to S3, it doesn't matter if it's pre-2022 or post.
+data "aws_iam_policy_document" "nlb_bucket_policy" {
+  statement {
+    sid    = "AWSLogDeliveryAclCheckNLB"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
+    actions   = ["s3:GetBucketAcl"]
+    resources = [module.load_balancer_logs_bucket.bucket_arn]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"]
+    }
+  }
+  statement {
+    sid    = "AWSLogDeliveryWriteNLB"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
+    actions   = ["s3:PutObject"]
+    resources = ["${module.load_balancer_logs_bucket.bucket_arn}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"]
+    }
+  }
+}
+
+# S3 Bucket policy for regions created before 2022
 data "aws_iam_policy_document" "pre2022_lb_bucket_policy" {
-  # S3 Bucket policy for regions created before 2022
   count = local.is_pre2022_region ? 1 : 0
+  # Include the NLB statement
+  source_policy_documents = [data.aws_iam_policy_document.nlb_bucket_policy.json]
+  # Statement for ALB's prior to 2022
   statement {
     effect = "Allow"
     principals {
@@ -47,9 +99,12 @@ data "aws_iam_policy_document" "pre2022_lb_bucket_policy" {
   }
 }
 
+# S3 Bucket policy for regions created after 2022
 data "aws_iam_policy_document" "post2022_lb_bucket_policy" {
-  # S3 Bucket policy for regions created after 2022
   count = local.is_pre2022_region ? 0 : 1
+  # Include the NLB statement
+  source_policy_documents = [data.aws_iam_policy_document.nlb_bucket_policy.json]
+  # Statement for ALB's prior to 2022
   statement {
     effect = "Allow"
     principals {
@@ -81,6 +136,8 @@ module "load_balancer_logs_bucket" {
   owner       = "Engineering"
   # Disable default bucket policy, setting our own here.
   set_default_bucket_policy = false
+  # Must use AES256 encryption for LB logs
+  encryption_sse_algorithm = "AES256"
   # Use the default lifecycle rule to delete all logs after 365 days.
   lifecycle_rule = {
     enabled                                = true
