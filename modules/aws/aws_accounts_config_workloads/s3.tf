@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "pre2022_lb_bucket_policy" {
       "s3:PutObject"
     ]
     resources = [
-      module.load_balancer_logs_bucket.bucket_arn
+      "${module.load_balancer_logs_bucket.bucket_arn}/*"
     ]
   }
 }
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "post2022_lb_bucket_policy" {
       "s3:PutObject"
     ]
     resources = [
-      module.load_balancer_logs_bucket.bucket_arn
+      "${module.load_balancer_logs_bucket.bucket_arn}/*"
     ]
   }
 }
