@@ -7,6 +7,7 @@ Supports:
 * Fargate and EC2 Deployment
 * Creation of a Load Balancer - Network or Application - to load balance traffic to the service.
 * SSL termination on the load balancer
+* Access logs for the load balancer, see the [Load Balancer Access Logs](#load-balancer-access-logs) section for details.
 
 If setting up an ECS cluster with API Gateway in front, you will want:
 * An NLB - set var.load_balancer_type to `network` since API Gateway can only talk to an NLB.
@@ -30,10 +31,20 @@ _"Unable to assume the service linked role. Please verify that the ECS service l
 on first deploy, use the console to create a fake cluster. It may fail, but check in IAM for the role
  `AWSServiceRoleForECS`. If it appears, try the terraform deploy again.
 
-## TODO Items
+## Dependencies
 
-* Add access logging to the Load Balancer
-  [Issue 110](https://github.com/apresdev/apres-terraform/issues/110)
+This depends on the aws_accounts_config_workloads module to be deployed in the account/region, at least version 0.6.
+
+## Load Balancer Access Logs
+
+The logs will be stored in a separate bucket created by the aws_accounts_config_workloads module, named
+`<account-id>-workloadconfig-<region>-load-balancer-logs`. The path for the access logs is defined by AWS
+and described in the
+[Access logs for your Application Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-log-file-format)
+or [Access logs for your Network Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-access-logs.html)
+documents.
+
+## TODO Items
 * Add ability to scale up/down by more than 1 EC2 instance
   [Issue 111](https://github.com/apresdev/apres-terraform/issues/111)
 

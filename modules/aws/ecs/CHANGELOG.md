@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.1 - 2024-10-02
+
+Adds support for writing load balancer access logs to S3.
+
 ## 1.1.0 - 2024-09-26
 
 Add support for securely delivering container secrets using Secrets Manager.

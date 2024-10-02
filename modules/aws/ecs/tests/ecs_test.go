@@ -173,6 +173,21 @@ func validateLoadBalancer(t *testing.T, lbType string, lbClient *elasticloadbala
 		assert.True(t, valid, fmt.Sprintf("Tags have invalid values for %s: %v", *tagDescription.ResourceArn, bad))
 	}
 
+	// Verify logging is setup
+	loggingResp, err := lbClient.DescribeLoadBalancerAttributes(context.Background(),
+		&elasticloadbalancingv2.DescribeLoadBalancerAttributesInput{
+			LoadBalancerArn: &tfOut.loadBalancerArn,
+		})
+	assert.NoError(t, err, "Expected no error for DescribeLoadBalancerAttributes")
+	foundLogging := false
+	for _, attr := range loggingResp.Attributes {
+		if *attr.Key == "access_logs.s3.enabled" {
+			assert.Equal(t, "true", *attr.Value, "Expected access logs to be enabled")
+			foundLogging = true
+		}
+	}
+	assert.True(t, foundLogging, "Did not find the attribute access_logs.s3.enabled on the load balancer.")
+
 	// check the health of the target group. We're going to wait for one to be healthy.
 	// since it can take a bit of time after service startup
 	healthy := false
