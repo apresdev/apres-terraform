@@ -1,7 +1,7 @@
 # Module for the S3 bucket
 module "s3" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/2.0.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.1"
   name        = lower(var.name)
   environment = var.environment
   owner       = var.owner
