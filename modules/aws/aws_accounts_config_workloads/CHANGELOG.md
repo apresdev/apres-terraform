@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.1 - 2024-10-02
+
+Fix path in bucket policy.
+
 ## 0.6.0 - 2024-10-02
 
 Add a regional bucket for load balancer logs.
