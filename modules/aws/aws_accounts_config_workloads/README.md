@@ -42,6 +42,14 @@ The following permissions are required to use this module, shown as a Policy sni
     "s3:*"
   ],
   "Resource": "arn:aws:s3:::*-load-balancer-logs"
+},
+{
+  "Sid": "DenyS3Delete",
+  "Effect": "Deny",
+  "Action": [
+    "s3:Delete*"
+  ],
+  "Resource": "arn:aws:s3:::*-load-balancer-logs"
 }
 ```
 
