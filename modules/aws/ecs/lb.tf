@@ -1,11 +1,12 @@
 locals {
-  name = "${var.name}-${var.environment}"
+  name                       = "${var.name}-${var.environment}"
+  lb_access_logs_bucket_name = "${data.aws_caller_identity.current.account_id}-workloadconfig-${data.aws_region.current.name}-load-balancer-logs"
 }
 resource "aws_lb" "default" {
   # TODO: Add access logging for NLB
   #checkov:skip=CKV_AWS_150:Not using deletion protection for now.
   #checkov:skip=CKV_AWS_91:Not enabling access logs for now.
-  #checkov:skip=CKV2_AWS_20:False positive, this is an NLB, not an ALB.
+  #checkov:skip=CKV2_AWS_20:False positive when this is an LB
   count = var.create_load_balancer ? 1 : 0
 
   # To create this we need the port set, so have a pre-condition check here so we don't fail half way through the deploy.
@@ -19,6 +20,13 @@ resource "aws_lb" "default" {
   name                             = local.name
   load_balancer_type               = var.load_balancer_type
   enable_cross_zone_load_balancing = "true"
+
+  # Access logs
+  access_logs {
+    # Leave prefix as the default.
+    bucket  = local.lb_access_logs_bucket_name
+    enabled = true
+  }
 
   # launch lbs in private subnets
   internal = true
