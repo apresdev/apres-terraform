@@ -93,6 +93,10 @@ variable "encryption_sse_algorithm" {
   description = "The server-side encryption algorithm to use. Defaults to 'aws:kms'."
   type        = string
   default     = "aws:kms"
+  validation {
+    condition     = var.encryption_sse_algorithm == "AES256" || var.encryption_sse_algorithm == "aws:kms" || var.encryption_sse_algorithm == "aws:kms:dsse"
+    error_message = "encryption_sse_algorithm must be 'AES256' or 'aws:kms' or 'aws:kms:dsse'."
+  }
 }
 
 variable "encryption_kms_key_id" {
