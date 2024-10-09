@@ -23,7 +23,7 @@ locals {
 # CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
 #
 # The following are applied if configured:
-# CKV_AWS_119: Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK 
+# CKV_AWS_119: Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK
 #
 resource "aws_dynamodb_table" "default" {
 
@@ -59,6 +59,19 @@ resource "aws_dynamodb_table" "default" {
     content {
       name = attribute.value.name
       type = attribute.value.type
+    }
+  }
+
+  dynamic "global_secondary_index" {
+    for_each = var.global_secondary_indices
+    content {
+      name               = global_secondary_index.value.name
+      hash_key           = global_secondary_index.value.hash_key
+      range_key          = global_secondary_index.value.range_key
+      write_capacity     = global_secondary_index.value.write_capacity
+      read_capacity      = global_secondary_index.value.read_capacity
+      projection_type    = global_secondary_index.value.projection_type
+      non_key_attributes = global_secondary_index.value.non_key_attributes
     }
   }
 
