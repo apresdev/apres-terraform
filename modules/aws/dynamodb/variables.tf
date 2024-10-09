@@ -45,6 +45,37 @@ variable "attributes" {
   default     = []
 }
 
+variable "global_secondary_indices" {
+  description = <<EOF
+  List of definitions for global secondary indices. Note that any Dynamo attributes must
+  be defined in the attributes variable.
+  Each "global_secondary_indices" variable has the following properties:
+    name - (Required) The name of the global secondary index.
+    hash_key - (Required) The attribute to use as the hash (partition) key. Must also be
+      defined as an attribute
+    range_key - (Optional) The attribute to use as the range (sort) key. Must also be
+      defined as an attribute
+    write_capacity - (Optional) The number of write units for this index. Do not specify
+      if using an on-demand (PAY_PER_REQUEST) table.
+    read_capacity - (Optional) The number of read units for this index. Do not specify
+      if using an on-demand table.
+    projection_type - (Optional) One of ALL, KEYS_ONLY, INCLUDE. Default is ALL.
+    non_key_attributes - (Optional) List of attributes that are copied from the table
+      into the index. These attributes are in addition to the primary key attributes and
+      index key attributes, and are projected into the index.
+  EOF
+  type = list(object({
+    name               = string
+    hash_key           = string
+    range_key          = optional(string, "")
+    write_capacity     = optional(number, null)
+    read_capacity      = optional(number, null)
+    projection_type    = optional(string, "ALL")
+    non_key_attributes = optional(list(string), [])
+  }))
+  default = []
+}
+
 variable "billing_mode" {
   description = <<EOF
   (Optional) Controls how you are charged for read and write throughput and how you manage capacity. The valid values are PROVISIONED and
