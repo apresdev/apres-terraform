@@ -2,17 +2,21 @@
 # The CI pipeline will run individual steps, in part to make it simpler to debug in the GitHub UI.
 all: format checkov init-no-backend validate update-readme
 
-TFFILES=$(wildcard *.tf)
+TEST_TF_DIR = tests/fixtures
+
+TFFILES=$(wildcard *.tf ${TEST_TF_DIR}/*.tf)
 
 format: .build/format
 
 .build/format: $(TFFILES)
 	tofu fmt
+	if [ -d $(TEST_TF_DIR) ]; then tofu fmt $(TEST_TF_DIR); fi
 	@mkdir -p .build
 	@touch .build/format
 
 format-check:
 	tofu fmt -check -diff
+	if [ -d $(TEST_TF_DIR)  ]; then tofu fmt -check -diff $(TEST_TF_DIR); fi
 
 checkov: .build/checkov
 
@@ -26,6 +30,7 @@ init-no-backend: .build/init-no-backend
 
 .build/init-no-backend: $(TFFILES)
 	tofu init -backend=false $(INIT_FLAGS)
+	if [ -d $(TEST_TF_DIR) ]; then cd $(TEST_TF_DIR) && tofu init -backend=false $(INIT_FLAGS); fi
 	@mkdir -p .build
 	@touch .build/init-no-backend
 
@@ -40,6 +45,7 @@ init-upgrade: .build/init-upgrade
 
 .build/init-upgrade:
 	tofu init -backend=false -upgrade
+	if [ -d $(TEST_TF_DIR) ]; then cd $(TEST_TF_DIR) && tofu init -backend=false -upgrade; fi
 	@mkdir -p .build
 	@touch .build/init-upgrade
 
@@ -48,6 +54,7 @@ init: .build/init
 
 .build/init: $(TFFILES)
 	tofu init $(INIT_FLAGS)
+	if [ -d $(TEST_TF_DIR) ]; then cd $(TEST_TF_DIR) && tofu init $(INIT_FLAGS); fi
 	@mkdir -p .build
 	@touch .build/init
 
@@ -56,6 +63,7 @@ validate: .build/validate
 
 .build/validate: $(TFFILES) .terraform.lock.hcl
 	tofu validate $(VALIDATE_FLAGS)
+	if [ -d $(TEST_TF_DIR) ]; then cd $(TEST_TF_DIR) && tofu validate $(VALIDATE_FLAGS); fi
 	@mkdir -p .build
 	@touch .build/validate
 
@@ -72,6 +80,7 @@ deploy: apply
 
 clean:
 	rm -rf .terraform .external_modules .build
+	if [ -d $(TEST_TF_DIR) ]; then rm -rf $(TEST_TF_DIR)/.terraform; fi
 
 # Not every module has a ./tests directory, so we need to check for it.
 TESTS_DIR = $(wildcard ./tests/*)
