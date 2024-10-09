@@ -14,7 +14,7 @@ module "s3" {
   encryption_sse_algorithm  = "aws:kms"
   encryption_kms_key_id     = aws_kms_key.default.arn
   lifecycle_rule = {
-    enabled = true
+    enabled                  = true
     old_versions_delete_days = 90
   }
 }
