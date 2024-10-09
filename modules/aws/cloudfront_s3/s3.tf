@@ -13,6 +13,10 @@ module "s3" {
   set_default_bucket_policy = false
   encryption_sse_algorithm  = "aws:kms"
   encryption_kms_key_id     = aws_kms_key.default.arn
+  lifecycle_rule = {
+    enabled = true
+    old_versions_delete_days = 90
+  }
 }
 
 # Bucket policy to allow CloudFront to write to the logs bucket
