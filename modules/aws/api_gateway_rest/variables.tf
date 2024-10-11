@@ -98,10 +98,24 @@ variable "openapi_spec_variables" {
   type        = map(string)
 }
 
+variable "attach_vpc_load_balancer" {
+  description = <<EOF
+    To attach a load balancer with a VPC link, set this to true and provide the `load_balancer_arn` variable.
+    If this is true, `load_balancer_arn` must be set. If false, the `load_balancer_arn` will be ignored.
+
+    Ideally we could use the load_balancer_arn variable to determine whether or not to create a VPC Link and
+    attach a load balancer, but unfortunately if referencing another module to get the ARN, terraform cannot
+    determine the dependency order. So we need two variables.
+
+  EOF
+  type        = bool
+  default     = false
+}
+
 variable "load_balancer_arn" {
   description = <<EOF
     The ARN of a target load balancer to which the API Gateway should be forwarding requests, as defined
-    in the API spec. If this is set, a VPC Link will be created.
+    in the API spec. To use this, set `attach_vpc_load_balancer` to true, else this will be ignored.
 
     Because the VPC Link ID is not known until after it is built, when the OpenAPI spec is processed, the
     variable `vpc_link_connection_id` will be substituted in with the actual VPC Link ID. An example of how
