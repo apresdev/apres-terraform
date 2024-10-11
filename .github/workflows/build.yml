@@ -75,8 +75,13 @@ jobs:
         with:
           script: |
             // if the trigger is dependabot, use the PR title as the changelog
-            if (github.actor == 'dependabot[bot]') {
-              return github.event.pull_request.title;
+            // context.actor will be the most recent user, dependabot opens a PR and
+            // then user xyz adds commits, the actor will be xyx, not dependabot.
+            // The pull_request.user.login is the creator of the PR.
+            if (context.payload.pull_request.user.login === "dependabot[bot]") {
+              title = context.payload.pull_request.title;
+              console.log("This PR was opened by Dependabot, using the title as the Changelog: " + title);
+              return title;
             }
             changelog = '';
             lines = context.payload.pull_request.body.split('\n');
@@ -92,7 +97,7 @@ jobs:
             }
             if (changelog === '') {
               // Fail because we should have had a Changelog.
-              core.error('No changelog found in PR body! Add a line beginning with "Changelog: " and rerun this job.');
+              core.setFailed('No changelog found in PR body! Add a line beginning with "Changelog: " and rerun this job.');
             }
             console.log("Changelog: '" + changelog + "'");
             return changelog;
