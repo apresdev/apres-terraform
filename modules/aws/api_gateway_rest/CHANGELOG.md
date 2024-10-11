@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.2 - 2024-10-11
+
+Fix load balancer dependency issue with count by adding the "attach_vpc_load_balancer" variable.
+
 ## 1.0.1 - 2024-09-25
 
 Update README with IAM permissions required to deploy the module.
