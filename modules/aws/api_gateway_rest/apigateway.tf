@@ -1,7 +1,3 @@
-locals {
-  create_vpc_link = var.load_balancer_arn == "" ? false : true
-}
-
 resource "aws_api_gateway_rest_api" "default" {
   name        = "${var.name}-${var.environment}-api"
   description = "${var.name} ${var.environment} REST API"
@@ -12,7 +8,7 @@ resource "aws_api_gateway_rest_api" "default" {
     merge(
       var.openapi_spec_variables,
       {
-        vpc_link_connection_id = local.create_vpc_link ? aws_api_gateway_vpc_link.default[0].id : ""
+        vpc_link_connection_id = var.attach_vpc_load_balancer ? aws_api_gateway_vpc_link.default[0].id : ""
       }
     )
   )
@@ -73,7 +69,7 @@ resource "aws_api_gateway_deployment" "default" {
 }
 
 resource "aws_api_gateway_vpc_link" "default" {
-  count       = local.create_vpc_link ? 1 : 0
+  count       = var.attach_vpc_load_balancer ? 1 : 0
   name        = "${var.name} ${var.environment} VPC Link"
   target_arns = [var.load_balancer_arn]
   tags = merge(

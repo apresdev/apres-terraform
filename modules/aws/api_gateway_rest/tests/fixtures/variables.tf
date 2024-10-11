@@ -26,3 +26,14 @@ variable "timestamp" {
   description = "Timestamp used for testing the template"
   type        = string
 }
+
+variable "attach_vpc_load_balancer" {
+  type    = bool
+  default = false
+}
+
+variable "vpc_environment_tag" {
+  description = "Environment tag for the VPC. CICD requires Test, developers should use Dev or Sandbox"
+  type        = string
+  default     = "Test"
+}
