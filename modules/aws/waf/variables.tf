@@ -205,8 +205,12 @@ variable "default_action" {
 variable "associate_resource_arn" {
   type        = string
   description = <<EOF
-    The ARN of the resource to associate with the web ACL. The resource can be any supported
-    service such as an Application Load Balancer, API Gateway, AWS AppSync, or an Amazon CloudFront.
+    The ARN of the resource to associate with the web ACL.
+
+    From the aws_wafv2_web_acl_association documentation:
+    This must be an ARN of an Application Load Balancer, an Amazon API Gateway stage (REST only,
+    HTTP is unsupported), an Amazon Cognito User Pool, an Amazon AppSync GraphQL API,
+    an Amazon App Runner service, or an Amazon Verified Access instance.
 
     Note: the README contains a list of IAM permissions, this ARN needs to be added to the statement
     with the Sid `AssociateWAF` else the association will fail.
