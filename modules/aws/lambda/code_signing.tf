@@ -1,9 +1,10 @@
 # Upload the unsigned zipped source file to the lambda artifacts buckt.
 # This is required for the code signing job below.
 resource "aws_s3_object" "unsigned" {
-  bucket = data.aws_s3_bucket.lambda_artifacts.id
-  key    = "unsigned/${local.name}.zip"
-  source = local.artifact
+  bucket      = data.aws_s3_bucket.lambda_artifacts.id
+  key         = "unsigned/${local.name}.zip"
+  source      = local.artifact
+  source_hash = local.artifact_hash
 
   tags = merge(
     local.tags,
