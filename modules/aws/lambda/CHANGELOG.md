@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.1 - 2024-10-16
+
+Fix bug where an updated local lambda package will not re-upload, fix timeout default, and update providers.
+
 ## 0.2.0 - 2024-08-23
 
 Added feature `skip_zip` to allow users to skip the archive creation if they already have a zipped binary (defaults to off).
