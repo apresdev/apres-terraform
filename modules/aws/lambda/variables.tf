@@ -30,7 +30,7 @@ variable "runtime" {
 # #########################################################################################################################################
 variable "memory_size" {
   description = <<EOF
-  (Optional) Amount of memory in MB your Lambda Function can use at runtime. 
+  (Optional) Amount of memory in MB your Lambda Function can use at runtime.
   Defaults to 128.
   EOF
   type        = number
@@ -48,19 +48,19 @@ variable "handler" {
 
 variable "timeout" {
   description = <<EOF
-  (Optional) Amount of time your Lambda Function has to run in seconds. 
-  Defaults to 3 seconds. 
+  (Optional) Amount of time your Lambda Function has to run in seconds.
+  Defaults to 3 seconds.
   EOF
   type        = number
-  default     = 128
+  default     = 3
 }
 
 
 variable "architectures" {
   description = <<EOF
-  (Optional) Instruction set architecture for your Lambda function. 
-  Valid values are ["x86_64"] and ["arm64"]. 
-  Default is ["arm64"]. 
+  (Optional) Instruction set architecture for your Lambda function.
+  Valid values are ["x86_64"] and ["arm64"].
+  Default is ["arm64"].
   Removing this attribute, function's architecture stay the same.
   EOF
   type        = list(string)
@@ -73,7 +73,7 @@ variable "architectures" {
 
 variable "environment_variables" {
   description = <<EOF
-  (Optional) Map of environment variables that are accessible from the function code during execution. 
+  (Optional) Map of environment variables that are accessible from the function code during execution.
   If provided at least one key must be present.
   EOF
   type        = map(string)
@@ -95,7 +95,7 @@ variable "description" {
 
 variable "ephemeral_storage" {
   description = <<EOF
-  (Optional) The amount of Ephemeral storage(/tmp) to allocate for the Lambda Function in MB. 
+  (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.
   This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB.
   EOF
   type        = number
@@ -114,8 +114,8 @@ variable "ephemeral_storage" {
 
 variable "reserved_concurrent_executions" {
   description = <<EOF
-  (Optional) Amount of reserved concurrent executions for this lambda function. 
-  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. 
+  (Optional) Amount of reserved concurrent executions for this lambda function.
+  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.
   Defaults to Unreserved Concurrency Limits -1.
   EOF
   type        = number
