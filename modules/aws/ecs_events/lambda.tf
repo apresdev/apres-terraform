@@ -17,7 +17,6 @@ resource "aws_iam_role_policy" "lambda" {
 }
 
 # Add lambda resource permissions for EventBridge
-
 resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
