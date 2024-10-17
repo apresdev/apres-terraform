@@ -21,5 +21,5 @@ variable "component" {
 
 variable "vpc_environment_tag" {
   type    = string
-  default = "Sandbox"
+  default = "Test"
 }
