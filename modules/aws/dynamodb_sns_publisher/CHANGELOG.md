@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.1.3 - 2024-10-17
+
+Bump lambda::apres-terraform from 0.2.0 to 0.2.1 in /modules/aws/dynamodb_sns_publisher
+
 ## 0.1.2 - 2024-10-11
 
 Bump hashicorp/aws from 5.64.0 to 5.71.0 in /modules/aws/dynamodb_sns_publisher
