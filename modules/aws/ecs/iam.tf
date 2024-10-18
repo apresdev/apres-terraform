@@ -111,10 +111,6 @@ data "aws_iam_policy_document" "task_assume_role" {
 resource "aws_iam_role" "task_role" {
   name               = "${var.name}-${var.environment}-TaskRole"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
-  inline_policy {
-    name   = "${var.name}-${var.environment}-TaskPolicy"
-    policy = var.ecs_task_iam_policy_document
-  }
   tags = merge(
     local.tags,
     {
@@ -123,3 +119,8 @@ resource "aws_iam_role" "task_role" {
   )
 }
 
+resource "aws_iam_role_policy" "task_role" {
+  name   = "${var.name}-${var.environment}-TaskPolicy"
+  role   = aws_iam_role.task_role.name
+  policy = var.ecs_task_iam_policy_document
+}
