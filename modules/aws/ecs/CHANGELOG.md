@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.2 - 2024-10-18
+
+Update providers, fix deprecation warning in the IAM role, add CloudWatch dashboard.
+
 ## 1.1.1 - 2024-10-02
 
 Adds support for writing load balancer access logs to S3.
