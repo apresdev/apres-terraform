@@ -63,9 +63,6 @@ resource "aws_iam_role" "task_execution_role" {
       }
     ]
   })
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  ]
   dynamic "inline_policy" {
     for_each = data.aws_iam_policy_document.task_execution_secrets_policy
     content {
@@ -79,6 +76,11 @@ resource "aws_iam_role" "task_execution_role" {
       Name = "${var.name}-${var.environment}-TaskExecutionRole"
     },
   )
+}
+
+resource "aws_iam_role_policy_attachment" "task_execution_role_policy_attachment" {
+  role       = aws_iam_role.task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 # This is the assume role policy that allows ECS to delegate permissions to the task.
