@@ -1,13 +1,21 @@
 # Account configuration for Workload Accounts
 
 This module is meant to be applied to every AWS account where you deploy workloads, per region. It sets up
-CloudWatch Logs with KMS encryption, and if enabled allows API Gateway to log to CloudWatch Logs. It
-also creates an S3 bucket for Load Balancer access logs, by default keeping access logs for 365 days. The bucket
-name will be `<account-id>-workloadconfig-<region>-load-balancer-logs`.
+the following:
+* CloudWatch Logs with KMS encryption
+* If enabled, allows API Gateway to log to CloudWatch Logs.
+* Creates an S3 bucket for Load Balancer access logs, by default keeping access logs for 365 days. The bucket
+  name will be `<account-id>-workloadconfig-<region>-load-balancer-logs`.
+* Adds the ECS event lifecyle to monitor for ECS tasks that are in a crash loop.
 
 ## AWS IAM Permissions
 
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
+Replace `${AWS::AccountID}` with the AWS Account ID where this is deployed, and `${AWS::Region}`
+with the region where this is deployed.
+
+In addition to the permissions below, the permissions of the [ecs_events](../ecs_events/README.md) will
+also need to be applied!
 
 ```json
 {
@@ -72,6 +80,7 @@ The following permissions are required to use this module, shown as a Policy sni
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.0 |
+| <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.1.0 |
 | <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.2.4 |
 | <a name="module_load_balancer_logs_bucket"></a> [load\_balancer\_logs\_bucket](#module\_load\_balancer\_logs\_bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.0.1 |
 | <a name="module_messaging_regional"></a> [messaging\_regional](#module\_messaging\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/messaging_regional | rel/messaging_regional/0.1.0 |

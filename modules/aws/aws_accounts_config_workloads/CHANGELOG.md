@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.7.0 - 2024-10-18
+
+Add the ECS Events module, to monitor for ECS tasks in crash loops.
+
 ## 0.6.3 - 2024-10-02
 
 Fix typos in NLB region lookup.
