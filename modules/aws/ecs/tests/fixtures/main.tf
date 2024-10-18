@@ -8,7 +8,6 @@ locals {
       size_in_gb = 21 # min is 21GB
     }
   ] : []
-
 }
 
 resource "aws_secretsmanager_secret" "default" {
