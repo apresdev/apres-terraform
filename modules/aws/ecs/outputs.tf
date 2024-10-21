@@ -47,3 +47,9 @@ output "load_balancer_target_group_arn" {
   value       = var.create_load_balancer ? aws_lb_target_group.default[0].arn : ""
   description = "ARN of the Load Balancer Target Group if it was created, else an empty string."
 }
+
+output "dashboard_url" {
+  # Need to compute this, it's not available from the provider.
+  value       = "https://${data.aws_region.current.name}.console.aws.amazon.com/cloudwatch/home#dashboards:name=${local.cw_dashboard_name}"
+  description = "URL for the ECS Cluster Dashboard"
+}
