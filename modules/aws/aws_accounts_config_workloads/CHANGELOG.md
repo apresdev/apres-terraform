@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.8.0 - 2024-10-23
+
+Add AWS ChatBot to the workloads account, in one specified region, for CloudWatch Alarms support.
+
 ## 0.7.0 - 2024-10-18
 
 Add the ECS Events module, to monitor for ECS tasks in crash loops.
