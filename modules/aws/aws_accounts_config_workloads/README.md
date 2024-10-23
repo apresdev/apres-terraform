@@ -9,14 +9,14 @@ the following:
 * Adds the ECS event lifecyle to monitor for ECS tasks that are in a crash loop.
 
 It also sets up ChatBot in the region specified by the `chatbot_primary_region` variable,
-for CloudWatch Alarms integration. ChatBot is a global region, so ChatBot is only deployed
+for CloudWatch Alarms integration. ChatBot is a global service, so ChatBot is only deployed
 in a single region, and the SNS alerting topic it subscribes to can be used from all regions.
 See the next section for more details.
 
 ## CloudWatch Alarms
 
 CloudWatch Alarms created with the Apres `cloudwatch_alarms` module will automatically send messages
-to ChatBot, and it in turn will notify in Slack/Teams/Email depending on the configuration passed into
+to ChatBot, and ChatBot in turn will notify in Slack/Teams/Email depending on the configuration passed into
 this module.
 
 Future revisions may change the alerting mechanism, Apres recommends using the `cloudwatch_alarms` module
