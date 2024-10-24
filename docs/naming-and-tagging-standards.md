@@ -1,4 +1,46 @@
-# Apres AWS Tagging
+# Apres AWS Naming and Tagging Standards
+
+## Naming
+
+AWS resource names, displayed in the AWS console and returned in the CLI and API's, are not straightforward.
+Some services like IAM are global and require globally unique names within the AWS account. S3
+requires globally unique names among all customers and all regions. Most developers will at some point need
+to deploy multiple instances of a service in a single AWS account and region, requiring unique names.
+
+To accomplish all that, the default naming scheme used in Apres terraform modules will
+be `${environment}-${name}` (See the [Apres Tags](#apres-tags)
+section below for details on what `name` and `environment` represent) using the variables passed into the
+the terraform modules. For example, if using the `ecs` module and the name is `backend` and environment is `Dev`, the
+resulting name used for ECS resources will be `Dev-backend`. Services with special cases are outlined below.
+
+Some resources, because of the complexity, may have an identifier appended. The ECS module in particular uses
+this when creating IAM artifacts, since each ECS task uses at least two IAM roles. In those cases, the name
+will be `${environment}-${name}-SomeIdentifier`.
+
+### IAM Artifacts Naming
+
+IAM resources are deployed globally, and there is a use case for needing to deploy the same stack and environment
+in two regions in the same account. If the name of the IAM artifact is the same, the second deploy will fail. To
+avoid this, wherever possible modules use a `name_prefix`, and the resulting name will
+be `${environment}-${name}-<unique_id>` where the unique_id is created by AWS. Using the same example
+as above, the name could be `Dev-backend-20240409161750033900000001`.
+
+An exception is made for IAM artifact names that need to be computed by outside resources, such as the roles used by GitHub
+OIDC providers. Those roles must have static predictable names.
+
+### S3 Bucket Naming
+
+S3 buckets must be globally unique among all customers and regions. Names must also be in lower case.
+To accomplish this the bucket name consist of four parts:
+* Current 12 digit AWS Account ID.
+* Environment in lower case.
+* Current region, like `us-east-2`
+* Name in lower case.
+
+With a bucket name of `testbucket` and environment of `MyEnv` the bucket name would be
+`123456789012-myenv-us-east-2-testbucket`.
+
+## Tagging
 
 Apres Terraform Modules will tag all AWS resources with a specific set of tags, see below for detailed explanation of the tags.
 
