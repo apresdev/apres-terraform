@@ -74,7 +74,10 @@ The following permissions are required to use this module, shown as a Policy sni
     "Action": [
       "ssm:GetParameter"
     ],
-    "Resource": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter//apres/lambda/signing-config-arn"
+    "Resource": [
+      "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter//apres/lambda/signing-config-arn",
+      "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter//apres/lambda/signing-profile-name"
+    ]
   },
   {
     "Effect": "Allow",
@@ -83,13 +86,6 @@ The following permissions are required to use this module, shown as a Policy sni
       "signer:StartSigningJob"
     ],
     "Resource": "arn:aws:signer:${AWS::Region}:${AWS::AccountId}:/signing-profiles/*"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "ssm:GetParameter"
-    ],
-    "Resource": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter//apres/lambda/signing-profile-name"
   },
   {
     "Effect": "Allow",
@@ -112,7 +108,10 @@ The following permissions are required to use this module, shown as a Policy sni
     "Action": [
       "kms:DescribeKey"
     ],
-    "Resource": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/alias/aws/lambda"
+    "Resource": [
+      "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/alias/aws/lambda",
+      "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/alias/aws/s3"
+    ]
   },
   {
     "Effect": "Allow",
@@ -128,7 +127,7 @@ The following permissions are required to use this module, shown as a Policy sni
       "iam:ListInstanceProfilesForRole",
       "iam:DeleteRole"
     ],
-    "Resource": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-${AWS::Region}-${environment}-${name}"
+    "Resource": "arn:aws:iam::${AWS::AccountId}:role/${environment}-${name}-*"
   },
   {
     "Effect": "Allow",
@@ -164,13 +163,6 @@ The following permissions are required to use this module, shown as a Policy sni
   {
     "Effect": "Allow",
     "Action": [
-      "kms:DescribeKey"
-    ],
-    "Resource": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/alias/aws/s3"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
       "signer:DescribeSigningJob"
     ],
     "Resource": "arn:aws:signer:${AWS::Region}:${AWS::AccountId}:/signing-jobs/*"
@@ -185,57 +177,6 @@ The following permissions are required to use this module, shown as a Policy sni
       "lambda:DeleteFunction"
     ],
     "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${environment}-${name}"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "logs:CreateLogGroup",
-      "logs:PutRetentionPolicy",
-      "logs:ListTagsForResource"
-    ],
-    "Resource": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/apres/lambda/${environment}-${name}"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "iam:CreateRole",
-      "iam:GetRole",
-      "iam:ListRolePolicies",
-      "iam:ListAttachedRolePolicies",
-      "iam:PutRolePolicy",
-      "iam:GetRolePolicy",
-      "iam:PassRole"
-    ],
-    "Resource": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-${AWS::Region}-${environment}-${name}"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-      "s3:GetObjectTagging"
-    ],
-    "Resource": "arn:aws:s3:::${AWS::AccountId}-${lambda_regional_environment}-${AWS::Region}-lambda-artifacts/unsigned/${environment}-${name}.zip"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "sqs:CreateQueue",
-      "sqs:TagQueue",
-      "sqs:GetQueueAttributes",
-      "sqs:ListQueueTags"
-    ],
-    "Resource": "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${environment}-${name}-deadletter"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "lambda:CreateFunction",
-      "lambda:GetFunction",
-      "lambda:ListVersionsByFunction",
-      "lambda:GetFunctionCodeSigningConfig"
-    ],
-    "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${environment}-${name}"
   }
 ]
 
@@ -247,48 +188,48 @@ The following best practices are applied:
 
 | Id          | Policy                                                                                              |
 |-------------|-----------------------------------------------------------------------------------------------------|
-| CKV_AWS_66  | Ensure that CloudWatch Log Group specifies retention days                                           |       
-| CKV_AWS_27  | Ensure all data stored in the SQS queue is encrypted                                                |                                                
-| CKV_AWS_168 | Ensure SQS queue policy is not public by only allowing specific services or principals to access it |   
-| CKV_AWS_25  | Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389                                 |                                   
-| CKV_AWS_23  | Ensure every security group and rule has a description                                              |                                                
-| CKV_AWS_277 | Ensure no security groups allow ingress from 0.0.0.0:0 to port -1                                   |                                     
-| CKV_AWS_24  | Ensure no security groups allow ingress from 0.0.0.0:0 to port 22                                   |                                     
-| CKV_AWS_260 | Ensure no security groups allow ingress from 0.0.0.0:0 to port 80                                   |                                     
-| CKV_AWS_356 | Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions       |         
-| CKV_AWS_358 | Ensure GitHub Actions OIDC trust policies only allows actions from a specific known organization    |      
-| CKV_AWS_110 | Ensure IAM policies does not allow privilege escalation                                             |                                               
-| CKV_AWS_49  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |                                   
-| CKV_AWS_107 | Ensure IAM policies does not allow credentials exposure                                             |                                               
-| CKV_AWS_283 | Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource         |           
-| CKV_AWS_109 | Ensure IAM policies does not allow permissions management / resource exposure without constraints   |     
-| CKV_AWS_1   | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |                   
-| CKV_AWS_108 | Ensure IAM policies does not allow data exfiltration                                                |                                                  
-| CKV_AWS_111 | Ensure IAM policies does not allow write access without constraints                                 |                                   
-| CKV_AWS_356 | Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions       |         
-| CKV_AWS_358 | Ensure GitHub Actions OIDC trust policies only allows actions from a specific known organization    |      
-| CKV_AWS_110 | Ensure IAM policies does not allow privilege escalation                                             |                                               
-| CKV_AWS_49  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |                                   
-| CKV_AWS_107 | Ensure IAM policies does not allow credentials exposure                                             |                                               
-| CKV_AWS_283 | Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource         |           
-| CKV_AWS_109 | Ensure IAM policies does not allow permissions management / resource exposure without constraints   |     
-| CKV_AWS_1   | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |                   
-| CKV_AWS_108 | Ensure IAM policies does not allow data exfiltration                                                |                                                  
-| CKV_AWS_60  | Ensure IAM role allows only specific services or principals to assume it                            |                              
-| CKV_AWS_274 | Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy                 |                   
-| CKV_AWS_61  | Ensure AWS IAM policy does not allow assume role permission across all services                     |                       
-| CKV_AWS_63  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |                                   
-| CKV_AWS_62  | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |                   
-| CKV_AWS_173 | Check encryption settings for Lambda environmental variable                                         |                                          
-| CKV_AWS_116 | Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)                          |                            
-| CKV_AWS_50  | X-Ray tracing is enabled for Lambda                                                                 |                                                                   
-| CKV_AWS_115 | Ensure that AWS Lambda function is configured for function-level concurrent execution limit         |           
-| CKV_AWS_45  | Ensure no hard-coded secrets exist in lambda environment                                            |                                              
-| CKV_AWS_117 | Ensure that AWS Lambda function is configured inside a VPC                                          |  
-| CKV_AWS_272 | Ensure AWS Lambda function is configured to validate code-signing                                   |                                     
-| CKV2_AWS_5  | Ensure that Security Groups are attached to another resource                                        |                                          
-| CKV2_AWS_40 | Ensure AWS IAM policy does not allow full IAM privileges                                            |                                              
-| CKV2_AWS_40 | Ensure AWS IAM policy does not allow full IAM privileges                                            |                                              
+| CKV_AWS_66  | Ensure that CloudWatch Log Group specifies retention days                                           |
+| CKV_AWS_27  | Ensure all data stored in the SQS queue is encrypted                                                |
+| CKV_AWS_168 | Ensure SQS queue policy is not public by only allowing specific services or principals to access it |
+| CKV_AWS_25  | Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389                                 |
+| CKV_AWS_23  | Ensure every security group and rule has a description                                              |
+| CKV_AWS_277 | Ensure no security groups allow ingress from 0.0.0.0:0 to port -1                                   |
+| CKV_AWS_24  | Ensure no security groups allow ingress from 0.0.0.0:0 to port 22                                   |
+| CKV_AWS_260 | Ensure no security groups allow ingress from 0.0.0.0:0 to port 80                                   |
+| CKV_AWS_356 | Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions       |
+| CKV_AWS_358 | Ensure GitHub Actions OIDC trust policies only allows actions from a specific known organization    |
+| CKV_AWS_110 | Ensure IAM policies does not allow privilege escalation                                             |
+| CKV_AWS_49  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |
+| CKV_AWS_107 | Ensure IAM policies does not allow credentials exposure                                             |
+| CKV_AWS_283 | Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource         |
+| CKV_AWS_109 | Ensure IAM policies does not allow permissions management / resource exposure without constraints   |
+| CKV_AWS_1   | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |
+| CKV_AWS_108 | Ensure IAM policies does not allow data exfiltration                                                |
+| CKV_AWS_111 | Ensure IAM policies does not allow write access without constraints                                 |
+| CKV_AWS_356 | Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions       |
+| CKV_AWS_358 | Ensure GitHub Actions OIDC trust policies only allows actions from a specific known organization    |
+| CKV_AWS_110 | Ensure IAM policies does not allow privilege escalation                                             |
+| CKV_AWS_49  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |
+| CKV_AWS_107 | Ensure IAM policies does not allow credentials exposure                                             |
+| CKV_AWS_283 | Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource         |
+| CKV_AWS_109 | Ensure IAM policies does not allow permissions management / resource exposure without constraints   |
+| CKV_AWS_1   | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |
+| CKV_AWS_108 | Ensure IAM policies does not allow data exfiltration                                                |
+| CKV_AWS_60  | Ensure IAM role allows only specific services or principals to assume it                            |
+| CKV_AWS_274 | Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy                 |
+| CKV_AWS_61  | Ensure AWS IAM policy does not allow assume role permission across all services                     |
+| CKV_AWS_63  | Ensure no IAM policies documents allow "*" as a statement's actions                                 |
+| CKV_AWS_62  | Ensure IAM policies that allow full "*-*" administrative privileges are not created                 |
+| CKV_AWS_173 | Check encryption settings for Lambda environmental variable                                         |
+| CKV_AWS_116 | Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)                          |
+| CKV_AWS_50  | X-Ray tracing is enabled for Lambda                                                                 |
+| CKV_AWS_115 | Ensure that AWS Lambda function is configured for function-level concurrent execution limit         |
+| CKV_AWS_45  | Ensure no hard-coded secrets exist in lambda environment                                            |
+| CKV_AWS_117 | Ensure that AWS Lambda function is configured inside a VPC                                          |
+| CKV_AWS_272 | Ensure AWS Lambda function is configured to validate code-signing                                   |
+| CKV2_AWS_5  | Ensure that Security Groups are attached to another resource                                        |
+| CKV2_AWS_40 | Ensure AWS IAM policy does not allow full IAM privileges                                            |
+| CKV2_AWS_40 | Ensure AWS IAM policy does not allow full IAM privileges                                            |
 
 ### Suppressed Best Practices
 
@@ -296,9 +237,9 @@ The following best practices are suppress:
 
 | Id          | Policy                                                              |
 |-------------|---------------------------------------------------------------------|
-| CKV_AWS_158 | Ensure that CloudWatch Log Group is encrypted by KMS                |                  
-| CKV_AWS_338 | Ensure CloudWatch log groups retains logs for at least 1 year       |         
-| CKV_AWS_111 | Ensure IAM policies does not allow write access without constraints |   
+| CKV_AWS_158 | Ensure that CloudWatch Log Group is encrypted by KMS                |
+| CKV_AWS_338 | Ensure CloudWatch log groups retains logs for at least 1 year       |
+| CKV_AWS_111 | Ensure IAM policies does not allow write access without constraints |
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -312,14 +253,15 @@ The following best practices are suppress:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.5.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.41.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.6.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.72.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.0.0 |
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
+| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.1.0 |
 
 ## Resources
 
@@ -351,24 +293,24 @@ The following best practices are suppress:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
-| <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br>  Valid values are ["x86\_64"] and ["arm64"].<br>  Default is ["arm64"].<br>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br>  "arm64"<br>]</pre> | no |
+| <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br/>  Valid values are ["x86\_64"] and ["arm64"].<br/>  Default is ["arm64"].<br/>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br/>  "arm64"<br/>]</pre> | no |
 | <a name="input_binary_path"></a> [binary\_path](#input\_binary\_path) | This path to the lambda executable file. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
 | <a name="input_description"></a> [description](#input\_description) | (Optional) Description of what your Lambda Function does. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional) Map of environment variables that are accessible from the function code during execution.<br>  If provided at least one key must be present. | `map(string)` | `null` | no |
-| <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.<br>  This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB. | `number` | `512` | no |
+| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional) Map of environment variables that are accessible from the function code during execution.<br/>  If provided at least one key must be present. | `map(string)` | `null` | no |
+| <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.<br/>  This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB. | `number` | `512` | no |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | (Optional) Function entrypoint in your code. | `string` | `null` | no |
 | <a name="input_lambda_regional_environment"></a> [lambda\_regional\_environment](#input\_lambda\_regional\_environment) | Lambda Regional Environment Name, used to lookup regional code signing and S3 buckets. | `string` | `"WorkLoadConfig"` | no |
-| <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | (Optional) Amount of memory in MB your Lambda Function can use at runtime.<br>  Defaults to 128. | `number` | `128` | no |
+| <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | (Optional) Amount of memory in MB your Lambda Function can use at runtime.<br/>  Defaults to 128. | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the lambda function.  Used to name all dependent resources required by the function (e.g. DLQ, signing jobs, etc.) | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
-| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
+| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br/>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br/>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
 | <a name="input_runtime"></a> [runtime](#input\_runtime) | Identifier of the function's runtime. | `string` | n/a | yes |
 | <a name="input_skip_zip"></a> [skip\_zip](#input\_skip\_zip) | (Optional) Set to true to skip zip archive creation.  If set, this assumes that `source_path` points to an existing zip archive. | `bool` | `false` | no |
-| <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Amount of time your Lambda Function has to run in seconds.<br>  Defaults to 3 seconds. | `number` | `3` | no |
-| <a name="input_vpc"></a> [vpc](#input\_vpc) | Controls the lambda's VPC settings.<br>    The enabled field controls whether the lambda runs in the private subnets of the VPC.  Defaults to false.<br>    The environment\_tag is used to lookup the VPC based on the VPCs tag structure.  Required if enabled is true. | <pre>object({<br>    enabled         = bool<br>    environment_tag = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "environment_tag": null<br>}</pre> | no |
+| <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Amount of time your Lambda Function has to run in seconds.<br/>  Defaults to 3 seconds. | `number` | `3` | no |
+| <a name="input_vpc"></a> [vpc](#input\_vpc) | Controls the lambda's VPC settings.<br/>    The enabled field controls whether the lambda runs in the private subnets of the VPC.  Defaults to false.<br/>    The environment\_tag is used to lookup the VPC based on the VPCs tag structure.  Required if enabled is true. | <pre>object({<br/>    enabled         = bool<br/>    environment_tag = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "environment_tag": null<br/>}</pre> | no |
 
 ## Outputs
 
