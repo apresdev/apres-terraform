@@ -21,9 +21,10 @@ will be `${environment}-${name}-SomeIdentifier`.
 
 IAM resources are deployed globally, and there is a use case for needing to deploy the same stack and environment
 in two regions in the same account. If the name of the IAM artifact is the same, the second deploy will fail. To
-avoid this, wherever possible modules use a `name_prefix`, and the resulting name will
-be `${environment}-${name}-<unique_id>` where the unique_id is created by AWS. Using the same example
-as above, the name could be `Dev-backend-20240409161750033900000001`.
+avoid this, wherever supporeted modules will use the
+[name_prefix](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role#name_prefix)
+argument, and the resulting name will be `${environment}-${name}-<unique_id>` where the unique_id is created by AWS.
+Using the same example as above, the name could be `Dev-backend-20240409161750033900000001`.
 
 An exception is made for IAM artifact names that need to be computed by outside resources, such as the roles used by GitHub
 OIDC providers. Those roles must have static predictable names.
