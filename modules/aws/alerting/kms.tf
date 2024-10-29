@@ -63,13 +63,13 @@ resource "aws_kms_key_policy" "default" {
 }
 
 resource "aws_kms_key" "default" {
-  description             = "${title(var.name)}-${var.environment} - Alerting SNS Key"
+  description             = "${module.apres_names.local_name} - Alerting SNS Key"
   deletion_window_in_days = 7
   enable_key_rotation     = true
   tags = merge(
     local.tags,
     {
-      Name = "${title(var.name)}-${var.environment} - Alerting SNS Key"
+      Name = "${module.apres_names.local_name} - Alerting SNS Key"
     },
   )
 }
