@@ -70,12 +70,12 @@ resource "aws_api_gateway_deployment" "default" {
 
 resource "aws_api_gateway_vpc_link" "default" {
   count       = var.attach_vpc_load_balancer ? 1 : 0
-  name        = "${module.apres_names.local_name}} API Gateway VPC Link"
+  name        = module.apres_names.local_name
   target_arns = [var.load_balancer_arn]
   tags = merge(
     local.tags,
     {
-      Name = "${module.apres_names.local_name}} API Gateway VPC Link"
+      Name = module.apres_names.local_name
     },
   )
 }
