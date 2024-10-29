@@ -53,7 +53,7 @@ func (s *LambdaTestSuite) SetupSuite() {
 func (s *LambdaTestSuite) TestLambda() {
 	// Variables for the terraform module
 	now := time.Now().Unix()
-	functionNameInput := fmt.Sprintf("test-lambda-%d", now)
+	functionNameInput := fmt.Sprintf("test-%d", now)
 	// Terraform options
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
@@ -115,7 +115,7 @@ func (s *LambdaTestSuite) TestLambda() {
 
 // assertOutputs verifies that all output variables are set correctly.
 func (s *LambdaTestSuite) assertOutputs(account string, functionNameInput string, functionName string, functionArn string) {
-	expectedFunctionName := fmt.Sprintf("%s-%s", strings.ToLower(s.environment), strings.ToLower(functionNameInput))
+	expectedFunctionName := fmt.Sprintf("%s-%s", s.environment, functionNameInput)
 	s.Assert().Equal(expectedFunctionName, functionName, "expected bucket name to match")
 
 	expectedTableArn := fmt.Sprintf("arn:aws:lambda:%s:%s:function:%s", s.awsRegion, account, expectedFunctionName)
@@ -184,7 +184,7 @@ func mustHaveLogGroup(functionName string) LambdaAssertion {
 		require.NotNil(t, output.Configuration)
 		require.NotNil(t, output.Configuration.LoggingConfig)
 		require.NotNil(t, output.Configuration.LoggingConfig.LogGroup)
-		assert.Equal(t, fmt.Sprintf("/apres/lambda/%s", strings.ToLower(functionName)), *output.Configuration.LoggingConfig.LogGroup)
+		assert.Equal(t, fmt.Sprintf("/apres/lambda/%s", functionName), *output.Configuration.LoggingConfig.LogGroup)
 	}
 }
 

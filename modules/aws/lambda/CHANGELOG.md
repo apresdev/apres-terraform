@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.0 - 2024-10-29
+
+Fix IAM artifacts to use name_prefix to support multi-region deployments.
+
 ## 0.2.1 - 2024-10-16
 
 Fix bug where an updated local lambda package will not re-upload, fix timeout default, and update providers.

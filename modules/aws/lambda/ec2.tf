@@ -5,8 +5,8 @@ resource "aws_security_group" "default" {
   # condition for whether or not to create this resource.  (see the dynamidynamic "vpc_config" section in resource "aws_lambda_function" "default" in main.tf )
   #checkov:skip=CKV2_AWS_5:"Ensure that Security Groups are attached to another resource"
 
-  name        = "${var.name}-${var.environment}-Lambda-Function"
-  description = "Security group for ECS Task ${var.name}-${var.environment}"
+  name        = "${local.name}-Lambda-Function"
+  description = "Security group for ECS Task ${local.name}"
   vpc_id      = data.aws_vpc.default[0].id
 
   egress {
@@ -20,7 +20,7 @@ resource "aws_security_group" "default" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-Lambda-Function"
+      Name = "${local.name}-Lambda-Function"
     },
   )
 

@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 # Creates the role needed by the lambda function.
 resource "aws_iam_role" "default" {
-  name               = "${var.name}-${var.environment}-LambdaRole"
+  name_prefix        = "${local.name}-LambdaRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   tags = merge(
@@ -26,14 +26,12 @@ resource "aws_iam_role" "default" {
       Name = local.name
     })
   )
-
-  depends_on = [data.aws_iam_policy_document.assume_role]
 }
 
 # This grants the permissions the lambda needs during execution
 data "aws_iam_policy_document" "default" {
 
-  # Allows the lambda to write to cloud watch logs  
+  # Allows the lambda to write to cloud watch logs
   statement {
     effect = "Allow"
 
@@ -48,7 +46,7 @@ data "aws_iam_policy_document" "default" {
     ]
   }
 
-  # Give the lambda function permission to send messages to the DLQ 
+  # Give the lambda function permission to send messages to the DLQ
   statement {
     effect = "Allow"
 
@@ -74,7 +72,7 @@ data "aws_iam_policy_document" "default" {
       "ec2:AssignPrivateIpAddresses",
       "ec2:UnassignPrivateIpAddresses"
     ]
-    # Unfortunately, according to the docs, you need to use "*".  
+    # Unfortunately, according to the docs, you need to use "*".
     # TODO: See if we can minimize the scope at little to at least the region and account
     resources = ["*"]
   }
@@ -117,18 +115,11 @@ data "aws_iam_policy_document" "default" {
       ]
     }
   }
-
-  depends_on = [
-    module.cloudwatch_log,
-    aws_sqs_queue.deadletter
-  ]
 }
 
 # Attaches the default lambda permissions to the policy
 resource "aws_iam_role_policy" "default" {
-  name   = local.name
-  role   = aws_iam_role.default.name
-  policy = data.aws_iam_policy_document.default.json
-
-  depends_on = [data.aws_iam_policy_document.default]
+  name_prefix = "${local.name}-LambdaPolicy"
+  role        = aws_iam_role.default.name
+  policy      = data.aws_iam_policy_document.default.json
 }
