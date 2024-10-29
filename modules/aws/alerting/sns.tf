@@ -1,6 +1,7 @@
 resource "aws_sns_topic" "default" {
-  depends_on        = [aws_kms_alias.default]
-  display_name      = "Apres Alerting ${title(var.name)}-${title(var.environment)}"
+  depends_on   = [aws_kms_alias.default]
+  display_name = "${module.apres_names.local_name} Apres Alerting"
+  # Topic name, different from the naming standard.
   name              = "apres-alerting-${lower(var.name)}-${lower(var.environment)}"
   kms_master_key_id = local.sns_key_alias
   tags = merge(
