@@ -6,7 +6,7 @@ data "aws_region" "current" {}
 
 # Lookup the code signing bucket
 data "aws_s3_bucket" "lambda_artifacts" {
-  bucket = local.regional_name
+  bucket = local.artifact_bucket
 }
 
 # Lookup the code signing bucket
