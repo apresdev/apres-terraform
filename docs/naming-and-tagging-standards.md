@@ -17,6 +17,8 @@ Some resources, because of the complexity, may have an identifier appended. The 
 this when creating IAM artifacts, since each ECS task uses at least two IAM roles. In those cases, the name
 will be `${environment}-${name}-SomeIdentifier`.
 
+The [apres-names](../modules/aws/apres_names/) module is the implementation of this standard.
+
 ### IAM Artifacts Naming
 
 IAM resources are deployed globally, and there is a use case for needing to deploy the same stack and environment
