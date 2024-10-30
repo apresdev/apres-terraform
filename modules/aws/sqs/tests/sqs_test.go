@@ -166,7 +166,7 @@ func (s *SqsTestSuite) assertQueueNameAndArn(account string, queueNameInput stri
 
 // asQueueName generates the expected structure of a queue name.
 func (s *SqsTestSuite) asQueueName(queueName string) string {
-	return fmt.Sprintf("%s-%s", strings.ToLower(s.environment), strings.ToLower(queueName))
+	return fmt.Sprintf("%s-%s", s.environment, strings.ToLower(queueName))
 }
 
 // asQueueArn generates the expected structure of a queue ARN.
@@ -180,7 +180,7 @@ func (s *SqsTestSuite) assertAlarmArns(account string, queueName string, metric 
 	arnArray := splitArns(arns)
 
 	for _, arn := range arnArray {
-		expectedQueueName := fmt.Sprintf("arn:aws:cloudwatch:%s:%s:alarm:%s-%s-1-sev%d", s.awsRegion, account, strings.ToLower(queueName), metric, severity)
+		expectedQueueName := fmt.Sprintf("arn:aws:cloudwatch:%s:%s:alarm:%s-%s-1-sev%d", s.awsRegion, account, queueName, metric, severity)
 		s.Assert().Equal(expectedQueueName, arn, "expected alarm ARN to match")
 	}
 }
