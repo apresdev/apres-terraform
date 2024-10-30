@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.3 - 2024-10-30
+
+Bump cloudwatchlogs::apres-terraform from 1.0.0 to 1.1.0 in /modules/aws/ecs
+
 ## 1.1.2 - 2024-10-18
 
 Update providers, fix deprecation warning in the IAM role, add CloudWatch dashboard.
