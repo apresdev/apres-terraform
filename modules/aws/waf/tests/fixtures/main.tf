@@ -43,4 +43,5 @@ module "waf" {
   component              = "WAF"
   scope                  = "REGIONAL"
   associate_resource_arn = aws_lb.default.arn
+  depends_on             = [aws_lb.default]
 }
