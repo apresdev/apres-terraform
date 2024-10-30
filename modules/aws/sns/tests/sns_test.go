@@ -57,7 +57,7 @@ func (s *SnsTestSuite) TestSqs() {
 
 	// Variables for the terraform module
 	now := time.Now().Unix()
-	topicNameInput := fmt.Sprintf("testqueue%d", now)
+	topicNameInput := fmt.Sprintf("testtopic%d", now)
 	// Terraform options
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
@@ -90,7 +90,7 @@ func (s *SnsTestSuite) TestSqs() {
 	s.assertTopicNameAndArn(accountId, topicNameInput, topicName, topicArn)
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Verify the main queue.
+	// Verify the main topic.
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	s.assertTagsAndAttributes(topicArn,
 		assertEncryption,
@@ -99,26 +99,26 @@ func (s *SnsTestSuite) TestSqs() {
 
 }
 
-// assertQueueName verifies that all output variables are set correctly.
+// assertTopicName verifies that all output variables are set correctly.
 func (s *SnsTestSuite) assertTopicNameAndArn(account string, topicNameInput string, topicName string, topicArn string) {
-	expectedQueueName := s.asTopicName(topicNameInput)
-	s.Assert().Equal(expectedQueueName, topicName, "expected queue name to match")
+	expectedTopicName := s.asTopicName(topicNameInput)
+	s.Assert().Equal(expectedTopicName, topicName, "expected topic name to match")
 
-	expectedQueueArn := s.asTopicArn(account, expectedQueueName)
-	s.Assert().Equal(expectedQueueArn, topicArn, "expected queue ARN to match")
+	expectedTopicArn := s.asTopicArn(account, expectedTopicName)
+	s.Assert().Equal(expectedTopicArn, topicArn, "expected topic ARN to match")
 }
 
-// asTopicName generates the expected structure of a queue name.
-func (s *SnsTestSuite) asTopicName(queueName string) string {
-	return fmt.Sprintf("%s-%s", strings.ToLower(s.environment), strings.ToLower(queueName))
+// asTopicName generates the expected structure of a topic name.
+func (s *SnsTestSuite) asTopicName(topicName string) string {
+	return fmt.Sprintf("%s-%s", s.environment, strings.ToLower(topicName))
 }
 
-// asTopicArn generates the expected structure of a queue ARN.
-func (s *SnsTestSuite) asTopicArn(account string, queueName string) string {
-	return fmt.Sprintf("arn:aws:sns:%s:%s:%s", s.awsRegion, account, queueName)
+// asTopicArn generates the expected structure of a topic ARN.
+func (s *SnsTestSuite) asTopicArn(account string, topicName string) string {
+	return fmt.Sprintf("arn:aws:sns:%s:%s:%s", s.awsRegion, account, topicName)
 }
 
-// assertTagsAndAttributes ensures that all apres tags are applied to the given queue and that all attribute assertions pass.
+// assertTagsAndAttributes ensures that all apres tags are applied to the given topic and that all attribute assertions pass.
 func (s *SnsTestSuite) assertTagsAndAttributes(topicArn string, attributeAssertions ...AttributeAssertion) {
 
 	s.assertTags(topicArn)
@@ -129,13 +129,13 @@ func (s *SnsTestSuite) assertTagsAndAttributes(topicArn string, attributeAsserti
 	}
 }
 
-// getAttributes fetches the queue attributes from AWS.
+// getAttributes fetches the topic attributes from AWS.
 func (s *SnsTestSuite) getAttributes(topicArn string) map[string]string {
 
 	resp, err := s.sns.GetTopicAttributes(s.ctx, &sns.GetTopicAttributesInput{
 		TopicArn: aws.String(topicArn),
 	})
-	s.Require().NoError(err, "should be able to get queue url")
+	s.Require().NoError(err, "should be able to get topic url")
 	s.Require().NotNil(resp, "attributes must not be nil")
 
 	return resp.Attributes
@@ -144,7 +144,7 @@ func (s *SnsTestSuite) getAttributes(topicArn string) map[string]string {
 // assertTags ensures that the topic has all required tags set with appropriate values by default.
 func (s *SnsTestSuite) assertTags(topicArn string) {
 	resp, err := s.sns.ListTagsForResource(s.ctx, &sns.ListTagsForResourceInput{ResourceArn: aws.String(topicArn)})
-	s.Assert().NoError(err, "expected no error on GetBucketTagging")
+	s.Assert().NoError(err, "expected no error on ListTagsForResource")
 
 	// Tag structs are specific to the service, so convert to awstagging.TagItem
 	tags := make([]awstagging.TagItem, 0)
@@ -158,7 +158,7 @@ func (s *SnsTestSuite) assertTags(topicArn string) {
 	s.Assert().True(valid, "Tags have invalid values: %v", bad)
 }
 
-// assertEncryption verifies that encryption is always enabled on all queues.
+// assertEncryption verifies that encryption is always enabled on all topics.
 func assertEncryption(t *testing.T, attributes map[string]string) {
 	keyId := optional("KmsMasterKeyId", attributes, "")
 	assert.Equal(t, "alias/apres/messaging", keyId, "expected to use SNS KMS key by default")
