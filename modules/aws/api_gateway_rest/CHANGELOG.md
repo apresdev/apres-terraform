@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-10-30
+
+Update names to reflect naming standards.
+
 ## 1.0.2 - 2024-10-11
 
 Fix load balancer dependency issue with count by adding the "attach_vpc_load_balancer" variable.
