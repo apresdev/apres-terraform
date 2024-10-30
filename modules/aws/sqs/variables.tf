@@ -46,16 +46,19 @@ variable "default_tags" {
 # A queue name can have up to 80 characters.
 # The following characters are accepted: alphanumeric characters, hyphens (-), and underscores (_).
 #
-# The overhead of our standard naming convention is approximately 40 characters (which includes the account id, the region, the 
-# environment, and the optional deadletter suffix), so we will restrict the user supplied input to 40 characters to attempt to avoid 
+# The overhead of our standard naming convention is 12 characters, with the optional deadletter suffix,
+# so we will restrict the user supplied input to 65 characters to attempt to avoid
 # overloading the full SQS queue name limitations.
 variable "name" {
-  description = "Name of the queue, must be between 3 and 40 characters long and can contain only the following characters: a-z, A-Z, 0-9, _, and -"
+  description = <<EOF
+    Name of the queue, must be more than 2 and less than 65 characters
+    long and can contain only the following characters: a-z, A-Z, 0-9, _, and -
+  EOF
   type        = string
   nullable    = false
   validation {
-    condition     = length(var.name) >= 3 && length(var.name) < 40
-    error_message = "Name length must be between 3 and 40 characters."
+    condition     = length(var.name) >= 3 && length(var.name) < 65
+    error_message = "Name length must be more than 2 and less than 65 characters."
   }
   validation {
     condition     = can(regex("^[a-zA-Z0-9_\\-]*$", var.name))
@@ -89,7 +92,7 @@ variable "max_message_size" {
 
 variable "delay_seconds" {
   description = <<EOF
-  (Optional) The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 seconds." 
+  (Optional) The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 seconds."
   EOF
   type        = number
   default     = 0
@@ -97,7 +100,7 @@ variable "delay_seconds" {
 
 variable "encryption_kms_key_id" {
   description = <<EOF
-  The ARN of the KMS key to use for server-side encryption. 
+  The ARN of the KMS key to use for server-side encryption.
   If not provided, the default customer managed key 'alias/apres/messaging' will be used.
   EOF
   type        = string
