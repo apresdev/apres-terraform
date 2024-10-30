@@ -209,61 +209,60 @@ The following permissions are required to use this module, shown as a Policy sni
 ```
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
-| Name                                                                      | Version           |
-|---------------------------------------------------------------------------|-------------------|
+| Name | Version |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 5.0.0          |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 
 ## Providers
 
-| Name                                                             | Version |
-|------------------------------------------------------------------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws)                | 5.64.0  |
-| <a name="provider_external"></a> [external](#provider\_external) | n/a     |
-| <a name="provider_github"></a> [github](#provider\_github)       | 6.2.3   |
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.73.0 |
+| <a name="provider_external"></a> [external](#provider\_external) | 2.3.4 |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.3.1 |
 
 ## Modules
 
-| Name                                                   | Source                                                          | Version          |
-|--------------------------------------------------------|-----------------------------------------------------------------|------------------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.2.0 |
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.3.0 |
 
 ## Resources
 
-| Name                                                                                                                                               | Type        |
-|----------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [aws_iam_role_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy)                         | resource    |
-| [aws_lambda_event_source_mapping.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_event_source_mapping) | resource    |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                      | data source |
-| [aws_iam_policy_document.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)              | data source |
-| [aws_kms_alias.messaging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias)                                | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                        | data source |
-| [external_external.artifact_download](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external)                | data source |
-| [github_release.lambda](https://registry.terraform.io/providers/hashicorp/github/latest/docs/data-sources/release)                                 | data source |
+| Name | Type |
+|------|------|
+| [aws_iam_role_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_lambda_event_source_mapping.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_event_source_mapping) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_kms_alias.messaging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [external_external.artifact_download](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
+| [github_release.lambda](https://registry.terraform.io/providers/hashicorp/github/latest/docs/data-sources/release) | data source |
 
 ## Inputs
 
-| Name                                                                                                                    | Description                                                                            | Type          | Default            | Required |
-|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|---------------|--------------------|:--------:|
-| <a name="input_application"></a> [application](#input\_application)                                                     | Application name, used for tagging AWS resources.                                      | `string`      | n/a                |   yes    |
-| <a name="input_component"></a> [component](#input\_component)                                                           | Component name, used for tagging AWS resources.                                        | `string`      | n/a                |   yes    |
-| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags)                                                | Default set of tags to be applied to all resources                                     | `map(string)` | `{}`               |    no    |
-| <a name="input_environment"></a> [environment](#input\_environment)                                                     | Environment name, used for tagging AWS resources, and in the bucket name.              | `string`      | `"dev"`            |    no    |
-| <a name="input_lambda_regional_environment"></a> [lambda\_regional\_environment](#input\_lambda\_regional\_environment) | Lambda Regional Environment Name, used to lookup regional code signing and S3 buckets. | `string`      | `"WorkLoadConfig"` |    no    |
-| <a name="input_name"></a> [name](#input\_name)                                                                          | The name used to generate the SNS publisher resources (i.e. the lambda naming).        | `string`      | n/a                |   yes    |
-| <a name="input_owner"></a> [owner](#input\_owner)                                                                       | Owner of the resources, used for tagging AWS resources.                                | `string`      | n/a                |   yes    |
-| <a name="input_stream_arn"></a> [stream\_arn](#input\_stream\_arn)                                                      | The ARN of the DynamoDB stream acting as the event source.                             | `string`      | n/a                |   yes    |
-| <a name="input_topic_arn"></a> [topic\_arn](#input\_topic\_arn)                                                         | The ARN of the SNS topic acting as the event sink.                                     | `string`      | n/a                |   yes    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
+| <a name="input_lambda_regional_environment"></a> [lambda\_regional\_environment](#input\_lambda\_regional\_environment) | Lambda Regional Environment Name, used to lookup regional code signing and S3 buckets. | `string` | `"WorkLoadConfig"` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name used to generate the SNS publisher resources (i.e. the lambda naming). | `string` | n/a | yes |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_stream_arn"></a> [stream\_arn](#input\_stream\_arn) | The ARN of the DynamoDB stream acting as the event source. | `string` | n/a | yes |
+| <a name="input_topic_arn"></a> [topic\_arn](#input\_topic\_arn) | The ARN of the SNS topic acting as the event sink. | `string` | n/a | yes |
 
 ## Outputs
 
-| Name                                                                                | Description |
-|-------------------------------------------------------------------------------------|-------------|
-| <a name="output_binary_path"></a> [binary\_path](#output\_binary\_path)             | n/a         |
-| <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn)                | n/a         |
-| <a name="output_lambda_artifact"></a> [lambda\_artifact](#output\_lambda\_artifact) | n/a         |
-
+| Name | Description |
+|------|-------------|
+| <a name="output_binary_path"></a> [binary\_path](#output\_binary\_path) | n/a |
+| <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | n/a |
+| <a name="output_lambda_artifact"></a> [lambda\_artifact](#output\_lambda\_artifact) | n/a |
 <!-- END_TF_DOCS -->
