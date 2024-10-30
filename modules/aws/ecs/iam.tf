@@ -50,7 +50,8 @@ data "aws_iam_policy_document" "task_execution_secrets_policy" {
 # The task execution role grants the Amazon ECS container and Fargate agents permission to make AWS API calls on your behalf.
 # See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
 resource "aws_iam_role" "task_execution_role" {
-  name = "${var.name}-${var.environment}-TaskExecutionRole"
+  name_prefix = "${local.name}-TaskExec"
+  description = "Task Execution Role for ECS ${local.name}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -66,14 +67,14 @@ resource "aws_iam_role" "task_execution_role" {
   dynamic "inline_policy" {
     for_each = data.aws_iam_policy_document.task_execution_secrets_policy
     content {
-      name   = "${var.name}-${var.environment}-TaskExecutionSecretsPolicy"
+      name   = "${local.name}-TaskExecutionSecretsPolicy"
       policy = inline_policy.value.json
     }
   }
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-TaskExecutionRole"
+      Name = "${local.name}-TaskExecutionRole"
     },
   )
 }
@@ -109,18 +110,19 @@ data "aws_iam_policy_document" "task_assume_role" {
 }
 
 resource "aws_iam_role" "task_role" {
-  name               = "${var.name}-${var.environment}-TaskRole"
+  name_prefix        = "${local.name}-TaskRole"
+  description        = "Task Role for ECS ${local.name}"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role.json
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-TaskRole"
+      Name = "${local.name}-TaskRole"
     },
   )
 }
 
 resource "aws_iam_role_policy" "task_role" {
-  name   = "${var.name}-${var.environment}-TaskPolicy"
+  name   = "${local.name}-TaskPolicy"
   role   = aws_iam_role.task_role.name
   policy = var.ecs_task_iam_policy_document
 }

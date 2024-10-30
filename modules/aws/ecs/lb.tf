@@ -1,5 +1,4 @@
 locals {
-  name                       = "${var.name}-${var.environment}"
   lb_access_logs_bucket_name = "${data.aws_caller_identity.current.account_id}-workloadconfig-${data.aws_region.current.name}-load-balancer-logs"
 }
 resource "aws_lb" "default" {
@@ -116,8 +115,8 @@ locals {
 # Create a security group based on the variables set above.
 resource "aws_security_group" "load_balancer" {
   count       = local.create_lb_security_group ? 1 : 0
-  name        = "${local.name}-${var.environment}-LB"
-  description = "Security group for LB ${local.name}-${var.environment}"
+  name        = "${local.name}-LB"
+  description = "LB for ${local.name}"
   vpc_id      = data.aws_vpc.default.id
 
   egress {
