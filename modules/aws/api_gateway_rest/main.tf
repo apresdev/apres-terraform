@@ -9,6 +9,8 @@ locals {
       "managed-by"  = "Terraform"
     })
   )
+
+  name = module.apres_names.local_name
 }
 
 module "apres_names" {
