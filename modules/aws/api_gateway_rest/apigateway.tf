@@ -1,6 +1,6 @@
 resource "aws_api_gateway_rest_api" "default" {
-  name        = "${var.name}-${var.environment}-api"
-  description = "${var.name} ${var.environment} REST API"
+  name        = local.name
+  description = "${local.name} REST API"
   # Merge changes instead of replace, see note at the top of
   # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api#openapi-specification
   put_rest_api_mode = "merge"
@@ -20,7 +20,7 @@ resource "aws_api_gateway_rest_api" "default" {
   tags = merge(
     local.tags,
     {
-      Name = var.name
+      Name = local.name
     },
   )
 }
@@ -51,7 +51,7 @@ resource "aws_api_gateway_stage" "default" {
   tags = merge(
     local.tags,
     {
-      Name = var.name
+      Name = local.name
     },
   )
 }
@@ -70,12 +70,12 @@ resource "aws_api_gateway_deployment" "default" {
 
 resource "aws_api_gateway_vpc_link" "default" {
   count       = var.attach_vpc_load_balancer ? 1 : 0
-  name        = "${var.name} ${var.environment} VPC Link"
+  name        = local.name
   target_arns = [var.load_balancer_arn]
   tags = merge(
     local.tags,
     {
-      Name = var.name
+      Name = local.name
     },
   )
 }
