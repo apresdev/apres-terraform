@@ -9,9 +9,7 @@ resulting name will have the following pattern:
 
 where:
 
-* `account-id` is the 12 digit AWS account where the bucket is deployed.
 * `environment` is the lower case `environment` variable passed into the terraform stack
-* `region` is the AWS region where the bucket is deployed
 * `name` is the lower case `name` variable passed into the terraform stack.
 
 For example, if the stack is deployed with:
@@ -24,7 +22,7 @@ module "sns" {
 }
 ```
 
-and the stack is deployed to the AWS account 12345689012 in us-east-2, the SNS topic name will be `123456789012-systemtest-us-east-2-mytesttopic`
+the SNS topic name will be `SystemTest-mytesttopic`
 
 ### Enforced Best Practices
 
@@ -93,7 +91,9 @@ The following permissions are required to use this module, shown as a Policy sni
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 
 ## Resources
 
@@ -112,7 +112,7 @@ No modules.
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_display_name"></a> [display\_name](#input\_display\_name) | The human-readable name used in the From field for notifications to email and email-json endpoints | `string` | n/a | yes |
-| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. <br>  If not provided, the default customer managed key 'alias/apres/messaging' will be used. | `string` | `"alias/apres/messaging"` | no |
+| <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. <br/>  If not provided, the default customer managed key 'alias/apres/messaging' will be used. | `string` | `"alias/apres/messaging"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the queue, must be between 3 and 40 characters long and can contain only the following characters: a-z, A-Z, 0-9, \_, and - | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
