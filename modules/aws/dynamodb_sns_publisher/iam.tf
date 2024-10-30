@@ -1,9 +1,9 @@
 # This grants the permissions the lambda needs during execution
 data "aws_iam_policy_document" "default" {
 
-  policy_id = "${local.lambda_name}-stream-publisher"
+  policy_id = "${local.name}-stream-publisher"
 
-  # Allows the lambda to publish to SNS  
+  # Allows the lambda to publish to SNS
   statement {
     effect = "Allow"
 
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "default" {
     resources = [var.topic_arn]
   }
 
-  # Allows the lambda to connect to the dynamodb stream  
+  # Allows the lambda to connect to the dynamodb stream
   statement {
     effect = "Allow"
 
@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "default" {
 
   }
 
-  # Allows the lambda to use the messaging key 
+  # Allows the lambda to use the messaging key
   statement {
     effect = "Allow"
 
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "default" {
 
 # Attaches the additional lambda permissions to the policy
 resource "aws_iam_role_policy" "default" {
-  name   = local.lambda_name
-  role   = module.lambda.iam_role_name
-  policy = data.aws_iam_policy_document.default.json
+  name_prefix = local.name
+  role        = module.lambda.iam_role_name
+  policy      = data.aws_iam_policy_document.default.json
 }
