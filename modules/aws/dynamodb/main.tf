@@ -9,12 +9,19 @@ locals {
       owner       = var.owner
     })
   )
-  table_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+  table_name = module.apres_names.local_name
 
   # Auto-scaling defaults
   autoscaling_enabled = var.billing_mode == "PROVISIONED" && var.autoscaling_enabled
   write_capacity      = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
   read_capacity       = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+}
+
+module "apres_names" {
+  #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/1.0.0"
+  name        = var.name
+  environment = var.environment
 }
 
 # The following best practices are applied to the table by default:
@@ -85,10 +92,7 @@ resource "aws_dynamodb_table" "default" {
     })
   )
 
-  depends_on = [data.aws_caller_identity.current]
-
   #checkov:skip=CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables
-
 }
 
 #CKV2_AWS_16: Ensure that Auto Scaling is enabled on your DynamoDB tables

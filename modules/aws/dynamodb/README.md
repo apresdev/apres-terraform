@@ -2,16 +2,13 @@
 
 ## Overview
 
-This module will create a DynamoDb table in accordance with best practices. DynamoDB tables names do not need to be globally unique in AWS; however,
-to match similar resources that must be unique (such as S3 buckets), the resulting name will have the following pattern:
+This module will create a DynamoDb table in accordance with best practices. DynamoDB tables names do not need to be globally unique in AWS, and table names will be created using the following patterN:
 
-`account-id`-`environment`-`region`-`name`
+`environment`-`name`
 
 where:
 
-* `account-id` is the 12 digit AWS account where the bucket is deployed.
 * `environment` is the lower case `environment` variable passed into the terraform stack
-* `region` is the AWS region where the bucket is deployed
 * `name` is the lower case `name` variable passed into the terraform stack.
 
 For example, if the stack is deployed with:
@@ -31,11 +28,11 @@ module "dynamodb" {
 }
 ```
 
-and the stack is deployed to the AWS account 12345689012 in us-east-2, the table name will be `123456789012-systemtest-us-east-2-mytesttable`
+the table name will be `SystemTest-mytesttable`
 
 ### Enforced Best Practices
 
-The following best practices are applied to the bucket:
+The following best practices are applied to the table:
 
 | Id          | Policy                                                                |
 |-------------|-----------------------------------------------------------------------|
@@ -93,7 +90,7 @@ The following permissions are required to use this module, shown as a Policy sni
     "Action": [
         "dynamodb:*"
     ],
-    "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::AccountId}-${environment}-${AWS::Region}-${name}"
+    "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${environment}-${name}"
 },
 {
     "Effect": "Allow",
@@ -130,7 +127,9 @@ The following permissions are required to use this module, shown as a Policy sni
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 
 ## Resources
 
@@ -160,7 +159,7 @@ No modules.
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | (Optional) Enables deletion protection for table. Defaults to true. | `bool` | `true` | no |
 | <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br/>  the default AWS managed key 'aws/dynamodb' will be used. | `string` | `""` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources, and in the bucket name. | `string` | n/a | yes |
 | <a name="input_global_secondary_indices"></a> [global\_secondary\_indices](#input\_global\_secondary\_indices) | List of definitions for global secondary indices. Note that any Dynamo attributes must<br/>  be defined in the attributes variable.<br/>  Each "global\_secondary\_indices" variable has the following properties:<br/>    name - (Required) The name of the global secondary index.<br/>    hash\_key - (Required) The attribute to use as the hash (partition) key. Must also be<br/>      defined as an attribute<br/>    range\_key - (Optional) The attribute to use as the range (sort) key. Must also be<br/>      defined as an attribute<br/>    write\_capacity - (Optional) The number of write units for this index. Do not specify<br/>      if using an on-demand (PAY\_PER\_REQUEST) table.<br/>    read\_capacity - (Optional) The number of read units for this index. Do not specify<br/>      if using an on-demand table.<br/>    projection\_type - (Optional) One of ALL, KEYS\_ONLY, INCLUDE. Default is ALL.<br/>    non\_key\_attributes - (Optional) List of attributes that are copied from the table<br/>      into the index. These attributes are in addition to the primary key attributes and<br/>      index key attributes, and are projected into the index. | <pre>list(object({<br/>    name               = string<br/>    hash_key           = string<br/>    range_key          = optional(string, "")<br/>    write_capacity     = optional(number, null)<br/>    read_capacity      = optional(number, null)<br/>    projection_type    = optional(string, "ALL")<br/>    non_key_attributes = optional(list(string), [])<br/>  }))</pre> | `[]` | no |
 | <a name="input_hash_key"></a> [hash\_key](#input\_hash\_key) | The attribute to use as the hash (partition) key. Must also be defined as an attribute | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the table, must be between 3 and 255 characters long and can contain only the following characters: a-z, A-Z, 0-9, \_, -, and . | `string` | n/a | yes |

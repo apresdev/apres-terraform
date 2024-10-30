@@ -183,7 +183,7 @@ func (s *DynamoDbTestSuite) TestPayPerRequest() {
 
 // assertOutputs verifies that all output variables are set correctly.
 func (s *DynamoDbTestSuite) assertOutputs(account string, tableNameInput string, tableName string, tableArn string, streamArn string) {
-	expectedTableName := fmt.Sprintf("%s-%s-%s-%s", account, strings.ToLower(s.environment), s.awsRegion, strings.ToLower(tableNameInput))
+	expectedTableName := fmt.Sprintf("%s-%s", s.environment, tableNameInput)
 	s.Assert().Equal(expectedTableName, tableName, "expected bucket name to match")
 
 	expectedTableArn := fmt.Sprintf("arn:aws:dynamodb:%s:%s:table/%s", s.awsRegion, account, expectedTableName)
