@@ -212,11 +212,15 @@ variable "associate_resource_arn" {
     HTTP is unsupported), an Amazon Cognito User Pool, an Amazon AppSync GraphQL API,
     an Amazon App Runner service, or an Amazon Verified Access instance.
 
+    If associating this WAF with a CloudFront distribution created by the CloudFront module,
+    leave this blank. The CloudFront module will handle the association.
+
     Note: the README contains a list of IAM permissions, this ARN needs to be added to the statement
     with the Sid `AssociateWAF` else the association will fail.
   EOF
+  default     = ""
   validation {
-    condition     = can(regex("arn:aws.*", var.associate_resource_arn))
+    condition     = can(var.associate_resource_arn == "" || regex("arn:aws.*", var.associate_resource_arn))
     error_message = "The ARN must be a valid AWS ARN."
   }
 }
