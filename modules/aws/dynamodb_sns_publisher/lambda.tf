@@ -5,7 +5,7 @@ module "lambda" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.3.0"
 
-  name          = local.name
+  name          = var.name
   description   = "DynamoDB stream to SNS publisher"
   binary_path   = local.binary_path
   memory_size   = 128

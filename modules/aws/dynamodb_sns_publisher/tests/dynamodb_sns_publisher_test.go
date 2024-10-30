@@ -53,7 +53,7 @@ func (s *DynamoDbSnsPublisherTestSuite) SetupSuite() {
 func (s *DynamoDbSnsPublisherTestSuite) TestRoundTrip() {
 	// Variables for the terraform module
 	now := time.Now().Unix()
-	tableNameInput := fmt.Sprintf("testfunc%d", now)
+	tableNameInput := fmt.Sprintf("test%d", now)
 	// Terraform options
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
