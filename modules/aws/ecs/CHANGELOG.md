@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.0.0 - 2024-10-30
+
+Update names to match standards. This will cause a rebuild of most resources.
+
 ## 1.1.2 - 2024-10-18
 
 Update providers, fix deprecation warning in the IAM role, add CloudWatch dashboard.

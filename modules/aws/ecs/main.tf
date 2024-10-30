@@ -31,12 +31,12 @@ locals {
     startPeriod = var.container_health_check_start_period
   }
 
-  container_name = "${var.name}-${var.environment}"
+  name = module.apres_names.local_name
 
   # Create an array for the load balancer, so we can create it dynamically
   load_balancer_config = var.create_load_balancer ? [
     {
-      container_name = local.container_name
+      container_name = local.name
       container_port = var.container_port
     }
   ] : []
@@ -92,4 +92,11 @@ locals {
     }
   ] : []
 
+}
+
+module "apres_names" {
+  #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/1.0.0"
+  name        = var.name
+  environment = var.environment
 }

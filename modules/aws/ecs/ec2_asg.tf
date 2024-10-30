@@ -15,11 +15,15 @@ locals {
     "%USE_NVME_STORAGE%",
     var.ec2_use_instance_nvme_storage ? "true" : "false"
   )
+
+  # We need the ASG name here and for the CloudWatch dashboard, even if we don't create
+  # the ASG.
+  ecs_asg_name = "${local.name}-ECSASG"
 }
 
 resource "aws_launch_template" "ecs_launch_template" {
   count         = local.use_ec2
-  name          = var.name
+  name          = local.name
   image_id      = data.aws_ami.ecs_ami.id
   instance_type = var.ec2_instance_type
   user_data     = base64encode(local.user_data)
@@ -52,12 +56,12 @@ resource "aws_launch_template" "ecs_launch_template" {
 
 resource "aws_iam_role" "ec2_instance_role" {
   count              = local.use_ec2
-  name               = "${var.name}-${var.environment}-EC2InstanceRole"
+  name_prefix        = "${local.name}-EC2InstanceRole"
   assume_role_policy = data.aws_iam_policy_document.ec2_instance_role_policy.json
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-EC2InstanceRole"
+      Name = "${local.name}-EC2InstanceRole"
     },
   )
 }
@@ -72,17 +76,16 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm" {
   count      = local.use_ec2
   role       = aws_iam_role.ec2_instance_role[0].name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-
 }
 
 resource "aws_iam_instance_profile" "ec2_instance_role_profile" {
-  count = local.use_ec2
-  name  = "${var.name}-${var.environment}-EC2InstanceRoleProfile"
-  role  = aws_iam_role.ec2_instance_role[0].id
+  count       = local.use_ec2
+  name_prefix = "${local.name}-EC2InstanceRoleProfile"
+  role        = aws_iam_role.ec2_instance_role[0].id
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-EC2InstanceRoleProfile"
+      Name = "${local.name}-EC2InstanceRoleProfile"
     },
   )
 }
@@ -104,7 +107,7 @@ data "aws_iam_policy_document" "ec2_instance_role_policy" {
 
 resource "aws_autoscaling_group" "ecs_asg" {
   count                 = local.use_ec2
-  name                  = "${var.name}-${var.environment}-ECSASG"
+  name                  = local.ecs_asg_name
   max_size              = var.ec2_autoscale_max
   min_size              = var.ec2_autoscale_min
   vpc_zone_identifier   = data.aws_subnets.private.ids
@@ -147,7 +150,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   }
   tag {
     key                 = "Name"
-    value               = "${var.name}-${var.environment}-ECSASG"
+    value               = local.ecs_asg_name
     propagate_at_launch = true
   }
   # This tag is needed for the capacity provider.
@@ -161,8 +164,8 @@ resource "aws_autoscaling_group" "ecs_asg" {
 resource "aws_security_group" "ecs_asg" {
   #checkov:skip=CKV2_AWS_5:False positive, this security group is attached to the launch template.
   count       = local.use_ec2
-  name        = "${var.name}-${var.environment}-ECS-ASG"
-  description = "Security group for ECS ASG for ${var.name}-${var.environment}"
+  name        = local.ecs_asg_name
+  description = "ECS ASG for ${local.name}"
   vpc_id      = data.aws_vpc.default.id
 
   egress {
@@ -176,7 +179,7 @@ resource "aws_security_group" "ecs_asg" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-ECSASGSecurityGroup"
+      Name = local.ecs_asg_name
     },
   )
 }

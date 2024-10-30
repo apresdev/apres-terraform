@@ -22,7 +22,7 @@ import (
 )
 
 const awsRegion = "us-east-2"
-const environmentName = "Testing"
+const environmentName = "Test"
 
 func getName() string {
 	return fmt.Sprintf("test%d", time.Now().Unix())
@@ -243,7 +243,7 @@ func TestECSFargateNoLoadBalancer(t *testing.T) {
 
 	tfOut := getAndVerifyOutputs(t, terraformOptions)
 
-	expectedClusterName := fmt.Sprintf("%s-%s", name, environmentName)
+	expectedClusterName := fmt.Sprintf("%s-%s", environmentName, name)
 	assert.Equal(t, tfOut.ecsClusterName, expectedClusterName, "Expected ECS Cluster Name to match the name passed to the stack")
 
 	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
@@ -305,7 +305,7 @@ func TestECSFargateEphemeralVolumeLoadBalancer(t *testing.T) {
 	assert.NotEmpty(t, tfOut.loadBalancerDnsName, "Expected a non-empty Load Balancer DNS Name")
 	assert.NotEmpty(t, tfOut.loadBalancerTargetGroupArn, "Expected a non-empty Load Balancer Target Group ARN")
 
-	expectedClusterName := fmt.Sprintf("%s-%s", name, environmentName)
+	expectedClusterName := fmt.Sprintf("%s-%s", environmentName, name)
 	assert.Equal(t, expectedClusterName, tfOut.ecsClusterName,
 		"Expected ECS Cluster Name to match the name passed to the stack")
 
@@ -357,7 +357,7 @@ func TestECSEc2WithLoadBalancer(t *testing.T) {
 
 	tfOut := getAndVerifyOutputs(t, terraformOptions)
 
-	expectedClusterName := fmt.Sprintf("%s-%s", name, environmentName)
+	expectedClusterName := fmt.Sprintf("%s-%s", environmentName, name)
 	assert.Equal(t, expectedClusterName, tfOut.ecsClusterName, "Expected ECS Cluster Name to match the name passed to the stack")
 
 	assert.NotEmpty(t, tfOut.ec2AsgArn, "Expected a non-empty EC2 ASG ARN")

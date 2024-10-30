@@ -27,12 +27,12 @@ locals {
 # https://github.com/hashicorp/terraform-provider-aws/issues/35279
 #
 resource "aws_ecs_task_definition" "default" {
-  family = local.container_name
+  family = local.name
   # Reference for the following is https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = jsonencode(
     [
       {
-        name                   = local.container_name
+        name                   = local.name
         image                  = var.container_image_uri
         essential              = true
         readonlyRootFilesystem = true
@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "default" {
           options = {
             awslogs-group         = local.cwl_log_group_name
             awslogs-region        = data.aws_region.current.name
-            awslogs-stream-prefix = local.container_name
+            awslogs-stream-prefix = local.name
           }
         }
         portMappings = local.container_port_mappings
@@ -72,7 +72,7 @@ resource "aws_ecs_task_definition" "default" {
   tags = merge(
     local.tags,
     {
-      Name = local.container_name
+      Name = local.name
     },
   )
 
@@ -115,7 +115,7 @@ resource "aws_ecs_service" "default" {
     aws_iam_role_policy_attachment.ec2_ecs[0],
     aws_iam_role_policy_attachment.ec2_ssm[0],
   ]
-  name            = local.container_name
+  name            = local.name
   desired_count   = 1
   task_definition = aws_ecs_task_definition.default.arn
   cluster         = aws_ecs_cluster.default.id
@@ -154,7 +154,7 @@ resource "aws_ecs_service" "default" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}"
+      Name = local.name
     },
   )
   propagate_tags = "SERVICE"
@@ -165,7 +165,7 @@ resource "aws_ecs_service" "default" {
     assign_public_ip = false
   }
 
-  # Create this section dynamicall, but call out the listener ARN directly because we don't
+  # Create this section dynamically, but call out the listener ARN directly because we don't
   # know the ARN at the time the local section is created.
   dynamic "load_balancer" {
     for_each = local.load_balancer_config
@@ -178,13 +178,13 @@ resource "aws_ecs_service" "default" {
 }
 
 resource "aws_security_group" "ecs" {
-  name        = "${var.name}-${var.environment}-ECS-Task"
-  description = "Security group for ECS Task ${var.name}-${var.environment}"
+  name        = "${local.name}-ECS-Task"
+  description = "ECS Task for ${local.name}"
   vpc_id      = data.aws_vpc.default.id
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-ECS-Task"
+      Name = "${local.name}-ECS-Task"
     },
   )
   egress {
@@ -209,7 +209,7 @@ resource "aws_security_group_rule" "ecs_ingress" {
 
 resource "aws_ecs_cluster" "default" {
   #checkov:skip=CKV_AWS_224:CloudWatch Logs are encrypted, just not with CMK's.
-  name = "${var.name}-${var.environment}"
+  name = local.name
 
   configuration {
     execute_command_configuration {
@@ -229,7 +229,7 @@ resource "aws_ecs_cluster" "default" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}"
+      Name = local.name
     },
   )
 }
