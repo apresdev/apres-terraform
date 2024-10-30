@@ -10,7 +10,7 @@ locals {
 
 module "cloudwatchlogs" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.0.0"
+  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.1.0"
   # The name MUST be prepended with "aws-waf-logs-" for the WAF to be able to log to it.
   name              = "aws-waf-logs-${lower(var.name)}-${lower(var.environment)}"
   path              = "aws-waf-logs-${lower(var.name)}-${lower(var.environment)}"
