@@ -202,6 +202,15 @@ variable "default_action" {
   }
 }
 
+variable "associate_resource" {
+  description = <<EOF
+    Whether to associate the WAF with a resource specified in the associate_resource_arn variable.
+    If associating this WAF with a CloudFront distribution created by the CloudFront module, set this to false.
+  EOF
+  type        = bool
+  default     = true
+}
+
 variable "associate_resource_arn" {
   type        = string
   description = <<EOF
@@ -213,14 +222,10 @@ variable "associate_resource_arn" {
     an Amazon App Runner service, or an Amazon Verified Access instance.
 
     If associating this WAF with a CloudFront distribution created by the CloudFront module,
-    leave this blank. The CloudFront module will handle the association.
+    leave this blank and set the associate_resource variable to false.
 
     Note: the README contains a list of IAM permissions, this ARN needs to be added to the statement
     with the Sid `AssociateWAF` else the association will fail.
   EOF
   default     = ""
-  validation {
-    condition     = can(var.associate_resource_arn == "" || regex("arn:aws.*", var.associate_resource_arn))
-    error_message = "The ARN must be a valid AWS ARN."
-  }
 }

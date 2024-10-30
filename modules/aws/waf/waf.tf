@@ -310,8 +310,11 @@ resource "aws_wafv2_web_acl" "default" {
   )
 }
 
+# Need to use two variables here, since the ARN passed in typically belongs to another
+# resource that's being created, and terraform can't figure out the dependency chain, even
+# with depends_on set. So we use two variables.
 resource "aws_wafv2_web_acl_association" "default" {
-  count        = var.associate_resource_arn == "" ? 0 : 1
+  count        = var.associate_resource ? 1 : 0
   resource_arn = var.associate_resource_arn
   web_acl_arn  = aws_wafv2_web_acl.default.arn
 }
