@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.0 - 2024-10-30
+
+Update names to match standards.
+
 ## 0.1.3 - 2024-10-17
 
 Bump lambda::apres-terraform from 0.2.0 to 0.2.1 in /modules/aws/dynamodb_sns_publisher
