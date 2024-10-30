@@ -50,12 +50,15 @@ variable "default_tags" {
 # so we will restrict the user supplied input to 65 characters to attempt to avoid
 # overloading the full SQS queue name limitations.
 variable "name" {
-  description = "Name of the queue, must be between 3 and 65 characters long and can contain only the following characters: a-z, A-Z, 0-9, _, and -"
+  description = <<EOF
+    Name of the queue, must be more than 2 and less than 65 characters
+    long and can contain only the following characters: a-z, A-Z, 0-9, _, and -
+  EOF
   type        = string
   nullable    = false
   validation {
     condition     = length(var.name) >= 3 && length(var.name) < 65
-    error_message = "Name length must be between 3 and 65 characters."
+    error_message = "Name length must be more than 2 and less than 65 characters."
   }
   validation {
     condition     = can(regex("^[a-zA-Z0-9_\\-]*$", var.name))
