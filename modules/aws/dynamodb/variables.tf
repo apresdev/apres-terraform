@@ -1,7 +1,6 @@
 variable "environment" {
   description = "Environment name, used for tagging AWS resources, and in the bucket name."
   type        = string
-  default     = "dev"
 }
 
 # Table names and index names must be between 3 and 255 characters long, and can contain only the following characters:
