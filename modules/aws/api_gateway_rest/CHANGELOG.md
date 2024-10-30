@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.3 - 2024-10-30
+
+Bump cwl_apigateway::apres-terraform from 1.0.0 to 1.1.0 in /modules/aws/api_gateway_rest
+
 ## 1.0.2 - 2024-10-11
 
 Fix load balancer dependency issue with count by adding the "attach_vpc_load_balancer" variable.
