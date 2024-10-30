@@ -43,7 +43,7 @@ resource "aws_appautoscaling_target" "app_scale_target" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
-  alarm_name          = "${var.name}-${var.environment}-CPU-Util-High-${var.ecs_cpu_high_threshold_percent}"
+  alarm_name          = "${local.name}-CPU-Util-High-${var.ecs_cpu_high_threshold_percent}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
@@ -62,13 +62,13 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-CPU-Util-High-${var.ecs_cpu_high_threshold_percent}"
+      Name = "${local.name}-CPU-Util-High-${var.ecs_cpu_high_threshold_percent}"
     }
   )
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
-  alarm_name          = "${var.name}-${var.environment}-CPU-Util-Low-${var.ecs_cpu_low_threshold_percent}"
+  alarm_name          = "${local.name}-CPU-Util-Low-${var.ecs_cpu_low_threshold_percent}"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
@@ -87,7 +87,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
   tags = merge(
     local.tags,
     {
-      Name = "${var.name}-${var.environment}-CPU-Util-Low-${var.ecs_cpu_low_threshold_percent}"
+      Name = "${local.name}-CPU-Util-Low-${var.ecs_cpu_low_threshold_percent}"
     }
   )
 }

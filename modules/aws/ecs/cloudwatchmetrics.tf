@@ -1,9 +1,9 @@
 
 locals {
-  cw_dashboard_name = "${var.name}-${var.environment}-ECS-Dashboard"
+  cw_dashboard_name = "${local.name}-ECS-Dashboard"
 }
 resource "aws_cloudwatch_metric_alarm" "crash_loop" {
-  alarm_name          = "${var.name}-${var.environment}-TaskCrashLoop"
+  alarm_name          = "${local.name}-TaskCrashLoop"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "TaskNonZeroExitCode"
@@ -13,9 +13,9 @@ resource "aws_cloudwatch_metric_alarm" "crash_loop" {
   threshold           = 4
   alarm_description   = "Alarm if too many tasks exit with non-zero exit codes"
   dimensions = {
-    Cluster = "${local.container_name}"
-    Service = "${local.container_name}"
-    Task    = "${local.container_name}"
+    Cluster = "${local.name}"
+    Service = "${local.name}"
+    Task    = "${local.name}"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "type" : "metric",
           "properties" : {
             "metrics" : [
-              ["ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "${local.container_name}", "ClusterName", "${local.container_name}", { "region" : "${data.aws_region.current.name}", "yAxis" : "right" }],
+              ["ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "${local.name}", "ClusterName", "${local.name}", { "region" : "${data.aws_region.current.name}", "yAxis" : "right" }],
               [".", "CpuUtilized", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }]
             ],
             "view" : "timeSeries",
@@ -63,7 +63,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "type" : "metric",
           "properties" : {
             "metrics" : [
-              ["ECS/ContainerInsights", "DesiredTaskCount", "ServiceName", "${local.container_name}", "ClusterName", "${local.container_name}", { "region" : "${data.aws_region.current.name}" }],
+              ["ECS/ContainerInsights", "DesiredTaskCount", "ServiceName", "${local.name}", "ClusterName", "${local.name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "TaskSetCount", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }],
               [".", "PendingTaskCount", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }],
               [".", "RunningTaskCount", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }]
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "type" : "metric",
           "properties" : {
             "metrics" : [
-              ["ECS/ContainerInsights", "StorageWriteBytes", "ServiceName", "${local.container_name}", "ClusterName", "${local.container_name}", { "region" : "${data.aws_region.current.name}" }],
+              ["ECS/ContainerInsights", "StorageWriteBytes", "ServiceName", "${local.name}", "ClusterName", "${local.name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "StorageReadBytes", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }]
             ],
             "view" : "timeSeries",
@@ -108,7 +108,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "type" : "metric",
           "properties" : {
             "metrics" : [
-              ["ECS/ContainerInsights", "NetworkTxBytes", "ServiceName", "${local.container_name}", "ClusterName", "${local.container_name}", { "region" : "${data.aws_region.current.name}" }],
+              ["ECS/ContainerInsights", "NetworkTxBytes", "ServiceName", "${local.name}", "ClusterName", "${local.name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "NetworkRxBytes", ".", ".", ".", ".", { "region" : "${data.aws_region.current.name}" }]
             ],
             "view" : "timeSeries",
@@ -127,7 +127,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "type" : "metric",
           "properties" : {
             "metrics" : [
-              ["Apres/ECS", "TaskNonZeroExitCode", "Task", "${local.container_name}", "Cluster", "${local.container_name}", "Service", "${local.container_name}", { "region" : "${data.aws_region.current.name}" }]
+              ["Apres/ECS", "TaskNonZeroExitCode", "Task", "${local.name}", "Cluster", "${local.name}", "Service", "${local.name}", { "region" : "${data.aws_region.current.name}" }]
             ],
             "view" : "timeSeries",
             "stacked" : false,
@@ -151,7 +151,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "height" : 6,
           "properties" : {
             "metrics" : [
-              ["AWS/AutoScaling", "GroupDesiredCapacity", "AutoScalingGroupName", "${local.container_name}-ECSASG", { "region" : "${data.aws_region.current.name}" }],
+              ["AWS/AutoScaling", "GroupDesiredCapacity", "AutoScalingGroupName", "${local.ecs_asg_name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "GroupMaxSize", ".", ".", { "region" : "${data.aws_region.current.name}" }],
               [".", "GroupInServiceInstances", ".", ".", { "region" : "${data.aws_region.current.name}" }]
             ],
@@ -176,7 +176,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "height" : 6,
           "properties" : {
             "metrics" : [
-              ["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "${local.container_name}-ECSASG", { "region" : "${data.aws_region.current.name}" }],
+              ["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "${local.ecs_asg_name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "CPUCreditUsage", ".", ".", { "yAxis" : "right", "region" : "${data.aws_region.current.name}" }],
               [".", "CPUCreditBalance", ".", ".", { "yAxis" : "right", "region" : "${data.aws_region.current.name}" }]
             ],
@@ -216,7 +216,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "height" : 6,
           "properties" : {
             "metrics" : [
-              ["AWS/EC2", "EBSWriteOps", "AutoScalingGroupName", "${local.container_name}-ECSASG", { "region" : "${data.aws_region.current.name}" }],
+              ["AWS/EC2", "EBSWriteOps", "AutoScalingGroupName", "${local.ecs_asg_name}", { "region" : "${data.aws_region.current.name}" }],
               [".", "EBSReadBytes", ".", ".", { "yAxis" : "right", "region" : "${data.aws_region.current.name}" }],
               [".", "EBSWriteBytes", ".", ".", { "yAxis" : "right", "region" : "${data.aws_region.current.name}" }],
               [".", "EBSReadOps", ".", ".", { "region" : "${data.aws_region.current.name}" }]
@@ -247,7 +247,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           "height" : 6,
           "properties" : {
             "metrics" : [
-              ["AWS/EC2", "NetworkOut", "AutoScalingGroupName", "${local.container_name}-ECSASG", { "yAxis" : "right" }],
+              ["AWS/EC2", "NetworkOut", "AutoScalingGroupName", "${local.ecs_asg_name}", { "yAxis" : "right" }],
               [".", "NetworkPacketsIn", ".", "."],
               [".", "NetworkIn", ".", ".", { "yAxis" : "right" }],
               [".", "NetworkPacketsOut", ".", "."]
