@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-10-30
+
+Update names to match naming standards. Make the association optional for later reuse in the cloudfront_s3 module.
+
 ## 1.0.2 - 2024-10-15
 
 Update variable docs for allowable ARNs.
