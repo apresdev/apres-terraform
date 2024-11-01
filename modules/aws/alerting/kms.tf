@@ -1,4 +1,5 @@
-# We can use the IAM Policy Document for the Key Policy
+# KMS keys are created in every region where the stack is deployed.
+
 data "aws_iam_policy_document" "kms" {
   #checkov:skip=CKV_AWS_356:Resources need to be '*' for this policy.
   #checkov:skip=CKV_AWS_111:Write must be unconstrained for this policy.
@@ -40,7 +41,7 @@ data "aws_iam_policy_document" "kms" {
     }
   }
   dynamic "statement" {
-    for_each = var.publishing_services
+    for_each = local.all_publishing_services
     content {
       sid    = "Allow${title(split(".", statement.value)[0])}ToUseKMS"
       effect = "Allow"
