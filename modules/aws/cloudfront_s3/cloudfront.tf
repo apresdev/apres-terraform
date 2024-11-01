@@ -1,5 +1,5 @@
 locals {
-  s3_origin_id = "s3-${lower(var.name)}"
+  s3_origin_id = "s3-${lower(local.name)}"
   default_spa_error_responses = [
     {
       error_code            = 403
@@ -18,15 +18,15 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = lower(var.name)
-  description                       = "${title(var.name)} ${var.environment} Policy"
+  name                              = local.name
+  description                       = "${local.name} Policy"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_cache_policy" "default" {
-  name        = "${lower(var.name)}-${lower(var.environment)}-cache-policy"
+  name        = local.name
   min_ttl     = 0
   max_ttl     = 3600
   default_ttl = 3600
@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "default" {
   #checkov:skip=CKV2_AWS_47:Included WAF has log4j vulnerability mitigation
   #checkov:skip=CKV_AWS_310:TODO look at origin failover
   #checkov:skip=CKV2_AWS_32:TODO add response headers policy.
-  comment = "${title(var.name)} ${var.environment} CloudFront Distribution"
+  comment = "${local.name} CloudFront Distribution"
 
   # Need the ACL to be in place before we can create the distribution
   depends_on = [aws_s3_bucket_acl.logging]
@@ -76,7 +76,7 @@ resource "aws_cloudfront_distribution" "default" {
   logging_config {
     include_cookies = false
     bucket          = module.s3_logs.bucket_regional_domain_name
-    prefix          = "${lower(var.name)}-${lower(var.environment)}-cloudfront-logs/"
+    prefix          = "${lower(local.name)}-cloudfront-logs/"
   }
 
   default_cache_behavior {

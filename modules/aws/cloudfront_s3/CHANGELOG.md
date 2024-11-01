@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.0 - 2024-11-01
+
+Fix names and replace inline WAF module with the Apres WAF module.
+
 ## 0.2.2 - 2024-10-10
 
 Bump s3::apres-terraform from 2.0.1 to 3.0.1 in /modules/aws/cloudfront_s3
