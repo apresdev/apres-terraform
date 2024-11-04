@@ -17,20 +17,6 @@ variable "retain_load_balancer_logs_days" {
   default     = 365
 }
 
-variable "chatbot_primary_region" {
-  description = <<EOF
-    ChatBot will send CloudWatch Alarms to Slack or Teams (if configured) but ChatBot is a global service. Set this
-    to the region name, like "us-east-2" or "us-west-2" where the primary ChatBot is configured.
-
-    ChatBot must be configured in each account before being deployed, with Slack and/or Teams integration. See the
-    instructions in the Apres `alerting` terraform module for more information.
-
-    Leaving this blank will disable ChatBot, and the Slack and Teams variables will be ignored.
-  EOF
-  type        = string
-  default     = ""
-}
-
 variable "slack_workspace_id" {
   description = <<EOF
   The Slack workspace ID for notifications,
@@ -78,16 +64,4 @@ variable "msteams_tenant_id" {
     EOF
   type        = string
   default     = ""
-}
-
-variable "email_addresses" {
-  description = <<EOF
-    List of email addresses to send notifications to.
-    EOF
-  type        = list(string)
-  default     = []
-  validation {
-    condition     = alltrue([for x in var.email_addresses : can(regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", x))])
-    error_message = "Email addresses must be valid."
-  }
 }
