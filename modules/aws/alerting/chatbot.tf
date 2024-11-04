@@ -13,8 +13,8 @@ resource "aws_chatbot_slack_channel_configuration" "default" {
   slack_team_id    = var.slack_workspace_id
   slack_channel_id = each.value.slack_channel_id
 
-  # Topic to subscribe to
-  sns_topic_arns = ["arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${local.sns_topic_prefix}${each.value.name}"]
+  # Topic to subscribe to.
+  sns_topic_arns = [aws_sns_topic.default["${local.sns_topic_prefix}${each.value.name}"].arn]
 
   tags = merge(
     local.tags,
