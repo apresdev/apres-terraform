@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.0 - 2024-11-04
+
+Bump alerting module version to pick up regional deployments, and ecs_events version to pickup naming changes.
+
 ## 0.8.0 - 2024-10-23
 
 Add AWS ChatBot to the workloads account, in one specified region, for CloudWatch Alarms support.
