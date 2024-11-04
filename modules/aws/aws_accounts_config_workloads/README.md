@@ -7,20 +7,23 @@ the following:
 * Creates an S3 bucket for Load Balancer access logs, by default keeping access logs for 365 days. The bucket
   name will be `<account-id>-workloadconfig-<region>-load-balancer-logs`.
 * Adds the ECS event lifecyle to monitor for ECS tasks that are in a crash loop.
+* Adds the alerting module for [CloudWatch Alarms](#alerting-with-cloudwatch-alarms).
 
-It also sets up ChatBot in the region specified by the `chatbot_primary_region` variable,
-for CloudWatch Alarms integration. ChatBot is a global service, so ChatBot is only deployed
-in a single region, and the SNS alerting topic it subscribes to can be used from all regions.
-See the next section for more details.
+## Prerequites
 
-## CloudWatch Alarms
+To configure alerting with Slack and/or Teams, you must first configure the Slack and/or Teams integration with
+AWS Chatbot, once per AWS account. See the instructions in [the alerting module](../alerting/README.md) for instructions.
 
-CloudWatch Alarms created with the Apres `cloudwatch_alarms` module will automatically send messages
-to ChatBot, and ChatBot in turn will notify in Slack/Teams/Email depending on the configuration passed into
-this module.
+Once that is complete, fill in the Slack and/or Teams variables in this module.
 
-Future revisions may change the alerting mechanism, Apres recommends using the `cloudwatch_alarms` module
-to stay up to date with changes.
+## Alerting with CloudWatch Alarms
+
+CloudWatch Alarms created with the Apres [cloudwatch_alarm](../cloudwatch_alarm/README.md) module will
+automatically send messages to ChatBot, and ChatBot in turn will notify in Slack and/or Teams depending
+on the configuration passed into this module.
+
+Future revisions may change the alerting mechanism, Apres recommends using the
+[cloudwatch_alarm](../cloudwatch_alarm/README.md) module to stay up to date with changes.
 
 ## AWS IAM Permissions
 
@@ -29,7 +32,7 @@ Replace `${AWS::AccountID}` with the AWS Account ID where this is deployed, and 
 with the region where this is deployed.
 
 In addition to the permissions below, the permissions of the [ecs_events](../ecs_events/README.md)
-and [alertings](../alerting/README.md) will also need to be applied!
+and [alerting](../alerting/README.md) will also need to be applied!
 
 ```json
 {
@@ -80,20 +83,20 @@ and [alertings](../alerting/README.md) will also need to be applied!
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0, < 2.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.74.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.72.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.74.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/1.0.1 |
+| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/2.0.0 |
 | <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.0 |
 | <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.1.0 |
 | <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.2.4 |
@@ -115,8 +118,6 @@ and [alertings](../alerting/README.md) will also need to be applied!
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_chatbot_primary_region"></a> [chatbot\_primary\_region](#input\_chatbot\_primary\_region) | ChatBot will send CloudWatch Alarms to Slack or Teams (if configured) but ChatBot is a global service. Set this<br/>    to the region name, like "us-east-2" or "us-west-2" where the primary ChatBot is configured.<br/><br/>    ChatBot must be configured in each account before being deployed, with Slack and/or Teams integration. See the<br/>    instructions in the Apres `alerting` terraform module for more information.<br/><br/>    Leaving this blank will disable ChatBot, and the Slack and Teams variables will be ignored. | `string` | `""` | no |
-| <a name="input_email_addresses"></a> [email\_addresses](#input\_email\_addresses) | List of email addresses to send notifications to. | `list(string)` | `[]` | no |
 | <a name="input_enable_api_gateway_logging"></a> [enable\_api\_gateway\_logging](#input\_enable\_api\_gateway\_logging) | Enable API Gateway logging to CloudWatch Logs. This requires an IAM Role and an API Gateway<br/>    configuration per region. By default this is disabled, enable if you are planning to<br/>    use API Gateway in the account this is deployed in. | `bool` | `false` | no |
 | <a name="input_msteams_channel_id"></a> [msteams\_channel\_id](#input\_msteams\_channel\_id) | The Microsoft Teams Channel ID for nofications.  The Channel Id is buried in the URL to the channel,<br/>    and can be found in Teams using the "Get link to channel" menu option. A resulting URL might look like<br/>    `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990`<br/>    and the Channel ID is between the slashes after `channel`, in this case the Channel ID i<br/>    is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`. | `string` | `""` | no |
 | <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams "Team ID" for notifications. This is displayed in the AWS Console. If not set,<br/>    Teams integration will not be enabled. | `string` | `""` | no |
@@ -127,7 +128,5 @@ and [alertings](../alerting/README.md) will also need to be applied!
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_alerts_sns_topic_arn"></a> [alerts\_sns\_topic\_arn](#output\_alerts\_sns\_topic\_arn) | The ARN of the SNS Topic for alerts, or empty string if it does not exist in this region. |
+No outputs.
 <!-- END_TF_DOCS -->
