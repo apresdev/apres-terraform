@@ -19,7 +19,7 @@ module "lambda_regional" {
 
 module "ecs_events" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.1.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.2.0"
   name        = "ECSEvents"
   environment = "WorkloadConfig"
   application = "ECSEvents"
