@@ -10,6 +10,24 @@ locals {
       "managed-by"  = "Terraform"
     })
   )
+
+  slack_enabled = var.slack_workspace_id != "" ? true : false
+  teams_enabled = var.msteams_team_id != "" ? true : false
+
+  # Create a flattened list of publishing services
+  slack_publishing_services = distinct(flatten([for c in var.chatbot_slack_config : c.publishing_services]))
+  teams_publishing_services = distinct(flatten([for c in var.chatbot_msteams_config : c.publishing_services]))
+  all_publishing_services   = distinct(concat(local.slack_publishing_services, local.teams_publishing_services))
+
+  # Create flattened list of SNS topics to create
+  sns_topic_prefix = "apres-alerting-"
+  slack_sns_topic_names = [
+    for config in var.chatbot_slack_config : "${local.sns_topic_prefix}${config.name}"
+  ]
+  teams_sns_topic_names = [
+    for config in var.chatbot_slack_config : "${local.sns_topic_prefix}${config.name}"
+  ]
+  all_sns_topic_names = distinct(concat(local.slack_sns_topic_names, local.teams_sns_topic_names))
 }
 
 module "apres_names" {
