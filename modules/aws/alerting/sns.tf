@@ -10,7 +10,7 @@ resource "aws_sns_topic" "default" {
   tags = merge(
     local.tags,
     {
-      Name = "apres-alerting-${lower(each.value)}"
+      Name = each.value
     },
   )
 }
