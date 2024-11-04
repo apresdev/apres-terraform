@@ -13,7 +13,7 @@ This module sets up:
 ## Future Considerations
 
 In this initial version only integrations with Slack and Teams are supported. For future integrations
-with tools such as PagerDuty, OpsGenie, FireHydrant, etc, this module act as an abstraction for those
+with tools such as PagerDuty, OpsGenie, FireHydrant, etc, this module acts as an abstraction for those
 services, as the integrations are typically implemented using SNS.
 
 ## Known Issues
@@ -24,9 +24,9 @@ recovery. See [the bug](https://github.com/hashicorp/terraform-provider-aws/issu
 
 ## Multiple Regions
 
-Chatbot is a _unique_ global service. The Slack Workspace and/or Teams configuration needs to be configured
-once per AWS account, see [Prerequisites](#prerequisites---configure-slack-andor-microsoft-teams), but after that
-channel configurations can be deployed regionally.
+Chatbot is a _unique_ global service. The Slack Workspace and/or Teams integration needs to be manually configured
+once per AWS account, see [Prerequisites](#prerequisites---configure-slack-andor-microsoft-teams). Once
+configured, channel configurations can be deployed regionally.
 
 The catch is that Slack and Team channels are region-specific. That is, you cannot configure the same
 Chatbot configuration in two regions to write to a single channel, and you will need a channel per region.
@@ -58,9 +58,9 @@ the elements of the `chatbot_slack_config` are:
   `costalerts.amazonaws.com` is for Budget and Cost Anomaly alerts.
 * `slack_channel_id` is the Slack channel ID for notifications. To find a channel ID, in Slack,
   right click on a channel and select "View channel details" and the Channel ID should be at the
-  bottom, like C07S3JC2C0N
+  bottom, like `C07S3JC2C0N`.
 
-If configuring MS Teams, us the `chatbot_msteams_config` object. The same values apply as above, with
+If configuring MS Teams, use the `chatbot_msteams_config` object. The same values apply as above, with
 the difference being the `msteams_channel_id` instead of the `slack_channel_id`. The Channel
 ID is buried in the URL to the channel, and can be found in Teams using the "Get link to channel"
 menu option. A resulting URL might look like
@@ -88,7 +88,7 @@ if you want to add AWS to the channel, answer Yes.
 Once the Slack integration is setup, set the `slack_workspace_id` and apply this module and
 the rest of the integration will be configured.
 * To find the Slack Workspace ID, see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID. Alternatively the AWS console will show the Workspace ID.
-* To find the Slack Channel ID, right click on a channel and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N.
+* To find the Slack Channel ID, right click on a channel and select "View channel details" and the Channel ID should be at the bottom, like `C07S3JC2C0N`.
 
 ### Setup AWS Chatbot and Microsoft Teams Integration
 To skip this step, leave the `msteams_team_id` variable as default (empty string).

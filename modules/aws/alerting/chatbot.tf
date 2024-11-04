@@ -66,7 +66,7 @@ resource "aws_iam_policy" "chatbot_guardrails" {
   tags = merge(
     local.tags,
     {
-      Name = "${module.apres_names.local_name}-ChatBot"
+      Name = "${module.apres_names.local_name}-ChatBot-Guardrails"
     },
   )
 }
