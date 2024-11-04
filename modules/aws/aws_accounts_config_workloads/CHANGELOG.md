@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.1 - 2024-11-04
+
+Pick up bug fixes in alerting module.
+
 ## 0.9.0 - 2024-11-04
 
 Bump alerting module version to pick up regional deployments, and ecs_events version to pickup naming changes.
