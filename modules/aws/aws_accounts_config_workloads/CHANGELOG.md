@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.2 - 2024-11-04
+
+Shorten names to fix the 38 character limit on IAM artifacts created in the alerting module.
+
 ## 0.9.1 - 2024-11-04
 
 Pick up bug fixes in alerting module.
