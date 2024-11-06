@@ -101,9 +101,13 @@ The disadvantages are:
   as a configuration source. If an alarm is created for say an ECS cluster and deployed in one region in dev/test/prod,
   the cost will be $0.30. This is not prohibitevely expensive, but module developers will need to be aware of
   this when creating alarms.
-* CloudWatch Alarms supports both thresholds like `alarm if X > 5` _and_ anomaly detection, like
-  `alarm if X > the band with standard deviation of Y`. Anomaly detection is not supported in AWS Managed Grafana's
-   Alerts, that functionality cannot be replicated.
+
+#### CloudWatch Alarms based on Anomaly Detection
+
+CloudWatch supports anomaly detection, instead of a threshold like `alarm if X > 5` anomaly detection
+has thresholds like `alarm if X > the band with standard deviation of Y`. Anomaly detection is supported
+in Grafana 10.4 but the author could not get it working. For the initial implementation anomaly detection
+will not be supported.
 
 ### Grafana Dashboards
 
