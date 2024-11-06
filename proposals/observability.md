@@ -53,7 +53,7 @@ Use AWS Managed Grafana in a separate AWS account, with permissions setup to pul
 AWS accounts and regions. This [article](https://pcg.io/insights/aws-managed-grafana-for-one-or-multiple-aws-organizations/)
 explains how to setup the permissions to allow this.
 
-Grafana has become the defacto industry standard, and from experience is fantastic tool. We will use
+Grafana is a defacto industry standard, and from experience is fantastic tool. We will use
 [AWS Managed Grafana](https://docs.aws.amazon.com/grafana/) since it integrates neatly with the existing Identity provider,
 CloudTrail, and other AWS services. It is not free, the cost is $9/month per editor and $4/month per viewer, but only
 if the users login and use the tool.
@@ -97,24 +97,38 @@ The advantages of this approach:
 
 The disadvantages are:
 * The Lambda will be reasonably complex, and need to be maintained by Apres.
-* CloudWatch Alarms cost $0.10 per month, while not expensive they are not free either.
+* Each CloudWatch Alarms cost $0.10 per month (first 10 are free). We'll be creating alarms that are used primarily
+  as a configuration source. If an alarm is created for say an ECS cluster and deployed in one region in dev/test/prod,
+  the cost will be $0.30. This is not prohibitevely expensive, but module developers will need to be aware of
+  this when creating alarms.
+* CloudWatch Alarms supports both thresholds like `alarm if X > 5` _and_ anomaly detection, like
+  `alarm if X > the band with standard deviation of Y`. Anomaly detection is not supported in AWS Managed Grafana's
+   Alerts, that functionality cannot be replicated.
 
 ### Grafana Dashboards
 
 Two Apres modules currently deploy CloudWatch dashboards ([vpc](../modules/aws/vpc/) and [ecs](../modules/aws/ecs/))
 to the account/region where those modules are deployed.
 
-We propose switching to use Grafana dashboards. Versioning immediately becomes a challenge. Currently the CloudWatch
-dashboards are deployed along with the stack, and if the stack changes, the dashboard deployed will match. In the
-proposed scheme that will not work, as for example the [ecs](../modules/aws/ecs/) module may have several versions
-running across a client's accounts and regions.
+We propose switching to use Grafana dashboards.
+
+Dashboard versions, when making major chanages inside a Terraform module, may become challenging. For example, if
+the ECS module is updated to a new major version with new resources, the supporting dashboard will need to be updated
+to contain the new resources. However, the client may be running both the old and new version of the ECS module
+at the same time across their AWS accounts/regions, and the dashboard solution will need to support both.
+
+The CloudWatch dashboard solution addressed that by deploying a dashboard per ECS module (aka: cluster),
+in the local account/region.  However because of how Terraform and AWS permissions work, a
+stack deploying into one AWS account cannot also deploy a dashboard to Grafana in another account.
 
 To address this we have several options:
-1. A Grafana dashboard can be represented in JSON. When a stack deploys, publish the corresponding dashboard to
+1. A Grafana dashboard is represented in JSON. When a stack deploys, publish the corresponding dashboard to
    a local S3 bucket. A Lambda, similar to the one proposed in [Alarm Definition with Lambda](#alarm-definition-with-lambda)
-   will periodically retrieve and load the dashboards into the single Grafana instance, with the version of the module
+   will periodically retrieve and load the dashboards into the central Grafana instance, with the version of the module
    in the dashboard name.
 2. Dashboards will be kept separately in the Grafana module, and the module authors will need to keep the dashboards
    up to date with any changes, as well as keep the major version numbers in the dashboard name.
 
-The second option is simpler to manage, and we propose using that mechanism.
+The second option is simpler to manage, and we propose using that mechanism. To address the versioning concern,
+by convention a dashboard should support the current major version of the associated module, and the previous
+version. For example, if the current ECS module version is 4.x the dashboard must support version 3.x and 4.x.
