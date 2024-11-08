@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.10.0 - 2024-11-07
+
+Remove alerting module due to unforeseen issues with Chatbot.
+
 ## 0.9.2 - 2024-11-04
 
 Shorten names to fix the 38 character limit on IAM artifacts created in the alerting module.

@@ -7,23 +7,6 @@ the following:
 * Creates an S3 bucket for Load Balancer access logs, by default keeping access logs for 365 days. The bucket
   name will be `<account-id>-workloadconfig-<region>-load-balancer-logs`.
 * Adds the ECS event lifecyle to monitor for ECS tasks that are in a crash loop.
-* Adds the alerting module for [CloudWatch Alarms](#alerting-with-cloudwatch-alarms).
-
-## Prerequites
-
-To configure alerting with Slack and/or Teams, you must first configure the Slack and/or Teams integration with
-AWS Chatbot, once per AWS account. See the instructions in [the alerting module](../alerting/README.md) for instructions.
-
-Once that is complete, fill in the Slack and/or Teams variables in this module.
-
-## Alerting with CloudWatch Alarms
-
-CloudWatch Alarms created with the Apres [cloudwatch_alarm](../cloudwatch_alarm/README.md) module will
-automatically send messages to ChatBot, and ChatBot in turn will notify in Slack and/or Teams depending
-on the configuration passed into this module.
-
-Future revisions may change the alerting mechanism, Apres recommends using the
-[cloudwatch_alarm](../cloudwatch_alarm/README.md) module to stay up to date with changes.
 
 ## AWS IAM Permissions
 
@@ -96,7 +79,6 @@ and [alerting](../alerting/README.md) will also need to be applied!
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/2.0.1 |
 | <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.0 |
 | <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.2.0 |
 | <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.2.4 |
@@ -119,12 +101,7 @@ and [alerting](../alerting/README.md) will also need to be applied!
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_enable_api_gateway_logging"></a> [enable\_api\_gateway\_logging](#input\_enable\_api\_gateway\_logging) | Enable API Gateway logging to CloudWatch Logs. This requires an IAM Role and an API Gateway<br/>    configuration per region. By default this is disabled, enable if you are planning to<br/>    use API Gateway in the account this is deployed in. | `bool` | `false` | no |
-| <a name="input_msteams_channel_id"></a> [msteams\_channel\_id](#input\_msteams\_channel\_id) | The Microsoft Teams Channel ID for nofications.  The Channel Id is buried in the URL to the channel,<br/>    and can be found in Teams using the "Get link to channel" menu option. A resulting URL might look like<br/>    `https://teams.microsoft.com/l/channel/19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2/aws-security-hub-test?groupId=048113e8-d452-4921-95dd-be5f410e7aaf&tenantId=35591627-bdde-4d16-a221-bf72ffc20990`<br/>    and the Channel ID is between the slashes after `channel`, in this case the Channel ID i<br/>    is `19%3a8451e761b67a4416b47ac034d6d8cc5c%40thread.tacv2`. | `string` | `""` | no |
-| <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams "Team ID" for notifications. This is displayed in the AWS Console. If not set,<br/>    Teams integration will not be enabled. | `string` | `""` | no |
-| <a name="input_msteams_tenant_id"></a> [msteams\_tenant\_id](#input\_msteams\_tenant\_id) | The Microsoft Teams Tenant ID for notifications. This is displayed in the AWS Console. | `string` | `""` | no |
 | <a name="input_retain_load_balancer_logs_days"></a> [retain\_load\_balancer\_logs\_days](#input\_retain\_load\_balancer\_logs\_days) | Number of days to retain the load balancer logs in the S3 bucket. By default, this is set to 365.<br/>    Setting this to -1 will retain logs indefinitely. | `number` | `365` | no |
-| <a name="input_slack_channel_id"></a> [slack\_channel\_id](#input\_slack\_channel\_id) | The Slack channel ID for notifications. To find a channel ID, in Slack, right click on a channel<br/>  and select "View channel details" and the Channel ID should be at the bottom, like C07S3JC2C0N | `string` | `""` | no |
-| <a name="input_slack_workspace_id"></a> [slack\_workspace\_id](#input\_slack\_workspace\_id) | The Slack workspace ID for notifications,<br/>  see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID on how to find it.<br/><br/>  If not set, Slack integration will not be enabled. | `string` | `""` | no |
 
 ## Outputs
 
