@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.1 - 2024-11-11
+
+Bump aws_accounts_config_global::apres-terraform from 0.1.0 to 0.2.0 in /modules/aws/aws_account_config_root
+
 ## 0.3.0 - 2024-08-15
 
 Update version of security_tools_delegator, add support for indicating primary region.
