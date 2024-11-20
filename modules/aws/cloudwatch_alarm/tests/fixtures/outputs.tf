@@ -3,7 +3,7 @@ output "alarm_arn" {
   value       = module.alarm.alarm_arn
 }
 
-output "alarm_id" {
-  description = "The id of the CloudWatch Alarm"
-  value       = module.alarm.alarm_id
+output "alarm_name" {
+  description = "The name of the CloudWatch Alarm"
+  value       = module.alarm.alarm_name
 }

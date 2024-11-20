@@ -83,10 +83,10 @@ func getTfOutputs(s *CWATestSuite, tOpts *terraform.Options) (string, string) {
 	arn := terraform.Output(s.T(), tOpts, "alarm_arn")
 	assert.True(s.T(), len(arn) > 1, "Expected a non-empty ARN")
 
-	id := terraform.Output(s.T(), tOpts, "alarm_id")
-	assert.True(s.T(), len(id) > 1, "Expected a non-empty alarm ID")
+	name := terraform.Output(s.T(), tOpts, "alarm_name")
+	assert.True(s.T(), len(name) > 1, "Expected a non-empty alarm name")
 
-	return arn, id
+	return arn, name
 }
 
 func getCloudwatchService(s *CWATestSuite) *cloudwatch.Client {
@@ -95,25 +95,25 @@ func getCloudwatchService(s *CWATestSuite) *cloudwatch.Client {
 	return cloudwatch.NewFromConfig(cfg)
 }
 
-func getAlarm(s *CWATestSuite, svc *cloudwatch.Client, alarmId string) *types.MetricAlarm {
-	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmId}})
+func getAlarm(s *CWATestSuite, svc *cloudwatch.Client, alarmName string) *types.MetricAlarm {
+	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmName}})
 	assert.NoError(s.T(), err, "Expected no error for DescribeAlarms")
 	assert.Equal(s.T(), 1, len(resp.MetricAlarms), "Expected 1 alarm")
 	return &resp.MetricAlarms[0]
 }
 
-func assertCommon(s *CWATestSuite, alarm *types.MetricAlarm, alarmId string) {
-	assert.Equal(s.T(), alarmId, *alarm.AlarmName, "Expected the alarm name to match")
+func assertCommon(s *CWATestSuite, alarm *types.MetricAlarm, alarmName string) {
+	assert.Equal(s.T(), alarmName, *alarm.AlarmName, "Expected the alarm name to match")
 	expectedDescription := fmt.Sprintf("%s\n***\nRunbook: %s", s.description, s.runbookUrl)
 	assert.Equal(s.T(), expectedDescription, *alarm.AlarmDescription, "Expected the alarm description to match")
 }
 
-func waitForAlarm(s *CWATestSuite, alarmId string, svc *cloudwatch.Client) {
+func waitForAlarm(s *CWATestSuite, alarmName string, svc *cloudwatch.Client) {
 	// Wait for the alarm to go to ALARM state, up to ~3 minutes.
 	// sleep for 10 seconds, 18 times.
 	sleepTime := 10 * time.Second
 	for i := 0; i < 18; i++ {
-		resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmId}})
+		resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmName}})
 		assert.NoError(s.T(), err, "Expected no error for DescribeAlarms")
 		if len(resp.MetricAlarms) > 0 {
 			alarm := resp.MetricAlarms[0]
@@ -142,17 +142,17 @@ func waitForAlarm(s *CWATestSuite, alarmId string, svc *cloudwatch.Client) {
 // 	terraform.InitAndApply(s.T(), terraformOptions)
 
 // 	// Get the outputs
-// 	_, alarmId := getTfOutputs(s, terraformOptions)
+// 	_, alarmName := getTfOutputs(s, terraformOptions)
 
 // 	svc := getCloudwatchService(s)
 
-// 	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmId}})
+// 	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmName}})
 // 	assert.NoError(s.T(), err, "Expected no error for DescribeAlarms")
 // 	assert.Equal(s.T(), 1, len(resp.MetricAlarms), "Expected 1 alarm")
 
-// 	alarm := getAlarm(s, svc, alarmId)
+// 	alarm := getAlarm(s, svc, alarmName)
 
-// 	assertCommon(s, alarm, alarmId)
+// 	assertCommon(s, alarm, alarmName)
 
 // 	// Check fields specific to anomaly detection alerts
 // 	assert.Equal(s.T(), 2, len(alarm.Metrics), "Expected 2 metric")
@@ -177,7 +177,7 @@ func waitForAlarm(s *CWATestSuite, alarmId string, svc *cloudwatch.Client) {
 // 	}
 
 // 	// Check StateValue, should be ALARM
-// 	waitForAlarm(s, alarmId, svc)
+// 	waitForAlarm(s, alarmName, svc)
 // }
 
 func (s *CWATestSuite) TestMetricAlarm() {
@@ -189,17 +189,17 @@ func (s *CWATestSuite) TestMetricAlarm() {
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 	terraform.InitAndApply(s.T(), terraformOptions)
 
-	_, alarmId := getTfOutputs(s, terraformOptions)
+	_, alarmName := getTfOutputs(s, terraformOptions)
 
 	svc := getCloudwatchService(s)
 
-	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmId}})
+	resp, err := svc.DescribeAlarms(s.ctx, &cloudwatch.DescribeAlarmsInput{AlarmNames: []string{alarmName}})
 	assert.NoError(s.T(), err, "Expected no error for DescribeAlarms")
 	assert.Equal(s.T(), 1, len(resp.MetricAlarms), "Expected 1 alarm")
 
-	alarm := getAlarm(s, svc, alarmId)
+	alarm := getAlarm(s, svc, alarmName)
 
-	assertCommon(s, alarm, alarmId)
+	assertCommon(s, alarm, alarmName)
 
 	// Check fields specific to standard metrics alarms
 	assert.Equal(s.T(), 1, len(alarm.Dimensions), "Expected 1 dimension")
@@ -232,7 +232,7 @@ func (s *CWATestSuite) TestMetricAlarm() {
 	assert.Equal(s.T(), "apres_cloudwatch_alarm_module", t, "Expected the source tag to exist and match")
 
 	// Check StateValue, should be ALARM
-	waitForAlarm(s, alarmId, svc)
+	waitForAlarm(s, alarmName, svc)
 }
 
 func getTag(tags []awstagging.TagItem, key string) string {

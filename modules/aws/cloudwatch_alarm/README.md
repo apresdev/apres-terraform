@@ -8,7 +8,9 @@ details on how this works.
 
 For specifics on the alarm configuration, see the [Using Amazon CloudWatchAlarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html) page.
 
-Anomaly detection is not supported, as the Grafana Alerting module does not support it.
+Anomaly detection is not supported in the initial version. The author ran across
+[this bug](https://github.com/grafana/grafana/issues/69873#issuecomment-1711320519), and further investigation
+is required.
 
 ## Examples
 
@@ -114,6 +116,5 @@ The following AWS Permissions are required to use this module.
 | Name | Description |
 |------|-------------|
 | <a name="output_alarm_arn"></a> [alarm\_arn](#output\_alarm\_arn) | The ARN of the CloudWatch Alarm |
-| <a name="output_alarm_id"></a> [alarm\_id](#output\_alarm\_id) | The ID of the CloudWatch Alarm, which is also the name. |
-| <a name="output_alarm_name"></a> [alarm\_name](#output\_alarm\_name) | The name of the CloudWatch Alarm, which is also the ID. |
+| <a name="output_alarm_name"></a> [alarm\_name](#output\_alarm\_name) | The name of the CloudWatch Alarm. |
 <!-- END_TF_DOCS -->
