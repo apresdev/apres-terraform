@@ -17,7 +17,7 @@
 		},
 		"ghcr.io/prulloac/devcontainer-features/pre-commit:1": {},
 		"ghcr.io/devcontainers-contrib/features/checkov:1": {
-			"version": "3.2.204"
+			"version": "3.2.320"
 		},
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
 		"ghcr.io/devcontainers/features/go:1": {
