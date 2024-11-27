@@ -178,6 +178,7 @@ resource "aws_ecs_service" "default" {
 }
 
 resource "aws_security_group" "ecs" {
+  #checkov:skip=CKV_AWS_382: False positive, ECS need full egress.
   name        = "${local.name}-ECS-Task"
   description = "ECS Task for ${local.name}"
   vpc_id      = data.aws_vpc.default.id
