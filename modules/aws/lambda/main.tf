@@ -90,7 +90,3 @@ resource "aws_lambda_function" "default" {
     module.cloudwatch_log,
   ]
 }
-# [apply -input=false -auto-approve -var custom_dashboard_folder_name=Custom
-# -var name=Grafana -var environment=Test1732652209
-# -var accounts={"Test" = "381491850865", "Dev" = "590184099330"}
-# -var admin_groups=["31db85b0-4031-705e-d39b-ce16bcae5a59"] -var regions=["us-east-2", "us-west-2"] -lock=false]

@@ -1,4 +1,4 @@
-# Upload the unsigned zipped source file to the lambda artifacts buckt.
+# Upload the unsigned zipped source file to the lambda artifacts bucket.
 # This is required for the code signing job below.
 resource "aws_s3_object" "unsigned" {
   bucket = data.aws_s3_bucket.lambda_artifacts.id
