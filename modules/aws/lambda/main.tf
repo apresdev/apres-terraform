@@ -16,8 +16,6 @@ resource "aws_lambda_function" "default" {
   role          = aws_iam_role.default.arn
   description   = var.description
 
-  source_code_hash = local.artifact_hash
-
   architectures = var.architectures
   handler       = coalesce(var.handler, basename(var.binary_path))
   memory_size   = var.memory_size
@@ -31,7 +29,7 @@ resource "aws_lambda_function" "default" {
   #checkov:skip=CKV_AWS_115:"Ensure that AWS Lambda function is configured for function-level concurrent execution limit"
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  # This is only enabled if the client chooses to attach the VPC, by default we explicitly do not add it. As it slows down deployment times and 
+  # This is only enabled if the client chooses to attach the VPC, by default we explicitly do not add it. As it slows down deployment times and
   # it violates the principle of least privileges to always connect the lambda to the VPC.
   #checkov:skip=CKV_AWS_117:Ensure that AWS Lambda function is configured inside a VPC
   dynamic "vpc_config" {

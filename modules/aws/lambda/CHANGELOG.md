@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2024-11-27
+
+Remove source hash on binary files that was causing terraform plans to fail when the binary wasn't already on disk.
+
 ## 0.3.0 - 2024-10-29
 
 Fix IAM artifacts to use name_prefix to support multi-region deployments.
