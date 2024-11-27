@@ -16,8 +16,6 @@ resource "aws_lambda_function" "default" {
   role          = aws_iam_role.default.arn
   description   = var.description
 
-  source_code_hash = local.artifact_hash
-
   architectures = var.architectures
   handler       = coalesce(var.handler, basename(var.binary_path))
   memory_size   = var.memory_size
@@ -31,7 +29,7 @@ resource "aws_lambda_function" "default" {
   #checkov:skip=CKV_AWS_115:"Ensure that AWS Lambda function is configured for function-level concurrent execution limit"
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  # This is only enabled if the client chooses to attach the VPC, by default we explicitly do not add it. As it slows down deployment times and 
+  # This is only enabled if the client chooses to attach the VPC, by default we explicitly do not add it. As it slows down deployment times and
   # it violates the principle of least privileges to always connect the lambda to the VPC.
   #checkov:skip=CKV_AWS_117:Ensure that AWS Lambda function is configured inside a VPC
   dynamic "vpc_config" {
@@ -92,3 +90,7 @@ resource "aws_lambda_function" "default" {
     module.cloudwatch_log,
   ]
 }
+# [apply -input=false -auto-approve -var custom_dashboard_folder_name=Custom
+# -var name=Grafana -var environment=Test1732652209
+# -var accounts={"Test" = "381491850865", "Dev" = "590184099330"}
+# -var admin_groups=["31db85b0-4031-705e-d39b-ce16bcae5a59"] -var regions=["us-east-2", "us-west-2"] -lock=false]
