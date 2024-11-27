@@ -27,8 +27,8 @@ resource "aws_lb" "default" {
     enabled = true
   }
 
-  # launch lbs in private subnets
-  internal = true
+  # launch lbs in public or private depending on the publicity
+  internal = var.load_balancer_is_public ? false : true
   subnets  = var.load_balancer_is_public ? data.aws_subnets.public.ids : data.aws_subnets.private.ids
   # Use the security group given if it exists, else the one created in this module.
   security_groups = var.load_balancer_security_group != "" ? [var.load_balancer_security_group] : [aws_security_group.load_balancer[0].id]
@@ -114,6 +114,7 @@ locals {
 
 # Create a security group based on the variables set above.
 resource "aws_security_group" "load_balancer" {
+  #checkov:skip=CKV_AWS_382: False positive, Load Balancers need full egress.
   count       = local.create_lb_security_group ? 1 : 0
   name        = "${local.name}-LB"
   description = "LB for ${local.name}"

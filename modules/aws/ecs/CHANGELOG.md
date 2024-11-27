@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.0.1 - 2024-11-27
+
+Fix bug with making load balancers public.
+
 ## 2.0.0 - 2024-10-30
 
 Update names to match standards. This will cause a rebuild of most resources.
