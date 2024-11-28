@@ -69,7 +69,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_monitoring_account_id"></a> [monitoring\_account\_id](#input\_monitoring\_account\_id) | The AWS account ID of the monitoring account. This account will be granted access to<br/>        view CloudWatch metrics, alarms and logs. | `string` | `""` | no |
+| <a name="input_observe_account_id"></a> [observe\_account\_id](#input\_observe\_account\_id) | The AWS account ID of the monitoring account. This account will be granted access to<br>        view CloudWatch metrics, alarms and logs. | `string` | `""` | no |
 
 ## Outputs
 
