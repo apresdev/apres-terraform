@@ -7,6 +7,7 @@ Org Root
     - Infrastructure OU
         - artifacts account
         - deploy account
+        - observe account
     - Sandbox OU
         - sandbox account
     - Security OU
@@ -60,6 +61,11 @@ account, so it can be re-used in all your workload accounts. The goal is to buil
 
 The Deploy account is to host any Continuous Integration or Continuous Deployment (CI/CD) activities. At time of writing
 the Apres Foundations modules do not use the Deploy account.
+
+## Observe Account
+
+The Observe account is to host a central Managed Grafana instance, used to view metrics across all accounts, and
+used to alert on any alarms created in the accounts.
 
 ## Sandbox Account
 
