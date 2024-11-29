@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.0 - 2024-11-29
+
+Add possible overrides for code signing name and ARN to handle Terraform dependencies better.
+
 ## 0.4.0 - 2024-11-27
 
 Remove source hash on binary files that was causing terraform plans to fail when the binary wasn't already on disk.
