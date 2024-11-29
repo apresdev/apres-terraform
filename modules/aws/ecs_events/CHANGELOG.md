@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.1 - 2024-11-29
+
+Bump lambda module version.
+
 ## 0.2.0 - 2024-10-30
 
 Update names to match standards.
