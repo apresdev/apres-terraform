@@ -160,6 +160,23 @@ variable "vpc" {
   }
 }
 
+# There are times in the internal Apres modules where due to how terraform handles depenencies,
+# specifically in the ecs_events module when being deployed through the aws_accounts_config_workloads
+# module, where we need to pass in the next three parameters, else Terraform can't handle the dependencies on
+# new accounts.
+
+variable "code_signing_profile_name" {
+  description = "Name of the code signing profile. This should typically be left blank to use the default."
+  type        = string
+  default     = ""
+}
+
+variable "code_signing_config_arn" {
+  description = "ARN of the code signing config. This should typically be left blank to use the default."
+  type        = string
+  default     = ""
+}
+
 # #########################################################################################################################################
 # Regional Lambda variables
 # #########################################################################################################################################
