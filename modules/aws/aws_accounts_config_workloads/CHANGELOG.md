@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.0 - 2024-11-29
+
+Enable and enforce EBS encryption by default.
+
 ## 0.10.0 - 2024-11-07
 
 Remove alerting module due to unforeseen issues with Chatbot.
