@@ -53,3 +53,15 @@ variable "environment" {
     error_message = "Environment name must be alphanumeric and capitalized."
   }
 }
+
+variable "code_signing_profile_name" {
+  description = "Name of the code signing profile. This should typically be left blank to use the default."
+  type        = string
+  default     = ""
+}
+
+variable "code_signing_config_arn" {
+  description = "ARN of the code signing config. This should typically be left blank to use the default."
+  type        = string
+  default     = ""
+}
