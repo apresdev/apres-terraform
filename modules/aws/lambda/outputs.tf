@@ -17,8 +17,3 @@ output "lambda_function_name" {
   description = "The name of the lambda function"
   value       = aws_lambda_function.default.function_name
 }
-
-output "signing_config_arn" {
-  description = "The ARN of the lambda function"
-  value       = data.aws_ssm_parameter.signing_config_arn.insecure_value
-}

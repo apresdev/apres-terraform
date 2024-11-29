@@ -279,9 +279,7 @@ The following best practices are suppress:
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_alias.lambda_artifacts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
-| [aws_lambda_code_signing_config.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/lambda_code_signing_config) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
-| [aws_s3_bucket.lambda_artifacts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/s3_bucket) | data source |
 | [aws_ssm_parameter.signing_config_arn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.signing_profile_name](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_subnet.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
@@ -295,6 +293,8 @@ The following best practices are suppress:
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
 | <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br/>  Valid values are ["x86\_64"] and ["arm64"].<br/>  Default is ["arm64"].<br/>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br/>  "arm64"<br/>]</pre> | no |
 | <a name="input_binary_path"></a> [binary\_path](#input\_binary\_path) | This path to the lambda executable file. | `string` | n/a | yes |
+| <a name="input_code_signing_config_arn"></a> [code\_signing\_config\_arn](#input\_code\_signing\_config\_arn) | ARN of the code signing config. This should typically be left blank to use the default. | `string` | `""` | no |
+| <a name="input_code_signing_profile_name"></a> [code\_signing\_profile\_name](#input\_code\_signing\_profile\_name) | Name of the code signing profile. This should typically be left blank to use the default. | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
 | <a name="input_description"></a> [description](#input\_description) | (Optional) Description of what your Lambda Function does. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
@@ -320,5 +320,4 @@ The following best practices are suppress:
 | <a name="output_iam_role_name"></a> [iam\_role\_name](#output\_iam\_role\_name) | The name of the IAM role created for the lambda function |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | The ARN of the lambda function |
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | The name of the lambda function |
-| <a name="output_signing_config_arn"></a> [signing\_config\_arn](#output\_signing\_config\_arn) | The ARN of the lambda function |
 <!-- END_TF_DOCS -->
