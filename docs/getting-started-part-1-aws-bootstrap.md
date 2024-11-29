@@ -150,8 +150,9 @@ Organizational Units (OUs) structure,
 * Security - this OU is created by default. The `audit` and `log archive`
   accounts are configured in this OU.
 * Infrastructure - centralized accounts for `artifacts` and deployment tools
-  `deploy`. For example, AWS ECR (docker containers) repositories will be
-  configured in these accounts. CI/CD tools are also configured under this OU.
+  `deploy` and observability tools `observe`. For example, AWS ECR (docker containers) repositories will be
+  configured in these accounts. CI/CD tools are also configured under this OU. Managed Grafana will also
+  be in this OU.
 * Sandbox - an OU meant for experimental software development. Accounts
   under the Sandbox OU should be considered disposable.
 * Workloads - accounts for your applications workloads are configured
@@ -171,6 +172,7 @@ Org Root
     - Infrastructure (OU)
         - artifacts - aws+artifacts@yourdomain.com
         - deploy - aws+deploy@yourdomain.com
+        - observe - aws+observe@yourdomain.com
     - Sandbox (OU)
         - sandbox - aws+sandbox@yourdomain.com
     - Security (OU)
