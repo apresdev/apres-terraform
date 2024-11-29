@@ -7,6 +7,7 @@ the following:
 * Creates an S3 bucket for Load Balancer access logs, by default keeping access logs for 365 days. The bucket
   name will be `<account-id>-workloadconfig-<region>-load-balancer-logs`.
 * Adds the ECS event lifecyle to monitor for ECS tasks that are in a crash loop.
+* Enables EBS encryption by default.
 
 ## AWS IAM Permissions
 

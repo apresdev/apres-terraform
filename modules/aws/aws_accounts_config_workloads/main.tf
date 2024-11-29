@@ -1,6 +1,6 @@
 module "cloudwatchlogs_regional" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source                     = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional?ref=rel/cloudwatchlogs_regional/1.2.0"
+  source                     = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional?ref=rel/cloudwatchlogs_regional/1.2.1"
   environment                = "WorkloadConfig"
   enable_api_gateway_logging = var.enable_api_gateway_logging
 }
@@ -24,4 +24,8 @@ module "ecs_events" {
   environment = "WorkloadConfig"
   application = "ECSEvents"
   component   = "ECSEvents"
+}
+
+resource "aws_ebs_encryption_by_default" "default" {
+  enabled = true
 }
