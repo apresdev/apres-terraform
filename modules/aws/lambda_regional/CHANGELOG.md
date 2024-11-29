@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.0 - 2024-11-29
+
+Add outputs for consumption by other modules, update S3 lifecycle rules.
+
 ## 0.2.4 - 2024-08-15
 
 Switch to using version_arn in signing config..
