@@ -27,7 +27,7 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 
 module "lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.4.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.5.0"
   name        = var.name
   environment = var.environment
   application = var.application
@@ -37,4 +37,7 @@ module "lambda" {
   runtime     = "python3.9"
   binary_path = "${path.module}/lambda.py"
   handler     = "lambda.lambda_handler"
+
+  code_signing_profile_name = var.code_signing_profile_name
+  code_signing_config_arn   = var.code_signing_config_arn
 }
