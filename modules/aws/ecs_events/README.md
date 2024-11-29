@@ -137,14 +137,14 @@ Substitute the following variables:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.59.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.78.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.3.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.4.0 |
 
 ## Resources
 
