@@ -80,7 +80,7 @@ and [alerting](../alerting/README.md) will also need to be applied!
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.0 |
+| <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.1 |
 | <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.2.0 |
 | <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.2.4 |
 | <a name="module_load_balancer_logs_bucket"></a> [load\_balancer\_logs\_bucket](#module\_load\_balancer\_logs\_bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.0.1 |
@@ -90,6 +90,7 @@ and [alerting](../alerting/README.md) will also need to be applied!
 
 | Name | Type |
 |------|------|
+| [aws_ebs_encryption_by_default.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_encryption_by_default) | resource |
 | [aws_s3_bucket_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.nlb_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
