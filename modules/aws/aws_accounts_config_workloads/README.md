@@ -81,8 +81,8 @@ and [alerting](../alerting/README.md) will also need to be applied!
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cloudwatchlogs_regional"></a> [cloudwatchlogs\_regional](#module\_cloudwatchlogs\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs_regional | rel/cloudwatchlogs_regional/1.2.1 |
-| <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.3.0 |
-| <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.3.0 |
+| <a name="module_ecs_events"></a> [ecs\_events](#module\_ecs\_events) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events | rel/ecs_events/0.3.1 |
+| <a name="module_lambda_regional"></a> [lambda\_regional](#module\_lambda\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional | rel/lambda_regional/0.3.1 |
 | <a name="module_load_balancer_logs_bucket"></a> [load\_balancer\_logs\_bucket](#module\_load\_balancer\_logs\_bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.0.1 |
 | <a name="module_messaging_regional"></a> [messaging\_regional](#module\_messaging\_regional) | git@github.com:apresdev/apres-terraform.git//modules/aws/messaging_regional | rel/messaging_regional/0.1.0 |
 
