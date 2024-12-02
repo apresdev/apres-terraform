@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.1 - 2024-12-02
+
+Bump versions and add dependency to deal with terraform race conditions on new accounts.
+
 ## 0.12.0 - 2024-12-02
 
 Add signing variables to work around a terraform race condition.
