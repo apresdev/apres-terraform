@@ -13,17 +13,21 @@ module "messaging_regional" {
 
 module "lambda_regional" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional?ref=rel/lambda_regional/0.2.4"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_regional?ref=rel/lambda_regional/0.3.0"
   environment = "WorkloadConfig"
 }
 
 module "ecs_events" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.2.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.3.0"
   name        = "ECSEvents"
   environment = "WorkloadConfig"
   application = "ECSEvents"
   component   = "ECSEvents"
+
+  # Need to pass this in or else we get a race condition with lookups and creations on new accounts
+  code_signing_profile_name = module.lambda_regional.signing_profile_name
+  code_signing_config_arn   = module.lambda_regional.signing_config_arn
 }
 
 resource "aws_ebs_encryption_by_default" "default" {
