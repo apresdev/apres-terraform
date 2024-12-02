@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.0 - 2024-12-02
+
+Add signing variables to work around a terraform race condition.
+
 ## 0.11.0 - 2024-11-29
 
 Enable and enforce EBS encryption by default.
