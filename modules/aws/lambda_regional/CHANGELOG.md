@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.1 - 2024-12-02
+
+Minor tweak to module to deal with race conditions when deploying to new accounts.
+
 ## 0.3.0 - 2024-11-29
 
 Add outputs for consumption by other modules, update S3 lifecycle rules.
