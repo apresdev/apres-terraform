@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.1 - 2024-12-02
+
+Minor fix to deal with the race condition on deploying a lambda to a new AWS account.
+
 ## 0.5.0 - 2024-11-29
 
 Add possible overrides for code signing name and ARN to handle Terraform dependencies better.
