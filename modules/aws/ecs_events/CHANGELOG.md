@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.1 - 2024-12-02
+
+Minor tweak to address race condition when deploying to a new account.
+
 ## 0.3.0 - 2024-11-29
 
 Include code signing variables to handle race condition.
