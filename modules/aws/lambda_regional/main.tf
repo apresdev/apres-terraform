@@ -1,3 +1,8 @@
+locals {
+  signing_profile_ssm_parameter = "/apres/lambda/signing-profile-name"
+  signing_arn_ssm_parameter     = "/apres/lambda/signing-config-arn"
+}
+
 # Creates a signing profile for lambda.
 resource "aws_signer_signing_profile" "default" {
   platform_id = "AWSLambda-SHA384-ECDSA"
@@ -7,6 +12,7 @@ resource "aws_signer_signing_profile" "default" {
     value = 3
     type  = "MONTHS"
   }
+
 
   tags = local.tags
 }
@@ -23,9 +29,10 @@ resource "aws_lambda_code_signing_config" "default" {
     untrusted_artifact_on_deployment = "Enforce"
   }
 
+
 }
 
-# Save the lambda signing config arn in a well known parameter.  This is needed by the lambda module to re-use the same signing 
+# Save the lambda signing config arn in a well known parameter.  This is needed by the lambda module to re-use the same signing
 # configuration across lambda functions, rather than creating a configuration per function.
 #
 # We need the parameter because the only way to lookup a data.aws_lambda_code_signing_config is with the arn and a portion of the arn is
@@ -39,7 +46,7 @@ resource "aws_lambda_code_signing_config" "default" {
 # store and retrieve this at deploy time, as the lambda module needs the code signing configuration to ensure that the lambda function only uses
 # functions signed using the given configuration.
 resource "aws_ssm_parameter" "default" {
-  name        = "/apres/lambda/signing-config-arn"
+  name        = local.signing_arn_ssm_parameter
   description = "The ARN for the lambda signing configuration."
   type        = "SecureString"
   value       = aws_lambda_code_signing_config.default.arn
@@ -49,7 +56,7 @@ resource "aws_ssm_parameter" "default" {
   tags = merge(
     local.tags,
     tomap({
-      Name = "/apres/lambda/signing-config-arn"
+      Name = local.signing_arn_ssm_parameter
     })
   )
 }
@@ -68,7 +75,7 @@ resource "aws_ssm_parameter" "default" {
 # convention.  So we need a parameter to store and retrieve this at deploy time, as the lambda module needs the signing profile name when creating
 # a signing job.
 resource "aws_ssm_parameter" "signing_profile_name" {
-  name        = "/apres/lambda/signing-profile-name"
+  name        = local.signing_profile_ssm_parameter
   description = "The name of the signing profile for the lambda signing configuration."
   type        = "SecureString"
   value       = aws_signer_signing_profile.default.name
@@ -78,7 +85,7 @@ resource "aws_ssm_parameter" "signing_profile_name" {
   tags = merge(
     local.tags,
     tomap({
-      Name = "/apres/lambda/signing-config-arn"
+      Name = local.signing_profile_ssm_parameter
     })
   )
 }
