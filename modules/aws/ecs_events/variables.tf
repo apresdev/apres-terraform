@@ -54,13 +54,13 @@ variable "environment" {
   }
 }
 
-variable "code_signing_profile_name" {
+variable "code_signing_name_ssm_parameter" {
   description = "Name of the code signing profile. This should typically be left blank to use the default."
   type        = string
   default     = ""
 }
 
-variable "code_signing_config_arn" {
+variable "code_signing_arn_ssm_parameter" {
   description = "ARN of the code signing config. This should typically be left blank to use the default."
   type        = string
   default     = ""

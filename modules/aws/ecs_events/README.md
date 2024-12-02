@@ -144,7 +144,7 @@ Substitute the following variables:
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.5.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.5.1 |
 
 ## Resources
 
@@ -161,8 +161,8 @@ Substitute the following variables:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_code_signing_config_arn"></a> [code\_signing\_config\_arn](#input\_code\_signing\_config\_arn) | ARN of the code signing config. This should typically be left blank to use the default. | `string` | `""` | no |
-| <a name="input_code_signing_profile_name"></a> [code\_signing\_profile\_name](#input\_code\_signing\_profile\_name) | Name of the code signing profile. This should typically be left blank to use the default. | `string` | `""` | no |
+| <a name="input_code_signing_arn_ssm_parameter"></a> [code\_signing\_arn\_ssm\_parameter](#input\_code\_signing\_arn\_ssm\_parameter) | ARN of the code signing config. This should typically be left blank to use the default. | `string` | `""` | no |
+| <a name="input_code_signing_name_ssm_parameter"></a> [code\_signing\_name\_ssm\_parameter](#input\_code\_signing\_name\_ssm\_parameter) | Name of the code signing profile. This should typically be left blank to use the default. | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
