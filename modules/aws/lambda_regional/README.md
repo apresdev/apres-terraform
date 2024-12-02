@@ -141,5 +141,7 @@ The following permissions are required to use this module, shown as a Policy sni
 |------|-------------|
 | <a name="output_lambda_artifacts_bucket_name"></a> [lambda\_artifacts\_bucket\_name](#output\_lambda\_artifacts\_bucket\_name) | Name of the lambda artifacts bucket |
 | <a name="output_signing_config_arn"></a> [signing\_config\_arn](#output\_signing\_config\_arn) | Value of the ssm parameter for the signing config arn |
+| <a name="output_signing_config_arn_ssm_parameter"></a> [signing\_config\_arn\_ssm\_parameter](#output\_signing\_config\_arn\_ssm\_parameter) | Name of the SSM Parameter containing the code signing config arn |
+| <a name="output_signing_config_name_ssm_parameter"></a> [signing\_config\_name\_ssm\_parameter](#output\_signing\_config\_name\_ssm\_parameter) | Name of the SSM Parameter containing the signing profile name |
 | <a name="output_signing_profile_name"></a> [signing\_profile\_name](#output\_signing\_profile\_name) | Value of the ssm parameter for the signing profile name |
 <!-- END_TF_DOCS -->
