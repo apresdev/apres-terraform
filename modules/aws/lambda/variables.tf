@@ -165,14 +165,20 @@ variable "vpc" {
 # module, where we need to pass in the next three parameters, else Terraform can't handle the dependencies on
 # new accounts.
 
-variable "code_signing_profile_name" {
-  description = "Name of the code signing profile. This should typically be left blank to use the default."
+variable "code_signing_arn_ssm_parameter" {
+  description = <<EOF
+  Name of the SSM Parameter containing the code signing profile.
+  This should typically be left blank to use the default.
+  EOF
   type        = string
   default     = ""
 }
 
-variable "code_signing_config_arn" {
-  description = "ARN of the code signing config. This should typically be left blank to use the default."
+variable "code_signing_name_ssm_parameter" {
+  description = <<EOF
+    Name of the SSM Parameter containing the ARN of the code signing config.
+    This should typically be left blank to use the default.
+  EOF
   type        = string
   default     = ""
 }

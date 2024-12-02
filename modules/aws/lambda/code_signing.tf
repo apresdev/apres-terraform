@@ -20,7 +20,7 @@ resource "aws_s3_object" "unsigned" {
 # Create a job to sign the artifacts.
 # This signs the S3 object that was created above and places it in the signed prefix location.
 resource "aws_signer_signing_job" "default" {
-  profile_name = var.code_signing_profile_name == "" ? data.aws_ssm_parameter.signing_profile_name[0].value : var.code_signing_profile_name
+  profile_name = data.aws_ssm_parameter.signing_profile_name.value
 
   source {
     s3 {
