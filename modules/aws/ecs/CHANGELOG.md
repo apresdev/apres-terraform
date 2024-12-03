@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.0 - 2024-12-03
+
+Add an alarm for task crash loop detection.
+
 ## 2.0.1 - 2024-11-27
 
 Fix bug with making load balancers public.
