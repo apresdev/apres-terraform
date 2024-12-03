@@ -66,6 +66,13 @@ Secrets like passwords should _never_ be passed along in Environment variables. 
 supports using Secrets Manager, and then the secret values will never be visible. See
 the comments on the `container_secrets` variable for examples.
 
+## Alarms
+
+The module defines an alarm that will be visible in CloudWatch Alarms, and Grafana Alerts if
+the [managed_grafana](../managed_grafana) module is deployed. The alarm is to detect tasks
+that are in crash loops, repeatedly failing and restarting with a non-zero exit code. The name
+will be `${var.environment}-${var.name}-TaskCrashLoop-SEV1`
+
 # AWS IAM Permissions
 
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
@@ -113,6 +120,7 @@ the name passed in.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
+| <a name="module_cloudwatch_alarm"></a> [cloudwatch\_alarm](#module\_cloudwatch\_alarm) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm | rel/cloudwatch_alarm/0.1.0 |
 | <a name="module_cloudwatchlogs"></a> [cloudwatchlogs](#module\_cloudwatchlogs) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.1.0 |
 
 ## Resources
@@ -181,6 +189,7 @@ the name passed in.
 | <a name="input_container_secrets"></a> [container\_secrets](#input\_container\_secrets) | To avoid passing in secrets in clear text, provide a list of ARNs of secrets in Secrets Manager to be securely<br/>    injected as environment variables into the container.<br/><br/>    ARN's may include the secret ARN, or have the key name or a specific version appended. See the docs at<br/>    https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html for<br/>    details, with two examples following.<br/><br/>    The kms\_key\_alias it the KMS key alias that was used to encrypt the secret.<br/><br/>    Secrets are stored with key/value pairs in Secret Manager. If you want the full JSON object as the<br/>    environment variable, the ARN should not incluce a key, for example:<pre>{<br/>      name          = "DATABASE_CONFIG"<br/>      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig"<br/>      kms_key_alias = "aws/secretsmanager"<br/>    }</pre>and the resulting environment variable, stored as a string, might be:<pre>DATABASE_CONFIG={"username":"mydbuser","password":"asdf","engine":"mariadb","host":"127.0.0.1","port":"12345","dbname":"asdf"}</pre>If you want just the password, which in this example is in Secrets Manager with the key `password`, the ARN should<br/>    look like:<pre>{<br/>      name          = "DATABASE_PASSWORD"<br/>      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig:password"<br/>      kms_key_alias = "aws/secretsmanager"<br/>    }</pre>and the resulting environment variable, stored as a string, might be:<pre>DATABASE_PASSWORD=asdf</pre>The IAM permissions to read the secret ARN will be automatically added to the task execution role, including<br/>    a statement to allow decryption using the KMS key(s) identified by their aliases. | <pre>list(object({<br/>    name          = string<br/>    secret_arn    = string<br/>    kms_key_alias = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_container_tmpfs"></a> [container\_tmpfs](#input\_container\_tmpfs) | Sometimes containers need to write temporary files, like Java does to /tmp and nginx in a /var/cache.<br/>    To accommodate that, this parameter allows one more tmpfs filessystems to be added to the container.<br/><br/>    This is not supported on Fargate!<br/><br/>    Size is in Mb, see the link below for a full list of mount options. "rw" is likely the one you will need.<br/>    For example:<pre>hcl<br/>    {<br/>       containerPath = "/tmp"<br/>       mountOptions = ["rw"]<br/>       size = 50<br/>    }</pre>This will mount a 50Mb tmpfs filesystem at /tmp in the container.<br/><br/>    See "tmpfs" at this link for details:<br/>    https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#container_definition_linuxparameters | <pre>list(object({<br/>    containerPath = string,<br/>    mountOptions  = list(string),<br/>    size          = number,<br/>  }))</pre> | `[]` | no |
 | <a name="input_cpu"></a> [cpu](#input\_cpu) | The number of cpu units to reserve for the container. Default is the smallest possible Fargate size.<br/><br/>  If using Fargate, CPU and Memory settings must be paired correctly. They are not enforced here,<br/>  see the description at<br/>  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html | `number` | `256` | no |
+| <a name="input_crash_loop_threshold"></a> [crash\_loop\_threshold](#input\_crash\_loop\_threshold) | Total number of times a task can crash, exit with a non-zero code, in a 300 second time period, before<br/>    an alarm is triggered. | `number` | `10` | no |
 | <a name="input_create_load_balancer"></a> [create\_load\_balancer](#input\_create\_load\_balancer) | Create a load balancer for the service. If false, all variables starting with<br/>    `load_balancer_` will be ignored." | `bool` | n/a | yes |
 | <a name="input_deployment_target"></a> [deployment\_target](#input\_deployment\_target) | The deployment target for the ECS service, can be either "FARGATE" or "EC2". | `string` | n/a | yes |
 | <a name="input_ec2_autoscale_max"></a> [ec2\_autoscale\_max](#input\_ec2\_autoscale\_max) | Maximum number of EC2 instances to scale to. Ignored if deployment\_target is FARGATE. | `number` | `3` | no |
