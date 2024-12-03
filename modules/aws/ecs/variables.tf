@@ -583,3 +583,12 @@ variable "load_balancer_health_check_interval" {
   type        = number
   default     = 30
 }
+
+variable "crash_loop_threshold" {
+  description = <<EOF
+    Total number of times a task can crash, exit with a non-zero code, in a 300 second time period, before
+    an alarm is triggered.
+    EOF
+  type        = number
+  default     = 10
+}
