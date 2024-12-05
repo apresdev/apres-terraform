@@ -38,6 +38,12 @@ jobs:
         with:
           tofu_version: 1.7.1
 
+      # We use tofu for everything but terratest uses terraform. Pin the version to avoid bugs in v1.10.0.
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.1"
+
       - name: OpenTofu format check
         id: fmt
         run: make format-check
