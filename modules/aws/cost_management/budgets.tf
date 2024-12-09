@@ -14,7 +14,7 @@ resource "aws_budgets_budget" "default" {
       threshold_type             = "PERCENTAGE"
       notification_type          = notification.value["type"]
       subscriber_email_addresses = var.email_addresses
-      subscriber_sns_topic_arns  = local.enable_chat_alerts ? [module.alerting[0].sns_topic_arn] : []
+      subscriber_sns_topic_arns  = local.enable_chat_alerts ? module.alerting[0].sns_topic_arns : []
     }
   }
 }
