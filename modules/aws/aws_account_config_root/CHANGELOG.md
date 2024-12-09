@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.1 - 2024-12-09
+
+Bug fix in cost management and alerting modules.
+
 ## 0.4.0 - 2024-12-09
 
 Enable centralized AWS root  user management.
