@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2024-12-09
+
+Enable centralized AWS root  user management.
+
 ## 0.3.0 - 2024-08-15
 
 Update version of security_tools_delegator, add support for indicating primary region.
