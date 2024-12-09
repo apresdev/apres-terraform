@@ -158,7 +158,7 @@ KMS resource stanza cannot be further limited due to how the KMS key IDs are gen
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.74.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.80.0 |
 
 ## Modules
 
@@ -206,5 +206,7 @@ KMS resource stanza cannot be further limited due to how the KMS key IDs are gen
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_sns_topic_arns"></a> [sns\_topic\_arns](#output\_sns\_topic\_arns) | List of ARNs for the SNS topics created for alerting. |
 <!-- END_TF_DOCS -->
