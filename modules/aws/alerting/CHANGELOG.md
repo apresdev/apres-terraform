@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.0 - 2024-12-09
+
+Add an output variable for all SNS topics created.
+
 ## 2.0.1 - 2024-11-04
 
 Bug fix - fix dependency between SNS topic subscription and Chatbot channel configuration.
