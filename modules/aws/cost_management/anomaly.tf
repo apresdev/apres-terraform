@@ -18,9 +18,12 @@ resource "aws_ce_anomaly_subscription" "chat" {
     aws_ce_anomaly_monitor.default.arn
   ]
 
-  subscriber {
-    type    = "SNS"
-    address = module.alerting[0].sns_topic_arn
+  dynamic "subscriber" {
+    for_each = module.alerting[0].sns_topic_arns
+    content {
+      type    = "SNS"
+      address = subscriber.value
+    }
   }
 
   frequency = var.frequency
