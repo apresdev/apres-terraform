@@ -90,7 +90,7 @@ which requires CloudFormation API access.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/2.1.0 |
+| <a name="module_alerting"></a> [alerting](#module\_alerting) | git@github.com:apresdev/apres-terraform.git//modules/aws/alerting | rel/alerting/2.1.1 |
 
 ## Resources
 
