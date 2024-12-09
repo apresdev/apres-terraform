@@ -10,6 +10,15 @@ This module configures the AWS Root account. It includes:
 It is critical to set the correct contact information, as AWS will use the contacts in case of a security or
 billing question, and not responding may result in suspension or termination of the AWS services.
 
+## Prerequisites
+
+Since organizations were setup as part of the bootstrap process, you must grant service access for `iam.amazonaws.com`
+to Organizations before deploying this module! At time of writing this cannot be done via the console. Using the CLI
+run the following command:
+```
+aws organizations enable-aws-service-access --service-principal iam.amazonaws.com
+```
+
 ## Root user
 
 This module enables centralized Root user management. See the
@@ -80,6 +89,7 @@ The following permissions are required to use this module, substitute `${AWS::Ac
   Action:
     - iam:EnableOrganizationsRootCredentialsManagement
     - iam:EnableOrganizationsRootSessions
+    - iam:List*
     - organizations:RegisterDelegatedAdministrator
     - organizations:EnableAwsServiceAccess
   Resource: "*"
