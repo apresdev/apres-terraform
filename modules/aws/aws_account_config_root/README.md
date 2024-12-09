@@ -104,7 +104,7 @@ The following permissions are required to use this module, substitute `${AWS::Ac
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aws_accounts_config_global"></a> [aws\_accounts\_config\_global](#module\_aws\_accounts\_config\_global) | git@github.com:apresdev/apres-terraform.git//modules/aws/aws_accounts_config_global | rel/aws_accounts_config_global/0.3.0 |
-| <a name="module_costmanagement"></a> [costmanagement](#module\_costmanagement) | git@github.com:apresdev/apres-terraform.git//modules/aws/cost_management | rel/cost_management/1.1.0 |
+| <a name="module_costmanagement"></a> [costmanagement](#module\_costmanagement) | git@github.com:apresdev/apres-terraform.git//modules/aws/cost_management | rel/cost_management/1.1.1 |
 | <a name="module_security_tools_delegator"></a> [security\_tools\_delegator](#module\_security\_tools\_delegator) | git@github.com:apresdev/apres-terraform.git//modules/aws/security_tools_delegator | rel/security_tools_delegator/0.3.0 |
 
 ## Resources
