@@ -316,5 +316,4 @@ variable "primary_region" {
   description = <<EOF
   The primary region where the AWS Organization is located, and where SecurityHub will be running in the audit account.
   EOF
-
 }

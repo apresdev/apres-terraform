@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.2 - 2024-12-09
+
+Updated README with correct permissions and prerequisites.
+
 ## 0.4.1 - 2024-12-09
 
 Bug fix in cost management and alerting modules.
