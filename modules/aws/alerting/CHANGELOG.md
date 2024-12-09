@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.1 - 2024-12-09
+
+Fix bug in outputs.
+
 ## 2.1.0 - 2024-12-09
 
 Add an output variable for all SNS topics created.
