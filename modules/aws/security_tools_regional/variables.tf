@@ -29,6 +29,42 @@ variable "guardduty_enable_lambda_protection" {
   default     = true
 }
 
+variable "inspector_enable_ec2_scanning" {
+  description = "Enable Inspector to scan EC2 instances"
+  type        = bool
+  default     = true
+}
+
+variable "inspector_enable_ecr_scanning" {
+  description = "Enable Inspector to scan ECR repositories"
+  type        = bool
+  default     = true
+}
+
+variable "inspector_enable_lambda_scanning" {
+  description = "Enable Inspector to scan Lambda functions"
+  type        = bool
+  default     = true
+}
+
+variable "inspector_enable_lambda_code_scanning" {
+  description = "Enable Inspector to scan Lambda function code"
+  type        = bool
+  default     = true
+}
+
+variable "inspector_member_accounts" {
+  description = <<EOF
+    List of member account IDs to enable Inspector on. The audit account has no way to look these up,
+    so you must specify them here.
+
+    This list should include all accounts in the Workloads OU and Infrastructure OU, and any other
+    account where you want Inspector to run. Do not include the audit account here.
+  EOF
+  type        = list(string)
+  default     = []
+}
+
 variable "extra_tags" {
   description = "Extra tags to be applied to all resources"
   type        = map(string)
@@ -65,6 +101,5 @@ variable "environment" {
   validation {
     condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.environment))
     error_message = "Environment name must be alphanumeric and capitalized."
-
   }
 }

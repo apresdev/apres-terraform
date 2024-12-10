@@ -1,10 +1,14 @@
 # Apres AWS Region-specific Security Tools configuration
 
-This module configures the region-specific security tools. Services such as GuardDuty are deployed
-per-region (and in future Inspector and Detective) and thus require a pre-region deployment.
+This module configures the region-specific security tools. Services such as GuardDuty and Inspector
+are deployed per-region and thus require a pre-region deployment.
+
+This module expects that the [security_tools_delegator](../security_tools_delegator/README.md) module
+has been applied to the root account in all active regions.
 
 This module sets up:
-* Amazon GuardDuty, publishing to Security Hub (configured in the _security\_tools_ module)
+* Amazon GuardDuty, publishing to Security Hub
+* Amazon Inspector, publishing to Security Hub
 
 ## Considerations with AWS Organizations
 
@@ -23,16 +27,23 @@ to the root account. If that is the case, you will need to import the detector u
    ```
 2. Using the example above, import the detector with `tofu import aws_guardduty_detector.default bac76941540ffef6b96ffc7fe8e21234`
 
+## Amazon Inspector
+
+See [Automated scan types in Amazon Inspector](https://docs.aws.amazon.com/inspector/latest/user/scanning-resources.html)
+for details on what the different scan types mean. By default all scan types are enabled.
+
 ## Future enhancements
-1. Add other region-specific services like Inspector, Detective, etc will be added in future versions.
-2. Export GuardDuty events to S3. See [Export findings](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html)
+1. Other region-specific services such as Detective may be added in future versions.
+2. Add support to    export GuardDuty events to S3. See
+   [Export findings](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html)
 
 ## Prerequisites
 
 ### Delegate Management
 
-Run the [security_tools_delegator](../security_tools_delegator/README.md) module against the management account of your organization. This sets
-up the delegation for the services that this module configures. This module will fail to deploy without that.
+Run the [security_tools_delegator](../security_tools_delegator/README.md) module against the management
+account of your organization, in all activer regions. This sets up the delegation for the services
+that this module configures, and is required.
 
 # AWS IAM Permissions
 
@@ -43,6 +54,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 {
   "Action": [
      "guardduty:*"
+     #TODO
   ],
   "Resource": "*"
 }
@@ -61,7 +73,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.62.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.80.0 |
 
 ## Modules
 
@@ -77,6 +89,8 @@ No modules.
 | [aws_guardduty_organization_configuration_feature.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration_feature) | resource |
 | [aws_guardduty_organization_configuration_feature.rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration_feature) | resource |
 | [aws_guardduty_organization_configuration_feature.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration_feature) | resource |
+| [aws_inspector2_enabler.members](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_enabler) | resource |
+| [aws_inspector2_enabler.self](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/inspector2_enabler) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
@@ -91,6 +105,11 @@ No modules.
 | <a name="input_guardduty_enable_lambda_protection"></a> [guardduty\_enable\_lambda\_protection](#input\_guardduty\_enable\_lambda\_protection) | Enable GuardDuty to monitor Lambda functions | `bool` | `true` | no |
 | <a name="input_guardduty_enable_rds_protection"></a> [guardduty\_enable\_rds\_protection](#input\_guardduty\_enable\_rds\_protection) | Enable GuardDuty to monitor RDS instances | `bool` | `true` | no |
 | <a name="input_guardduty_enable_s3_protection"></a> [guardduty\_enable\_s3\_protection](#input\_guardduty\_enable\_s3\_protection) | Enable GuardDuty to monitor S3 buckets | `bool` | `true` | no |
+| <a name="input_inspector_enable_ec2_scanning"></a> [inspector\_enable\_ec2\_scanning](#input\_inspector\_enable\_ec2\_scanning) | Enable Inspector to scan EC2 instances | `bool` | `true` | no |
+| <a name="input_inspector_enable_ecr_scanning"></a> [inspector\_enable\_ecr\_scanning](#input\_inspector\_enable\_ecr\_scanning) | Enable Inspector to scan ECR repositories | `bool` | `true` | no |
+| <a name="input_inspector_enable_lambda_code_scanning"></a> [inspector\_enable\_lambda\_code\_scanning](#input\_inspector\_enable\_lambda\_code\_scanning) | Enable Inspector to scan Lambda function code | `bool` | `true` | no |
+| <a name="input_inspector_enable_lambda_scanning"></a> [inspector\_enable\_lambda\_scanning](#input\_inspector\_enable\_lambda\_scanning) | Enable Inspector to scan Lambda functions | `bool` | `true` | no |
+| <a name="input_inspector_member_accounts"></a> [inspector\_member\_accounts](#input\_inspector\_member\_accounts) | List of member account IDs to enable Inspector on. The audit account has no way to look these up,<br/>    so you must specify them here.<br/><br/>    This list should include all accounts in the Workloads OU and Infrastructure OU, and any other<br/>    account where you want Inspector to run. Do not include the audit account here. | `list(string)` | `[]` | no |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 
 ## Outputs
