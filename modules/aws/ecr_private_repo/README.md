@@ -2,11 +2,12 @@
 
 ## Overview
 
-Creates an ECR Private Repository, and IAM artifacts for the GitHub Repo to use to push/pull images.
+Creates an ECR Private Repository, and IAM artifacts for the GitHub Repository to use to push/pull images.
 The role created has the pattern `GitHubActionsECRServiceRole${name}`, and is provided at an output. For example
 if the repo name provided is `acme` then the role name becomes `GitHubActionsECRServiceRoleAcme` with the capital A.
 
-For example, let's create an image called `acme` and grant the `apresdev/acme` repo permission to push to it.
+## Example
+We create an image called `acme` and grant the `apresdev/acme` repo permission to push to it.
 In the deploy tf (hint: [./aws-core/artifacts/us-east-2/variables.tf](./aws-core/artifacts/us-east-2/variables)) set the variable:
 ```hcl
 variable "managed_repos" {
@@ -61,12 +62,11 @@ jobs:
           ECR_REPOSITORY: etl # name of this repo
           IMAGE_TAG: ${{ github.sha }}
         run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-dd
 ```
 
 ## Security Scanning
 
-Scanning is enabled at the account level, not at the repo level.
+Scanning is enabled via Amazon Inspector, not at the repository level.
 
 # AWS IAM Permissions
 
@@ -100,7 +100,7 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.35.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.80.0 |
 
 ## Modules
 
@@ -128,10 +128,10 @@ No modules.
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"ECR"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used for tagging AWS resources. | `string` | `"Dev"` | no |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
-| <a name="input_github_repo_subject_claim_filter"></a> [github\_repo\_subject\_claim\_filter](#input\_github\_repo\_subject\_claim\_filter) | The GitHub repo to trust for GitHub Actions. Also known as the Subject claim filter for<br>  valid tokens. Must be in the format of<br>  repo:apresdev/repo-name:ref:refs/heads/branch-or-tag, can be a comma delimited<br>  list if there is more than one. Example:<br>  * repo:apresdev/iac:ref:refs/heads/main means only the main branch of the apresdev/iac repo can assume the role.<br>  * repo:apresdev/iac:* means any branch or tag of the apresdev/iac repo can assume the role.<br>  See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims<br>  for examples of filtering by branch or deployment environment. | `string` | n/a | yes |
+| <a name="input_github_repo_subject_claim_filter"></a> [github\_repo\_subject\_claim\_filter](#input\_github\_repo\_subject\_claim\_filter) | The GitHub repo to trust for GitHub Actions. Also known as the Subject claim filter for<br/>  valid tokens. Must be in the format of<br/>  repo:apresdev/repo-name:ref:refs/heads/branch-or-tag, can be a comma delimited<br/>  list if there is more than one. Example:<br/>  * repo:apresdev/iac:ref:refs/heads/main means only the main branch of the apresdev/iac repo can assume the role.<br/>  * repo:apresdev/iac:* means any branch or tag of the apresdev/iac repo can assume the role.<br/>  See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims<br/>  for examples of filtering by branch or deployment environment. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the ECR repo | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_shared_aws_org_for_pull"></a> [shared\_aws\_org\_for\_pull](#input\_shared\_aws\_org\_for\_pull) | Path to an AWS Organizations OU to share the repo to. This is translated to a condition using the<br>  aws:PrincipalOrgPaths condition key. See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalorgpaths for more information.<br>  A valid example might "org-id/root-ou-id/*" (Remember to use the Org ID as the root!) | `list(string)` | n/a | yes |
+| <a name="input_shared_aws_org_for_pull"></a> [shared\_aws\_org\_for\_pull](#input\_shared\_aws\_org\_for\_pull) | Path to an AWS Organizations OU to share the repo to. This is translated to a condition using the<br/>  aws:PrincipalOrgPaths condition key. See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalorgpaths for more information.<br/>  A valid example might "org-id/root-ou-id/*" (Remember to use the Org ID as the root!) | `list(string)` | n/a | yes |
 
 ## Outputs
 
