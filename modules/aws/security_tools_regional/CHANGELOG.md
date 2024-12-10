@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2024-12-10
+
+Add support for configuring Amazon Inspector.
+
 ## 0.3.0 - 2024-08-16
 
 Switch to use the GuardDuty org config so that all accounts will have features enabled.
