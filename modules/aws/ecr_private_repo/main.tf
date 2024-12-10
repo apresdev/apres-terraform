@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "allow_pull" {
 
     actions = [
       "ecr:BatchGetImage",
-      "ecr:GetDownloadUrlForLayer"
+      "ecr:GetDownloadUrlForLayer",
     ]
     condition {
       test     = "ForAnyValue:StringLike"
@@ -77,7 +77,8 @@ data "aws_iam_policy_document" "github_actions" {
       "ecr:UploadLayerPart",
       "ecr:InitiateLayerUpload",
       "ecr:BatchCheckLayerAvailability",
-      "ecr:PutImage"
+      "ecr:PutImage",
+      "ecr:DescribeImageScanFindings"
     ]
     resources = [resource.aws_ecr_repository.repo.arn]
   }
