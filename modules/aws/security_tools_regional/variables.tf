@@ -55,11 +55,12 @@ variable "inspector_enable_lambda_code_scanning" {
 
 variable "inspector_member_accounts" {
   description = <<EOF
-    List of member account IDs to enable Inspector on. The audit account has no way to look these up,
-    so you must specify them here.
+    List of member account IDs to enable Inspector on. The audit account cannot lookup member
+    accounts, so you must specify them here.
 
     This list should include all accounts in the Workloads OU and Infrastructure OU, and any other
-    account where you want Inspector to run. Do not include the audit account here.
+    account where you want Inspector to run. The audit account will be added automatically
+    whether in this list or not.
   EOF
   type        = list(string)
   default     = []
