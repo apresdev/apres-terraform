@@ -7,7 +7,7 @@ locals {
   ])
 
   # in case the audit account is in the member list, remove it.
-  member_accounts = setsubtract(var.inspector_member_accounts, data.aws_caller_identity.current.account_id)
+  member_accounts = setsubtract(var.inspector_member_accounts, [data.aws_caller_identity.current.account_id])
 }
 
 # Because of how AWS handles this we need to enable first the audit account,
