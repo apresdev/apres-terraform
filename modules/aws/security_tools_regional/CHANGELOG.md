@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.1 - 2024-12-11
+
+Fix bug for empty inspector member account and fix documented permissions.
+
 ## 0.4.0 - 2024-12-10
 
 Add support for configuring Amazon Inspector.
