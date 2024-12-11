@@ -7,10 +7,10 @@ This module expects that the [security_tools_delegator](../security_tools_delega
 has been applied to the root account in all active regions.
 
 This module sets up:
-* Amazon GuardDuty, publishing to Security Hub
-* Amazon Inspector, publishing to Security Hub
+* Amazon GuardDuty publishing to Security Hub
+* Amazon Inspector publishing to Security Hub
 
-## Considerations with AWS Organizations
+##  Amazon GuardDuty and AWS Organizations
 
 AWS Organizations can setup GuardDuty in the audit account, but it is unclear how and in what regions. There is
 a possibility the detector exists in the primary region after the `security_tools_delegator` module is deployed
@@ -34,7 +34,7 @@ for details on what the different scan types mean. By default all scan types are
 
 ## Future enhancements
 1. Other region-specific services such as Detective may be added in future versions.
-2. Add support to    export GuardDuty events to S3. See
+2. Add support to export GuardDuty events to S3. See
    [Export findings](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html)
 
 ## Prerequisites
@@ -45,7 +45,7 @@ Run the [security_tools_delegator](../security_tools_delegator/README.md) module
 account of your organization, in all activer regions. This sets up the delegation for the services
 that this module configures, and is required.
 
-# AWS IAM Permissions
+## AWS IAM Permissions
 
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
 Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
@@ -53,8 +53,8 @@ Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
 ```json
 {
   "Action": [
-     "guardduty:*"
-     #TODO
+     "guardduty:*",
+     "inspector2:*"
   ],
   "Resource": "*"
 }
