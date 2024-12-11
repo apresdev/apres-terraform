@@ -47,18 +47,11 @@ that this module configures, and is required.
 
 ## AWS IAM Permissions
 
-The following permissions are required to use this module, shown as a Policy snippet in JSON.
-Substitute `${AWS::AccountId}` with the Account ID where this is deployed.
-
-```json
-{
-  "Action": [
-     "guardduty:*",
-     "inspector2:*"
-  ],
-  "Resource": "*"
-}
-```
+The following managed policies should be attached to the role deploying this stack:
+* `arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess`
+* `arn:aws:iam::aws:policy/AmazonGuardDutyFullAccess`
+* `arn:aws:iam::aws:policy/AmazonInspector2FullAccess`
+* `arn:aws:iam::aws:policy/AWSSecurityHubFullAccess`
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
