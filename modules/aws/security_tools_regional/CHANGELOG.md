@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.2 - 2024-12-11
+
+Add missing member association for Inspector.
+
 ## 0.4.1 - 2024-12-11
 
 Fix bug for empty inspector member account and fix documented permissions.
