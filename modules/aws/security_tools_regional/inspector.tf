@@ -5,6 +5,9 @@ locals {
     var.inspector_enable_lambda_scanning ? "LAMBDA" : null,
     var.inspector_enable_lambda_code_scanning && var.inspector_enable_lambda_scanning ? "LAMBDA_CODE" : null,
   ])
+
+  # in case the audit account is in the member list, remove it.
+  member_accounts = setsubtract(var.inspector_member_accounts, data.aws_caller_identity.current.account_id)
 }
 
 # Because of how AWS handles this we need to enable first the audit account,
@@ -15,8 +18,8 @@ resource "aws_inspector2_enabler" "self" {
 }
 
 resource "aws_inspector2_enabler" "members" {
-  count          = length(var.inspector_member_accounts) > 0 ? 1 : 0
-  account_ids    = var.inspector_member_accounts
+  count          = length(local.member_accounts) > 0 ? 1 : 0
+  account_ids    = local.member_accounts
   resource_types = local.inspector_enable_resource_types
   depends_on     = [aws_inspector2_enabler.self]
 }
