@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.3 - 2024-12-11
+
+Update permissions required to deploy in README.
+
 ## 0.4.2 - 2024-12-11
 
 Add missing member association for Inspector.
