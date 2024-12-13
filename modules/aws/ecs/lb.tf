@@ -58,7 +58,8 @@ locals {
       "nossl" : "TCP"
     }
   }
-  lb_protocol = var.load_balancer_ssl_cert_arn == "" ? local.lb_protocols[var.load_balancer_type]["nossl"] : local.lb_protocols[var.load_balancer_type]["ssl"]
+  listener_protocol     = var.load_balancer_ssl_cert_arn == "" ? local.lb_protocols[var.load_balancer_type]["nossl"] : local.lb_protocols[var.load_balancer_type]["ssl"]
+  target_group_protocol = var.load_balancer_type == "application" ? local.lb_protocols["application"]["nossl"] : local.lb_protocols["network"]["nossl"]
 }
 
 # adds a listener to the load balancer and allows ingress
@@ -66,7 +67,7 @@ resource "aws_lb_listener" "default" {
   count             = var.create_load_balancer ? 1 : 0
   load_balancer_arn = aws_lb.default[0].id
   port              = var.load_balancer_port
-  protocol          = local.lb_protocol
+  protocol          = local.listener_protocol
   certificate_arn   = var.load_balancer_ssl_cert_arn != "" ? var.load_balancer_ssl_cert_arn : null
   ssl_policy        = var.load_balancer_ssl_cert_arn != "" ? "ELBSecurityPolicy-2016-08" : null
 
@@ -86,7 +87,7 @@ resource "aws_lb_target_group" "default" {
   count                = var.create_load_balancer ? 1 : 0
   name                 = local.name
   port                 = var.load_balancer_port
-  protocol             = local.lb_protocol
+  protocol             = local.target_group_protocol
   vpc_id               = data.aws_vpc.default.id
   target_type          = "ip"
   deregistration_delay = 30
