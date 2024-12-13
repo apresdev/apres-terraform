@@ -1,8 +1,10 @@
 resource "aws_iam_instance_profile" "main" {
-  name = var.name
-  role = aws_iam_role.main.name
+  name_prefix = local.name
+  role        = aws_iam_role.main.name
 
-  tags = var.tags
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 data "aws_iam_policy_document" "main" {
@@ -19,7 +21,7 @@ data "aws_iam_policy_document" "main" {
     condition {
       test     = "StringEquals"
       variable = "ec2:ResourceTag/Name"
-      values   = [var.name]
+      values   = [local.name]
     }
   }
 
@@ -75,8 +77,17 @@ data "aws_iam_policy_document" "main" {
   }
 }
 
+resource "aws_iam_policy" "main" {
+  name        = local.name
+  description = "IAM policy for ${local.name} instance"
+  policy      = data.aws_iam_policy_document.main.json
+  tags = merge(var.tags, {
+    Name = local.name
+  })
+}
+
 resource "aws_iam_role" "main" {
-  name = var.name
+  name_prefix = local.name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -92,12 +103,14 @@ resource "aws_iam_role" "main" {
     ]
   })
 
-  inline_policy {
-    name   = "Main"
-    policy = data.aws_iam_policy_document.main.json
-  }
+  tags = merge(var.tags, {
+    Name = local.name
+  })
+}
 
-  tags = var.tags
+resource "aws_iam_role_policy_attachment" "main" {
+  role       = aws_iam_role.main.name
+  policy_arn = aws_iam_policy.main.arn
 }
 
 # add SSM support

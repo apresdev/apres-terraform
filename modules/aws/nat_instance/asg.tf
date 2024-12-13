@@ -1,6 +1,6 @@
 resource "aws_autoscaling_group" "main" {
   #checkov:skip=CKV_AWS_88:NAT instances must have a public IP.
-  name                = var.name
+  name                = local.name
   max_size            = 1
   min_size            = 1
   desired_capacity    = 1
@@ -14,7 +14,7 @@ resource "aws_autoscaling_group" "main" {
 
   tag {
     key                 = "Name"
-    value               = var.name
+    value               = local.name
     propagate_at_launch = true
   }
 
