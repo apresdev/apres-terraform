@@ -67,6 +67,8 @@ resource "aws_lb_listener" "default" {
   load_balancer_arn = aws_lb.default[0].id
   port              = var.load_balancer_port
   protocol          = local.lb_protocol
+  certificate_arn   = var.load_balancer_ssl_cert_arn != "" ? var.load_balancer_ssl_cert_arn : null
+  ssl_policy        = var.load_balancer_ssl_cert_arn != "" ? "ELBSecurityPolicy-2016-08" : null
 
   default_action {
     target_group_arn = aws_lb_target_group.default[0].id
