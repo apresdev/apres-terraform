@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.2 - 2024-12-13
+
+Fix a bug in the target group protocol when SSL termination is required on the load balancer.
+
 ## 2.1.1 - 2024-12-13
 
 Fix the missing SSL certificate ARN in the load balancer.
