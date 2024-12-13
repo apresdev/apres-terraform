@@ -6,6 +6,11 @@ Creates an ECR Private Repository, and IAM artifacts for the GitHub Repository t
 The role created has the pattern `GitHubActionsECRServiceRole${name}`, and is provided at an output. For example
 if the repo name provided is `acme` then the role name becomes `GitHubActionsECRServiceRoleAcme` with the capital A.
 
+Note that by default the role & policy are created, unless `var.primary_region` is set to a different region from where
+this module is deployed. If you are creating an ECR repository in multiple regions, the IAM role and policy can only
+be created once since they are global, so use `var.primary_region` to specify which region you want to manage the
+role and policy.
+
 ## Example
 We create an image called `acme` and grant the `apresdev/acme` repo permission to push to it.
 In the deploy tf (hint: [./aws-core/artifacts/us-east-2/variables.tf](./aws-core/artifacts/us-east-2/variables)) set the variable:
@@ -119,6 +124,7 @@ No modules.
 | [aws_iam_policy_document.allow_pull](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.github_actions_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
@@ -131,6 +137,7 @@ No modules.
 | <a name="input_github_repo_subject_claim_filter"></a> [github\_repo\_subject\_claim\_filter](#input\_github\_repo\_subject\_claim\_filter) | The GitHub repo to trust for GitHub Actions. Also known as the Subject claim filter for<br/>  valid tokens. Must be in the format of<br/>  repo:apresdev/repo-name:ref:refs/heads/branch-or-tag, can be a comma delimited<br/>  list if there is more than one. Example:<br/>  * repo:apresdev/iac:ref:refs/heads/main means only the main branch of the apresdev/iac repo can assume the role.<br/>  * repo:apresdev/iac:* means any branch or tag of the apresdev/iac repo can assume the role.<br/>  See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims<br/>  for examples of filtering by branch or deployment environment. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the ECR repo | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_primary_region"></a> [primary\_region](#input\_primary\_region) | The module creates IAM resources, which can only be created in one region. If you are creating<br/>    the same repository in multiple regions, use this variable to specify the primary region which<br/>    is responsible for creating the IAM resources. Leaving it blank means the current region will<br/>    be used. | `string` | `""` | no |
 | <a name="input_shared_aws_org_for_pull"></a> [shared\_aws\_org\_for\_pull](#input\_shared\_aws\_org\_for\_pull) | Path to an AWS Organizations OU to share the repo to. This is translated to a condition using the<br/>  aws:PrincipalOrgPaths condition key. See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalorgpaths for more information.<br/>  A valid example might "org-id/root-ou-id/*" (Remember to use the Org ID as the root!) | `list(string)` | n/a | yes |
 
 ## Outputs
