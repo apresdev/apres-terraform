@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.1 - 2024-12-13
+
+Fix the missing SSL certificate ARN in the load balancer.
+
 ## 2.1.0 - 2024-12-03
 
 Add an alarm for task crash loop detection.
