@@ -77,3 +77,14 @@ variable "extra_tags" {
     error_message = "Tag values must be alphanumeric and capitalized."
   }
 }
+
+variable "primary_region" {
+  description = <<EOF
+    The module creates IAM resources, which can only be created in one region. If you are creating
+    the same repository in multiple regions, use this variable to specify the primary region which
+    is responsible for creating the IAM resources. Leaving it blank means the current region will
+    be used.
+  EOF
+  type        = string
+  default     = ""
+}

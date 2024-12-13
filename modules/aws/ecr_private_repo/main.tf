@@ -10,6 +10,9 @@ locals {
     })
   )
 
+  # whether or not to create iam artifacts
+  create_iam_artifacts = var.primary_region == "" || data.aws_region.current.name == var.primary_region ? true : false
+
   github_oidc_iam_role_name   = "GitHubActionsECRServiceRole${title(var.name)}"
   github_oidc_iam_policy_name = "GitHubActionsECRServicePolicy${title(var.name)}"
 
@@ -93,6 +96,7 @@ data "aws_iam_policy_document" "github_actions" {
 }
 
 resource "aws_iam_policy" "github_actions" {
+  count       = local.create_iam_artifacts ? 1 : 0
   name        = local.github_oidc_iam_policy_name
   path        = "/"
   description = "IAM policy for GitHub Actions for ECR - ${var.name}"
@@ -130,6 +134,7 @@ data "aws_iam_policy_document" "github_actions_trust" {
 
 # This is the role used by GitHub Actions via the OIDC provider.
 resource "aws_iam_role" "github_actions" {
+  count              = local.create_iam_artifacts ? 1 : 0
   name               = local.github_oidc_iam_role_name
   description        = "IAM Role for GitHub Actions for ECR"
   assume_role_policy = data.aws_iam_policy_document.github_actions_trust.json
@@ -142,7 +147,22 @@ resource "aws_iam_role" "github_actions" {
 }
 
 resource "aws_iam_policy_attachment" "github_actions" {
+  count      = local.create_iam_artifacts ? 1 : 0
   name       = "GitHubActionsOIDCPolicyAttachment"
-  roles      = [aws_iam_role.github_actions.name]
-  policy_arn = aws_iam_policy.github_actions.arn
+  roles      = [aws_iam_role.github_actions[0].name]
+  policy_arn = aws_iam_policy.github_actions[0].arn
+}
+
+# moved role and policy after v1.1.0
+moved {
+  from = aws_iam_role.github_actions
+  to   = aws_iam_role.github_actions[0]
+}
+moved {
+  from = aws_iam_policy.github_actions
+  to   = aws_iam_policy.github_actions[0]
+}
+moved {
+  from = aws_iam_policy_attachment.github_actions
+  to   = aws_iam_policy_attachment.github_actions[0]
 }

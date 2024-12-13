@@ -10,15 +10,15 @@ output "repository_url" {
 
 output "github_iam_role_arn" {
   description = "GitHub OIDC IAM Role ARN"
-  value       = aws_iam_role.github_actions.arn
+  value       = local.create_iam_artifacts ? aws_iam_role.github_actions[0].arn : null
 }
 
 output "github_iam_role_name" {
   description = "GitHub OIDC IAM Role Name"
-  value       = aws_iam_role.github_actions.name
+  value       = local.create_iam_artifacts ? aws_iam_role.github_actions[0].name : null
 }
 
 output "github_iam_policy_arn" {
   description = "GitHub OIDC IAM Policy ARN"
-  value       = aws_iam_policy.github_actions.arn
+  value       = local.create_iam_artifacts ? aws_iam_policy.github_actions[0].arn : null
 }
