@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.3.0 - 2024-12-13
+
+Enable VPC module to be deployed in multiple regions in one AWS account.
+
 ## 2.2.0 - 2024-09-06
 
 Bump NAT instance version to pick up CloudWatch Agent changes for more metrics.
