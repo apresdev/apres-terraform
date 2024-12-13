@@ -49,7 +49,9 @@ module "nat_instance" {
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 
 ## Resources
 
@@ -57,7 +59,9 @@ No modules.
 |------|------|
 | [aws_autoscaling_group.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
 | [aws_iam_instance_profile.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
+| [aws_iam_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_launch_template.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_network_interface.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_interface) | resource |
@@ -77,10 +81,11 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_security_group_ids"></a> [additional\_security\_group\_ids](#input\_additional\_security\_group\_ids) | A list of identifiers of security groups to be added for the NAT instance | `list(string)` | `[]` | no |
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | AMI to use for the NAT instance. Uses fck-nat latest AMI in the region if none provided | `string` | `null` | no |
-| <a name="input_cloudwatch_agent_configuration"></a> [cloudwatch\_agent\_configuration](#input\_cloudwatch\_agent\_configuration) | CloudWatch configuration for the NAT instance | <pre>object({<br>    namespace           = optional(string, "nat-instance"),<br>    collection_interval = optional(number, 60),<br>    endpoint_override   = optional(string, "")<br>  })</pre> | <pre>{<br>  "collection_interval": 60,<br>  "endpoint_override": "",<br>  "namespace": "nat-instance"<br>}</pre> | no |
+| <a name="input_cloudwatch_agent_configuration"></a> [cloudwatch\_agent\_configuration](#input\_cloudwatch\_agent\_configuration) | CloudWatch configuration for the NAT instance | <pre>object({<br/>    namespace           = optional(string, "nat-instance"),<br/>    collection_interval = optional(number, 60),<br/>    endpoint_override   = optional(string, "")<br/>  })</pre> | <pre>{<br/>  "collection_interval": 60,<br/>  "endpoint_override": "",<br/>  "namespace": "nat-instance"<br/>}</pre> | no |
 | <a name="input_cloudwatch_agent_configuration_param_arn"></a> [cloudwatch\_agent\_configuration\_param\_arn](#input\_cloudwatch\_agent\_configuration\_param\_arn) | ARN of the SSM parameter containing the CloudWatch agent configuration. If none provided, creates one | `string` | `null` | no |
 | <a name="input_ebs_root_volume_size"></a> [ebs\_root\_volume\_size](#input\_ebs\_root\_volume\_size) | Size of the EBS root volume in GB | `number` | `8` | no |
 | <a name="input_encryption"></a> [encryption](#input\_encryption) | Whether or not to encrypt the EBS volume | `bool` | `true` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Instance type to use for the NAT instance | `string` | `"t4g.micro"` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | Will use the provided KMS key ID to encrypt the EBS volume. Uses the default KMS key if none provided | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name used for resources created within the module | `string` | n/a | yes |

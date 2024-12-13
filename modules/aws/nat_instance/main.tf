@@ -4,18 +4,21 @@ locals {
   cwagent_param_arn  = var.use_cloudwatch_agent ? var.cloudwatch_agent_configuration_param_arn != null ? var.cloudwatch_agent_configuration_param_arn : aws_ssm_parameter.cloudwatch_agent_config[0].arn : null
   cwagent_param_name = var.use_cloudwatch_agent ? var.cloudwatch_agent_configuration_param_arn != null ? split("/", data.aws_arn.ssm_param[0].resource)[1] : aws_ssm_parameter.cloudwatch_agent_config[0].name : null
   security_groups    = concat(var.use_default_security_group ? [aws_security_group.main.id] : [], var.additional_security_group_ids)
+
+  name = module.apres_names.local_name
 }
 
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
-data "aws_vpc" "main" {
-  id = var.vpc_id
+module "apres_names" {
+  #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/1.0.0"
+  name        = var.name
+  environment = var.environment
 }
 
 resource "aws_security_group" "main" {
-  name        = var.name
-  description = "Used in ${var.name} instance in subnet ${var.subnet_id}"
+  #checkov:skip=CKV_AWS_382: NAT Intances need egress to 0/0
+  name        = local.name
+  description = "Used in ${local.name} instance in subnet ${var.subnet_id}"
   vpc_id      = data.aws_vpc.main.id
 
   ingress {
@@ -36,18 +39,18 @@ resource "aws_security_group" "main" {
   }
 
   tags = merge(var.tags, {
-    Name = var.name
+    Name = local.name
   })
 }
 
 resource "aws_network_interface" "main" {
-  description       = "${var.name} static private ENI"
+  description       = "${local.name} static private ENI"
   subnet_id         = var.subnet_id
   security_groups   = [aws_security_group.main.id]
   source_dest_check = false
 
   tags = merge(var.tags, {
-    Name = var.name
+    Name = local.name
   })
 }
 
@@ -60,7 +63,7 @@ resource "aws_route" "main" {
 resource "aws_ssm_parameter" "cloudwatch_agent_config" {
   count = var.use_cloudwatch_agent && var.cloudwatch_agent_configuration_param_arn == null ? 1 : 0
 
-  name   = "${var.name}-cloudwatch-agent-config"
+  name   = "${local.name}-cloudwatch-agent-config"
   key_id = var.kms_key_id
   type   = "SecureString"
   value = templatefile("${path.module}/templates/cwagent.json", {

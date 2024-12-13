@@ -3,6 +3,15 @@ variable "name" {
   type        = string
 }
 
+variable "environment" {
+  description = "Environment Name, used for naming and tagging AWS resources."
+  type        = string
+  validation {
+    condition     = can(regex("^[A-Z][a-zA-Z0-9]*$", var.environment))
+    error_message = "Environment name must be alphanumeric and capitalized."
+  }
+}
+
 variable "vpc_id" {
   description = "VPC ID to deploy the NAT instance into"
   type        = string
@@ -41,8 +50,6 @@ variable "ami_id" {
   type        = string
   default     = null
 }
-
-
 
 variable "ebs_root_volume_size" {
   description = "Size of the EBS root volume in GB"
