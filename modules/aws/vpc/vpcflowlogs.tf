@@ -51,17 +51,30 @@ data "aws_iam_policy_document" "vpc_flow_logs" {
     resources = ["arn:aws:logs:us-east-2:${data.aws_caller_identity.current.account_id}:log-group:vpc-flow-logs:*"]
   }
 }
-resource "aws_iam_role" "vpc_flow_logs" {
-  name_prefix        = "vpcflowlogs-"
-  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role.json
-  inline_policy {
-    name   = "VPCFlowLogsPolicy"
-    policy = data.aws_iam_policy_document.vpc_flow_logs.json
-  }
+
+resource "aws_iam_policy" "vpc_flow_logs" {
+  name_prefix = "vpcflowlogs-"
+  policy      = data.aws_iam_policy_document.vpc_flow_logs.json
   tags = merge(
     local.tags,
     {
       Name = format("%s VPC Flow Logs", var.environment),
     },
   )
+}
+
+resource "aws_iam_role" "vpc_flow_logs" {
+  name_prefix        = "vpcflowlogs-"
+  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role.json
+  tags = merge(
+    local.tags,
+    {
+      Name = format("%s VPC Flow Logs", var.environment),
+    },
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "vpc_flow_logs" {
+  role       = aws_iam_role.vpc_flow_logs.name
+  policy_arn = aws_iam_policy.vpc_flow_logs.arn
 }
