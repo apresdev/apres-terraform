@@ -1,6 +1,6 @@
 output "name" {
   description = "Name used for resources created within the module"
-  value       = var.name
+  value       = local.name
 }
 
 output "vpc_id" {

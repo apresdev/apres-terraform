@@ -33,7 +33,7 @@ data "aws_arn" "ssm_param" {
 
 resource "aws_launch_template" "main" {
   #checkov:skip=CKV_AWS_88:False positive, NAT instances must have a public IP.
-  name          = var.name
+  name          = local.name
   image_id      = local.ami_id
   instance_type = var.instance_type
 
@@ -53,7 +53,7 @@ resource "aws_launch_template" "main" {
   }
 
   network_interfaces {
-    description                 = "${var.name} ephemeral public ENI"
+    description                 = "${local.name} ephemeral public ENI"
     subnet_id                   = var.subnet_id
     associate_public_ip_address = true
     security_groups             = local.security_groups
@@ -74,7 +74,7 @@ resource "aws_launch_template" "main" {
       resource_type = tag_specifications.value
 
       tags = merge(var.tags, {
-        Name = var.name
+        Name = local.name
       })
     }
   }
