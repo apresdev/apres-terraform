@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.3.2 - 2024-12-16
+
+Bug fixes for IAM artifacts names when deploying to multiple regions.
+
 ## 2.3.1 - 2024-12-16
 
 Update required permissions in README.md for the v2.3 change.
