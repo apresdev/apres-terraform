@@ -154,7 +154,7 @@ Substitute `${AWS::Region}` with the region where this is deployed.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_nat_instance"></a> [nat\_instance](#module\_nat\_instance) | git@github.com:apresdev/apres-terraform.git//modules/aws/nat_instance | rel/nat_instance/1.2.0 |
+| <a name="module_nat_instance"></a> [nat\_instance](#module\_nat\_instance) | git@github.com:apresdev/apres-terraform.git//modules/aws/nat_instance | rel/nat_instance/1.2.1 |
 
 ## Resources
 
