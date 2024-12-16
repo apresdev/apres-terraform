@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.3.3 - 2024-12-16
+
+Pick up fix from nat_instance module to handle replacement of security groups and ENI attachments.
+
 ## 2.3.2 - 2024-12-16
 
 Bug fixes for IAM artifacts names when deploying to multiple regions.
