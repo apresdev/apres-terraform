@@ -119,9 +119,10 @@ Substitute `${AWS::Region}` with the region where this is deployed.
   "Effect": "Allow",
   "Action": "iam:*",
   "Resource": [
-    "arn:aws:iam::*:role/vpc*",
-    "arn:aws:iam::${AWS::AccountId}:role/vpc*",
-    "arn:aws:iam::${AWS::AccountId}:instance-profile/vpc*",
+    "arn:aws:iam::*:role/*vpc*",
+    "arn:aws:iam::${AWS::AccountId}:policy/*vpc*",
+    "arn:aws:iam::${AWS::AccountId}:role/*vpc*",
+    "arn:aws:iam::${AWS::AccountId}:instance-profile/*vpc*",
     "arn:aws:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
     "arn:aws:iam::${AWS::AccountId}:policy/GitHubActionsECRServicePolicy*",
     "arn:aws:iam::${AWS::AccountId}:role/GitHubActionsECRServiceRole*",
