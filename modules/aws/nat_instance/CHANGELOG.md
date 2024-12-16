@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.1 - 2024-12-16
+
+Use name_prefix in IAM policy to support multi-instance deployments.
+
 ## 1.2.0 - 2024-12-13
 
 Switch names to match Apres standards, and IAM artifacts to use name_prefix to support deploying to multiple regions in the same account, or even multiple instances in the same region.

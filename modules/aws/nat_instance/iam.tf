@@ -27,7 +27,6 @@ data "aws_iam_policy_document" "main" {
 
   # Allow the intstance to fetch tags so it can use them for extra CloudWatch metrics
   dynamic "statement" {
-
     for_each = var.use_cloudwatch_agent ? ["x"] : []
     content {
       sid    = "AllowFetchTags"
@@ -43,7 +42,6 @@ data "aws_iam_policy_document" "main" {
 
   dynamic "statement" {
     for_each = var.use_cloudwatch_agent ? ["x"] : []
-
     content {
       sid    = "CWAgentSSMParameter"
       effect = "Allow"
@@ -58,7 +56,6 @@ data "aws_iam_policy_document" "main" {
 
   dynamic "statement" {
     for_each = var.use_cloudwatch_agent ? ["x"] : []
-
     content {
       sid    = "CWAgentMetrics"
       effect = "Allow"
@@ -78,7 +75,7 @@ data "aws_iam_policy_document" "main" {
 }
 
 resource "aws_iam_policy" "main" {
-  name        = local.name
+  name_prefix = local.name
   description = "IAM policy for ${local.name} instance"
   policy      = data.aws_iam_policy_document.main.json
   tags = merge(var.tags, {
@@ -88,7 +85,6 @@ resource "aws_iam_policy" "main" {
 
 resource "aws_iam_role" "main" {
   name_prefix = local.name
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
