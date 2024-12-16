@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.3.1 - 2024-12-16
+
+Update required permissions in README.md for the v2.3 change.
+
 ## 2.3.0 - 2024-12-13
 
 Enable VPC module to be deployed in multiple regions in one AWS account.
