@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.3.0 - 2024-12-16
+
+Switch interface security group attachment to facilitate replacement.
+
 ## 1.2.1 - 2024-12-16
 
 Use name_prefix in IAM policy to support multi-instance deployments.
