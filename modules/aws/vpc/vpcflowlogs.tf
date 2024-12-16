@@ -1,8 +1,11 @@
+locals {
+  cloudwatch_log_group_name = "/apres/${var.environment}-VPCFlowLogs"
+}
 # The following sets up VPC Flow Logs to CLoudWatch Logs
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
   #checkov:skip=CKV_AWS_338:Flow Log Retention is set by the user.
   #checkov:skip=CKV_AWS_158:Flow Logs encrypted by default KMS key is acceptable.
-  name = "vpc-flow-logs"
+  name = local.cloudwatch_log_group_name
   tags = merge(
     local.tags,
     {
@@ -46,7 +49,7 @@ data "aws_iam_policy_document" "vpc_flow_logs" {
       "logs:DescribeLogGroups",
       "logs:DescribeLogStreams",
     ]
-    resources = ["arn:aws:logs:us-east-2:${data.aws_caller_identity.current.account_id}:log-group:vpc-flow-logs:*"]
+    resources = ["${aws_cloudwatch_log_group.vpc_flow_logs.arn}:*"]
   }
 }
 
