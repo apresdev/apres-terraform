@@ -120,6 +120,7 @@ Substitute `${AWS::Region}` with the region where this is deployed.
   "Action": "iam:*",
   "Resource": [
     "arn:aws:iam::*:role/*vpc*",
+    "arn:aws:iam::${AWS::AccountId}:policy/*vpc*",
     "arn:aws:iam::${AWS::AccountId}:role/*vpc*",
     "arn:aws:iam::${AWS::AccountId}:instance-profile/*vpc*",
     "arn:aws:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
