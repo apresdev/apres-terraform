@@ -46,12 +46,16 @@ resource "aws_security_group" "main" {
 resource "aws_network_interface" "main" {
   description       = "${local.name} static private ENI"
   subnet_id         = var.subnet_id
-  security_groups   = [aws_security_group.main.id]
   source_dest_check = false
 
   tags = merge(var.tags, {
     Name = local.name
   })
+}
+
+resource "aws_network_interface_sg_attachment" "main" {
+  security_group_id    = aws_security_group.main.id
+  network_interface_id = aws_network_interface.main.id
 }
 
 resource "aws_route" "main" {
