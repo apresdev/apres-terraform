@@ -28,12 +28,10 @@ resource "aws_flow_log" "vpc_flow_logs" {
 data "aws_iam_policy_document" "vpc_flow_logs_assume_role" {
   statement {
     effect = "Allow"
-
     principals {
       type        = "Service"
       identifiers = ["vpc-flow-logs.amazonaws.com"]
     }
-
     actions = ["sts:AssumeRole"]
   }
 }
@@ -53,7 +51,7 @@ data "aws_iam_policy_document" "vpc_flow_logs" {
 }
 
 resource "aws_iam_policy" "vpc_flow_logs" {
-  name_prefix = "vpcflowlogs-"
+  name_prefix = "${var.environment}-vpcflowlogs-"
   policy      = data.aws_iam_policy_document.vpc_flow_logs.json
   tags = merge(
     local.tags,
@@ -64,7 +62,7 @@ resource "aws_iam_policy" "vpc_flow_logs" {
 }
 
 resource "aws_iam_role" "vpc_flow_logs" {
-  name_prefix        = "vpcflowlogs-"
+  name_prefix        = "${var.environment}-vpcflowlogs-"
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_role.json
   tags = merge(
     local.tags,
