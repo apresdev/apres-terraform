@@ -83,8 +83,11 @@ data "aws_iam_policy_document" "github_actions" {
       "ecr:PutImage",
       "ecr:DescribeImageScanFindings"
     ]
-    resources = [resource.aws_ecr_repository.repo.arn]
+    # can't use the ARN directly from the resource, since we need to allow all regions, not just
+    # the current one.
+    resources = ["arn:aws:ecr:*:${data.aws_caller_identity.current.account_id}:repository/${var.name}"]
   }
+
   # Add separate statement for ecr:GetAuthorizationToken because resource is necessarily "*"
   statement {
     effect = "Allow"
