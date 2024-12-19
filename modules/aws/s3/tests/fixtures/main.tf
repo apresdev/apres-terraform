@@ -9,4 +9,10 @@ module "s3" {
   lifecycle_rule = {
     enabled = true
   }
+  cors_rules = [
+    {
+      allowed_methods = ["PUT"]
+      allowed_origins = ["localhost"]
+    }
+  ]
 }

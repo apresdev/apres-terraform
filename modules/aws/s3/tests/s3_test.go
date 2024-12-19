@@ -118,4 +118,16 @@ func TestS3(t *testing.T) {
 	assert.Len(t, rule.Transitions, 1, "Expected one transition")
 	assert.Equal(t, int32(1), *rule.Transitions[0].Days, "Expected 1 day for transition")
 	assert.Equal(t, types.TransitionStorageClassIntelligentTiering, rule.Transitions[0].StorageClass, "Expected Intelligent Tiering for transition")
+
+	// Check Lifecycle Rule
+	corsResp, err := svc.GetBucketCors(context.TODO(), &s3.GetBucketCorsInput{Bucket: &expectedBucketName})
+	assert.NoError(t, err, "Expected no error on GetBucketLifecycleConfiguration")
+
+	// Check CORS Rules
+	assert.Len(t, corsResp.CORSRules, 1, "Expected one CORS rule")
+	corsRule := corsResp.CORSRules[0]
+	assert.Equal(t, corsRule.AllowedHeaders, []string{"*"}, "Expected AllowedHeaders ['*'] by default")
+	assert.Equal(t, corsRule.AllowedMethods, []string{"PUT"}, "Expected AllowedMethods ['PUT']")
+	assert.Equal(t, corsRule.AllowedOrigins, []string{"localhost"}, "Expected AllowedOrigins ['localhost']")
+	assert.Empty(t, corsRule.ExposeHeaders, "Expected ExposeHeaders [] by default")
 }
