@@ -195,3 +195,33 @@ variable "lifecycle_rule" {
     error_message = "transition_to_intelligent_tier_days must be -1 to disable, or greater than 0."
   }
 }
+
+variable "cors_rules" {
+  description = <<EOF
+  The cors_rule configuration block supports the following arguments:
+
+  allowed_headers - (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.
+  allowed_methods - (Required) Set of HTTP methods that you allow the origin to execute. Valid values are GET, PUT, HEAD, POST, and DELETE.
+  allowed_origins - (Required) Set of origins you want customers to be able to access the bucket from.
+  expose_headers - (Optional) Set of headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object).
+
+  EOF
+
+  type = list(object({
+    allowed_headers = optional(list(string), ["*"])
+    allowed_methods = list(string)
+    allowed_origins = list(string)
+    expose_headers  = optional(list(string), [])
+  }))
+
+  default = []
+
+  validation {
+    condition = alltrue([
+      for rule in var.cors_rules : alltrue([
+        for method in rule.allowed_methods : contains(["GET", "PUT", "HEAD", "POST", "DELETE"], method)
+      ])
+    ])
+    error_message = "allowed_methods must be one of GET, PUT, HEAD, POST, or DELETE."
+  }
+}

@@ -115,6 +115,74 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
 }
 ```
 
+### Allow pre-signed object uploads from the browser
+```hcl
+module "s3" {
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
+  name        = "my-bucket"
+  environment = "Dev"
+  application = "MyApplication"
+  component   = "Storage"
+  owner       = "Engineering"
+  cors_rules = [
+    {
+      allowed_methods = ["PUT"]
+      allowed_origins = ["*"]
+    }
+  ]
+}
+```
+
+# AWS IAM Permissions
+
+The following permissions are required to use this module, shown as a Policy snippet in JSON.
+
+- `${AWS::AccountId}` with the Account ID where this stack is deployed.
+- `${AWS::Region}` with the AWS Region where this stack is deployed, like `us-east-2`
+- `${environment}` with the lower case of the variable `var.environment`
+- `${name}` with the lower case of the variable `var.name`
+
+```json
+{
+    "Effect": "Allow",
+    "Action": [
+        "sts:GetCallerIdentity"
+    ],
+    "Resource": "*"
+},
+{
+    "Effect": "Allow",
+    "Action": [
+        "s3:CreateBucket",
+        "s3:ListBucket",
+        "s3:GetBucketTagging",
+        "s3:PutBucketTagging",
+        "s3:GetBucketPolicy",
+        "s3:GetBucketAcl",
+        "s3:GetBucketCORS",
+        "s3:GetBucketWebsite",
+        "s3:GetBucketVersioning",
+        "s3:GetAccelerateConfiguration",
+        "s3:GetBucketRequestPayment",
+        "s3:GetBucketLogging",
+        "s3:GetLifecycleConfiguration",
+        "s3:GetReplicationConfiguration",
+        "s3:GetEncryptionConfiguration",
+        "s3:GetBucketObjectLockConfiguration",
+        "s3:PutBucketCORS",
+        "s3:PutEncryptionConfiguration",
+        "s3:PutLifecycleConfiguration",
+        "s3:PutBucketVersioning",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:DeleteBucketPolicy",
+        "s3:DeleteBucket",
+        "s3:DeleteBucketCORS"
+    ],
+    "Resource": "arn:aws:s3:::${AWS::AccountId}-${environment}-${AWS::Region}-${name}"
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -138,6 +206,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_s3_bucket.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_cors_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_cors_configuration) | resource |
 | [aws_s3_bucket_lifecycle_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_policy.deny_unsecure_communications](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
@@ -153,6 +222,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_cors_rules"></a> [cors\_rules](#input\_cors\_rules) | The cors\_rule configuration block supports the following arguments:<br><br>  allowed\_headers - (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.<br>  allowed\_methods - (Required) Set of HTTP methods that you allow the origin to execute. Valid values are GET, PUT, HEAD, POST, and DELETE.<br>  allowed\_origins - (Required) Set of origins you want customers to be able to access the bucket from.<br>  expose\_headers - (Optional) Set of headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object). | <pre>list(object({<br>    allowed_headers = optional(list(string), ["*"])<br>    allowed_methods = list(string)<br>    allowed_origins = list(string)<br>    expose_headers  = optional(list(string), [])<br>  }))</pre> | `[]` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default set of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_encryption_kms_key_id"></a> [encryption\_kms\_key\_id](#input\_encryption\_kms\_key\_id) | The ARN of the KMS key to use for server-side encryption. If not provided,<br>  the default AWS managed key 'aws/s3' will be used. | `string` | `""` | no |
 | <a name="input_encryption_sse_algorithm"></a> [encryption\_sse\_algorithm](#input\_encryption\_sse\_algorithm) | The server-side encryption algorithm to use. Defaults to 'aws:kms'. | `string` | `"aws:kms"` | no |
