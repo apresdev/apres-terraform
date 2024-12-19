@@ -88,8 +88,8 @@ func TestCloudFrontS3(t *testing.T) {
 	assert.NoError(t, err, "Expected no error opening file index.html")
 	_, err = s3svc.PutObject(context.Background(), &s3.PutObjectInput{
 		Bucket: &s3BucketName,
-		Key: &fileName,
-		Body: file,
+		Key:    &fileName,
+		Body:   file,
 	})
 	assert.NoError(t, err, "Expected no error uploading file to S3")
 
@@ -108,4 +108,15 @@ func TestCloudFrontS3(t *testing.T) {
 	// empty the buckets.
 	err = s3utils.S3EmptyBucket(s3svc, s3BucketName)
 	assert.NoError(t, err, "Expected no error emptying S3 bucket")
+
+	// Check CORS Rules
+	corsResp, err := s3svc.GetBucketCors(context.TODO(), &s3.GetBucketCorsInput{Bucket: &s3BucketName})
+	assert.NoError(t, err, "Expected no error on GetBucketCors")
+
+	assert.Len(t, corsResp.CORSRules, 1, "Expected one CORS rule")
+	corsRule := corsResp.CORSRules[0]
+	assert.Equal(t, corsRule.AllowedHeaders, []string{"*"}, "Expected AllowedHeaders ['*'] by default")
+	assert.Equal(t, corsRule.AllowedMethods, []string{"PUT"}, "Expected AllowedMethods ['PUT']")
+	assert.Equal(t, corsRule.AllowedOrigins, []string{"*"}, "Expected AllowedOrigins ['*']")
+	assert.Empty(t, corsRule.ExposeHeaders, "Expected ExposeHeaders [] by default")
 }

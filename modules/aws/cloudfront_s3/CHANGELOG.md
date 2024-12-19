@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-12-19
+
+Adding support to enable browser based uploads to the S3 bucket (enabling CORS).
+
 ## 1.0.0 - 2024-11-01
 
 Fix names and replace inline WAF module with the Apres WAF module.

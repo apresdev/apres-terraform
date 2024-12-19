@@ -187,3 +187,11 @@ variable "aliases" {
   type        = list(string)
   default     = []
 }
+
+variable "allow_browser_uploads" {
+  description = <<EOF
+    Enables the CORS rules in the S3 bucket to allow pre-signed PutObject requests from the browser.
+  EOF
+  type        = bool
+  default     = false
+}
