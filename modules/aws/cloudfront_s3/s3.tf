@@ -1,7 +1,8 @@
+
 # Module for the S3 bucket
 module "s3" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.1.0"
   name        = lower(var.name)
   environment = var.environment
   owner       = var.owner
@@ -17,6 +18,10 @@ module "s3" {
     enabled                  = true
     old_versions_delete_days = 90
   }
+  cors_rules = var.allow_browser_uploads ? [{
+    allowed_methods = ["PUT"]
+    allowed_origins = ["*"]
+  }] : []
 }
 
 # Bucket policy to allow CloudFront to write to the logs bucket
