@@ -231,3 +231,63 @@ properties:
       can use repository templates to create new repositories with repository files and directories that you define.
 
     default: false
+
+  actions:
+    type: object
+    description: >
+      Contains all of the settings to manage GitHub Actions in the repository.
+
+    additionalProperties: false
+    properties:
+      enabled:
+        type: boolean
+        description: >
+          Set to true to enable GitHub Actions on the repository.
+
+        default: true
+
+      allowed_actions:
+        type: string
+        description: >
+          One of "all", "local_only", or "selected", where "all" allows use of all actions including public unverified ones,
+          "local_only" allows only actions in the repository, and "selected" allows only actions that match the other criteria.
+
+        default: all
+        enum:
+          - all
+          - local_only
+          - selected
+
+      allowed_select_github_owned:
+        type: boolean
+        description: >
+          Set to true to allow the use of GitHub owned actions, ignored if allowed_actions is not "selected".
+
+        default: true
+
+      allowed_select_verified:
+        type: boolean
+        description: >
+          Set to true to allow the use of verified actions, ignored if allowed_actions is not "selected".
+
+        default: true
+
+      allowed_select_patterns:
+        type: array
+        description: >
+          A list of patterns to allow the use of actions from, ignored if allowed_actions is not "selected".
+
+        default: []
+
+      resuable_actions_scope:
+        type: string
+        description: >
+          Which scope to allow reusable actions from this repo. One of "none", "user", or "organization".
+          Typically set to "organization" if you want actions in this repository to be used in other repositories
+          in this organization.
+
+        default: none
+        enum:
+          - none
+          - user
+          - organization

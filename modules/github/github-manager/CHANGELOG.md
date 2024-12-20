@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2024-12-20
+
+Add support for managing GitHub Actions, both which ones can be used in a repo, and if any can be shared from the repo.
+
 ## 1.0.2 - 2024-09-20
 
 Switch repository team assignment from count to for_each so that adding/removing a team won't rebuild all the assignments.
