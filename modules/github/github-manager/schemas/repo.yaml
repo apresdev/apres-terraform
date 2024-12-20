@@ -249,9 +249,14 @@ properties:
       allowed_actions:
         type: string
         description: >
-          One of "all", "local_only", or "selected".
+          One of "all", "local_only", or "selected", where "all" allows use of all actions including public unverified ones,
+          "local_only" allows only actions in the repository, and "selected" allows only actions that match the other criteria.
 
         default: all
+        enum:
+          - all
+          - local_only
+          - selected
 
       allowed_select_github_owned:
         type: boolean
@@ -281,4 +286,8 @@ properties:
           Typically set to "organization" if you want actions in this repository to be used in other repositories
           in this organization.
 
-        default: "none"
+        default: none
+        enum:
+          - none
+          - user
+          - organization
