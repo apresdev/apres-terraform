@@ -114,6 +114,8 @@ See [Permissions for organization roles](https://docs.github.com/en/organization
 
 | Name | Type |
 |------|------|
+| [github_actions_repository_access_level.managed_repository](https://registry.terraform.io/providers/integrations/github/6.3.0/docs/resources/actions_repository_access_level) | resource |
+| [github_actions_repository_permissions.managed_repository](https://registry.terraform.io/providers/integrations/github/6.3.0/docs/resources/actions_repository_permissions) | resource |
 | [github_branch_protection.default](https://registry.terraform.io/providers/integrations/github/6.3.0/docs/resources/branch_protection) | resource |
 | [github_issue_labels.default](https://registry.terraform.io/providers/integrations/github/6.3.0/docs/resources/issue_labels) | resource |
 | [github_membership.members](https://registry.terraform.io/providers/integrations/github/6.3.0/docs/resources/membership) | resource |
@@ -127,10 +129,10 @@ See [Permissions for organization roles](https://docs.github.com/en/organization
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_github_owner"></a> [github\_owner](#input\_github\_owner) | This is the target GitHub organization or individual user account to manage. For example, 'apresdev'.<br><br>  A hint in finding the owner is to look at the URL of the organization. For example, the URL<br>  for the apresdev organization is https://github.com/apresdev/ and the github\_owner is `apresdev`. | `string` | n/a | yes |
-| <a name="input_member_directory"></a> [member\_directory](#input\_member\_directory) | Directory where the member yaml files exist, relative to where the module lives. For example,<br>    if the module is called from `terraform/github-manager`, and the member yaml files are in<br>    `config/repos`, then the value of this variable should be `${path.module}/../../config/member` | `string` | n/a | yes |
-| <a name="input_repo_directory"></a> [repo\_directory](#input\_repo\_directory) | Directory where the repository yaml files exist, relative to where the module lives. For example,<br>    if the module is called from `terraform/github-manager`, and the repository yaml files are in<br>    `config/repos`, then the value of this variable should be `${path.module}/../../config/repos` | `string` | n/a | yes |
-| <a name="input_team_directory"></a> [team\_directory](#input\_team\_directory) | Directory where the team yaml files exist, relative to where the module lives. For example,<br>    if the module is called from `terraform/github-manager`, and the team yaml files are in<br>    `config/teams`, then the value of this variable should be `${path.module}/../../config/teams` | `string` | n/a | yes |
+| <a name="input_github_owner"></a> [github\_owner](#input\_github\_owner) | This is the target GitHub organization or individual user account to manage. For example, 'apresdev'.<br/><br/>  A hint in finding the owner is to look at the URL of the organization. For example, the URL<br/>  for the apresdev organization is https://github.com/apresdev/ and the github\_owner is `apresdev`. | `string` | n/a | yes |
+| <a name="input_member_directory"></a> [member\_directory](#input\_member\_directory) | Directory where the member yaml files exist, relative to where the module lives. For example,<br/>    if the module is called from `terraform/github-manager`, and the member yaml files are in<br/>    `config/repos`, then the value of this variable should be `${path.module}/../../config/member` | `string` | n/a | yes |
+| <a name="input_repo_directory"></a> [repo\_directory](#input\_repo\_directory) | Directory where the repository yaml files exist, relative to where the module lives. For example,<br/>    if the module is called from `terraform/github-manager`, and the repository yaml files are in<br/>    `config/repos`, then the value of this variable should be `${path.module}/../../config/repos` | `string` | n/a | yes |
+| <a name="input_team_directory"></a> [team\_directory](#input\_team\_directory) | Directory where the team yaml files exist, relative to where the module lives. For example,<br/>    if the module is called from `terraform/github-manager`, and the team yaml files are in<br/>    `config/teams`, then the value of this variable should be `${path.module}/../../config/teams` | `string` | n/a | yes |
 
 ## Outputs
 
