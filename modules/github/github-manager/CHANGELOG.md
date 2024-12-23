@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.3 - 2024-12-23
+
+Bug fix for calculating dependencies when creating new repos.
+
 ## 1.1.2 - 2024-12-23
 
 Fix GH Actions defaults.
