@@ -14,6 +14,10 @@ resource "github_actions_repository_permissions" "managed_repository" {
       patterns_allowed     = try(each.value.actions.allowed_select_patterns, local.dedicated_actions.allowed_select_patterns)
     }
   }
+
+  depends_on = [
+    github_repository.managed_repository
+  ]
 }
 
 # Sets whether or not actions can be shared from this repo to others
