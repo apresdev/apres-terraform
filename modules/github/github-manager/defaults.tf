@@ -24,18 +24,19 @@ locals {
 
     isTemplate = local.repo_schema.properties.isTemplate.default
     labels     = local.repo_schema.properties.labels.default
+    actions = {
+      enabled                     = local.repo_schema.properties.actions.properties.enabled.default
+      allowed_actions             = local.repo_schema.properties.actions.properties.allowed_actions.default
+      allowed_select_github_owned = local.repo_schema.properties.actions.properties.allowed_select_github_owned.default
+      allowed_select_verified     = local.repo_schema.properties.actions.properties.allowed_select_verified.default
+      allowed_select_patterns     = local.repo_schema.properties.actions.properties.allowed_select_patterns.default
+      reusable_actions_scope      = local.repo_schema.properties.actions.properties.reusable_actions_scope.default
+    }
   }
 
   team_schema = yamldecode(file("${path.module}/schemas/team.yaml"))
   team_defaults = {
     privacy = local.team_schema.properties.privacy.default
   }
-  actions = {
-    enabled                     = local.repo_schema.properties.actions.properties.enabled.default
-    allowed_actions             = local.repo_schema.properties.actions.properties.allowed_actions.default
-    allowed_select_github_owned = local.repo_schema.properties.actions.properties.allowed_select_github_owned.default
-    allowed_select_verified     = local.repo_schema.properties.actions.properties.allowed_select_verified.default
-    allowed_select_patterns     = local.repo_schema.properties.actions.properties.allowed_select_patterns.default
-    reusable_actions_scope      = local.repo_schema.properties.actions.properties.reusable_actions_scope.default
-  }
+
 }
