@@ -36,6 +36,6 @@ locals {
     allowed_select_github_owned = local.repo_schema.properties.actions.properties.allowed_select_github_owned.default
     allowed_select_verified     = local.repo_schema.properties.actions.properties.allowed_select_verified.default
     allowed_select_patterns     = local.repo_schema.properties.actions.properties.allowed_select_patterns.default
-    resuable_actions_scope      = local.repo_schema.properties.actions.properties.resuable_actions_scope.default
+    reusable_actions_scope      = local.repo_schema.properties.actions.properties.reusable_actions_scope.default
   }
 }

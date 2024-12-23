@@ -279,7 +279,7 @@ properties:
 
         default: []
 
-      resuable_actions_scope:
+      reusable_actions_scope:
         type: string
         description: >
           Which scope to allow reusable actions from this repo. One of "none", "user", or "organization".

@@ -20,7 +20,7 @@ resource "github_actions_repository_permissions" "managed_repository" {
 resource "github_actions_repository_access_level" "managed_repository" {
   for_each     = local.repo_definitions
   repository   = each.key
-  access_level = each.value.actions.resuable_actions_scope
+  access_level = each.value.actions.reusable_actions_scope
 
   depends_on = [
     github_repository.managed_repository
