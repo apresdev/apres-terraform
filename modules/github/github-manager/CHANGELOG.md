@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.2 - 2024-12-23
+
+Fix GH Actions defaults.
+
 ## 1.1.1 - 2024-12-23
 
 Fix typo in repo schema.
