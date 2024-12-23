@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.1 - 2024-12-23
+
+Fix typo in repo schema.
+
 ## 1.1.0 - 2024-12-20
 
 Add support for managing GitHub Actions, both which ones can be used in a repo, and if any can be shared from the repo.
