@@ -316,8 +316,12 @@ The following best practices are suppress:
 
 | Name | Description |
 |------|-------------|
+| <a name="output_deadletter_queue_arn"></a> [deadletter\_queue\_arn](#output\_deadletter\_queue\_arn) | The ARN of the dead letter queue. |
+| <a name="output_deadletter_queue_id"></a> [deadletter\_queue\_id](#output\_deadletter\_queue\_id) | The ID of the dead letter queue. |
 | <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | The ARN of the IAM role created for the lambda function |
 | <a name="output_iam_role_name"></a> [iam\_role\_name](#output\_iam\_role\_name) | The name of the IAM role created for the lambda function |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | The ARN of the lambda function |
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | The name of the lambda function |
+| <a name="output_security_group_arn"></a> [security\_group\_arn](#output\_security\_group\_arn) | The ARN of the security group created for the lambda function if VPC attachment is used, else null. |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | The ID of the security group created for the lambda function if VPC attachment is used, else null. |
 <!-- END_TF_DOCS -->
