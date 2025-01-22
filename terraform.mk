@@ -84,6 +84,7 @@ clean:
 
 # Not every module has a ./tests directory, so we need to check for it.
 TESTS_DIR = $(wildcard ./tests/*)
+TESTS_MAKEFILE = $(wildcard ./tests/Makefile)
 
 test: .build/test
 
@@ -91,7 +92,11 @@ test: .build/test
 .build/test: $(TFFILES) .terraform.lock.hcl
 ifeq ($(strip $(TESTS_DIR)),)
 	@echo "No tests directory found."
+else ifneq ($(strip $(TESTS_MAKEFILE)),)
+	@echo "Found Makefile in ./tests, running that."
+	cd tests && make
 else
+	@echo "Running tests in ./tests"
 	cd tests && go mod download && go mod tidy && go test -v -timeout 30m $(TEST_FLAGS)
 endif
 
