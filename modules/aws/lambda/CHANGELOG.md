@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.2 - 2025-01-23
+
+Add outputs of ID and ARN's of the security group and dead letter queue resources.
+
 ## 0.5.1 - 2024-12-02
 
 Minor fix to deal with the race condition on deploying a lambda to a new AWS account.

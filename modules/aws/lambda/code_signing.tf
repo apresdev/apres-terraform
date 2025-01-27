@@ -12,6 +12,9 @@ resource "aws_s3_object" "unsigned" {
     })
   )
 
+  # Force the upload if the file changes localy
+  etag = filemd5(local.artifact)
+
   depends_on = [
     data.archive_file.lambda
   ]
