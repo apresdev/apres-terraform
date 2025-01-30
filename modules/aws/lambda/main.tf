@@ -11,6 +11,7 @@
 # - CKV_AWS_117:Ensure that AWS Lambda function is configured inside a VPC
 # - CKV_AWS_115:"Ensure that AWS Lambda function is configured for function-level concurrent execution limit"
 #
+
 resource "aws_lambda_function" "default" {
   function_name = local.name
   role          = aws_iam_role.default.arn
@@ -39,6 +40,12 @@ resource "aws_lambda_function" "default" {
       security_group_ids = [aws_security_group.default[0].id]
     }
   }
+  # If VPC configuration is applied, it normally takes ~5 minutes to delete the security group, but
+  # occasionally can take up to 60 minutes. The aws_lambda_function resource has a
+  # replace_security_groups_on_destroy property, that in theory speeds up destruction,
+  # but in practice does not, plus it leaves ENI's around in the VPC forever, no longer marked
+  # for cleanup. So we explicitly set it to null, in case a future developer stumbles on it.
+  replace_security_groups_on_destroy = null
 
   # CKV_AWS_50: "X-Ray tracing is enabled for Lambda"
   tracing_config {

@@ -48,9 +48,7 @@ func (s *LambdaTestSuite) SetupSuite() {
 	s.lambda = lambda.NewFromConfig(cfg)
 }
 
-// TODO: This should be pulled into a separate module
-
-func (s *LambdaTestSuite) TestLambda() {
+func (s *LambdaTestSuite) TestLambdaNoVPC() {
 	// Variables for the terraform module
 	now := time.Now().Unix()
 	functionNameInput := fmt.Sprintf("test-%d", now)
@@ -63,6 +61,7 @@ func (s *LambdaTestSuite) TestLambda() {
 		Vars: map[string]interface{}{
 			"name":        functionNameInput,
 			"environment": s.environment,
+			"enable_vpc":  false,
 		},
 	}
 
@@ -96,6 +95,70 @@ func (s *LambdaTestSuite) TestLambda() {
 		mustHaveTracingEnabled,
 		mustHaveDeadLetterQueue,
 		mustNotUseVpcByDefault,
+		mustHaveApresTags,
+		mustHaveLogGroup(lambdaFunctionName),
+		mustHaveEnvironmentVariables(map[string]string{
+			"AWS_ACCOUNT_ID": account,
+			"ENVIRONMENT":    s.environment,
+			"APPLICATION":    "UnitTests",
+			"COMPONENT":      "LambdaTest",
+			"OTHER":          "true",
+		}),
+	)
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Test the function attributes.
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	s.assertInvokeFunction(lambdaFunctionArn)
+}
+
+func (s *LambdaTestSuite) TestLambdaWithVPC() {
+	// Variables for the terraform module
+	now := time.Now().Unix()
+	functionNameInput := fmt.Sprintf("test-%d", now)
+	// Terraform options
+	terraformOptions := &terraform.Options{
+		// The path to where your Terraform code is located
+		TerraformDir: "./fixtures",
+
+		// Variables to pass to our Terraform code using -var options
+		Vars: map[string]interface{}{
+			"name":        functionNameInput,
+			"environment": s.environment,
+			"enable_vpc":  true,
+		},
+	}
+
+	// At the end of the test, run `terraform destroy` to clean up any resources that were created
+	defer terraform.Destroy(s.T(), terraformOptions)
+
+	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
+	terraform.InitAndApply(s.T(), terraformOptions)
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Get the outputs
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	lambdaFunctionName := terraform.Output(s.T(), terraformOptions, "lambda_function_name")
+	lambdaFunctionArn := terraform.Output(s.T(), terraformOptions, "lambda_function_arn")
+	account := terraform.Output(s.T(), terraformOptions, "aws_account_id")
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Verify the outputs.
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn)
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Get the function attributes.
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	s.assertFunction(
+		lambdaFunctionArn,
+
+		// Assertions
+		mustHaveEncryptedEnvironmentVariables,
+		mustHaveCodeSigning,
+		mustHaveTracingEnabled,
+		mustHaveDeadLetterQueue,
+		mustUseVpc,
 		mustHaveApresTags,
 		mustHaveLogGroup(lambdaFunctionName),
 		mustHaveEnvironmentVariables(map[string]string{
@@ -203,6 +266,12 @@ func mustHaveEnvironmentVariables(expected map[string]string) LambdaAssertion {
 func mustNotUseVpcByDefault(t *testing.T, output *lambda.GetFunctionOutput) {
 	require.NotNil(t, output.Configuration)
 	assert.Nil(t, output.Configuration.VpcConfig)
+}
+
+// mustUseVpc ensures that the Lambda function has a VPC connection
+func mustUseVpc(t *testing.T, output *lambda.GetFunctionOutput) {
+	require.NotNil(t, output.Configuration)
+	assert.NotNil(t, output.Configuration.VpcConfig)
 }
 
 // mustTags ensures that the Lambda function has the apres tags

@@ -15,4 +15,9 @@ module "lambda" {
   environment_variables = {
     "OTHER" : "true"
   }
+
+  vpc = {
+    enabled         = var.enable_vpc
+    environment_tag = var.vpc_environment_tag
+  }
 }
