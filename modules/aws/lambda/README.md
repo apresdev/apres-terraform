@@ -48,6 +48,31 @@ resource "aws_iam_role_policy" "default" {
 }
 ```
 
+# Lambda and Networking in VPC
+
+Lambda supports VPC access, this module does so with the `vpc` variable. The doc
+[Giving Lambda functions access to resources in an Amazon VPC](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html) has details on it works.
+
+Typically it takes about five minutes to delete the ENI's and associated security groups, but occasionally
+it can take up to 60 minutes. This is a known AWS limitation, and there is little that can be done about it.
+
+The details of how the networking configuration works:
+* When a Lambda function is configured with VPC access, the Lambda service creates ENI's are created in each
+  specified subnet, and the security group created by this module is attached to the ENI's. When the Lambda
+  function executes, it uses the ENI's to access the VPC.
+* When the Lambda function is deleted, the ENI's are not automatically deleted. They are marked for deletion, and AWS
+  has an opaque background process that cleans up the ENI's. There is no visibility into the process, and no
+  way to speed it up.
+* While waiting for the deletion, the ENI is marked as type `lambda`, with status `In-use`. Because it's still
+  in use, it cannot be modified. Further, if a custom security group is attached, that security group cannot
+  be deleted until the cleanup process is completed.
+* The Terraform provider for AWS has a `replace_security_group_on_destroy` flag which in theory can speed up deletion.
+  When that flag is set and the Lambda function is deleted, the provider first modifies the security group on the
+  Lambda function to be the default security group, and then deletes the function. The problem is that instead of
+  updating the security group attached to the ENI's in place, the Lambda service creates new ENI's with the default
+  security group attached, leaving the pre-existing ENI's with the old security group still attached. Worse, the
+  new ENI's are never marked for deletion, and will remain in your AWS account until you manually delete them.
+
 # AWS IAM Permissions
 
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
