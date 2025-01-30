@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.0 - 2025-01-30
+
+Update docs for Lambda's in VPCs and potentially long destruction times, plus some tests around it.
+
 ## 0.5.2 - 2025-01-23
 
 Add outputs of ID and ARN's of the security group and dead letter queue resources.
