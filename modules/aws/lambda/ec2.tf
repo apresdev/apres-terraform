@@ -6,7 +6,7 @@ resource "aws_security_group" "default" {
   #checkov:skip=CKV2_AWS_5:"Ensure that Security Groups are attached to another resource"
   #checkov:skip=CKV_AWS_382: "False postive, Lambda needs full egress."
   name        = "${local.name}-Lambda-Function"
-  description = "Security group for ECS Task ${local.name}"
+  description = "Security group for Lambda ${local.name}"
   vpc_id      = data.aws_vpc.default[0].id
 
   egress {
