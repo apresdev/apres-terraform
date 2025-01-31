@@ -31,3 +31,14 @@ Determining what AWS permissions are required for a module can be a nice game of
   ```
 1. Run your terraform plan/apply/destroy, and iamlive should output set of policies. Note that this may not capture _everything_ as updating resources may use a different set of API calls than creating does, but this should at least get you started.
 
+### Makefiles
+
+By default a module, as hinted at in the [templates](module/aws/templates) repo, will have a link to the generic
+module [Makefile](./terraform.mk). That's sufficient for most cases. Occasionally a test will need special steps,
+in which case the developer will want to do the following:
+
+* Create a Makefile in the module/tests directory.
+* The new Makefile must contain an `all` target, and do the necessary steps including executing the tests.
+
+See the [rds/tests/Makefile](./modules/aws/rds/tests/Makefile) as an example. The RDS test needs to build
+a Lambda locally first before running tests.
