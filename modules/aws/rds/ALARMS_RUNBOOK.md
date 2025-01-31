@@ -16,7 +16,7 @@ The next sections outline the alarms and recommended actions.
 
 ## CPU Utilization
 
-In both serverless and provisioned scenarios, first look at Performance Insights to determine if
+In both serverless and provisioned scenarios, first look at Performance Insights to determine
 which SQL queries are contributing to the high CPU Utilization and require tuning.
 
 In a serverless configuration, if `serverless` is set to true, the CPU Utilization is calculated

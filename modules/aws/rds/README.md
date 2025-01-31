@@ -27,13 +27,15 @@ this module trims down the choices to use Aurora MySQL or PostgreSQL.
 ## Decisions
 
 This module contains the following decisions:
-* The module only support Aurora PostgreSQL and Aurora MySQL. Aurora is extremely performant and
-  scalable, and removes enough of the administration overhead, like managing disk space, that the extra cost is worth it.
+* The module only support Aurora. Aurora is extremely performant and scalable, and removes enough of the
+  administration overhead, like managing disk space, that the extra cost is worth it.
 * For Aurora MySQL, only Aurora MySQL 2.x (MySQL 5.7) and greater are supported. Aurora MySQL 1.x (MySQL v5.6) is
   not supported, as it lacks some functionality.
+* All versions of Aurora PostgreSQL are supported.
 * DB instances will automatically be created in the persistence subnets, which has no internet access, inbound or outbound.
-  That is, your DB instances will _never_ be available to the internet.
-* When using Aurora Servless, only Serverless v2 is supported, as Serverless v1 is near end of life at time of writing.
+  That is, your DB instances will _never_ be available to the internet. The instance will be accessible to your
+  clients using the security groups, see [Network Security](#network-security).
+* When using Aurora Serverless, only Serverless v2 is supported, as Serverless v1 is near end of life at time of writing.
 * This module does not support direct integration between Amazon Aurora and AWS Secrets Manager due to limitations,
   see the [Managing the Master Password](#managing-the-master-password) section for further details.
 
@@ -169,19 +171,41 @@ third is not recommended at all, but occasionally required.
        # removed for brevity
      }
      # Let the lambda access the RDS instance
-     resource "aws_security_group_rule" "attach" {
-       description              = "Allow Lambda to access RDS"
-       type                     = "ingress"
-       from_port                = module.rds.port
-       to_port                  = module.rds.port
-       protocol                 = "tcp"
-       source_security_group_id = module.lambda.security_group_id
-       security_group_id        = module.rds.security_group_id
+     resource "aws_vpc_security_group_ingress_rule" "attach" {
+       description                  = "Allow Lambda to access RDS"
+       from_port                    = module.rds.port
+       to_port                      = module.rds.port
+       protocol                     = "tcp"
+       referenced_security_group_id = module.lambda.security_group_id
+       security_group_id            = module.rds.security_group_id
      }
    ```
 1. NOT RECOMMENDED! Set the `allow_ingress_from_all_private_subnets` to true. This grants inbound access
    to the RDS cluster from all private and persistence subnets. This is not recommended, but occasionally required
    by services that don't participate well in security groups.
+
+Should you need command-line access to your database, Apres recommends using the [bastion](../bastion/)
+module to create an EC2 instance that has access to your RDS instance. For example:
+
+```hcl
+  module "rds" {
+    # removed for brevity
+  }
+
+  module "bastion" {
+    # removed for brevity
+  }
+
+  resource "aws_vpc_security_group_ingress_rule" "attach" {
+    description                  = "Allow Lambda to access RDS"
+    from_port                    = module.rds.port
+    to_port                      = module.rds.port
+    protocol                     = "tcp"
+    referenced_security_group_id = module.bastion.security_group_id
+    security_group_id            = module.rds.security_group_id
+  }
+
+```
 
 ## Upgrades and Maintenance Windows
 

@@ -15,16 +15,6 @@ resource "aws_security_group" "rds" {
   description = "Security group for RDS instance ${local.name}"
   vpc_id      = data.aws_vpc.default.id
 
-  # TODO: I don't think we want this.
-  # egress {
-  #   description = "Allow traffic out to peristence and private subnets"
-  #   from_port   = 0
-  #   to_port     = 0
-  #   protocol    = -1
-  #   # only allow egress to the private and persistence subnets
-  #   cidr_blocks = local.private_and_persistence_cidrs
-  # }
-
   tags = merge(
     local.tags,
     {
