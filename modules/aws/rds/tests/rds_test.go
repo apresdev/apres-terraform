@@ -18,7 +18,6 @@ import (
 	lambdaTypes "github.com/aws/aws-sdk-go-v2/service/lambda/types"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	rdsTypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
-	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/suite"
 )
@@ -29,7 +28,6 @@ type RdsTestSuite struct {
 	awsRegion    string
 	environment  string
 	namePrefix   string
-	sts          *sts.Client
 	rdsClient    *rds.Client
 	lambdaClient *lambda.Client
 	dbName       string
@@ -86,15 +84,12 @@ func (s *RdsTestSuite) SetupSuite() {
 	}
 	// Get the vpc tag, emtpy string is fine.
 	s.vpcEnvTag = os.Getenv("TESTING_VPC_ENV_TAG")
-}
 
-
-func (s *RdsTestSuite) configureAwsClients() {
+	// create AWS creds before each test
 	cfg, err := config.LoadDefaultConfig(s.ctx, config.WithRegion(s.awsRegion))
 	s.Require().NoError(err, "expected no error for LoadDefaultConfig creating AWS session")
 
-	// Configure the AWS client for STS
-	s.sts = sts.NewFromConfig(cfg)
+	// Configure the AWS client for STS, RDS and Lambda
 	s.rdsClient = rds.NewFromConfig(cfg)
 	s.lambdaClient = lambda.NewFromConfig(cfg)
 }
@@ -102,10 +97,6 @@ func (s *RdsTestSuite) configureAwsClients() {
 // TestAuroraMySQL tests Aurora MySQL, configured with serverless, and adds an
 // innocous cluster parameter to test that path.
 func (s *RdsTestSuite) TestAuroraMySQL() {
-	// Configure the AWS clients inside each test function. Because of the amount of time it can take,
-	// the creds occasionally expire mid-test if we do it once per suite.
-	s.configureAwsClients()
-
 	var engine = "aurora-mysql"
 	var engineVersion = "8.0.mysql_aurora.3.08.0"
 	var preferredMaintenanceWindow = "sun:08:00-sun:08:30"
@@ -191,6 +182,7 @@ func (s *RdsTestSuite) TestAuroraMySQL() {
 	found := false
 	for _, param := range paramGroups.Parameters {
 		if *param.ParameterName == paramName {
+			found = true
 			s.Require().Equal("2048", *param.ParameterValue, "expected ParameterValue to match")
 		}
 	}
@@ -203,8 +195,6 @@ func (s *RdsTestSuite) TestAuroraMySQL() {
 // TestAuroraPostgresSQL tests Aurora PosgreSQL, configured with a db.t3.medium,
 // and adds an innocous instance parameter to test that path.
 func (s *RdsTestSuite) TestAuroraPostgreSQL() {
-	s.configureAwsClients()
-
 	var name = fmt.Sprintf("%s-pgsql", s.namePrefix)
 	var engine = "aurora-postgresql"
 	var engineVersion = "16.6"
