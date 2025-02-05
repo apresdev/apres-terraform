@@ -28,15 +28,6 @@ locals {
 #
 resource "aws_ecs_task_definition" "default" {
   family = local.name
-
-  # can't test this in the preflight, but check here before we deploy
-  lifecycle {
-    precondition {
-      condition     = var.deployment_target == "FARGATE" && length(var.container_tmpfs) > 0
-      error_message = "Fargate does not support tmpfs, set var.container_tmpfs to an empty list."
-    }
-  }
-
   # Reference for the following is https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = jsonencode(
     [
