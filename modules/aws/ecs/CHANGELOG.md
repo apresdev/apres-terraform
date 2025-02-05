@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.3 - 2025-02-05
+
+Fix volume bug for Fargate, updated docs, expose security group ID for consumption by other modules, remove redundant CloudWatch alarm and dashboard.
+
 ## 2.1.2 - 2024-12-13
 
 Fix a bug in the target group protocol when SSL termination is required on the load balancer.

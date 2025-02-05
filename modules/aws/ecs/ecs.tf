@@ -78,14 +78,14 @@ resource "aws_ecs_task_definition" "default" {
 
   # If Faragate and we have a volume, specify it here.
   dynamic "volume" {
-    for_each = var.ephemeral_volumes
+    for_each = local.container_volume_definition_fargate
     content {
       name = volume.value.name
     }
   }
   # If EC2 and we have a volume, specify it here.
   dynamic "volume" {
-    for_each = var.ephemeral_volumes
+    for_each = local.container_volume_definition_ec2
     content {
       name = volume.value.name
       docker_volume_configuration {
