@@ -70,7 +70,8 @@ variable "vpc_environment_tag" {
 variable "container_image_uri" {
   description = <<EOF
     URI of the container, should include the tag!
-    An example using ECR:: 012345668901.dkr.ecr.us-east-2.amazonaws.com/backend:46c2c244158828aa06c90655f58f1cc55b641234
+    An example using ECR:
+    `012345668901.dkr.ecr.us-east-2.amazonaws.com/backend:46c2c244158828aa06c90655f58f1cc55b641234`
     EOF
   type        = string
 }
@@ -102,25 +103,29 @@ variable "memory" {
 variable "ecs_task_iam_policy_document" {
   description = <<EOF
   The IAM Policy document to attach to the ECS task. This is a JSON document, and should be a valid IAM policy. Example:
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": "s3:ListBucket",
-        "Resource": "arn:aws:s3:::mybucket"
-      }
-    ]
-  }
-  We recommend storing this in a separate file and using the file() or templatefile() function to load it. The default is an
-  innocuous policy that allows the task to get its own identity with sts:GetCallerIdentity.
+  ```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::mybucket"
+    }
+  ]
+}
+  ```
+  We recommend storing this in a separate file and using the file() or templatefile() function to load it,
+  or use the
+  [aws_iam_policy_document data source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document).
+  The default is an innocuous policy that allows the task to get its own identity with sts:GetCallerIdentity.
 
   An example of using a file, with the file `ecs-task-iam-policy.json` in the same directory as the module:
-  ```hcl
-      module "ecs" {
-        # ...
-        ecs_task_iam_policy_document = file("\$\{path.module\}/../../ecs-task-iam-policy.json")
-      }
+  ```
+module "ecs" {
+  # ...
+  ecs_task_iam_policy_document = file("\$\{path.module\}/../../ecs-task-iam-policy.json")
+}
   ```
   EOF
   type        = string
@@ -165,13 +170,15 @@ variable "ephemeral_volumes" {
     - mount_point: The mount point for the volume, for example "/data"
     This is a list but only one volume is supported at this time.
     Example:
-    [
-      {
-        name = "data"
-        size_in_gb = 21
-        mount_point = "/data"
-      }
-    ]
+    ```
+[
+  {
+    name        = "data"
+    size_in_gb  = 21
+    mount_point = "/data"
+  }
+]
+    ```
   EOF
 }
 
@@ -187,7 +194,7 @@ variable "container_health_check_command" {
 
   For example:
   ```
-  ["CMD-SHELL", "curl -f http://localhost:5000/metrics || exit 1"]
+  ["CMD-SHELL", "curl -f http://localhost:5000/metrics \|\| exit 1"]
   ```
 
   See https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html
@@ -287,28 +294,28 @@ variable "container_secrets" {
     Secrets are stored with key/value pairs in Secret Manager. If you want the full JSON object as the
     environment variable, the ARN should not incluce a key, for example:
     ```
-    {
-      name          = "DATABASE_CONFIG"
-      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig"
-      kms_key_alias = "aws/secretsmanager"
-    }
+{
+  name          = "DATABASE_CONFIG"
+  secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig"
+  kms_key_alias = "aws/secretsmanager"
+}
     ```
     and the resulting environment variable, stored as a string, might be:
     ```
-    DATABASE_CONFIG={"username":"mydbuser","password":"asdf","engine":"mariadb","host":"127.0.0.1","port":"12345","dbname":"asdf"}
+DATABASE_CONFIG={"username":"mydbuser","password":"asdf","engine":"mariadb","host":"127.0.0.1","port":"12345","dbname":"asdf"}
     ```
     If you want just the password, which in this example is in Secrets Manager with the key `password`, the ARN should
     look like:
     ```
-    {
-      name          = "DATABASE_PASSWORD"
-      secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig:password"
-      kms_key_alias = "aws/secretsmanager"
-    }
+{
+  name          = "DATABASE_PASSWORD"
+  secret_arn    = "arn:aws:secretsmanager:us-east-2:123456789012:secret:mydbconfig:password"
+  kms_key_alias = "aws/secretsmanager"
+}
     ```
     and the resulting environment variable, stored as a string, might be:
     ```
-    DATABASE_PASSWORD=asdf
+DATABASE_PASSWORD=asdf
     ```
 
     The IAM permissions to read the secret ARN will be automatically added to the task execution role, including
@@ -373,10 +380,10 @@ variable "container_environment_variables" {
   A map of environment variables to set in the container. The keys are the environment variable names, and the values are the
   environment variable values. For example:
   ```
-  {
-    "DATABASE_URL" = "postgres://host:5432/dbname"
-    "DEBUG" = "true"
-  }
+{
+  "DATABASE_URL" = "postgres://host:5432/dbname"
+  "DEBUG"        = "true"
+}
   ```
 
   See the README.md for environment variables that are passed in by default. Any environment variables set
@@ -432,8 +439,8 @@ variable "ec2_use_instance_nvme_storage" {
 
   Capacity planning is critical - the NVMe volume must be large enough to support the ephemeral volume size,
   of _all_ the container instances that can run on the instance. For example:
-  * An m7gd.large has 118GB of NVMe storage, and 2 vCPUs (or 2048 CPU units)
-  * If your container has cpu=768, two containers may run on the instance, and if the ephemeral volume is more than 1/2
+  - An m7gd.large has 118GB of NVMe storage, and 2 vCPUs (or 2048 CPU units)
+  - If your container has cpu=768, two containers may run on the instance, and if the ephemeral volume is more than 1/2
     of the 118GB NVMe volume, the ephemeral volume will not fit on the instance.
 
   NVMe storage is only supported on certain instance types, it is up to the user to verify the instance type
@@ -452,12 +459,12 @@ variable "container_tmpfs" {
 
     Size is in Mb, see the link below for a full list of mount options. "rw" is likely the one you will need.
     For example:
-    ```hcl
-    {
-       containerPath = "/tmp"
-       mountOptions = ["rw"]
-       size = 50
-    }
+    ```
+{
+   containerPath = "/tmp"
+   mountOptions  = ["rw"]
+   size          = 50
+}
     ```
 
     This will mount a 50Mb tmpfs filesystem at /tmp in the container.
@@ -477,7 +484,7 @@ variable "container_tmpfs" {
 variable "create_load_balancer" {
   description = <<EOF
     Create a load balancer for the service. If false, all variables starting with
-    `load_balancer_` will be ignored."
+    `load_balancer_` will be ignored.
   EOF
   type        = bool
 }
