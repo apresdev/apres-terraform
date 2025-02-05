@@ -13,6 +13,12 @@ output "master_password_kms_key_arn" {
   value       = aws_kms_key.default.arn
 }
 
+output "master_password" {
+  description = "Master password for the RDS instance"
+  value       = random_password.master_password.result
+  sensitive   = true
+}
+
 output "security_group_id" {
   description = "ID of the security group for the RDS instance"
   value       = aws_security_group.rds.id
