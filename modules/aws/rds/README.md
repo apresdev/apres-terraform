@@ -92,9 +92,31 @@ does not support the integration.
 Instead, the module does the following:
 * Create a random password, stores it in Secrets Manager for later consumption by other services.
 * Creates the database using that password.
-* Passes the Secrets ARN as an output.
+* Passes the Secrets ARN as an output, and the password string itself (as a sensitive string).
 
-A sample golang snippet using the AWS SDK to get the password follows, without error checking for brevity.
+You have several options for consuming the password. The first is to use the `master_password` output in
+your module as-is.
+
+The second is to use data sources to lookup the password. For example:
+```hcl
+# Create the DB
+module "rds" {
+  # ... removed for brevity
+}
+# Lookup the Secret
+data "aws_secretsmanager_secret" "password" {
+  arn = module.rds.master_password_secret_arn
+}
+# Obtain the secret data
+data "aws_secretsmanager_secret_version" "password" {
+  secret_id = data.aws_secretsmanager_secret.password.id
+}
+# Use the password
+password = data.aws_secrets_manager_secret_version.password.secret_string
+```
+
+The third option is where your code looks up the password using the AWS SDK. A sample golang snippet using the
+AWS SDK to get the password follows, without error checking for brevity.
 See [rdslambda/main.go](./tests/fixtures/rdslambda/main.go) in
 this module's unit tests for the full example.
 
@@ -420,6 +442,7 @@ the name passed in.
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | ID of the RDS cluster |
 | <a name="output_cluster_members"></a> [cluster\_members](#output\_cluster\_members) | List of RDS cluster members |
 | <a name="output_endpoint"></a> [endpoint](#output\_endpoint) | DNS address of the RDS cluster |
+| <a name="output_master_password"></a> [master\_password](#output\_master\_password) | Master password for the RDS instance |
 | <a name="output_master_password_kms_key_arn"></a> [master\_password\_kms\_key\_arn](#output\_master\_password\_kms\_key\_arn) | KMS Key ARN used to encrypt the master password for the RDS instance |
 | <a name="output_master_password_kms_key_id"></a> [master\_password\_kms\_key\_id](#output\_master\_password\_kms\_key\_id) | KMS Key ID used to encrypt the master password for the RDS instance |
 | <a name="output_master_password_secret_arn"></a> [master\_password\_secret\_arn](#output\_master\_password\_secret\_arn) | ARN of the secret containing the master password for the RDS instance |
