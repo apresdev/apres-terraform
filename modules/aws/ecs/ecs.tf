@@ -28,6 +28,15 @@ locals {
 #
 resource "aws_ecs_task_definition" "default" {
   family = local.name
+
+  # can't test this in the preflight, but check here before we deploy
+  lifecycle {
+    precondition {
+      condition     = var.deployment_target == "FARGATE" && length(var.container_tmpfs) > 0
+      error_message = "Fargate does not support tmpfs, set var.container_tmpfs to an empty list."
+    }
+  }
+
   # Reference for the following is https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = jsonencode(
     [
@@ -78,14 +87,14 @@ resource "aws_ecs_task_definition" "default" {
 
   # If Faragate and we have a volume, specify it here.
   dynamic "volume" {
-    for_each = var.ephemeral_volumes
+    for_each = local.container_volume_definition_fargate
     content {
       name = volume.value.name
     }
   }
   # If EC2 and we have a volume, specify it here.
   dynamic "volume" {
-    for_each = var.ephemeral_volumes
+    for_each = local.container_volume_definition_ec2
     content {
       name = volume.value.name
       docker_volume_configuration {

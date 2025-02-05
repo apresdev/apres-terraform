@@ -56,7 +56,8 @@ locals {
   # First the fargate one
   container_volume_definition_fargate = var.deployment_target == "FARGATE" && length(var.ephemeral_volumes) > 0 ? [
     {
-      name = var.ephemeral_volumes[0].name
+      name       = var.ephemeral_volumes[0].name
+      size_in_gb = var.ephemeral_volumes[0].size_in_gb
     }
   ] : []
   # and the EC2 definition.
