@@ -8,7 +8,7 @@ module "cwa_cpu_utilization" {
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.1.0"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
-  name        = "${local.name}-CPUUtilization"
+  name        = "${local.name}-CPUUtilization-${count.index}"
   environment = var.environment
   application = var.application
   component   = "RDS"
@@ -36,7 +36,7 @@ module "cwa_acu_utilization" {
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.1.0"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
-  name        = "${local.name}-ACUUtilization"
+  name        = "${local.name}-ACUUtilization-${count.index}"
   environment = var.environment
   application = var.application
   component   = "RDS"
@@ -64,7 +64,7 @@ module "cwa_freeable_memory" {
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.1.0"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
-  name        = "${local.name}-FreeableMemory"
+  name        = "${local.name}-FreeableMemory-${count.index}"
   environment = var.environment
   application = var.application
   component   = "RDS"
@@ -92,7 +92,7 @@ module "cwa_read_latency" {
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.1.0"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
-  name        = "${local.name}-ReadLatency"
+  name        = "${local.name}-ReadLatency-${count.index}"
   environment = var.environment
   application = var.application
   component   = "RDS"
@@ -120,7 +120,7 @@ module "cwa_write_latency" {
   source = "git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.1.0"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
-  name        = "${local.name}-WriteLatency"
+  name        = "${local.name}-WriteLatency-${count.index}"
   environment = var.environment
   application = var.application
   component   = "RDS"
