@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.2 - 2025-02-10
+
+Bump S3 module and AWS provider version to deal with bug in the provider.
+
 ## 0.3.1 - 2024-12-02
 
 Minor tweak to module to deal with race conditions when deploying to new accounts.
