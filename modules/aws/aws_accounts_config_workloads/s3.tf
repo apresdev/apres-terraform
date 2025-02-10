@@ -131,7 +131,7 @@ resource "aws_s3_bucket_policy" "default" {
 
 module "load_balancer_logs_bucket" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.1.1"
   name        = "load-balancer-logs"
   environment = "WorkloadConfig"
   application = "LoadBalancerAccessLogs"
