@@ -121,8 +121,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
     expiration {
       days = var.lifecycle_rule.object_delete_days == -1 ? null : var.lifecycle_rule.object_delete_days
     }
-    filter {
-      prefix = var.lifecycle_rule.prefix
+    # This is to deal with a provider issue in 5.86.0 where the empty `filter {}` block was ok in previous
+    # versions but no longer ok in >= 5.86, because of a change AWS made in the API
+    # https://github.com/hashicorp/terraform-provider-aws/issues/41268
+    dynamic "filter" {
+      for_each = var.lifecycle_rule.prefix == "" ? [] : [1]
+      content {
+        prefix = var.lifecycle_rule.prefix
+      }
     }
     noncurrent_version_expiration {
       noncurrent_days = var.lifecycle_rule.old_versions_delete_days == -1 ? null : var.lifecycle_rule.old_versions_delete_days
