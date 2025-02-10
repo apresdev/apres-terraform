@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.2 - 2025-02-10
+
+Bump S3 module and AWS provider version to deal with bug in the provider.
+
 ## 0.12.1 - 2024-12-02
 
 Bump versions and add dependency to deal with terraform race conditions on new accounts.
