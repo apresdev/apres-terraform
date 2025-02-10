@@ -111,7 +111,7 @@ func TestS3(t *testing.T) {
 	assert.Len(t, lfcResp.Rules, 1, "Expected one lifecycle rule")
 	rule := lfcResp.Rules[0]
 	assert.Equal(t, rule.Status, types.ExpirationStatusEnabled, "Expected lifecycle rule to be enabled")
-	assert.Equal(t, types.LifecycleRuleFilter(&types.LifecycleRuleFilterMemberPrefix{Value: ""}), rule.Filter, "Expected no filter on lifecycle rule")
+	assert.Nil(t, rule.Filter, "Expected nil filter on lifecycle rule")
 	assert.Equal(t, int32(7), *rule.AbortIncompleteMultipartUpload.DaysAfterInitiation, "Expected 7 days for incomplete multipart upload")
 	assert.Nil(t, rule.Expiration.Date, "Expected no expiration date")
 	assert.Nil(t, rule.NoncurrentVersionTransitions, "Expected no noncurrent version transitions")
