@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.1 - 2025-02-10
+
+Bump S3 module and AWS provider version to deal with bug in the provider.
+
 ## 1.1.0 - 2024-12-19
 
 Adding support to enable browser based uploads to the S3 bucket (enabling CORS).
