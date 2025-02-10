@@ -101,19 +101,19 @@ The following permissions are required to use this module, shown as a Policy sni
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.86.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.78.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.86.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_s3_artifacts"></a> [s3\_artifacts](#module\_s3\_artifacts) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.0.1 |
+| <a name="module_s3_artifacts"></a> [s3\_artifacts](#module\_s3\_artifacts) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
 
 ## Resources
 
