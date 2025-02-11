@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.4.0 - 2025-02-11
+
+The NAT image name was based on Amazon Linux 2, but should be using Amazon Linux 2023. The Amazon Linux 2 image is no longer available.
+
 ## 2.3.3 - 2024-12-16
 
 Pick up fix from nat_instance module to handle replacement of security groups and ENI attachments.
