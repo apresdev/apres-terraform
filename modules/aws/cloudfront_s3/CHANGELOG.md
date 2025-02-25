@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.0 - 2025-02-25
+
+Add Route53 support, fix a bug in S3 lifecycles.
+
 ## 1.1.1 - 2025-02-10
 
 Bump S3 module and AWS provider version to deal with bug in the provider.
