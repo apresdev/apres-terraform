@@ -179,10 +179,32 @@ variable "acm_certificate_arn" {
   default     = ""
 }
 
-variable "aliases" {
+variable "hosted_zone_name" {
   description = <<EOF
-    List of aliases to apply to the CloudFront distribution. The first alias in the list will be
-    the primary domain name for the distribution.
+    The name of the hosted zone in Route53 in which to create the
+    alias records for the CloudFront distribution. If not specified, creation of Route53 aliases using
+    the primary_domain and alias_domains will be skipped.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "primary_domain" {
+  description = <<EOF
+    The primary domain name for the CloudFront distribution. A Route53 alias will be created using this domain.
+    This name will be the first alias in the aliases list.
+
+    Note: This domain must be the domain name or in the subject_alternative_name list of the ACM certificate.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "alias_domains" {
+  description = <<EOF
+    List of aliases to apply to the CloudFront distribution.
+
+    Note: This domain should be in the subject_alternative_name list of the ACM certificate.
   EOF
   type        = list(string)
   default     = []

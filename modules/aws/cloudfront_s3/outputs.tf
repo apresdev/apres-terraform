@@ -8,6 +8,11 @@ output "cloudfront_distribution_domain_name" {
   description = "Domain name of the CloudFront distribution"
 }
 
+output "cloudfront_distribution_hosted_zone_id" {
+  value       = aws_cloudfront_distribution.default.hosted_zone_id
+  description = "Hosted zone ID of the CloudFront distribution, required for creating alias records."
+}
+
 output "cloudfront_distribution_arn" {
   value       = aws_cloudfront_distribution.default.arn
   description = "ARN of the CloudFront distribution"
