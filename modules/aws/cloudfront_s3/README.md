@@ -35,6 +35,11 @@ this module implements that.
 Because of that and limitations in how Terraform handles multiple providers, the WAF configuration, if not overridden
 by setting the `waf_arn` variable, is done in a sub-module so that a provider alias can be passed in.
 
+## Certificates and us-east-1
+
+Certificates used in CloudFront distributions must be created in us-east-1. Use the `acm_certificate_arn` to
+specify the certificate ARN.
+
 ## TODO
 
 * Examine WAF rules: is the default set enough?
@@ -153,6 +158,8 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | [aws_kms_alias.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_kms_key_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
+| [aws_route53_record.aliases](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
+| [aws_route53_record.primary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_s3_bucket_acl.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_lifecycle_configuration.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_ownership_controls.logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
@@ -162,13 +169,14 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | [aws_cloudfront_log_delivery_canonical_user_id.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_log_delivery_canonical_user_id) | data source |
 | [aws_iam_policy_document.cloudfront](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [aws_route53_zone.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_acm_certificate_arn"></a> [acm\_certificate\_arn](#input\_acm\_certificate\_arn) | The ARN of an ACM SSL Certificate to use with the distribution. If not set, the default<br/>    CloudFront certificate will be used. Note the ACM Certificate must be in us-east-1! | `string` | `""` | no |
-| <a name="input_aliases"></a> [aliases](#input\_aliases) | List of aliases to apply to the CloudFront distribution. The first alias in the list will be<br/>    the primary domain name for the distribution. | `list(string)` | `[]` | no |
+| <a name="input_alias_domains"></a> [alias\_domains](#input\_alias\_domains) | List of aliases to apply to the CloudFront distribution.<br/><br/>    Note: This domain should be in the subject\_alternative\_name list of the ACM certificate. | `list(string)` | `[]` | no |
 | <a name="input_allow_browser_uploads"></a> [allow\_browser\_uploads](#input\_allow\_browser\_uploads) | Enables the CORS rules in the S3 bucket to allow pre-signed PutObject requests from the browser. | `bool` | `false` | no |
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_cloudfront_cache_allowed_methods"></a> [cloudfront\_cache\_allowed\_methods](#input\_cloudfront\_cache\_allowed\_methods) | List of allowed HTTP methods for the CloudFront cache policy. Must be one of:<br/>  * ["HEAD", "GET"] or<br/>  * ["HEAD", "GET", "OPTIONS"] or<br/>  * ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] | `list(string)` | <pre>[<br/>  "HEAD",<br/>  "DELETE",<br/>  "POST",<br/>  "GET",<br/>  "OPTIONS",<br/>  "PUT",<br/>  "PATCH"<br/>]</pre> | no |
@@ -185,9 +193,11 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | <a name="input_default_root_object"></a> [default\_root\_object](#input\_default\_root\_object) | Default root file to serve. See<br/>  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html | `string` | `"index.html"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
+| <a name="input_hosted_zone_name"></a> [hosted\_zone\_name](#input\_hosted\_zone\_name) | The name of the hosted zone in Route53 in which to create the<br/>    alias records for the CloudFront distribution. If not specified, creation of Route53 aliases using<br/>    the primary\_domain and alias\_domains will be skipped. | `string` | `""` | no |
 | <a name="input_is_spa"></a> [is\_spa](#input\_is\_spa) | Whether the site is a Single Page Application and 403, 404 error messages should be re-directed to the root object | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the distribution, used to create resources including the S3 bucket | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
+| <a name="input_primary_domain"></a> [primary\_domain](#input\_primary\_domain) | The primary domain name for the CloudFront distribution. A Route53 alias will be created using this domain.<br/>    This name will be the first alias in the aliases list.<br/><br/>    Note: This domain must be the domain name or in the subject\_alternative\_name list of the ACM certificate. | `string` | `""` | no |
 | <a name="input_waf_arn"></a> [waf\_arn](#input\_waf\_arn) | ARN of the WAF to attach to the CloudFront distribution. The provided ARN must be of a WAF v2<br/>    with scope "CLOUDFRONT" deployed in us-east-1.<br/><br/>    If not set, a default WAF with the following rulesets will be created:<br/>    * AWSManagedRulesCommonRuleSet<br/>    * AWSManagedRulesKnownBadInputsRuleSet<br/>    * AWSManagedRulesAnonymousIpList | `string` | `""` | no |
 
 ## Outputs
@@ -196,6 +206,7 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 |------|-------------|
 | <a name="output_cloudfront_distribution_arn"></a> [cloudfront\_distribution\_arn](#output\_cloudfront\_distribution\_arn) | ARN of the CloudFront distribution |
 | <a name="output_cloudfront_distribution_domain_name"></a> [cloudfront\_distribution\_domain\_name](#output\_cloudfront\_distribution\_domain\_name) | Domain name of the CloudFront distribution |
+| <a name="output_cloudfront_distribution_hosted_zone_id"></a> [cloudfront\_distribution\_hosted\_zone\_id](#output\_cloudfront\_distribution\_hosted\_zone\_id) | Hosted zone ID of the CloudFront distribution, required for creating alias records. |
 | <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | ID of the CloudFront distribution |
 | <a name="output_s3_bucket_domain_name"></a> [s3\_bucket\_domain\_name](#output\_s3\_bucket\_domain\_name) | Global domain name of the S3 bucket containing the website content |
 | <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of the S3 bucket containing the website content |

@@ -63,8 +63,7 @@ module "s3_logs" {
   versioning  = true
   mfa_delete  = false # TODO enable this later, see race condition.
   lifecycle_rule = {
-    enabled                  = true
-    old_versions_delete_days = 365
+    enabled = false # setting a separate policy below
   }
 }
 

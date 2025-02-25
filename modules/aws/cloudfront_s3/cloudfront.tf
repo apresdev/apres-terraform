@@ -117,5 +117,5 @@ resource "aws_cloudfront_distribution" "default" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  aliases = var.aliases
+  aliases = concat([var.primary_domain], var.alias_domains)
 }
