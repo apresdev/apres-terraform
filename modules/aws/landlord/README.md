@@ -371,6 +371,9 @@ Substitute:
 | <a name="output_api_load_balancer_fqdn"></a> [api\_load\_balancer\_fqdn](#output\_api\_load\_balancer\_fqdn) | The FQDN of the load balancer for the API. |
 | <a name="output_cdc_sync_queue_arn"></a> [cdc\_sync\_queue\_arn](#output\_cdc\_sync\_queue\_arn) | The ARN of the CDC sync SQS queue. |
 | <a name="output_cdc_sync_queue_name"></a> [cdc\_sync\_queue\_name](#output\_cdc\_sync\_queue\_name) | The name of the CDC sync SQS queue. |
+| <a name="output_cognito_user_pool_arn"></a> [cognito\_user\_pool\_arn](#output\_cognito\_user\_pool\_arn) | The ARN of the Cognito user pool. |
+| <a name="output_cognito_user_pool_client_id"></a> [cognito\_user\_pool\_client\_id](#output\_cognito\_user\_pool\_client\_id) | The ID of the Cognito user pool client. |
+| <a name="output_cognito_user_pool_id"></a> [cognito\_user\_pool\_id](#output\_cognito\_user\_pool\_id) | The ID of the Cognito user pool. |
 | <a name="output_console_domain_name"></a> [console\_domain\_name](#output\_console\_domain\_name) | The domain name of the console. |
 | <a name="output_console_ecs_cluster_name"></a> [console\_ecs\_cluster\_name](#output\_console\_ecs\_cluster\_name) | The name of the ECS cluster for the console. |
 | <a name="output_console_ecs_service_name"></a> [console\_ecs\_service\_name](#output\_console\_ecs\_service\_name) | The name of the ECS service for the console. |
