@@ -1,0 +1,3420 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Landlord Auth API",
+        "version": "1.0.0",
+        "description": "The Landlord authentication service. A multi-tenanted usage of AWS Cognito.",
+        "contact": {
+            "email": "info@apres.dev"
+        }
+    },
+    "tags": [
+        {
+            "name": "LandlordUser",
+            "description": "User authentication and authorization operations"
+        },
+        {
+            "name": "LandlordAdmin",
+            "description": "Administrative operations"
+        }
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:42001",
+            "description": "The default testing URL.",
+            "variables": {}
+        }
+    ],
+    "paths": {
+        "/ll-auth/api/login": {
+            "post": {
+                "operationId": "Login",
+                "summary": "Login with a username and password.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/LoginRequest"
+                },
+                "description": "Initiated a login with a username and password.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/LoginResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/login",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/refresh": {
+            "post": {
+                "operationId": "Refresh",
+                "summary": "Refresh the access token via the refresh token found in a cookie.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RefreshRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/LoginResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/refresh",
+                    "payloadFormatVersion": "1.0"
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/validate-mfa-code": {
+            "post": {
+                "operationId": "ValidateMFACode",
+                "summary": "Validate an MFA code.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/ValidateMFACodeRequest"
+                },
+                "description": "Validate a one-time multi-factor authentication (MFA) code.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/LoginResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/validate-mfa-code",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/associate-otp": {
+            "get": {
+                "operationId": "AssociateOTP",
+                "summary": "Associate OTP with a user.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "description": "Begins the process of associating an OTP provider with a user.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/AssociateOTPResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/associate-otp",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "post": {
+                "operationId": "VerifyOTPAssociation",
+                "summary": "Verify the association of an OTP device.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/VerifyOTPAssociationRequest"
+                },
+                "description": "Verify the association of an OTP device.",
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/associate-otp",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/subject": {
+            "get": {
+                "operationId": "RetrieveSubject",
+                "summary": "Get details about the subject",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SubjectResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/subject",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/subject/users": {
+            "get": {
+                "operationId": "ListSubjectUsers",
+                "summary": "Get the list of users of the subject's tenant",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantUsersResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/subject/users",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants": {
+            "get": {
+                "operationId": "ListTenants",
+                "summary": "Get a list of tenants.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [],
+                "description": "Get a list of tenants.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantsResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "post": {
+                "operationId": "CreateTenant",
+                "summary": "Create a new tenant",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CreateTenantRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}": {
+            "get": {
+                "operationId": "RetrieveTenant",
+                "summary": "Get a tenant by its ID",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/state/{tenantState}": {
+            "put": {
+                "operationId": "UpdateTenantState",
+                "summary": "Update a tenant's state",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tenantState",
+                        "in": "path",
+                        "required": true,
+                        "description": "The state to set the tenant to.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/state/{tenantState}",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.tenantState": "method.request.path.tenantState"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tenantState",
+                        "in": "path",
+                        "required": true,
+                        "description": "The state to set the tenant to.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/description": {
+            "put": {
+                "operationId": "UpdateTenantDescription",
+                "summary": "Update a tenant's description",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/TenantSetDescriptionRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/description",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/roles": {
+            "get": {
+                "operationId": "ListRolesForTenant",
+                "summary": "Get the list of roles for a tenant",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantRolesResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/roles",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "UpdateRolesForTenant",
+                "summary": "Update the roles for a tenant.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/TenantRolesRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantRolesResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/roles",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/profileFields": {
+            "post": {
+                "operationId": "UpdateTenantProfileFields",
+                "summary": "Update a tenant's profile fields",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateProfileFieldsRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/profileFields",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/users": {
+            "get": {
+                "operationId": "ListUsersForTenant",
+                "summary": "Get a list of users for a tenant.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TenantUsersResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/users",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/users/{userID}/role": {
+            "put": {
+                "operationId": "UpdateUserRole",
+                "summary": "Update a user's role.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateUserRoleRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/users/{userID}/role",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.userID": "method.request.path.userID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/users/{userID}/status": {
+            "put": {
+                "operationId": "UpdateUserStatus",
+                "summary": "Update a user's status.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateUserStatusRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/users/{userID}/status",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.userID": "method.request.path.userID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/users/{userID}/mfa": {
+            "put": {
+                "operationId": "UpdateUserMFA",
+                "summary": "Update a user's MFA settings",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateUserMFARequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/users/{userID}/mfa",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.userID": "method.request.path.userID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/users/{userID}/profileFields": {
+            "post": {
+                "operationId": "UpdateUserProfileFields",
+                "summary": "Update a user's profile fields",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateProfileFieldsRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/users/{userID}/profileFields",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.userID": "method.request.path.userID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/invite": {
+            "post": {
+                "operationId": "InviteToTenant",
+                "summary": "Invite a user to join a tenant.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/InviteRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/invite",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/tenants/{tenantID}/invite/{userID}": {
+            "delete": {
+                "operationId": "CancelInvitation",
+                "summary": "Cancel an invitation to a tenant.",
+                "tags": [
+                    "LandlordAdmin"
+                ],
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/tenants/{tenantID}/invite/{userID}",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {
+                        "integration.request.path.tenantID": "method.request.path.tenantID",
+                        "integration.request.path.userID": "method.request.path.userID"
+                    }
+                }
+            },
+            "options": {
+                "parameters": [
+                    {
+                        "name": "tenantID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the tenant to get users for.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the user to update.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/impersonate-role": {
+            "post": {
+                "operationId": "ImpersonateRole",
+                "summary": "Impersonate a role within a tenant.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/ImpersonateRoleRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ImpersonateResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/impersonate-role",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/impersonate-user": {
+            "post": {
+                "operationId": "ImpersonateUser",
+                "summary": "Impersonate a user within a tenant.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/ImpersonateUserRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ImpersonateResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/impersonate-user",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/clear-impersonation": {
+            "post": {
+                "operationId": "ClearImpersonation",
+                "summary": "Clear any impersonation for the current user.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/ClearImpersonationRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/clear-impersonation",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/new-password": {
+            "post": {
+                "operationId": "SetNewPassword",
+                "summary": "Set a new password after being issued a temporary password.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/SetNewPasswordRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SetNewPasswordResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/new-password",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/recover-password": {
+            "post": {
+                "operationId": "RecoverPassword",
+                "summary": "Recover a password.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RecoverPasswordRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/RecoverPasswordResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/recover-password",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ll-auth/api/reset-password": {
+            "post": {
+                "operationId": "ResetPassword",
+                "summary": "Reset a password.",
+                "tags": [
+                    "LandlordUser"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/ResetPasswordRequest"
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "connectionId": "${vpc_link_connection_id}",
+                    "connectionType": "VPC_LINK",
+                    "httpMethod": "any",
+                    "type": "http_proxy",
+                    "uri": "${nlb_uri}/ll-auth/api/reset-password",
+                    "payloadFormatVersion": "1.0",
+                    "requestParameters": {}
+                }
+            },
+            "options": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CorsResponse"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "passthroughBehavior": "never",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {},
+        "requestBodies": {
+            "LoginRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/LoginRequest"
+                        }
+                    }
+                }
+            },
+            "RefreshRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/RefreshRequest"
+                        }
+                    }
+                }
+            },
+            "ValidateMFACodeRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidateMFACodeRequest"
+                        }
+                    }
+                }
+            },
+            "VerifyOTPAssociationRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/VerifyOTPAssociationRequest"
+                        }
+                    }
+                }
+            },
+            "ImpersonateRoleRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ImpersonateRoleRequest"
+                        }
+                    }
+                }
+            },
+            "ImpersonateUserRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ImpersonateUserRequest"
+                        }
+                    }
+                }
+            },
+            "ClearImpersonationRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ClearImpersonationRequest"
+                        }
+                    }
+                }
+            },
+            "SetNewPasswordRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SetNewPasswordRequest"
+                        }
+                    }
+                }
+            },
+            "RecoverPasswordRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/RecoverPasswordRequest"
+                        }
+                    }
+                }
+            },
+            "ResetPasswordRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResetPasswordRequest"
+                        }
+                    }
+                }
+            },
+            "InviteRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/InviteRequest"
+                        }
+                    }
+                }
+            },
+            "CreateTenantRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateTenantRequest"
+                        }
+                    }
+                }
+            },
+            "TenantSetDescriptionRequest": {
+                "description": "Set the description for a tenant",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantSetDescriptionRequest"
+                        }
+                    }
+                }
+            },
+            "TenantRolesRequest": {
+                "description": "Set the roles for a tenant",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantRolesRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateUserRoleRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUserRoleRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateUserStatusRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUserStatusRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateUserMFARequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUserMFARequest"
+                        }
+                    }
+                }
+            },
+            "UpdateProfileFieldsRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateProfileFieldsRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "NoContent": {
+                "description": "The request completed successfully.  No response body will be sent.\n"
+            },
+            "LoginResponse": {
+                "description": "A response for a successful authentication",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/LoginResponse"
+                        }
+                    }
+                }
+            },
+            "ObtainTokenResponse": {
+                "description": "A response to obtain tokens via the OAuth2 PKCE flow",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ObtainTokenResponse"
+                        }
+                    }
+                }
+            },
+            "AssociateOTPResponse": {
+                "description": "Return the secret for associating an OTP device.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/AssociateOTPResponse"
+                        }
+                    }
+                }
+            },
+            "TenantResponse": {
+                "description": "A single tenant response.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantResponse"
+                        }
+                    }
+                }
+            },
+            "TenantsResponse": {
+                "description": "Return the tenants available to the user.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantsResponse"
+                        }
+                    }
+                }
+            },
+            "TenantRolesResponse": {
+                "description": "Return the roles associated with the tenant",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantRolesResponse"
+                        }
+                    }
+                }
+            },
+            "SubjectResponse": {
+                "description": "Return the subject's details",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SubjectResponse"
+                        }
+                    }
+                }
+            },
+            "TenantUsersResponse": {
+                "description": "Return the users associated with the tenant",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TenantUsersResponse"
+                        }
+                    }
+                }
+            },
+            "ImpersonateResponse": {
+                "description": "Return a new token for the impersonated role.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ImpersonateResponse"
+                        }
+                    }
+                }
+            },
+            "RecoverPasswordResponse": {
+                "description": "A response for a successful initiation of a password recovery",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/RecoverPasswordResponse"
+                        }
+                    }
+                }
+            },
+            "SetNewPasswordResponse": {
+                "description": "A response for a successful setting of a new password",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SetNewPasswordResponse"
+                        }
+                    }
+                }
+            },
+            "BadRequest": {
+                "description": "An error occurred.  The client provided one or more invalid inputs.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/APIError"
+                        },
+                        "example": {
+                            "status": "failure",
+                            "data": {
+                                "errors": [
+                                    {
+                                        "message": "bad_request",
+                                        "description": "The supplied value was invalid.",
+                                        "path": "request"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "Unauthorized": {
+                "description": "An error occurred.  The client is not authenticated in the system.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/APIError"
+                        },
+                        "example": {
+                            "status": "failure",
+                            "data": {
+                                "errors": [
+                                    {
+                                        "message": "unauthorized",
+                                        "description": "The client should authenticate itself to get the requested response."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "Forbidden": {
+                "description": "An error occurred.  The client is not authorized to perform the requested action.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/APIError"
+                        },
+                        "example": {
+                            "status": "failure",
+                            "data": {
+                                "errors": [
+                                    {
+                                        "message": "forbidden",
+                                        "description": "The client does not have the access right for the content."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "description": "An error occurred.  The client requested a resource that does not exist.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/APIError"
+                        },
+                        "example": {
+                            "status": "failure",
+                            "data": {
+                                "errors": [
+                                    {
+                                        "message": "not_found",
+                                        "description": "Could not find to requested resource."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "InternalServerError": {
+                "description": "An unexpected error occurred during the request.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/APIError"
+                        },
+                        "example": {
+                            "status": "failure",
+                            "data": {
+                                "errors": [
+                                    {
+                                        "message": "server_error",
+                                        "description": "An error occurred while processing the request."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "CorsResponse": {
+                "description": "Default response for CORS method",
+                "headers": {
+                    "Access-Control-Allow-Origin": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Access-Control-Allow-Methods": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Access-Control-Allow-Headers": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {}
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            },
+            "oauth2": {
+                "type": "oauth2",
+                "description": "This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)",
+                "flows": {
+                    "authorizationCode": {
+                        "authorizationUrl": "/authorize",
+                        "tokenUrl": "/token",
+                        "scopes": {}
+                    }
+                }
+            },
+            "cognito": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "x-amazon-apigateway-authtype": "cognito_user_pools",
+                "x-amazon-apigateway-authorizer": {
+                    "type": "cognito_user_pools",
+                    "providerARNs": [
+                        "${cognito_provider_arn}"
+                    ]
+                }
+            }
+        },
+        "schemas": {
+            "APIStatus": {
+                "type": "string",
+                "enum": [
+                    "success",
+                    "failure"
+                ],
+                "x-enum-varnames": [
+                    "APIStatusSuccess",
+                    "APIStatusFailure"
+                ]
+            },
+            "FieldError": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    }
+                }
+            },
+            "APIError": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/APIStatus"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/FieldError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "LoginStatus": {
+                "type": "string",
+                "enum": [
+                    "success",
+                    "new-password-required",
+                    "password-reset-required",
+                    "mfa-setup-required",
+                    "mfa-code-required"
+                ],
+                "x-enum-varnames": [
+                    "LoginStatusSuccess",
+                    "LoginStatusNewPasswordRequired",
+                    "LoginStatusPasswordResetRequired",
+                    "LoginStatusMFASetupRequired",
+                    "LoginStatusMFACodeRequired"
+                ]
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "session",
+                    "idToken",
+                    "accessToken",
+                    "refreshToken",
+                    "optURI"
+                ],
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/LoginStatus"
+                    },
+                    "session": {
+                        "type": "string"
+                    },
+                    "idToken": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    },
+                    "otpURI": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RefreshRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "refreshToken"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SetNewPasswordResponse": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "idToken",
+                    "accessToken",
+                    "refreshToken",
+                    "otpURI"
+                ],
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/LoginStatus"
+                    },
+                    "idToken": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    },
+                    "otpURI": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ObtainTokenResponse": {
+                "type": "object",
+                "required": [
+                    "id_token",
+                    "access_token",
+                    "refresh_token",
+                    "token_type",
+                    "expires_in"
+                ],
+                "properties": {
+                    "id_token": {
+                        "type": "string"
+                    },
+                    "access_token": {
+                        "type": "string"
+                    },
+                    "refresh_token": {
+                        "type": "string"
+                    },
+                    "token_type": {
+                        "type": "string"
+                    },
+                    "expires_in": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "AssociateOTPResponse": {
+                "type": "object",
+                "required": [
+                    "otpURI"
+                ],
+                "properties": {
+                    "otpURI": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ValidateMFACodeRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "mfaCode",
+                    "session"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "mfaCode": {
+                        "type": "string"
+                    },
+                    "session": {
+                        "type": "string"
+                    }
+                }
+            },
+            "VerifyOTPAssociationRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "otpCode",
+                    "accessToken"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "otpCode": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Tenant": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "roles",
+                    "subTenantRoles"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "subTenantRoles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "profileFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileFormatField"
+                        }
+                    }
+                }
+            },
+            "TenantResponse": {
+                "type": "object",
+                "required": [
+                    "tenant"
+                ],
+                "properties": {
+                    "tenant": {
+                        "$ref": "#/components/schemas/Tenant"
+                    }
+                }
+            },
+            "TenantsResponse": {
+                "type": "object",
+                "properties": {
+                    "tenants": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Tenant"
+                        }
+                    }
+                }
+            },
+            "TenantSetDescriptionRequest": {
+                "type": "object",
+                "required": [
+                    "description"
+                ],
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TenantRolesRequest": {
+                "type": "object",
+                "required": [
+                    "roles"
+                ],
+                "properties": {
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "subTenantRoles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "TenantRolesResponse": {
+                "type": "object",
+                "properties": {
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "subTenantRoles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "SubjectResponse": {
+                "type": "object",
+                "required": [
+                    "tenantID",
+                    "tenantName",
+                    "userID",
+                    "username",
+                    "role",
+                    "status"
+                ],
+                "properties": {
+                    "tenantID": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "tenantName": {
+                        "type": "string"
+                    },
+                    "tenantProfileFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileFormatField"
+                        }
+                    },
+                    "userID": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/UserStatus"
+                    },
+                    "userProfileFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileFormatField"
+                        }
+                    },
+                    "impersonating": {
+                        "type": "object",
+                        "required": [
+                            "tenantID",
+                            "userID",
+                            "email",
+                            "role"
+                        ],
+                        "properties": {
+                            "tenantID": {
+                                "type": "string",
+                                "format": "uuid"
+                            },
+                            "userID": {
+                                "type": "string",
+                                "format": "uuid"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            },
+                            "profileFields": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProfileFormatField"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "TenantUsersResponse": {
+                "type": "object",
+                "required": [
+                    "tenantID"
+                ],
+                "properties": {
+                    "tenantID": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "username",
+                                "role",
+                                "status",
+                                "cognitoID"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "$ref": "#/components/schemas/UserStatus"
+                                },
+                                "cognitoID": {
+                                    "type": "string"
+                                },
+                                "profileFields": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProfileFormatField"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ImpersonateRoleRequest": {
+                "type": "object",
+                "required": [
+                    "tenant",
+                    "role",
+                    "refreshToken"
+                ],
+                "properties": {
+                    "tenant": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ImpersonateUserRequest": {
+                "type": "object",
+                "required": [
+                    "tenant",
+                    "username",
+                    "refreshToken"
+                ],
+                "properties": {
+                    "tenant": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ImpersonateResponse": {
+                "type": "object",
+                "required": [
+                    "idToken",
+                    "accessToken"
+                ],
+                "properties": {
+                    "idToken": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ClearImpersonationRequest": {
+                "type": "object",
+                "required": [
+                    "refreshToken"
+                ],
+                "properties": {
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SetNewPasswordRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "password",
+                    "session"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "session": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResetPasswordRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "confirmationCode",
+                    "newPassword"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "confirmationCode": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RecoverPasswordRequest": {
+                "type": "object",
+                "required": [
+                    "username"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RecoverPasswordResponse": {
+                "type": "object",
+                "required": [
+                    "deliveryMedium",
+                    "destination"
+                ],
+                "properties": {
+                    "deliveryMedium": {
+                        "type": "string",
+                        "enum": [
+                            "EMAIL",
+                            "SMS"
+                        ]
+                    },
+                    "destination": {
+                        "type": "string",
+                        "description": "Displayable string for the destination where the recovery code was sent."
+                    }
+                }
+            },
+            "MFAPolicy": {
+                "type": "string",
+                "enum": [
+                    "none",
+                    "required"
+                ],
+                "x-enum-varnames": [
+                    "MFAPolicyNone",
+                    "MFAPolicyRequired"
+                ]
+            },
+            "ProfileField": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "value"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProfileFormatField": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "format",
+                    "value"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "format": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InviteRequest": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "role",
+                    "mfaPolicy"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string",
+                        "default": "guest"
+                    },
+                    "mfaPolicy": {
+                        "$ref": "#/components/schemas/MFAPolicy"
+                    },
+                    "profileFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileField"
+                        }
+                    }
+                }
+            },
+            "CreateTenantRequest": {
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UpdateUserRoleRequest": {
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "default": "guest"
+                    }
+                }
+            },
+            "UserStatus": {
+                "type": "string",
+                "enum": [
+                    "invited",
+                    "active",
+                    "inactive"
+                ],
+                "x-enum-varnames": [
+                    "UserStatusInvited",
+                    "UserStatusActive",
+                    "UserStatusInactive"
+                ]
+            },
+            "UpdateUserStatusRequest": {
+                "type": "object",
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "role": {
+                        "$ref": "#/components/schemas/UserStatus"
+                    }
+                }
+            },
+            "UpdateUserMFARequest": {
+                "type": "object",
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "mfaPolicy": {
+                        "$ref": "#/components/schemas/MFAPolicy"
+                    }
+                }
+            },
+            "UpdateProfileFieldsRequest": {
+                "type": "object",
+                "properties": {
+                    "profileFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileField"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
