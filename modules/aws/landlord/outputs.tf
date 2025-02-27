@@ -77,3 +77,17 @@ output "api_load_balancer_fqdn" {
   description = "The FQDN of the load balancer for the API."
   value       = module.landlord_api_ecs.load_balancer_dns_name
 }
+
+output "cognito_user_pool_arn" {
+  description = "The ARN of the Cognito user pool."
+  value       = aws_cognito_user_pool.default.arn
+}
+output "cognito_user_pool_id" {
+  description = "The ID of the Cognito user pool."
+  value       = aws_cognito_user_pool.default.id
+}
+
+output "cognito_user_pool_client_id" {
+  description = "The ID of the Cognito user pool client."
+  value       = aws_cognito_user_pool_client.default.id
+}
