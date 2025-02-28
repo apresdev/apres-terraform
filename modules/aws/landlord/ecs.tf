@@ -26,7 +26,7 @@ module "landlord_api_ecs" {
     LANDLORD_APP_NAME          = var.app_name
     LANDLORD_APP_ADMIN_EMAIL   = var.app_admin_email
     LANDLORD_LISTEN_ADDR       = "0.0.0.0:8080"
-    LANDLORD_DEFAULT_USER_POOL = "landlord-default-user-pool"
+    LANDLORD_DEFAULT_USER_POOL = local.user_pool_name
   }
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
@@ -61,7 +61,7 @@ module "landlord_console_ecs" {
     LANDLORD_APP_NAME          = var.app_name
     LANDLORD_APP_ADMIN_EMAIL   = var.app_admin_email
     LANDLORD_LISTEN_ADDR       = "0.0.0.0:8080"
-    LANDLORD_DEFAULT_USER_POOL = "landlord-default-user-pool"
+    LANDLORD_DEFAULT_USER_POOL = local.user_pool_name
   }
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
