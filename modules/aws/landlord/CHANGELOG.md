@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.0 - 2025-02-28
+
+Fix ECS deploy to use correct user pool name.
+
 ## 0.2.0 - 2025-02-27
 
 Add Cognito ID and ARN outputs.
