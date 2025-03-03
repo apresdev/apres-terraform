@@ -174,6 +174,14 @@ variable "acm_certificate_arn" {
   description = <<EOF
     The ARN of an ACM SSL Certificate to use with the distribution. If not set, the default
     CloudFront certificate will be used. Note the ACM Certificate must be in us-east-1!
+
+    There are several reasons to create a certificate outside this module:
+    1. The cloudfront module is not deployed to us-east-1 - in that case you must create the certificate
+       in us-east-1 and pass in ARN here.
+    2. One or more of the entries in `alias_domains` is not in the domain specified by the `hosted_zone_name`,
+       which means that automatic creation of the Route53 DNS records required for domain validation cannot be
+       created - in that case you must create the certificate in us-east-1, manage the DNS records manually, and
+       pass in the ARN here.
   EOF
   type        = string
   default     = ""
@@ -202,9 +210,19 @@ variable "primary_domain" {
 
 variable "alias_domains" {
   description = <<EOF
-    List of aliases to apply to the CloudFront distribution.
+    List of aliases to apply to the CloudFront distribution. Note that if an entry does not
+    end with the `hosted_zone_name`, no alias record will be created in Route53, since this
+    module will not know where the domain is hosted.
 
-    Note: This domain should be in the subject_alternative_name list of the ACM certificate.
+    For example, if:
+    * hosted_zone_name = "example.com"
+    * primary_domain = "something.example.com"
+    * alias_domains = ["www.example.com", "somethingelse.com"]
+    Then:
+    * The alias record for `something.example.com` and `www.example.com` will be created in Route53
+      in the `example.com` domain, but not for `somethingelse.com`.
+
+    Note: All alias domains should be in the subject_alternative_name list of the ACM certificate.
   EOF
   type        = list(string)
   default     = []
