@@ -165,13 +165,6 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 {
   "Effect": "Allow",
   "Action": [
-    "acm:*"
-  ],
-  "Resource": [ "*" ]
-},
-{
-  "Effect": "Allow",
-  "Action": [
     "route53:*"
   ],
   "Resource": [ "*" ]
