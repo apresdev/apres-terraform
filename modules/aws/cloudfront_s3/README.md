@@ -24,7 +24,7 @@ the output `cloudfront_domain_name`.
 
 ## Prerequisites
 
-If you do not specifiy the `waf_arn` variable, the WAF will be created in us-east-1, because that's where a CloudFront
+If you do not specify the `waf_arn` variable, the WAF will be created in us-east-1, because that's where a CloudFront
 WAF must be created, see the discussion at [WAF and us-east-1](#waf-and-us-east-1). You must deploy the Apres `cloudwatchlogs_regional` in us-east-1 for successful deployment of this
 module.
 
@@ -35,10 +35,49 @@ this module implements that.
 Because of that and limitations in how Terraform handles multiple providers, the WAF configuration, if not overridden
 by setting the `waf_arn` variable, is done in a sub-module so that a provider alias can be passed in.
 
-## Certificates and us-east-1
+## Domain names - Certificates, us-east-1, and Route53
 
-Certificates used in CloudFront distributions must be created in us-east-1. Use the `acm_certificate_arn` to
-specify the certificate ARN.
+Certificates used in CloudFront distributions must be created in us-east-1. Because of that and that this
+module can be deployed in any region, this module does not create the certificate.  You will need to create
+the certificate in a separate stack, using the [acm_public_cert](../acm_public_cert/) module. Then use
+the `acm_certificate_arn` to specify the certificate ARN.
+
+Certificates and Route53 are a complicated matter. For a Cloudfront distribution to work with more than one
+domain name, the following needs be true:
+* The domain name needs to be either the primary domain name on the certificate, or listed as a
+  Subject Alternative Domain (SAN), or Alias.
+* The domain name needs to be in Route53 pointing to the Cloudfront distribution.
+
+For example, let's assume two domain names should work: `dashboard.prod.example.com`, and `dashboard.example.com`.
+
+If the `example.com` domain is hosted in Route53 in the AWS account where the module is deployed, then
+create the certificate, and set the following variables:
+
+```hcl
+module "cloudfront_s3" {
+  # ...
+  hosted_zone_name    = "example.com"
+  primary_domain      = "dashboard.prod.example.com"
+  alias_domains       = [ "dashboard.example.com" ]
+  acm_certificate_arn = "arn:... " # the arn to the created certificate
+  # ...
+}
+```
+
+In that scenario two Route53 alias entries will be created in the `example.com` hosted zone
+for `dashboard.prod.example.com` and `dashboard.example.com`
+
+However if the domain `prod.example.com` is hosted in Route53 in the AWS account where the module is deployed,
+the Route53 entries for the `dashboard.example.com` cannot be created. In that
+case you will need to:
+1. Create the certificate yourself in us-east-1, and manage the verification yourself.
+2. Pass the ARN of the certificate into the `acm_certificate_arn` variable
+3. The `dashboard.example.com` Route53 entry will not be created, you will need to add that to whichever system manages the `example.com` domain.
+
+In all cases, the Route53 entries are "Alias" entries in AWS terminology, since they alias a CloudFront distribution,
+but the actual DNS recores are "A" records, not "CNAME" as you might expect. See
+[Choosing between alias and non-alias records](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
+for a detailed discussion.
 
 ## TODO
 
@@ -122,6 +161,20 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
   "Resource": [
     "arn:aws:cloudfront:${AWS::Region}:${AWS::AccountId}:log-group:*"
   ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "acm:*"
+  ],
+  "Resource": [ "*" ]
+},
+{
+  "Effect": "Allow",
+  "Action": [
+    "route53:*"
+  ],
+  "Resource": [ "*" ]
 }
 ```
 
@@ -175,8 +228,8 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_acm_certificate_arn"></a> [acm\_certificate\_arn](#input\_acm\_certificate\_arn) | The ARN of an ACM SSL Certificate to use with the distribution. If not set, the default<br/>    CloudFront certificate will be used. Note the ACM Certificate must be in us-east-1! | `string` | `""` | no |
-| <a name="input_alias_domains"></a> [alias\_domains](#input\_alias\_domains) | List of aliases to apply to the CloudFront distribution.<br/><br/>    Note: This domain should be in the subject\_alternative\_name list of the ACM certificate. | `list(string)` | `[]` | no |
+| <a name="input_acm_certificate_arn"></a> [acm\_certificate\_arn](#input\_acm\_certificate\_arn) | The ARN of an ACM SSL Certificate to use with the distribution. If not set, the default<br/>    CloudFront certificate will be used. Note the ACM Certificate must be in us-east-1!<br/><br/>    There are several reasons to create a certificate outside this module:<br/>    1. The cloudfront module is not deployed to us-east-1 - in that case you must create the certificate<br/>       in us-east-1 and pass in ARN here.<br/>    2. One or more of the entries in `alias_domains` is not in the domain specified by the `hosted_zone_name`,<br/>       which means that automatic creation of the Route53 DNS records required for domain validation cannot be<br/>       created - in that case you must create the certificate in us-east-1, manage the DNS records manually, and<br/>       pass in the ARN here. | `string` | `""` | no |
+| <a name="input_alias_domains"></a> [alias\_domains](#input\_alias\_domains) | List of aliases to apply to the CloudFront distribution. Note that if an entry does not<br/>    end with the `hosted_zone_name`, no alias record will be created in Route53, since this<br/>    module will not know where the domain is hosted.<br/><br/>    For example, if:<br/>    * hosted\_zone\_name = "example.com"<br/>    * primary\_domain = "something.example.com"<br/>    * alias\_domains = ["www.example.com", "somethingelse.com"]<br/>    Then:<br/>    * The alias record for `something.example.com` and `www.example.com` will be created in Route53<br/>      in the `example.com` domain, but not for `somethingelse.com`.<br/><br/>    Note: All alias domains should be in the subject\_alternative\_name list of the ACM certificate. | `list(string)` | `[]` | no |
 | <a name="input_allow_browser_uploads"></a> [allow\_browser\_uploads](#input\_allow\_browser\_uploads) | Enables the CORS rules in the S3 bucket to allow pre-signed PutObject requests from the browser. | `bool` | `false` | no |
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_cloudfront_cache_allowed_methods"></a> [cloudfront\_cache\_allowed\_methods](#input\_cloudfront\_cache\_allowed\_methods) | List of allowed HTTP methods for the CloudFront cache policy. Must be one of:<br/>  * ["HEAD", "GET"] or<br/>  * ["HEAD", "GET", "OPTIONS"] or<br/>  * ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] | `list(string)` | <pre>[<br/>  "HEAD",<br/>  "DELETE",<br/>  "POST",<br/>  "GET",<br/>  "OPTIONS",<br/>  "PUT",<br/>  "PATCH"<br/>]</pre> | no |
