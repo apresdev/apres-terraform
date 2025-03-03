@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.3.0 - 2025-03-03
+
+Only create Route53 entries if they can be created in the domain passed in, update docs on certificates and Route53.
+
 ## 1.2.0 - 2025-02-25
 
 Add Route53 support, fix a bug in S3 lifecycles.

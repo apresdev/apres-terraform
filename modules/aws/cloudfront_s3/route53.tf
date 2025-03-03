@@ -3,6 +3,10 @@ locals {
   do_primary_domain = local.do_route53 && var.primary_domain != ""
   do_alias_domains  = local.do_route53 && length(var.alias_domains) > 0
   alias_domains     = local.do_alias_domains ? var.alias_domains : []
+
+  # create a list of domain names we're going to create route53 entries for, only if they end with the
+  # primary_domain
+  alias_domains_to_create = [for alias in local.alias_domains : alias if endswith(alias, var.primary_domain)]
 }
 
 # This is an Alias record for Cloudfront, needs to be an A record even though it feels like
@@ -23,7 +27,7 @@ resource "aws_route53_record" "primary" {
 
 resource "aws_route53_record" "aliases" {
   #checkov:skip=CKV2_AWS_23:Attaching a resource to an A record is on purpose for a CloudFront distribution
-  for_each = toset(var.alias_domains)
+  for_each = toset(local.alias_domains_to_create)
   zone_id  = data.aws_route53_zone.default[0].zone_id
   name     = each.key
   type     = "A"
