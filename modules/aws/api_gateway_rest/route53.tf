@@ -1,7 +1,7 @@
 resource "aws_route53_record" "apigw_alias" {
   #checkov:skip=CKV2_AWS_23:Attaching a resource to an A record is on purpose for an API Gateway domain
   count   = local.do_route53 ? 1 : 0
-  zone_id = data.aws_route53_zone.default.zone_id
+  zone_id = data.aws_route53_zone.default[0].zone_id
   name    = var.domain_name
   type    = "A"
   alias {

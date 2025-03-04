@@ -39,7 +39,7 @@ resources yourself:
 * A Certificate with the domain name you need
 * An API Gateway Domain Name and a corresponding Mapping
 * A Route53 entry for the domain name, as an alias to the API Gateway Domain Name - Note this is different from
-  the invoke URL name!
+  the invoke URL name! Use the output variable `apigw_custom_domain_name` as the target.
 
 # AWS IAM Permissions
 
