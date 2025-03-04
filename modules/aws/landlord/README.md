@@ -306,7 +306,7 @@ Substitute:
 | <a name="module_acm_public_cert_console"></a> [acm\_public\_cert\_console](#module\_acm\_public\_cert\_console) | git@github.com:apresdev/apres-terraform.git//modules/aws/acm_public_cert | rel/acm_public_cert/2.0.0 |
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 | <a name="module_landlord_api_ecs"></a> [landlord\_api\_ecs](#module\_landlord\_api\_ecs) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs | rel/ecs/2.1.3 |
-| <a name="module_landlord_api_gateway"></a> [landlord\_api\_gateway](#module\_landlord\_api\_gateway) | git@github.com:apresdev/apres-terraform.git//modules/aws/api_gateway_rest | rel/api_gateway_rest/1.1.0 |
+| <a name="module_landlord_api_gateway"></a> [landlord\_api\_gateway](#module\_landlord\_api\_gateway) | git@github.com:apresdev/apres-terraform.git//modules/aws/api_gateway_rest | rel/api_gateway_rest/1.2.0 |
 | <a name="module_landlord_cdc_publisher"></a> [landlord\_cdc\_publisher](#module\_landlord\_cdc\_publisher) | git@github.com:apresdev/apres-terraform.git//modules/aws/dynamodb_sns_publisher | rel/dynamodb_sns_publisher/0.2.0 |
 | <a name="module_landlord_cdc_topic"></a> [landlord\_cdc\_topic](#module\_landlord\_cdc\_topic) | git@github.com:apresdev/apres-terraform.git//modules/aws/sns | rel/sns/1.0.0 |
 | <a name="module_landlord_console_ecs"></a> [landlord\_console\_ecs](#module\_landlord\_console\_ecs) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs | rel/ecs/2.1.3 |
@@ -327,7 +327,6 @@ Substitute:
 | [aws_iam_role.landlord_sms_cognito_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.landlord_sms_cognito_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_lambda_permission.with_sns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
-| [aws_route53_record.api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_route53_record.console](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [random_uuid.sms_external_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
