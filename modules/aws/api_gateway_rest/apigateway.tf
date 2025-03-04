@@ -17,6 +17,10 @@ resource "aws_api_gateway_rest_api" "default" {
     create_before_destroy = true
   }
 
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+
   tags = merge(
     local.tags,
     {
@@ -95,5 +99,21 @@ resource "aws_api_gateway_method_settings" "default" {
     caching_enabled    = false
     data_trace_enabled = false # TODO: is this useful?
   }
+}
+
+resource "aws_api_gateway_domain_name" "default" {
+  count           = local.do_route53 ? 1 : 0
+  domain_name     = var.domain_name
+  certificate_arn = var.acm_certificate_arn == "" ? module.acm_certificate[0].certificate_arn : var.acm_certificate_arn
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_base_path_mapping" "default" {
+  count       = local.do_route53 ? 1 : 0
+  api_id      = aws_api_gateway_rest_api.default.id
+  domain_name = aws_api_gateway_domain_name.default[0].domain_name
+  stage_name  = aws_api_gateway_stage.default.stage_name
 }
 

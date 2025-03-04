@@ -37,3 +37,8 @@ output "apigw_stage_invoke_url" {
   description = "The URL to invoke the API via the stage"
   value       = aws_api_gateway_stage.default.invoke_url
 }
+
+output "apigw_custom_domain_name" {
+  description = "The custom domain name of the API Gateway REST API, or empty string if not created"
+  value       = local.do_route53 ? aws_api_gateway_domain_name.default[0].regional_domain_name : ""
+}
