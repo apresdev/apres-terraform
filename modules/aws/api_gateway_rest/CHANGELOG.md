@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.0 - 2025-03-04
+
+Add support for creating a custom domain, switch default API type from edge to regional.
+
 ## 1.1.0 - 2024-10-30
 
 Update names to reflect naming standards.

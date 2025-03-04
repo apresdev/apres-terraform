@@ -11,6 +11,8 @@ locals {
   )
 
   name = module.apres_names.local_name
+
+  do_route53 = var.hosted_zone_name == "" ? false : true
 }
 
 module "apres_names" {
