@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2025-03-04
+
+Setup custom domain on the API Gateway.
+
 ## 0.3.0 - 2025-02-28
 
 Fix ECS deploy to use correct user pool name.
