@@ -14,11 +14,12 @@ module "landlord_api_ecs" {
   container_cpu_architecture = "X86_64"
   vpc_environment_tag        = var.vpc_environment_tag
 
-  create_load_balancer       = true
-  load_balancer_is_public    = false
-  load_balancer_ssl_cert_arn = module.acm_public_cert_api.certificate_arn
-  load_balancer_port         = 80
-  container_port             = 8080
+  create_load_balancer    = true
+  load_balancer_is_public = false
+  # Should not have a cert here!
+  #load_balancer_ssl_cert_arn = module.acm_public_cert_api.certificate_arn
+  load_balancer_port = 80
+  container_port     = 8080
 
   container_environment_variables = {
     LANDLORD_DB_TABLE_NAME     = module.landlord_dynamo.table_name
