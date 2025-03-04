@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.1 - 2025-03-04
+
+Bump API Gateway version for regional certificate fix.
+
 ## 0.4.0 - 2025-03-04
 
 Setup custom domain on the API Gateway.
