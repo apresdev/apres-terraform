@@ -147,3 +147,37 @@ variable "load_balancer_arn" {
   type        = string
   default     = ""
 }
+
+variable "hosted_zone_name" {
+  description = <<EOF
+    The name of the hosted zone in Route53 in which to create the
+    records for the API Gateway name. If not specified, no domain name will be created.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "domain_name" {
+  description = <<EOF
+    The domain name to use for the API Gateway. If not specified, no domain name will be created, and
+    the API Gateway will be accessible via the default domain name, in the output `api_gateway_domain_name`.
+    This is ignored if `hosted_zone_name` is not specified.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "acm_certificate_arn" {
+  description = <<EOF
+    The ARN of an ACM SSL Certificate to use with the API. If not set, a certificate will
+    be created in ACM using the domain_name specified in the `domain_name` variable.
+
+    If `hosted_zone_name` is not specified, this variable will be ignore, and no certificate
+    will be created.
+
+    If you are creating the certificate outside of this module, ensure that the domain name
+    or alternative name in the certificate matches the `domain_name` variable.
+  EOF
+  type        = string
+  default     = ""
+}
