@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.1 - 2025-03-04
+
+Fix the certificate to use a regional one.
+
 ## 1.2.0 - 2025-03-04
 
 Add support for creating a custom domain, switch default API type from edge to regional.

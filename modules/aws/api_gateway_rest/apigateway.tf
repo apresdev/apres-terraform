@@ -102,9 +102,9 @@ resource "aws_api_gateway_method_settings" "default" {
 }
 
 resource "aws_api_gateway_domain_name" "default" {
-  count           = local.do_route53 ? 1 : 0
-  domain_name     = var.domain_name
-  certificate_arn = var.acm_certificate_arn == "" ? module.acm_certificate[0].certificate_arn : var.acm_certificate_arn
+  count                    = local.do_route53 ? 1 : 0
+  domain_name              = var.domain_name
+  regional_certificate_arn = var.acm_certificate_arn == "" ? module.acm_certificate[0].certificate_arn : var.acm_certificate_arn
   endpoint_configuration {
     types = ["REGIONAL"]
   }
