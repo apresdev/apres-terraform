@@ -9,10 +9,4 @@ resource "aws_route53_record" "console" {
   records = [module.landlord_console_ecs.load_balancer_dns_name]
 }
 
-resource "aws_route53_record" "api" {
-  zone_id = data.aws_route53_zone.default.zone_id
-  name    = local.api_domain_name
-  type    = "CNAME"
-  ttl     = "60"
-  records = [module.landlord_api_ecs.load_balancer_dns_name]
-}
+# the API Route53 entry is created in the API Gateway module
