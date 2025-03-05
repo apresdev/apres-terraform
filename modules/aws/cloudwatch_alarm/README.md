@@ -46,6 +46,20 @@ Three tags are added to alarms that are consumed by the Grafana Configurator:
 * `source` - the value `cloudwatch_alarm_module` is set. This isn't strictly necessary but
   just in case a client creates an alarm with severity and runbook, this tag acts as the differentiator.
 
+
+## Treatment of Missing Data
+
+CloudWatch and Grafana handle missing data differently. There are legitimate cases where there are no values, for example
+a 5xx error on a load balancer that last occurred 24 hours ago, with no further data. In CloudWatch we would treat the "missing" data as "notBreaching", but in Grafana, the alert would remain triggered (alerting) until a new value appears.
+
+Because of that, in Grafana a missing value needs to be set to something. The following algorithm is used (using shorthand values for comparison_operator)
+* if `var.treat_missing_data` is `breaching`
+   * if `var.comparison_operator` is > or >= then in Grafana the value will be set to `var.threshold` + 1
+   * if `var.comparator` is < or <= then in Grafana the value will be set to zero
+* else if `var.treat_missing_data` is `notBreaching`
+   * if `var.comparator` is > or >= then in Grafana the value will be set to 0
+   * if `var.comparator` is < or <= then in Grafana the value will be set to `var.threshold` + 1
+
 ## AWS Permissions
 
 The following AWS Permissions are required to use this module.
