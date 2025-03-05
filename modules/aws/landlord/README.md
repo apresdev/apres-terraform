@@ -344,6 +344,10 @@ Substitute:
 | <a name="input_app_url"></a> [app\_url](#input\_app\_url) | The base URL of the app with its protocol scheme, used by Landlord & Cognito to redirect to after login | `string` | n/a | yes |
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_cognito_callback_urls"></a> [cognito\_callback\_urls](#input\_cognito\_callback\_urls) | List of callback URLs that are allowed as destinations after Cognito authentication. | `list(string)` | `[]` | no |
+| <a name="input_cognito_email_sending_account"></a> [cognito\_email\_sending\_account](#input\_cognito\_email\_sending\_account) | One of 'COGNITO\_DEFAULT' for dev/test usages or 'DEVELOPER' for prod usages | `string` | `"COGNITO_DEFAULT"` | no |
+| <a name="input_cognito_from_email_address"></a> [cognito\_from\_email\_address](#input\_cognito\_from\_email\_address) | The email address that emails will be sent from | `string` | `""` | no |
+| <a name="input_cognito_reply_to_email_address"></a> [cognito\_reply\_to\_email\_address](#input\_cognito\_reply\_to\_email\_address) | The email address that emails will be replied to | `string` | `""` | no |
+| <a name="input_cognito_ses_source_arn"></a> [cognito\_ses\_source\_arn](#input\_cognito\_ses\_source\_arn) | The ARN of the SES identity that Cognito will use to send emails | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_custom_domain_prefix"></a> [custom\_domain\_prefix](#input\_custom\_domain\_prefix) | The custom domain prefix for the Cognito Hosted UI. Note this must be globally unique to all customers and<br/>    regions, so pick a unique one. The resulting domain will be<br/>    {var.custom\_domain\_prefix}.auth.{current region}.amazoncognito.com. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
