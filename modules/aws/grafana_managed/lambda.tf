@@ -9,7 +9,7 @@ locals {
   asset_names    = [for v in data.github_release.lambda.assets : v.name]
   asset_index    = index(local.asset_names, local.asset_target)
   asset_url      = data.github_release.lambda.assets[local.asset_index].url
-  lambda_version = "1.3.0" # Release tag in GitHub to retrieve
+  lambda_version = "1.4.0" # Release tag in GitHub to retrieve
   release_tag    = "v${local.lambda_version}"
 
   binary_path = abspath("${path.root}/tf_generated/${local.asset_target}")

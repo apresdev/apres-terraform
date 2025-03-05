@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.0 - 2025-03-05
+
+Update Lambda version for the missing data alerts fix.
+
 ## 0.1.2 - 2025-02-10
 
 Bump S3 module and AWS provider version to deal with bug in the provider.
