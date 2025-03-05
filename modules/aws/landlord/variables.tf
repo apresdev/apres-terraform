@@ -156,3 +156,47 @@ variable "vpc_environment_tag" {
     error_message = "VPC Environment Tag must be alphanumeric and capitalized."
   }
 }
+
+variable "cognito_email_sending_account" {
+  # Cognito uses the value "DEVELOPER" to indicate that the email sending account is the developer's
+  # own account. This is used for production environments.
+  description = "One of 'COGNITO_DEFAULT' for dev/test usages or 'DEVELOPER' for prod usages"
+  type        = string
+  default     = "COGNITO_DEFAULT"
+  validation {
+    condition     = contains(["COGNITO_DEFAULT", "DEVELOPER"], var.cognito_email_sending_account)
+    error_message = "Must be one of COGNITO_DEFAULT or DEVELOPER"
+  }
+}
+
+# In the AWS console this is called: "FROM sender name"
+#
+# AWS says:
+#    FROM sender name - optional
+#    Enter a friendly name for the email sender in the format "John Stiles <johnstiles@example.com>.“
+variable "cognito_from_email_address" {
+  description = "The email address that emails will be sent from"
+  type        = string
+  default     = ""
+  validation {
+    condition     = var.cognito_from_email_address == "" || can(regex("^[a-zA-Z0-9\\s]+(\\s[a-zA-Z0-9\\s]+)*\\s<[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}>$", var.cognito_from_email_address))
+    error_message = "The email_from value must be in the format 'Name <email@domain.com>'."
+  }
+}
+
+# This, as compared to "cognito_from_email_address", is just an email address
+variable "cognito_reply_to_email_address" {
+  description = "The email address that emails will be replied to"
+  type        = string
+  default     = ""
+  validation {
+    condition     = var.cognito_reply_to_email_address == "" || can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.cognito_reply_to_email_address))
+    error_message = "The reply to email address must be a valid email address."
+  }
+}
+
+variable "cognito_ses_source_arn" {
+  description = "The ARN of the SES identity that Cognito will use to send emails"
+  type        = string
+  default     = ""
+}
