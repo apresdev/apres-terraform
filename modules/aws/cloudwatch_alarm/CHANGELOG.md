@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.0 - 2025-03-05
+
+Remove two options from treat_missing_data that cannot be supported in Grafana Alerts, update docs.
+
 ## 0.1.0 - 2024-11-20
 
 Initial creation of a CloudWatch Alarms module for consumption by the Grafana Configurator.
