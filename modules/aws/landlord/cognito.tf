@@ -56,6 +56,13 @@ resource "aws_cognito_user_pool" "default" {
     sns_region     = local.sms_region
   }
 
+  email_configuration {
+    email_sending_account  = var.cognito_email_sending_account
+    from_email_address     = var.cognito_from_email_address
+    reply_to_email_address = var.cognito_reply_to_email_address
+    source_arn             = var.cognito_ses_source_arn
+  }
+
   username_configuration {
     case_sensitive = false
   }
