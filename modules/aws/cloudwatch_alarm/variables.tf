@@ -123,8 +123,8 @@ variable "treat_missing_data" {
   type        = string
   default     = "notBreaching"
   validation {
-    condition     = can(regex("^(missing|ignore|breaching|notBreaching)$", var.treat_missing_data))
-    error_message = "treat_missing_data must be one of missing, ignore, breaching, or notBreaching."
+    condition     = can(regex("^(breaching|notBreaching)$", var.treat_missing_data))
+    error_message = "treat_missing_data must be one of breaching, or notBreaching."
   }
 }
 
