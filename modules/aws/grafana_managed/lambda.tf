@@ -25,6 +25,12 @@ data "github_release" "lambda" {
   release_tag = local.release_tag
 }
 
+output "assets_url" {
+  value = data.github_release.lambda.asserts_url
+}
+output "assets" {
+  value = data.github_release.lambda.assets
+}
 
 # Download the artifact
 data "external" "artifact_download" {
