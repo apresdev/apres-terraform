@@ -12,8 +12,11 @@ resource "aws_s3_object" "unsigned" {
     })
   )
 
-  # Force the upload if the file changes localy
-  etag = filemd5(local.artifact)
+  # Force the upload if the file changes locally. Use source_hash to work around
+  # encryption limitations with etag. The value is stored in state, not in S3, so
+  # there is a possibility of uploading it more frequently than necessary, but that's
+  # better than missing an upload.
+  source_hash = filemd5(local.artifact)
 
   depends_on = [
     data.archive_file.lambda
