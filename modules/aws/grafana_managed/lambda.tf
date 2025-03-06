@@ -26,7 +26,7 @@ data "github_release" "lambda" {
 }
 
 output "assets_url" {
-  value = data.github_release.lambda.asserts_url
+  value = data.github_release.lambda.assets_url
 }
 output "assets" {
   value = data.github_release.lambda.assets
