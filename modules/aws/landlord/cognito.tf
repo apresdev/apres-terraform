@@ -2,6 +2,7 @@ locals {
   sms_region            = var.sms_aws_region == "" ? data.aws_region.current.name : var.sms_aws_region
   user_pool_name        = "${local.name}-default-user-pool"
   user_pool_client_name = "${local.name}-default-user-pool-client"
+  default_email_message = format("{username} login here: %s with temporary password: {####}", var.app_url)
 }
 
 # Create a static UUID that will not change
@@ -18,12 +19,8 @@ resource "aws_cognito_user_pool" "default" {
     allow_admin_create_user_only = true
     invite_message_template {
       email_subject = format("Invitation for %s", var.app_url)
-      email_message = format(
-        "{username} login here: %s with temporary password: {####}",
-      var.app_url)
-      sms_message = format(
-        "{username} login here: %s with temporary password: {####}",
-      var.app_url)
+      email_message = var.invite_email_template_filename != "" ? file(var.invite_email_template_filename) : local.default_email_message
+      sms_message   = format("{username} login here: %s with temporary password: {####}", var.app_url)
     }
   }
 
