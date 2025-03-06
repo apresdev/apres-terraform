@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.7.0 - 2025-03-06
+
+Switch to using source_hash on the binary upload to S3 to work around etag limitations. Upgrade providers.
+
 ## 0.6.0 - 2025-01-30
 
 Update docs for Lambda's in VPCs and potentially long destruction times, plus some tests around it.
