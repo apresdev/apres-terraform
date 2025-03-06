@@ -31,19 +31,20 @@ download() {
     exit 0
 }
 
-if [ -f $version_file ] && [ -f $md5sum_file ] && [ -f $binary_path ]; then
-    current_version=`cat $version_file`
-    if [ "$current_version" != "$version" ]; then
-        download
-    fi
-
-    md5sum -c $md5sum_file > /dev/null 2> /dev/null
-    if [ $? -ne 0 ]; then
-        download
-    fi
-else
-    download
-fi
+download
+#if [ -f $version_file ] && [ -f $md5sum_file ] && [ -f $binary_path ]; then
+#    current_version=`cat $version_file`
+#    if [ "$current_version" != "$version" ]; then
+#        download
+#    fi
+#
+#    md5sum -c $md5sum_file > /dev/null 2> /dev/null
+#    if [ $? -ne 0 ]; then
+#        download
+#    fi
+#else
+#    download
+#fi
 
 # Return a JSON result, needed for the "external" terraform resource
 echo '{ "download": "false" }'
