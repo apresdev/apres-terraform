@@ -285,6 +285,7 @@ document for details.
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.86.0 |
 | <a name="provider_external"></a> [external](#provider\_external) | 2.3.4 |
 | <a name="provider_github"></a> [github](#provider\_github) | 6.5.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.2.3 |
 
 ## Modules
 
@@ -292,7 +293,7 @@ document for details.
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 | <a name="module_dashboards-bucket"></a> [dashboards-bucket](#module\_dashboards-bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.4.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.7.0 |
 | <a name="module_lambda_scheduler"></a> [lambda\_scheduler](#module\_lambda\_scheduler) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_scheduler | rel/lambda_scheduler/0.1.0 |
 
 ## Resources
@@ -317,6 +318,7 @@ document for details.
 | [aws_sns_topic.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_policy) | resource |
 | [aws_ssm_parameter.grafana_config](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [null_resource.always_run](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.grafana_custom_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |

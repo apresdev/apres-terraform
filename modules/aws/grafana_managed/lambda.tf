@@ -8,7 +8,6 @@ locals {
   asset_target   = "${local.lambda_name}.${local.architecture}.zip"
   asset_names    = [for v in data.github_release.lambda.assets : v.name]
   asset_index    = index(local.asset_names, local.asset_target)
-  asset_url      = data.github_release.lambda.assets[local.asset_index].url
   lambda_version = "1.4.0" # Release tag in GitHub to retrieve
   release_tag    = "v${local.lambda_version}"
 
@@ -33,7 +32,7 @@ data "external" "artifact_download" {
     "bash",
     "${path.module}/fetch-lambda.sh",
     local.binary_path,
-    local.asset_url,
+    data.github_release.lambda.assets[local.asset_index].url,
     local.lambda_version
   ]
   depends_on = [data.github_release.lambda]
@@ -85,7 +84,7 @@ resource "aws_iam_role_policy" "lambda" {
 
 module "lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.4.0"
+  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.7.0"
 
   name        = "Grafana"
   environment = var.environment
