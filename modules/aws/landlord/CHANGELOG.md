@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.0 - 2025-03-06
+
+TODO Add your changelog message, without any linebreaks, keep the *Changelog:* at the beginning of the line. The message will be automatically written to CHANGELOG.md in your module.
+
 ## 0.5.0 - 2025-03-05
 
 Add support for Cognito email configuration.
