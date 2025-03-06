@@ -109,6 +109,15 @@ variable "hosted_ui_logo_filename" {
   default     = ""
 }
 
+variable "invite_email_template_filename" {
+  description = <<-EOF
+    Filename for the invite Email template. If not provided, a simple one line message
+    will appear in the invite email.
+  EOF
+  type        = string
+  default     = ""
+}
+
 variable "custom_domain_prefix" {
   description = <<EOF
     The custom domain prefix for the Cognito Hosted UI. Note this must be globally unique to all customers and
