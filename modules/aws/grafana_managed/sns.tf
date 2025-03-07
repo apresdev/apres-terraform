@@ -31,3 +31,10 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     }
   }
 }
+
+resource "aws_sns_topic_subscription" "default" {
+  for_each  = toset(var.alert_email_addresses)
+  topic_arn = aws_sns_topic.default.arn
+  protocol  = "email"
+  endpoint  = each.key
+}
