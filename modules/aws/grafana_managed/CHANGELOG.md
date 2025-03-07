@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2025-03-07
+
+Add capability to add email subscriptions to the default SNS alert topic.
+
 ## 0.3.0 - 2025-03-07
 
 Update lambda version to pick up fix for race condition in downloading the lambda configurator binary.
