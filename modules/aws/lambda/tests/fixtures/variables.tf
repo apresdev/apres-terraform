@@ -14,3 +14,8 @@ variable "vpc_environment_tag" {
   type    = string
   default = "Test"
 }
+
+variable "use_zip" {
+  type    = bool
+  default = false
+}

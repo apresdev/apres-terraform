@@ -21,7 +21,8 @@ locals {
   log_group = "/apres/lambda/${local.name}"
 
   # The actual artifact to upload for code signing
-  artifact = var.skip_zip ? var.binary_path : data.archive_file.lambda[0].output_path
+  artifact      = var.source_file == "" ? var.zip_file : data.archive_file.lambda[0].output_path
+  artifact_hash = var.source_file == "" ? var.zip_file_hash : data.archive_file.lambda[0].output_md5
 }
 
 module "apres_names" {

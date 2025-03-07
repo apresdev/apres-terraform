@@ -18,7 +18,7 @@ resource "aws_lambda_function" "default" {
   description   = var.description
 
   architectures = var.architectures
-  handler       = coalesce(var.handler, basename(var.binary_path))
+  handler       = coalesce(var.handler, basename(local.artifact))
   memory_size   = var.memory_size
   runtime       = var.runtime
   timeout       = var.timeout

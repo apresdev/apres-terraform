@@ -1,9 +1,26 @@
+locals {
+  archive_path = var.use_zip ? "${path.module}/lambda.zip" : ""
+}
+
+data "archive_file" "lambda" {
+  count       = var.use_zip ? 1 : 0
+  type        = "zip"
+  source_file = "lambda.py"
+  output_path = local.archive_path
+}
+
+
 module "lambda" {
   source = "../../"
 
-  name          = var.name
-  runtime       = "python3.9"
-  binary_path   = "lambda.py"
+  name    = var.name
+  runtime = "python3.9"
+  # if use_zip set this to empty string
+  source_file = var.use_zip ? "" : "lambda.py"
+  # if use_zip use these two variables
+  zip_file      = var.use_zip ? local.archive_path : ""
+  zip_file_hash = var.use_zip ? data.archive_file.lambda[0].output_md5 : ""
+
   handler       = "lambda.lambda_handler"
   architectures = ["x86_64"]
 
