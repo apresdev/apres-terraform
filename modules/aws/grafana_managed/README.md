@@ -127,7 +127,7 @@ See [Notifying on Alarms](#notifying-on-alarms) for details on notifications.
 The Configurator backs up all non-provisioned dashboards to the S3 bucket, in the `backups/` prefix. The
 dashboards are stored using their UID's as filenames.
 
-## Notifying on Alarms
+## Notifying on Alerts
 
 Setting up notifications on the alarms is left as an exercise to the reader, documented at
 [Alerts in Grafana version 10](https://docs.aws.amazon.com/grafana/latest/userguide/v10-alerts.html). This module
@@ -139,7 +139,17 @@ Configurator cannot fix it. This module creates the following resource:
   output `sns_notifications_topic_arn`.
 * A Grafana contact point named `Default SNS Contact Point` configured to write the SNS topic.
 
-If you wish to send notifications via SNS, create Grafana Notification policies to use that contact point.
+Apres does not recommend using email in subscriptions for two reasons:
+1. In a complex environment emails get lost or ignored, and have no escalation path during non-working hours.
+2. The emails are complex to understand, without any way to change them.
+
+Instead, use a service like PagerDuty or VictorOps.
+
+With those caveats, if you wish to send notifications via SNS to email, you will need to:
+1. Specify the email address(es) in the `alert_email_addresses` variable.
+2. A subscription confirmation email will be sent to the email address(es), you will need to confirm them.
+3. By default no alerts will be sent, you will need to setup a Notification Policy to filter the alerts you
+   want to, using the Contact point `Default SNS Contact Point`.
 
 ## Dashboards and Accounts and Regions
 
@@ -316,6 +326,7 @@ document for details.
 | [aws_s3_object.grafana_dashboards](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_sns_topic.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_policy) | resource |
+| [aws_sns_topic_subscription.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [aws_ssm_parameter.grafana_config](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -333,6 +344,7 @@ document for details.
 | <a name="input_accounts"></a> [accounts](#input\_accounts) | AWS Account IDs that Grafana should have access to. The key is the display name and will<br/>    be used as when creating the data source, in practice this should match the account name. | `map(string)` | n/a | yes |
 | <a name="input_admin_groups"></a> [admin\_groups](#input\_admin\_groups) | List of Group IDs that should have ADMIN access to Grafana, see [Users and Groups](#grafana-users-and-groups-authentication). | `list(string)` | `[]` | no |
 | <a name="input_admin_users"></a> [admin\_users](#input\_admin\_users) | List of User IDs that should have ADMIN access to Grafana, see [Users and Groups](#grafana-users-and-groups-authentication). | `list(string)` | `[]` | no |
+| <a name="input_alert_email_addresses"></a> [alert\_email\_addresses](#input\_alert\_email\_addresses) | A list of email addresses to subscribe to the default Grafana Alerts SNS Topic.<br/><br/>    NOTE: This does not automatically send all alerts to these email addresses, there are two<br/>    manual steps to take, see the [Notifying on Alerts](#notifying-on-alerts) section for more information. | `list(string)` | `[]` | no |
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"Observability"` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"Grafana"` | no |
 | <a name="input_custom_cloudwatch_metrics_namespaces"></a> [custom\_cloudwatch\_metrics\_namespaces](#input\_custom\_cloudwatch\_metrics\_namespaces) | List of custom namespaces in CloudWatch to be added to the CloudWatch data sources.<br/>    If they are not added, the dashboards will not be able to search for metrics in these namespaces.<br/>    The standard Apres namespaces will be added automatically. | `list(string)` | `[]` | no |

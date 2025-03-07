@@ -165,3 +165,14 @@ variable "custom_dashboards" {
   type        = map(string)
   default     = {}
 }
+
+variable "alert_email_addresses" {
+  description = <<EOF
+    A list of email addresses to subscribe to the default Grafana Alerts SNS Topic.
+
+    NOTE: This does not automatically send all alerts to these email addresses, there are two
+    manual steps to take, see the [Notifying on Alerts](#notifying-on-alerts) section for more information.
+  EOF
+  type        = list(string)
+  default     = []
+}
