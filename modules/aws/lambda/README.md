@@ -7,8 +7,8 @@ such, the resulting name will have the following pattern:
 
 Resources created include:
 
-* A zip file archiving the `binary_path` input variable
-* An S3 object containing the unsigned archive file (auto-generated)
+* If `source_file` is set, a zip file archiving the specified file.
+* An S3 object containing the unsigned archive file, generated (see previous bullet) or specified in `zip_file`
 * A signing job the signs the archive with the `lamda_regional` code signing profile
 * A CloudWatch Log Group (CWL) for the function (`/apres/lambda/<function_name>`)
 * A Dead-letter SQS queue (DLQ) for any failed invocations of the lambda function.
@@ -278,8 +278,8 @@ The following best practices are suppress:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.6.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.72.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.89.0 |
 
 ## Modules
 
@@ -317,7 +317,6 @@ The following best practices are suppress:
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
 | <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br/>  Valid values are ["x86\_64"] and ["arm64"].<br/>  Default is ["arm64"].<br/>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br/>  "arm64"<br/>]</pre> | no |
-| <a name="input_binary_path"></a> [binary\_path](#input\_binary\_path) | This path to the lambda executable file. | `string` | n/a | yes |
 | <a name="input_code_signing_arn_ssm_parameter"></a> [code\_signing\_arn\_ssm\_parameter](#input\_code\_signing\_arn\_ssm\_parameter) | Name of the SSM Parameter containing the code signing profile.<br/>  This should typically be left blank to use the default. | `string` | `""` | no |
 | <a name="input_code_signing_name_ssm_parameter"></a> [code\_signing\_name\_ssm\_parameter](#input\_code\_signing\_name\_ssm\_parameter) | Name of the SSM Parameter containing the ARN of the code signing config.<br/>    This should typically be left blank to use the default. | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
@@ -333,9 +332,11 @@ The following best practices are suppress:
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br/>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br/>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
 | <a name="input_runtime"></a> [runtime](#input\_runtime) | Identifier of the function's runtime. | `string` | n/a | yes |
-| <a name="input_skip_zip"></a> [skip\_zip](#input\_skip\_zip) | (Optional) Set to true to skip zip archive creation.  If set, this assumes that `source_path` points to an existing zip archive. | `bool` | `false` | no |
+| <a name="input_source_file"></a> [source\_file](#input\_source\_file) | The path of the lambda executable source file, such as a python script. The file will be zipped up and<br/>  uploaded to the S3 bucket for signing, and then used by the Lambda.<br/><br/>  This is mutually exclusive with the `zip_file` variable. If both are set, `source_file` will be used. | `string` | `""` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Amount of time your Lambda Function has to run in seconds.<br/>  Defaults to 3 seconds. | `number` | `3` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | Controls the lambda's VPC settings.<br/>    The enabled field controls whether the lambda runs in the private subnets of the VPC.  Defaults to false.<br/>    The environment\_tag is used to lookup the VPC based on the VPCs tag structure.  Required if enabled is true. | <pre>object({<br/>    enabled         = bool<br/>    environment_tag = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "environment_tag": null<br/>}</pre> | no |
+| <a name="input_zip_file"></a> [zip\_file](#input\_zip\_file) | The path of the a lambda executable zip file. This could contain any executable or archive that is supported<br/>  by the Lambda runtime. The file will be uploaded to the S3 bucket for signing, and then used by the Lambda.<br/><br/>  This is mutually exclusive with the `source_file` variable. If both are set, `source_file` will be used.<br/><br/>  If this is set, the `zip_file_hash` must also be included. | `string` | `""` | no |
+| <a name="input_zip_file_hash"></a> [zip\_file\_hash](#input\_zip\_file\_hash) | The hash, md5 preferred, of the `zip_file`. Because of ordering issues with Terraform, this module cannot<br/>    calculate the hash of the zip file itself using the Terraform md5file() function. If it did, the md5file()<br/>    function gets called before the terraform plan is generated, which will fail if the zip\_file is not already<br/>    on disk, like if it is downloaded using a terraform provider in the calling stack. | `string` | `""` | no |
 
 ## Outputs
 

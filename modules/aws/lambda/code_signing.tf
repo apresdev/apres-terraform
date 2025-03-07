@@ -16,11 +16,19 @@ resource "aws_s3_object" "unsigned" {
   # encryption limitations with etag. The value is stored in state, not in S3, so
   # there is a possibility of uploading it more frequently than necessary, but that's
   # better than missing an upload.
-  source_hash = filemd5(local.artifact)
+  source_hash = local.artifact_hash
 
   depends_on = [
     data.archive_file.lambda
   ]
+
+  # Check to ensure we have a source of artifact, since we can't (yet) check that in the variable definition.
+  lifecycle {
+    precondition {
+      condition     = var.source_file != "" || var.zip_file != ""
+      error_message = "One of `source_file` or `zip_file` must be set."
+    }
+  }
 }
 
 # Create a job to sign the artifacts.

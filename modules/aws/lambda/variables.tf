@@ -9,14 +9,6 @@ variable "name" {
   nullable    = false
 }
 
-variable "binary_path" {
-  description = <<EOF
-  This path to the lambda executable file.
-  EOF
-  type        = string
-  nullable    = false
-}
-
 variable "runtime" {
   description = <<EOF
   Identifier of the function's runtime.
@@ -28,6 +20,41 @@ variable "runtime" {
 # #########################################################################################################################################
 # Optional Variables
 # #########################################################################################################################################
+variable "source_file" {
+  description = <<EOF
+  The path of the lambda executable source file, such as a python script. The file will be zipped up and
+  uploaded to the S3 bucket for signing, and then used by the Lambda.
+
+  This is mutually exclusive with the `zip_file` variable. If both are set, `source_file` will be used.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "zip_file" {
+  description = <<EOF
+  The path of the a lambda executable zip file. This could contain any executable or archive that is supported
+  by the Lambda runtime. The file will be uploaded to the S3 bucket for signing, and then used by the Lambda.
+
+  This is mutually exclusive with the `source_file` variable. If both are set, `source_file` will be used.
+
+  If this is set, the `zip_file_hash` must also be included.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "zip_file_hash" {
+  description = <<EOF
+    The hash, md5 preferred, of the `zip_file`. Because of ordering issues with Terraform, this module cannot
+    calculate the hash of the zip file itself using the Terraform md5file() function. If it did, the md5file()
+    function gets called before the terraform plan is generated, which will fail if the zip_file is not already
+    on disk, like if it is downloaded using a terraform provider in the calling stack.
+  EOF
+  type        = string
+  default     = ""
+}
+
 variable "memory_size" {
   description = <<EOF
   (Optional) Amount of memory in MB your Lambda Function can use at runtime.
@@ -120,14 +147,6 @@ variable "reserved_concurrent_executions" {
   EOF
   type        = number
   default     = -1
-}
-
-variable "skip_zip" {
-  description = <<EOF
-  (Optional) Set to true to skip zip archive creation.  If set, this assumes that `source_path` points to an existing zip archive.
-  EOF
-  type        = bool
-  default     = false
 }
 
 # #########################################################################################################################################

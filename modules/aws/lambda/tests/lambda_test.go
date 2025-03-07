@@ -48,7 +48,7 @@ func (s *LambdaTestSuite) SetupSuite() {
 	s.lambda = lambda.NewFromConfig(cfg)
 }
 
-func (s *LambdaTestSuite) TestLambdaNoVPC() {
+func (s *LambdaTestSuite) TestLambdaNoVPCSourceFile() {
 	// Variables for the terraform module
 	now := time.Now().Unix()
 	functionNameInput := fmt.Sprintf("test-%d", now)
@@ -62,6 +62,7 @@ func (s *LambdaTestSuite) TestLambdaNoVPC() {
 			"name":        functionNameInput,
 			"environment": s.environment,
 			"enable_vpc":  false,
+			"use_zip":     false,
 		},
 	}
 
@@ -112,7 +113,7 @@ func (s *LambdaTestSuite) TestLambdaNoVPC() {
 	s.assertInvokeFunction(lambdaFunctionArn)
 }
 
-func (s *LambdaTestSuite) TestLambdaWithVPC() {
+func (s *LambdaTestSuite) TestLambdaWithVPCZipFile() {
 	// Variables for the terraform module
 	now := time.Now().Unix()
 	functionNameInput := fmt.Sprintf("test-%d", now)
@@ -126,6 +127,7 @@ func (s *LambdaTestSuite) TestLambdaWithVPC() {
 			"name":        functionNameInput,
 			"environment": s.environment,
 			"enable_vpc":  true,
+			"use_zip":     true,
 		},
 	}
 
