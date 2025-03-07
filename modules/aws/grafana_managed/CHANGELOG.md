@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.0 - 2025-03-07
+
+Update lambda version to pick up fix for race condition in downloading the lambda configurator binary.
+
 ## 0.2.0 - 2025-03-05
 
 Update Lambda version for the missing data alerts fix.
