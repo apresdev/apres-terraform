@@ -292,7 +292,7 @@ document for details.
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 | <a name="module_dashboards-bucket"></a> [dashboards-bucket](#module\_dashboards-bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.4.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.0.0 |
 | <a name="module_lambda_scheduler"></a> [lambda\_scheduler](#module\_lambda\_scheduler) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_scheduler | rel/lambda_scheduler/0.1.0 |
 
 ## Resources
