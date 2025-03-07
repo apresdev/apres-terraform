@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.0 - 2025-03-07
+
+Change how source and zip files are managed to avoid race conditions.
+
 ## 0.7.0 - 2025-03-06
 
 Switch to using source_hash on the binary upload to S3 to work around etag limitations. Upgrade providers.
