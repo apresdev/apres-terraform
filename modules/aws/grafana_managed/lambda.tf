@@ -85,7 +85,7 @@ resource "aws_iam_role_policy" "lambda" {
 
 module "lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.4.0"
+  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.0.0"
 
   name        = "Grafana"
   environment = var.environment
@@ -96,11 +96,12 @@ module "lambda" {
   # runtime, binary_path, handler, etc
   runtime       = "provided.al2023"
   handler       = "configurator" # this is the binary name created by the build workflow in apresdev/lambda-configurator
-  skip_zip      = true
-  timeout       = 120 # 2 minutes
-  binary_path   = local.binary_path
+  timeout       = 120            # 2 minutes
   architectures = [local.architecture]
   memory_size   = 256
+
+  zip_file      = local.binary_path
+  zip_file_hash = data.external.artifact_download.result.md5sum
 
   # Environment variables
   environment_variables = {
