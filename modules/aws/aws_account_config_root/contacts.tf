@@ -24,9 +24,9 @@ locals {
 
 # Set the operations contact for all the AWS accounts
 resource "aws_account_alternate_contact" "operations" {
-  count                  = length(data.aws_organizations_organization.default.accounts[*].id)
+  for_each               = toset(data.aws_organizations_organization.default.accounts[*].id)
   alternate_contact_type = "OPERATIONS"
-  account_id             = data.aws_organizations_organization.default.accounts[count.index].id == data.aws_caller_identity.default.account_id ? null : data.aws_organizations_organization.default.accounts[count.index].id
+  account_id             = each.key == data.aws_caller_identity.default.account_id ? null : each.key
   name                   = local.operations_contact.name
   title                  = local.operations_contact.title
   email_address          = local.operations_contact.email_address
@@ -35,9 +35,9 @@ resource "aws_account_alternate_contact" "operations" {
 
 # Set the security contact for all the AWS accounts
 resource "aws_account_alternate_contact" "security" {
-  count                  = length(data.aws_organizations_organization.default.accounts[*].id)
+  for_each               = toset(data.aws_organizations_organization.default.accounts[*].id)
   alternate_contact_type = "SECURITY"
-  account_id             = data.aws_organizations_organization.default.accounts[count.index].id == data.aws_caller_identity.default.account_id ? null : data.aws_organizations_organization.default.accounts[count.index].id
+  account_id             = each.key == data.aws_caller_identity.default.account_id ? null : each.key
   name                   = local.security_contact.name
   title                  = local.security_contact.title
   email_address          = local.security_contact.email_address
@@ -46,9 +46,9 @@ resource "aws_account_alternate_contact" "security" {
 
 # Set the operations contact for all the AWS accounts
 resource "aws_account_alternate_contact" "billing" {
-  count                  = length(data.aws_organizations_organization.default.accounts[*].id)
+  for_each               = toset(data.aws_organizations_organization.default.accounts[*].id)
   alternate_contact_type = "BILLING"
-  account_id             = data.aws_organizations_organization.default.accounts[count.index].id == data.aws_caller_identity.default.account_id ? null : data.aws_organizations_organization.default.accounts[count.index].id
+  account_id             = each.key == data.aws_caller_identity.default.account_id ? null : each.key
   name                   = local.billing_contact.name
   title                  = local.billing_contact.title
   email_address          = local.billing_contact.email_address
