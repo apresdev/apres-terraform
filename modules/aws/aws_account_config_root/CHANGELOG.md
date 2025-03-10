@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.0 - 2025-03-10
+
+Fix bug in contacts when number of AWS accounts in an organization changes.
+
 ## 0.4.2 - 2024-12-09
 
 Updated README with correct permissions and prerequisites.
