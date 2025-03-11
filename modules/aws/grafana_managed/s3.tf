@@ -49,10 +49,11 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
 # Store all files into S3, in the "apres" key.
 resource "aws_s3_object" "grafana_dashboards" {
   #checkov:skip=CKV_AWS_186: Using the S3 default key for encryption.
-  for_each = fileset("${path.module}/dashboards", "*.json")
-  bucket   = module.dashboards-bucket.bucket_id
-  source   = "${path.module}/dashboards/${each.value}"
-  key      = "${local.dashboard_s3_prefix}/${each.value}"
+  for_each    = fileset("${path.module}/dashboards", "*.json")
+  bucket      = module.dashboards-bucket.bucket_id
+  source      = "${path.module}/dashboards/${each.value}"
+  key         = "${local.dashboard_s3_prefix}/${each.value}"
+  source_hash = filemd5("${path.module}/dashboards/${each.value}")
 }
 
 resource "aws_s3_object" "custom_dashboards" {
