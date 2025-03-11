@@ -649,7 +649,10 @@
     ],
     "refresh": "1m",
     "schemaVersion": 39,
-    "tags": [],
+    "tags": [
+        "Apres",
+        "Provisioned"
+    ],
     "templating": {
         "list": [
             {

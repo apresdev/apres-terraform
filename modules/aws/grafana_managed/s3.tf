@@ -56,8 +56,9 @@ resource "aws_s3_object" "grafana_dashboards" {
 }
 
 resource "aws_s3_object" "custom_dashboards" {
-  for_each = var.custom_dashboards
-  bucket   = module.dashboards-bucket.bucket_id
-  source   = each.value
-  key      = "${var.custom_dashboard_folder_name}/${each.key}.json"
+  for_each    = var.custom_dashboards
+  bucket      = module.dashboards-bucket.bucket_id
+  source      = each.value
+  key         = "${var.custom_dashboard_folder_name}/${each.key}.json"
+  source_hash = filemd5(each.value)
 }
