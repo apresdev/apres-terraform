@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.2 - 2025-03-11
+
+Fix missing attribute on provisioned dashboards.
+
 ## 0.5.1 - 2025-03-11
 
 Fix bug for provisioned dashboard updates not propagating to Grafana, add consistent tagging to provisioned dashboards.
