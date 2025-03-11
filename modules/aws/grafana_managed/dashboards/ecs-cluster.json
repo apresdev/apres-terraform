@@ -18,7 +18,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
-    "id": 7,
+    "id": 9,
     "links": [],
     "panels": [
         {
@@ -64,6 +64,7 @@
                         }
                     },
                     "mappings": [],
+                    "min": 0,
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
@@ -79,329 +80,30 @@
                     },
                     "unit": "percent"
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "MemoryUtilized"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            },
+                            {
+                                "id": "unit",
+                                "value": "decmbytes"
+                            }
+                        ]
+                    }
+                ]
             },
             "gridPos": {
-                "h": 11,
+                "h": 8,
                 "w": 12,
                 "x": 0,
                 "y": 0
-            },
-            "id": 1,
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "single",
-                    "sort": "none"
-                }
-            },
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ1"
-                    },
-                    "expression": "",
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUUtilization",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "A",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                },
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ2"
-                    },
-                    "expression": "",
-                    "hide": false,
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUUtilization",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "B",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                },
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ3"
-                    },
-                    "expression": "",
-                    "hide": false,
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUUtilization",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "C",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                }
-            ],
-            "title": "CPU Utilization",
-            "type": "timeseries"
-        },
-        {
-            "datasource": {
-                "type": "cloudwatch",
-                "uid": "${AWSAccount}"
-            },
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 0,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "percent"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 11,
-                "w": 12,
-                "x": 12,
-                "y": 0
-            },
-            "id": 2,
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
-                },
-                "tooltip": {
-                    "mode": "single",
-                    "sort": "none"
-                }
-            },
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ1"
-                    },
-                    "expression": "",
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUCreditUsage",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "A",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                },
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ2"
-                    },
-                    "expression": "",
-                    "hide": false,
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUCreditUsage",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "B",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                },
-                {
-                    "datasource": {
-                        "type": "cloudwatch",
-                        "uid": "${AWSAccount}"
-                    },
-                    "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ3"
-                    },
-                    "expression": "",
-                    "hide": false,
-                    "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
-                    "logGroups": [],
-                    "matchExact": true,
-                    "metricEditorMode": 0,
-                    "metricName": "CPUCreditUsage",
-                    "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
-                    "period": "",
-                    "queryMode": "Metrics",
-                    "refId": "C",
-                    "region": "$Region",
-                    "sqlExpression": "",
-                    "statistic": "Average"
-                }
-            ],
-            "title": "CPU Credit Usage",
-            "type": "timeseries"
-        },
-        {
-            "datasource": {
-                "type": "cloudwatch",
-                "uid": "${AWSAccount}"
-            },
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisBorderShow": false,
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 0,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 11,
-                "w": 12,
-                "x": 0,
-                "y": 11
             },
             "id": 3,
             "options": {
@@ -412,7 +114,7 @@
                     "showLegend": true
                 },
                 "tooltip": {
-                    "mode": "single",
+                    "mode": "multi",
                     "sort": "none"
                 }
             },
@@ -423,17 +125,18 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ1"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkIn",
+                    "metricName": "CpuUtilized",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
                     "refId": "A",
@@ -447,21 +150,132 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ2"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "hide": false,
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkIn",
+                    "metricName": "MemoryUtilized",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
-                    "refId": "B",
+                    "refId": "C",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "CPU and Memory",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "${AWSAccount}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "binBps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 0
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "NetworkRxBytes",
+                    "metricQueryType": 0,
+                    "namespace": "ECS/ContainerInsights",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
                     "region": "$Region",
                     "sqlExpression": "",
                     "statistic": "Average"
@@ -472,27 +286,28 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ3"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "hide": false,
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkIn",
+                    "metricName": "NetworkTxBytes",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
-                    "refId": "C",
+                    "refId": "B",
                     "region": "$Region",
                     "sqlExpression": "",
                     "statistic": "Average"
                 }
             ],
-            "title": "Network Bytes",
+            "title": "Network Bytes/second",
             "type": "timeseries"
         },
         {
@@ -500,7 +315,7 @@
                 "type": "cloudwatch",
                 "uid": "${AWSAccount}"
             },
-            "description": "Network Packets In",
+            "description": "Task Counts for the service, ContainerInstanceCount is the number of EC2 Instances running, if any.",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -551,18 +366,30 @@
                                 "value": 80
                             }
                         ]
-                    },
-                    "unit": "none"
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "ContainerInstanceCount"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            }
+                        ]
+                    }
+                ]
             },
             "gridPos": {
-                "h": 11,
+                "h": 8,
                 "w": 12,
-                "x": 12,
-                "y": 11
+                "x": 0,
+                "y": 8
             },
-            "id": 4,
+            "id": 7,
             "options": {
                 "legend": {
                     "calcs": [],
@@ -571,7 +398,7 @@
                     "showLegend": true
                 },
                 "tooltip": {
-                    "mode": "single",
+                    "mode": "multi",
                     "sort": "none"
                 }
             },
@@ -582,17 +409,18 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ1"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkPacketsIn",
+                    "metricName": "DesiredTaskCount",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
                     "refId": "A",
@@ -606,18 +434,19 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ2"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "hide": false,
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkPacketsIn",
+                    "metricName": "PendingTaskCount",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
                     "refId": "B",
@@ -631,30 +460,194 @@
                         "uid": "${AWSAccount}"
                     },
                     "dimensions": {
-                        "AutoScalingGroupName": "$VPCAZ3"
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
                     },
                     "expression": "",
                     "hide": false,
                     "id": "",
-                    "label": "${PROP('Dim.AutoScalingGroupName')} ",
+                    "label": "",
                     "logGroups": [],
                     "matchExact": true,
                     "metricEditorMode": 0,
-                    "metricName": "NetworkPacketsIn",
+                    "metricName": "RunningTaskCount",
                     "metricQueryType": 0,
-                    "namespace": "AWS/EC2",
+                    "namespace": "ECS/ContainerInsights",
                     "period": "",
                     "queryMode": "Metrics",
                     "refId": "C",
                     "region": "$Region",
                     "sqlExpression": "",
                     "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "ContainerInstanceCount",
+                    "metricQueryType": 0,
+                    "namespace": "ECS/ContainerInsights",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "D",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
                 }
             ],
-            "title": "Network Packets",
+            "title": "Task Counts",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "${AWSAccount}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "binBps"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 8
+            },
+            "id": 8,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "StorageReadBytes",
+                    "metricQueryType": 0,
+                    "namespace": "ECS/ContainerInsights",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ClusterName": "$ECSCluster",
+                        "ServiceName": "$ECSService"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "StorageWriteBytes",
+                    "metricQueryType": 0,
+                    "namespace": "ECS/ContainerInsights",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "B",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "Storage Bytes/second",
             "type": "timeseries"
         }
     ],
+    "refresh": "1m",
     "schemaVersion": 39,
     "tags": [],
     "templating": {
@@ -662,6 +655,7 @@
             {
                 "hide": 0,
                 "includeAll": false,
+                "label": "AWS Account",
                 "multi": false,
                 "name": "AWSAccount",
                 "options": [],
@@ -677,46 +671,16 @@
                     "type": "cloudwatch",
                     "uid": "${AWSAccount}"
                 },
-                "definition": "",
+                "definition": "regions()",
                 "hide": 0,
                 "includeAll": false,
                 "multi": false,
                 "name": "Region",
                 "options": [],
-                "query": {
-                    "queryType": "regions",
-                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
-                    "region": "default"
-                },
+                "query": "regions()",
                 "refresh": 2,
                 "regex": "",
                 "skipUrlSync": false,
-                "sort": 1,
-                "type": "query"
-            },
-            {
-                "datasource": {
-                    "type": "cloudwatch",
-                    "uid": "${AWSAccount}"
-                },
-                "definition": "",
-                "hide": 0,
-                "includeAll": false,
-                "label": "VPC Availability Zone 1",
-                "multi": false,
-                "name": "VPCAZ1",
-                "options": [],
-                "query": {
-                    "dimensionKey": "AutoScalingGroupName",
-                    "metricName": "CPUUtilization",
-                    "namespace": "AWS/EC2",
-                    "queryType": "dimensionValues",
-                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
-                    "region": "$Region"
-                },
-                "refresh": 1,
-                "regex": "/.*vpc-nat-az1$/",
-                "skipUrlSync": false,
                 "sort": 0,
                 "type": "query"
             },
@@ -728,22 +692,21 @@
                 "definition": "",
                 "hide": 0,
                 "includeAll": false,
-                "label": "VPC Availability Zone 2",
                 "multi": false,
-                "name": "VPCAZ2",
+                "name": "ECSCluster",
                 "options": [],
                 "query": {
-                    "dimensionKey": "AutoScalingGroupName",
+                    "dimensionKey": "ClusterName",
                     "metricName": "CPUUtilization",
-                    "namespace": "AWS/EC2",
+                    "namespace": "AWS/ECS",
                     "queryType": "dimensionValues",
                     "refId": "CloudWatchVariableQueryEditor-VariableQuery",
                     "region": "$Region"
                 },
                 "refresh": 1,
-                "regex": "/.*vpc-nat-az2$/",
+                "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 2,
                 "type": "query"
             },
             {
@@ -754,22 +717,25 @@
                 "definition": "",
                 "hide": 0,
                 "includeAll": false,
-                "label": "VPC Availability Zone 3",
+                "label": "ECS Service",
                 "multi": false,
-                "name": "VPCAZ3",
+                "name": "ECSService",
                 "options": [],
                 "query": {
-                    "dimensionKey": "AutoScalingGroupName",
+                    "dimensionFilters": {
+                        "ClusterName": "$ECSCluster"
+                    },
+                    "dimensionKey": "ServiceName",
                     "metricName": "CPUUtilization",
-                    "namespace": "AWS/EC2",
+                    "namespace": "AWS/ECS",
                     "queryType": "dimensionValues",
                     "refId": "CloudWatchVariableQueryEditor-VariableQuery",
                     "region": "$Region"
                 },
                 "refresh": 1,
-                "regex": "/.*vpc-nat-az3$/",
+                "regex": "",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 2,
                 "type": "query"
             }
         ]
@@ -780,8 +746,8 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "NAT Instance Dashboard",
-    "uid": "beffwptl4inlsb",
-    "version": 3,
+    "title": "ECS Cluster",
+    "uid": "cefgdz6al4kxsd",
+    "version": 9,
     "weekStart": ""
 }

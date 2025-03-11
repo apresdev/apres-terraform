@@ -1,0 +1,2011 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 10,
+    "links": [],
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 15,
+            "title": "Landlord API Gateway",
+            "type": "row"
+        },
+        {
+            "gridPos": {
+                "h": 2,
+                "w": 24,
+                "x": 0,
+                "y": 1
+            },
+            "id": 21,
+            "options": {
+                "code": {
+                    "language": "plaintext",
+                    "showLineNumbers": false,
+                    "showMiniMap": false
+                },
+                "content": "This section shows metrics the Landlord API Gateway, which is user-facing.",
+                "mode": "markdown"
+            },
+            "pluginVersion": "10.4.1",
+            "type": "text"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "${AWSAccount}"
+            },
+            "description": "Hit Rates. No data means no hits. 2xx rate = Hit - 4XX - 5XX",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 3
+            },
+            "id": 17,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ApiName": "$APIGateway"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "4XX Error Rate",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "4XXError",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/ApiGateway",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ApiName": "$APIGateway"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "5XX Error Rate",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "5XXError",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/ApiGateway",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "B",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ApiName": "$APIGateway"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "Hit Rate",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "Count",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/ApiGateway",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "C",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "API Gateway Rates",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "cloudwatch",
+                "uid": "${AWSAccount}"
+            },
+            "description": "Integration Latency is turn around time to the backend. Total Latency includes Integration Latency.",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "ms"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 3
+            },
+            "id": 18,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ApiName": "$APIGateway"
+                    },
+                    "expression": "",
+                    "id": "",
+                    "label": "Total Latency",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "Latency",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/ApiGateway",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "A",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "dimensions": {
+                        "ApiName": "$APIGateway"
+                    },
+                    "expression": "",
+                    "hide": false,
+                    "id": "",
+                    "label": "Integration Latency",
+                    "logGroups": [],
+                    "matchExact": true,
+                    "metricEditorMode": 0,
+                    "metricName": "IntegrationLatency",
+                    "metricQueryType": 0,
+                    "namespace": "AWS/ApiGateway",
+                    "period": "",
+                    "queryMode": "Metrics",
+                    "refId": "B",
+                    "region": "$Region",
+                    "sqlExpression": "",
+                    "statistic": "Average"
+                }
+            ],
+            "title": "API Gateway Latency",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 11
+            },
+            "id": 10,
+            "panels": [
+                {
+                    "gridPos": {
+                        "h": 2,
+                        "w": 24,
+                        "x": 0,
+                        "y": 12
+                    },
+                    "id": 20,
+                    "options": {
+                        "code": {
+                            "language": "plaintext",
+                            "showLineNumbers": false,
+                            "showMiniMap": false
+                        },
+                        "content": "This section shows metrics for the Landlord Console service running in ECS.",
+                        "mode": "markdown"
+                    },
+                    "pluginVersion": "10.4.1",
+                    "type": "text"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "percent"
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "MemoryUtilized"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "custom.axisPlacement",
+                                        "value": "right"
+                                    },
+                                    {
+                                        "id": "unit",
+                                        "value": "decmbytes"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 14
+                    },
+                    "id": 11,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "CpuUtilized",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "MemoryUtilized",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "C",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "CPU and Memory",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "binBps"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 14
+                    },
+                    "id": 4,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "NetworkRxBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "NetworkTxBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Network Bytes/second",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "description": "Task Counts for the service, ContainerInstanceCount is the number of EC2 Instances running, if any.",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "ContainerInstanceCount"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "custom.axisPlacement",
+                                        "value": "right"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 22
+                    },
+                    "id": 13,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "DesiredTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "PendingTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "RunningTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "C",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "ContainerInstanceCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "D",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Task Counts",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "binBps"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 22
+                    },
+                    "id": 8,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "StorageReadBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordConsoleCluster",
+                                "ServiceName": "$LandlordConsoleService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "StorageWriteBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Storage Bytes/second",
+                    "type": "timeseries"
+                }
+            ],
+            "title": "Landlord Console ECS Service",
+            "type": "row"
+        },
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 12
+            },
+            "id": 9,
+            "panels": [
+                {
+                    "gridPos": {
+                        "h": 2,
+                        "w": 24,
+                        "x": 0,
+                        "y": 13
+                    },
+                    "id": 19,
+                    "options": {
+                        "code": {
+                            "language": "plaintext",
+                            "showLineNumbers": false,
+                            "showMiniMap": false
+                        },
+                        "content": "This section shows metrics for the Landlord API service running in ECS, including the NLB, which is the target of the API Gateway.",
+                        "mode": "markdown"
+                    },
+                    "pluginVersion": "10.4.1",
+                    "type": "text"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "percent"
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "MemoryUtilized"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "custom.axisPlacement",
+                                        "value": "right"
+                                    },
+                                    {
+                                        "id": "unit",
+                                        "value": "decmbytes"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 15
+                    },
+                    "id": 3,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "CpuUtilized",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "MemoryUtilized",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "C",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "ECS CPU and Memory",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "binBps"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 15
+                    },
+                    "id": 12,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "NetworkRxBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "NetworkTxBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Network Bytes/second",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "description": "Task Counts for the service, ContainerInstanceCount is the number of EC2 Instances running, if any.",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "ContainerInstanceCount"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "custom.axisPlacement",
+                                        "value": "right"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 23
+                    },
+                    "id": 7,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "DesiredTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "PendingTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "RunningTaskCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "C",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "ContainerInstanceCount",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "D",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Task Counts",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "min": 0,
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "binBps"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 12,
+                        "y": 23
+                    },
+                    "id": 14,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "StorageReadBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "ClusterName": "$LandlordAPICluster",
+                                "ServiceName": "$LandlordAPIService"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "StorageWriteBytes",
+                            "metricQueryType": 0,
+                            "namespace": "ECS/ContainerInsights",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Storage Bytes/second",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "cloudwatch",
+                        "uid": "${AWSAccount}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisBorderShow": false,
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 0,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "insertNulls": false,
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "auto",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            }
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 8,
+                        "w": 12,
+                        "x": 0,
+                        "y": 31
+                    },
+                    "id": 16,
+                    "options": {
+                        "legend": {
+                            "calcs": [],
+                            "displayMode": "list",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "single",
+                            "sort": "none"
+                        }
+                    },
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "LoadBalancer": "$LandlordAPILoadBalancer"
+                            },
+                            "expression": "",
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "ActiveFlowCount",
+                            "metricQueryType": 0,
+                            "namespace": "AWS/NetworkELB",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "A",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        },
+                        {
+                            "datasource": {
+                                "type": "cloudwatch",
+                                "uid": "${AWSAccount}"
+                            },
+                            "dimensions": {
+                                "LoadBalancer": "$LandlordAPILoadBalancer"
+                            },
+                            "expression": "",
+                            "hide": false,
+                            "id": "",
+                            "label": "",
+                            "logGroups": [],
+                            "matchExact": true,
+                            "metricEditorMode": 0,
+                            "metricName": "NewFlowCount",
+                            "metricQueryType": 0,
+                            "namespace": "AWS/NetworkELB",
+                            "period": "",
+                            "queryMode": "Metrics",
+                            "refId": "B",
+                            "region": "$Region",
+                            "sqlExpression": "",
+                            "statistic": "Average"
+                        }
+                    ],
+                    "title": "Load Balancer Flow Counts",
+                    "type": "timeseries"
+                }
+            ],
+            "title": "Landlord API ECS Service",
+            "type": "row"
+        }
+    ],
+    "refresh": "1m",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "hide": 0,
+                "includeAll": false,
+                "label": "AWS Account",
+                "multi": false,
+                "name": "AWSAccount",
+                "options": [],
+                "query": "cloudwatch",
+                "queryValue": "",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "type": "datasource"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "regions()",
+                "hide": 0,
+                "includeAll": false,
+                "multi": false,
+                "name": "Region",
+                "options": [],
+                "query": "regions()",
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Landlord API ECS Cluster Name",
+                "multi": false,
+                "name": "LandlordAPICluster",
+                "options": [],
+                "query": {
+                    "dimensionKey": "ClusterName",
+                    "metricName": "CPUUtilization",
+                    "namespace": "AWS/ECS",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*[Ll]andlord-API$/",
+                "skipUrlSync": false,
+                "sort": 2,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "description": "Name of the Landlord ECS Cluster for the Console.",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Landlord Console ECS Cluster Name",
+                "multi": false,
+                "name": "LandlordConsoleCluster",
+                "options": [],
+                "query": {
+                    "dimensionKey": "ClusterName",
+                    "metricName": "CPUUtilization",
+                    "namespace": "AWS/ECS",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*[lL]andlord-Console$/",
+                "skipUrlSync": false,
+                "sort": 2,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "hide": 2,
+                "includeAll": false,
+                "label": "Landlord API ECS Service Name",
+                "multi": false,
+                "name": "LandlordAPIService",
+                "options": [],
+                "query": {
+                    "dimensionFilters": {
+                        "ClusterName": "$LandlordAPICluster"
+                    },
+                    "dimensionKey": "ServiceName",
+                    "metricName": "CPUUtilization",
+                    "namespace": "AWS/ECS",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*[lL]andlord-API$/",
+                "skipUrlSync": false,
+                "sort": 2,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "hide": 2,
+                "includeAll": false,
+                "label": "Landlord Console ECS Service Name",
+                "multi": false,
+                "name": "LandlordConsoleService",
+                "options": [],
+                "query": {
+                    "dimensionFilters": {
+                        "ClusterName": "$LandlordConsoleCluster"
+                    },
+                    "dimensionKey": "ServiceName",
+                    "metricName": "CPUUtilization",
+                    "namespace": "AWS/ECS",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*[Ll]andlord-Console$/",
+                "skipUrlSync": false,
+                "sort": 2,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Landlord API Load Balancer",
+                "multi": false,
+                "name": "LandlordAPILoadBalancer",
+                "options": [],
+                "query": {
+                    "dimensionFilters": {},
+                    "dimensionKey": "LoadBalancer",
+                    "metricName": "HealthyHostCount",
+                    "namespace": "AWS/NetworkELB",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*-[lL]andlord-API\\/.*/",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "datasource": {
+                    "type": "cloudwatch",
+                    "uid": "${AWSAccount}"
+                },
+                "definition": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "API Gateway Name",
+                "multi": false,
+                "name": "APIGateway",
+                "options": [],
+                "query": {
+                    "dimensionKey": "ApiName",
+                    "metricName": "Count",
+                    "namespace": "AWS/ApiGateway",
+                    "queryType": "dimensionValues",
+                    "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+                    "region": "$Region"
+                },
+                "refresh": 1,
+                "regex": "/.*-[lL]andlord$/",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-12h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Landlord",
+    "uid": "befgh7gn7en7kf",
+    "version": 6,
+    "weekStart": ""
+}
