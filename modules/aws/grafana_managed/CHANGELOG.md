@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.5.0 - 2025-03-11
+
+Update Grafana Configurator and NAT Instance provisioned dashboards, add provisioned dashboards for ECS Clusters and Landlord.
+
 ## 0.4.0 - 2025-03-07
 
 Add capability to add email subscriptions to the default SNS alert topic.
