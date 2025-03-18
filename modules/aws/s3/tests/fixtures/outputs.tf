@@ -21,3 +21,11 @@ output "aws_region" {
 output "default_bucket_policy" {
   value = module.s3.default_bucket_policy
 }
+
+output "destination_bucket_name" {
+  value = var.test_replication ? module.s3_destination[0].bucket_name : ""
+}
+
+output "destination_bucket_arn" {
+  value = var.test_replication ? module.s3_destination[0].bucket_arn : ""
+}
