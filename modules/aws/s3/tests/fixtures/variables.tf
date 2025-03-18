@@ -16,3 +16,9 @@ variable "environment" {
   type        = string
   default     = "unittest"
 }
+
+variable "test_replication" {
+  description = "Test replication"
+  type        = bool
+  default     = false
+}

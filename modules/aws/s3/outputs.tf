@@ -29,3 +29,20 @@ output "default_bucket_policy" {
   See comment on the variable `set_default_bucket_policy` for how to use this output.
   EOF
 }
+
+output "replication_source_service_role_arn" {
+  value       = var.replication_source_config.enabled ? aws_iam_role.replication_source[0].arn : null
+  description = <<EOF
+    The IAM role name for the replication source.  This is only created if replication is enabled and this
+    is the source bucket. This Role ARN is needed to allow the destination bucket to replicate from this bucket.
+  EOF
+}
+
+output "replication_bucket_policy" {
+  value       = var.replication_destination_config.enabled == true && var.set_default_bucket_policy == false ? data.aws_iam_policy_document.replication_destination[0].json : null
+  description = <<EOF
+    The bucket policy json for the replication destination bucket. This is only created if replication is enabled and
+    `set_default_bucket_policy` is false, in which case it is the calling stack's responsibility to add this
+    policy document to the bucket policy, else replication will not work.
+  EOF
+}

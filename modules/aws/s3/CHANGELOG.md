@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 4.0.0 - 2025-03-18
+
+Add support for S3 replication, change encryption algorithm input to match the S3 documentation.
+
 ## 3.1.1 - 2025-02-10
 
 Work around an AWS provider bug (https://github.com/hashicorp/terraform-provider-aws/issues/41268) by making the filter portion of the S3 lifecycle rule dynamic.
