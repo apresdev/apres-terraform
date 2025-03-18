@@ -65,8 +65,13 @@ variable "default_tags" {
 variable "set_default_bucket_policy" {
   description = <<EOF
   A bucket policy can only be set in one place, or it'll get overwritten. For some cases you may need to add statements
-  that include ARN's of other resources. If that's the case, set this to false, and then use the output `default_bucket_policy`
-  to include in your own policy. For example, in your code:
+  that include ARN's of other resources. If that's the case, set this to false, and then use the output
+  `default_bucket_policy` to include in your own policy.
+
+  If replication is desired and this is set to false, you must include the `replication_bucket_policy` output in your
+  bucket policy as well, else replication will not succeed!
+
+  For example, in your code:
     ```hcl
     module "s3" {
       # ...
@@ -83,19 +88,26 @@ variable "set_default_bucket_policy" {
       source_policy_documents = [ module.s3.default_bucket_policy ]
     }
     ```
-    The statement SID's must be uniuqe, the SID used in the default policy is "DenyUnSecureCommunications".
+    The statement SID's must be unique, the SID used in the default policy is "DenyUnSecureCommunications".
   EOF
   type        = bool
   default     = true
 }
 
 variable "encryption_sse_algorithm" {
-  description = "The server-side encryption algorithm to use. Defaults to 'aws:kms'."
+  description = <<EOF
+  The server-side encryption algorithm to use. Defaults to 'aws:kms'. Descriptions of the options from
+  the AWS docs are, with the attributes passed into the API brackets:
+  * `SSE-S3` (AES256): Server-side encryption with Amazon S3 managed keys. This is not supported on destination
+     buckets in replication scenarios.
+  * `SSE-KMS` (aws:kms): Server-side encryption with AWS Key Management Service keys
+  * `DSSE-KMS` (aws:kms:dsse): Dual-layer server-side encryption with AWS KMS keys
+  EOF
   type        = string
-  default     = "aws:kms"
+  default     = "SSE-KMS"
   validation {
-    condition     = var.encryption_sse_algorithm == "AES256" || var.encryption_sse_algorithm == "aws:kms" || var.encryption_sse_algorithm == "aws:kms:dsse"
-    error_message = "encryption_sse_algorithm must be 'AES256' or 'aws:kms' or 'aws:kms:dsse'."
+    condition     = var.encryption_sse_algorithm == "SSE-S3" || var.encryption_sse_algorithm == "SSE-KMS" || var.encryption_sse_algorithm == "DSSE-KMS"
+    error_message = "encryption_sse_algorithm must be SSE-S3, SSE-KMS or DSSE-KMS."
   }
 }
 
@@ -103,6 +115,8 @@ variable "encryption_kms_key_id" {
   description = <<EOF
   The ARN of the KMS key to use for server-side encryption. If not provided,
   the default AWS managed key 'aws/s3' will be used.
+
+  Note that if this bucket is the destination for replication, a KMS key must be specified.
   EOF
   type        = string
   default     = ""
@@ -223,5 +237,82 @@ variable "cors_rules" {
       ])
     ])
     error_message = "allowed_methods must be one of GET, PUT, HEAD, POST, or DELETE."
+  }
+}
+
+variable "replication_destination_config" {
+  description = <<EOF
+  Object to configure the bucket as the destination of replication. All attributes are ignored if `enabled` is false.
+
+  Attributes:
+  * enabled - set to true if this is the destination bucket, else replication will not be enabled.
+  * source_bucket_account - The AWS Account ID where the source bucket is homed.
+  * source_bucket_arn - The ARN of the source bucket.
+  * source_service_role_arn - The ARN of the service role that will be used to replicate objects. Note that
+    depending on how the role was created, it could be two different patterns:
+    * arn:aws:iam::account-id:role/role-name - created with the CLI or via this module
+    * arn:aws:iam::account-id:role/service-role/role-name - created with the Console
+    See the output `replication_source_iam_role` for the IAM role created by this module on the source bucket.
+  EOF
+  type = object({
+    enabled                 = bool
+    source_bucket_account   = string
+    source_bucket_arn       = string
+    source_service_role_arn = string
+  })
+  default = {
+    enabled                 = false
+    source_bucket_account   = ""
+    source_bucket_arn       = ""
+    source_service_role_arn = ""
+  }
+}
+
+variable "replication_source_config" {
+  description = <<EOF
+  Object to configure the bucket as the source of replication. All attributes are ignored if `enabled` is false.
+  Attributes:
+  * enabled - set to true if this is the source bucket, else replication will not be enabled.
+  * destination_account_id - The AWS Account ID where the destination bucket is homed.
+  * destination_bucket_arn - The ARN of the destination bucket.
+  * destination_encryption_sse_algorithm - The encryption algorithm to use for encryption on the destination bucket.
+    This must match what the destination bucket is configured for. Options are "SSE-S3", "SSE-KMS", or "DSSE-KMS". See
+    the variable `encryption_sse_algorithm` for more information. Note that "SSE-S3" is not supported for cross-account
+    replication.
+  * destination_kms_key_arn - The ARN of the KMS key to use for server-side encryption in the destination bucket. This
+    can be the Key or Alias ARN. If the encryption on the destination bucket is "SSE-KMS", and the destination bucket
+    is in a different AWS account, aliases cannot be used, or the replication will fail. You MUST
+    specify the KMS Key ARN, NOT an alias.
+  * destination_region - The region of the destination bucket.
+  * owner_translation - If true, ownership (AWS Account ID) of the object in the destination bucket will be set to the owner
+    of the destination bucket. If false, the owner of the object written in the destination bucket will be that
+    of the source bucket.
+  * replication_prefix - The prefix to apply to the replication configuration, default is everything. Include wildcards
+    if necessary. For example "Tax/" or "Tax*" are both legitimate.
+  * replicate_delete_markers - Flag to indicate if delete markers should be replicated, which means objects
+    deleted in the source bucket will also be deleted in the destination bucket.
+
+  EOF
+  type = object({
+    enabled                              = bool
+    destination_account_id               = string
+    destination_bucket_arn               = string
+    destination_encryption_sse_algorithm = string
+    destination_kms_key_arn              = string
+    destination_region                   = string
+    owner_translation                    = bool
+    replicate_delete_markers             = bool
+    replication_prefix                   = string
+  })
+  default = {
+    enabled                              = false
+    destination_account_id               = ""
+    destination_bucket_arn               = ""
+    destination_encryption_sse_algorithm = ""
+    destination_kms_key_arn              = ""
+    destination_region                   = ""
+    owner_translation                    = true
+    replicate_delete_markers             = false
+    replication_prefix                   = ""
   }
 }

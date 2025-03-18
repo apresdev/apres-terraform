@@ -10,6 +10,22 @@ locals {
     })
   )
   bucket_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+
+  name = module.apres_names.local_name
+
+  # translate the variable to what the API needs
+  encryption_attributes = {
+    SSE-S3   = "AES256"
+    SSE-KMS  = "aws:kms"
+    DSSE-KMS = "aws:kms:dsse"
+  }
+}
+
+module "apres_names" {
+  #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/1.0.0"
+  name        = var.name
+  environment = var.environment
 }
 
 # The following best practices are applied to the bucket
@@ -35,6 +51,7 @@ resource "aws_s3_bucket" "default" {
   #checkov:skip=CKV_AWS_18:Ensure the S3 bucket has access logging enabled
   #checkov:skip=CKV2_AWS_61:Ensure that an S3 bucket has a lifecycle configuration
   #checkov:skip=CKV_AWS_144:Ensure that S3 bucket has cross-region replication enabled
+  #checkov:skip=CKV_AWS_19:False positive, bucket is encrypted at rest
 
   bucket = local.bucket_name
 
@@ -71,42 +88,12 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = var.encryption_sse_algorithm
+      sse_algorithm     = local.encryption_attributes[var.encryption_sse_algorithm]
       kms_master_key_id = var.encryption_kms_key_id
     }
   }
 }
 
-# Ensure data is transported from the S3 bucket securely
-resource "aws_s3_bucket_policy" "deny_unsecure_communications" {
-  count      = var.set_default_bucket_policy ? 1 : 0
-  bucket     = aws_s3_bucket.default.id
-  policy     = data.aws_iam_policy_document.deny_unsecure_communications.json
-  depends_on = [aws_s3_bucket.default, data.aws_iam_policy_document.deny_unsecure_communications]
-}
-
-data "aws_iam_policy_document" "deny_unsecure_communications" {
-  statement {
-
-    sid    = "DenyUnSecureCommunications"
-    effect = "Deny"
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-
-    actions = ["s3:*"]
-
-    resources = [aws_s3_bucket.default.arn]
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-  }
-}
 
 resource "aws_s3_bucket_lifecycle_configuration" "default" {
   #checkov:skip=CKV_AWS_300:False positive, abort failed uploads is configured by default.
