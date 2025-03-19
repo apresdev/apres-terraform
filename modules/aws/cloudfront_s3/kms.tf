@@ -31,6 +31,23 @@ resource "aws_kms_key_policy" "default" {
             "aws:SourceArn" : aws_cloudfront_distribution.default.arn
           }
         }
+      },
+      {
+        Sid    = "Allow CloudFront Log Delivery to use the key",
+        Effect = "Allow",
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        },
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey*",
+        ],
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "aws:SourceArn" : aws_cloudfront_distribution.default.arn
+          }
+        }
       }
     ]
   })

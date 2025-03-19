@@ -79,6 +79,12 @@ but the actual DNS recores are "A" records, not "CNAME" as you might expect. See
 [Choosing between alias and non-alias records](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
 for a detailed discussion.
 
+## S3 Bucket Replication
+
+It may be desireable to replicate the contents of the underlying S3 bucket to another bucket. The replication
+is done via the S3 module, using the same arguments. See the [S3 module README](../s3/README.md) for details
+on the replication.
+
 ## TODO
 
 * Examine WAF rules: is the default set enough?
@@ -190,8 +196,8 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
-| <a name="module_s3"></a> [s3](#module\_s3) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
-| <a name="module_s3_logs"></a> [s3\_logs](#module\_s3\_logs) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
+| <a name="module_s3"></a> [s3](#module\_s3) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/4.0.0 |
+| <a name="module_s3_logs"></a> [s3\_logs](#module\_s3\_logs) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/4.0.0 |
 | <a name="module_waf"></a> [waf](#module\_waf) | git@github.com:apresdev/apres-terraform.git//modules/aws/waf | rel/waf/1.1.0 |
 
 ## Resources
@@ -244,6 +250,8 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | <a name="input_name"></a> [name](#input\_name) | Name of the distribution, used to create resources including the S3 bucket | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 | <a name="input_primary_domain"></a> [primary\_domain](#input\_primary\_domain) | The primary domain name for the CloudFront distribution. A Route53 alias will be created using this domain.<br/>    This name will be the first alias in the aliases list.<br/><br/>    Note: This domain must be the domain name or in the subject\_alternative\_name list of the ACM certificate. | `string` | `""` | no |
+| <a name="input_replication_destination_config"></a> [replication\_destination\_config](#input\_replication\_destination\_config) | Object to configure the S3 bucket as the destination of replication. All attributes are ignored if `enabled` is false.<br/><br/>  Attributes:<br/>  * enabled - set to true if this is the destination bucket, else replication will not be enabled.<br/>  * source\_bucket\_account - The AWS Account ID where the source bucket is homed.<br/>  * source\_bucket\_arn - The ARN of the source bucket.<br/>  * source\_service\_role\_arn - The ARN of the service role that will be used to replicate objects. Note that<br/>    depending on how the role was created, it could be two different patterns:<br/>    * arn:aws:iam::account-id:role/role-name - created with the CLI or via this module<br/>    * arn:aws:iam::account-id:role/service-role/role-name - created with the Console<br/>    See the output `replication_source_iam_role` for the IAM role created by this module on the source bucket. | <pre>object({<br/>    enabled                 = bool<br/>    source_bucket_account   = string<br/>    source_bucket_arn       = string<br/>    source_service_role_arn = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "source_bucket_account": "",<br/>  "source_bucket_arn": "",<br/>  "source_service_role_arn": ""<br/>}</pre> | no |
+| <a name="input_replication_source_config"></a> [replication\_source\_config](#input\_replication\_source\_config) | Object to configure the S3 bucket as the source of replication. All attributes are ignored if `enabled` is false.<br/>  Attributes:<br/>  * enabled - set to true if this is the source bucket, else replication will not be enabled.<br/>  * destination\_account\_id - The AWS Account ID where the destination bucket is homed.<br/>  * destination\_bucket\_arn - The ARN of the destination bucket.<br/>  * destination\_kms\_key\_arn - The ARN of the KMS key to use for server-side encryption in the destination bucket.<br/>    This _may_ be the KMS Alias if the source and bucket are in the same account.<br/>  * destination\_region - The region of the destination bucket.<br/>  * owner\_translation - If true, ownership (AWS Account ID) of the object in the destination bucket will be set to the owner<br/>    of the destination bucket. If false, the owner of the object written in the destination bucket will be that<br/>    of the source bucket.<br/>  * replication\_prefix - The prefix to apply to the replication configuration, default is everything. Include wildcards<br/>    if necessary. For example "Tax/" or "Tax*" are both legitimate.<br/>  * replicate\_delete\_markers - Flag to indicate if delete markers should be replicated, which means objects<br/>    deleted in the source bucket will also be deleted in the destination bucket. | <pre>object({<br/>    enabled                  = bool<br/>    destination_account_id   = string<br/>    destination_bucket_arn   = string<br/>    destination_kms_key_arn  = string<br/>    destination_region       = string<br/>    owner_translation        = bool<br/>    replicate_delete_markers = bool<br/>    replication_prefix       = string<br/>  })</pre> | <pre>{<br/>  "destination_account_id": "",<br/>  "destination_bucket_arn": "",<br/>  "destination_kms_key_arn": "",<br/>  "destination_region": "",<br/>  "enabled": false,<br/>  "owner_translation": true,<br/>  "replicate_delete_markers": false,<br/>  "replication_prefix": ""<br/>}</pre> | no |
 | <a name="input_waf_arn"></a> [waf\_arn](#input\_waf\_arn) | ARN of the WAF to attach to the CloudFront distribution. The provided ARN must be of a WAF v2<br/>    with scope "CLOUDFRONT" deployed in us-east-1.<br/><br/>    If not set, a default WAF with the following rulesets will be created:<br/>    * AWSManagedRulesCommonRuleSet<br/>    * AWSManagedRulesKnownBadInputsRuleSet<br/>    * AWSManagedRulesAnonymousIpList | `string` | `""` | no |
 
 ## Outputs
@@ -254,9 +262,11 @@ Some of the permissions have `us-east-1` hardcoded, for WAF deployment, see disc
 | <a name="output_cloudfront_distribution_domain_name"></a> [cloudfront\_distribution\_domain\_name](#output\_cloudfront\_distribution\_domain\_name) | Domain name of the CloudFront distribution |
 | <a name="output_cloudfront_distribution_hosted_zone_id"></a> [cloudfront\_distribution\_hosted\_zone\_id](#output\_cloudfront\_distribution\_hosted\_zone\_id) | Hosted zone ID of the CloudFront distribution, required for creating alias records. |
 | <a name="output_cloudfront_distribution_id"></a> [cloudfront\_distribution\_id](#output\_cloudfront\_distribution\_id) | ID of the CloudFront distribution |
+| <a name="output_replication_source_service_role_arn"></a> [replication\_source\_service\_role\_arn](#output\_replication\_source\_service\_role\_arn) | The IAM role name for the replication source.  This is only created if replication is enabled and this<br/>    is the source bucket. This Role ARN is needed to allow the destination bucket to replicate from this bucket. |
 | <a name="output_s3_bucket_domain_name"></a> [s3\_bucket\_domain\_name](#output\_s3\_bucket\_domain\_name) | Global domain name of the S3 bucket containing the website content |
 | <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of the S3 bucket containing the website content |
 | <a name="output_s3_bucket_regional_domain_name"></a> [s3\_bucket\_regional\_domain\_name](#output\_s3\_bucket\_regional\_domain\_name) | Regional domain name of the S3 bucket containing the website content |
+| <a name="output_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#output\_s3\_kms\_key\_arn) | ARN of the KMS key used to encrypt the S3 bucket |
 | <a name="output_s3_logs_bucket_domain_name"></a> [s3\_logs\_bucket\_domain\_name](#output\_s3\_logs\_bucket\_domain\_name) | Global domain name of the S3 bucket containing the CloudFront logs |
 | <a name="output_s3_logs_bucket_name"></a> [s3\_logs\_bucket\_name](#output\_s3\_logs\_bucket\_name) | Name of the S3 bucket containing the CloudFront logs |
 | <a name="output_s3_logs_bucket_regional_domain_name"></a> [s3\_logs\_bucket\_regional\_domain\_name](#output\_s3\_logs\_bucket\_regional\_domain\_name) | Regional domain name of the S3 bucket containing the CloudFront logs |
