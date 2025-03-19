@@ -52,3 +52,16 @@ output "waf_arn" {
   value       = var.waf_arn == "" ? module.waf[0].waf_arn : var.waf_arn
   description = "ARN of the WAF attached to the CloudFront distribution"
 }
+
+output "s3_kms_key_arn" {
+  value       = aws_kms_key.default.arn
+  description = "ARN of the KMS key used to encrypt the S3 bucket"
+}
+
+output "replication_source_service_role_arn" {
+  value       = var.replication_source_config.enabled ? module.s3.replication_source_service_role_arn : null
+  description = <<EOF
+    The IAM role name for the replication source.  This is only created if replication is enabled and this
+    is the source bucket. This Role ARN is needed to allow the destination bucket to replicate from this bucket.
+  EOF
+}

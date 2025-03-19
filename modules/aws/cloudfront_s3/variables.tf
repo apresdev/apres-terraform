@@ -235,3 +235,72 @@ variable "allow_browser_uploads" {
   type        = bool
   default     = false
 }
+
+variable "replication_destination_config" {
+  description = <<EOF
+  Object to configure the S3 bucket as the destination of replication. All attributes are ignored if `enabled` is false.
+
+  Attributes:
+  * enabled - set to true if this is the destination bucket, else replication will not be enabled.
+  * source_bucket_account - The AWS Account ID where the source bucket is homed.
+  * source_bucket_arn - The ARN of the source bucket.
+  * source_service_role_arn - The ARN of the service role that will be used to replicate objects. Note that
+    depending on how the role was created, it could be two different patterns:
+    * arn:aws:iam::account-id:role/role-name - created with the CLI or via this module
+    * arn:aws:iam::account-id:role/service-role/role-name - created with the Console
+    See the output `replication_source_iam_role` for the IAM role created by this module on the source bucket.
+  EOF
+  type = object({
+    enabled                 = bool
+    source_bucket_account   = string
+    source_bucket_arn       = string
+    source_service_role_arn = string
+  })
+  default = {
+    enabled                 = false
+    source_bucket_account   = ""
+    source_bucket_arn       = ""
+    source_service_role_arn = ""
+  }
+}
+
+variable "replication_source_config" {
+  description = <<EOF
+  Object to configure the S3 bucket as the source of replication. All attributes are ignored if `enabled` is false.
+  Attributes:
+  * enabled - set to true if this is the source bucket, else replication will not be enabled.
+  * destination_account_id - The AWS Account ID where the destination bucket is homed.
+  * destination_bucket_arn - The ARN of the destination bucket.
+  * destination_kms_key_arn - The ARN of the KMS key to use for server-side encryption in the destination bucket.
+    This _may_ be the KMS Alias if the source and bucket are in the same account.
+  * destination_region - The region of the destination bucket.
+  * owner_translation - If true, ownership (AWS Account ID) of the object in the destination bucket will be set to the owner
+    of the destination bucket. If false, the owner of the object written in the destination bucket will be that
+    of the source bucket.
+  * replication_prefix - The prefix to apply to the replication configuration, default is everything. Include wildcards
+    if necessary. For example "Tax/" or "Tax*" are both legitimate.
+  * replicate_delete_markers - Flag to indicate if delete markers should be replicated, which means objects
+    deleted in the source bucket will also be deleted in the destination bucket.
+
+  EOF
+  type = object({
+    enabled                  = bool
+    destination_account_id   = string
+    destination_bucket_arn   = string
+    destination_kms_key_arn  = string
+    destination_region       = string
+    owner_translation        = bool
+    replicate_delete_markers = bool
+    replication_prefix       = string
+  })
+  default = {
+    enabled                  = false
+    destination_account_id   = ""
+    destination_bucket_arn   = ""
+    destination_kms_key_arn  = ""
+    destination_region       = ""
+    owner_translation        = true
+    replicate_delete_markers = false
+    replication_prefix       = ""
+  }
+}
