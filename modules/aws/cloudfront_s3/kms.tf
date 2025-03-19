@@ -36,10 +36,9 @@ resource "aws_kms_key_policy" "default" {
         Sid    = "Allow CloudFront Log Delivery to use the key",
         Effect = "Allow",
         Principal = {
-          Service = "cloudfront.amazonaws.com"
+          Service = "delivery.logs.amazonaws.com"
         },
         Action = [
-          "kms:Encrypt",
           "kms:Decrypt",
           "kms:GenerateDataKey*",
         ],
