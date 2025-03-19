@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.4.0 - 2025-03-19
+
+Add support for S3 bucket replication, and fix CloudFront logging.
+
 ## 1.3.0 - 2025-03-03
 
 Only create Route53 entries if they can be created in the domain passed in, update docs on certificates and Route53.
