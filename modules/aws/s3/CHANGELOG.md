@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 4.1.0 - 2025-03-20
+
+Fix the ARN for local bucket encryption when in replication scenarios, change argument to match actual usage.
+
 ## 4.0.0 - 2025-03-18
 
 Add support for S3 replication, change encryption algorithm input to match the S3 documentation.
