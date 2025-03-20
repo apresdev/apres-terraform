@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.4.2 - 2025-03-20
+
+Fix bug for duplicate bucket policy for source replication.
+
 ## 1.4.1 - 2025-03-20
 
 Fix internal reference to S3 when cloudfront_s3 is the source of replication.
