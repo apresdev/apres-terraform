@@ -2,7 +2,7 @@
 # Module for the S3 bucket
 module "s3" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.1.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.0.0"
   name        = lower(var.name)
   environment = var.environment
   owner       = var.owner
@@ -12,7 +12,7 @@ module "s3" {
   mfa_delete  = false
   # Disable default policy, we'll add our own and include the default.
   set_default_bucket_policy = false
-  encryption_sse_algorithm  = "aws:kms"
+  encryption_sse_algorithm  = "SSE-KMS"
   encryption_kms_key_id     = aws_kms_key.default.arn
   lifecycle_rule = {
     enabled                  = true
@@ -22,6 +22,24 @@ module "s3" {
     allowed_methods = ["PUT"]
     allowed_origins = ["*"]
   }] : []
+  replication_destination_config = {
+    enabled                 = var.replication_destination_config.enabled
+    source_bucket_account   = var.replication_destination_config.source_bucket_account
+    source_bucket_arn       = var.replication_destination_config.source_bucket_arn
+    source_service_role_arn = var.replication_destination_config.source_service_role_arn
+  }
+  replication_source_config = {
+    enabled                              = var.replication_source_config.enabled
+    destination_account_id               = var.replication_source_config.destination_account_id
+    destination_bucket_arn               = var.replication_source_config.destination_bucket_arn
+    destination_encryption_sse_algorithm = "SSE-KMS"
+    destination_kms_key_arn              = var.replication_source_config.destination_kms_key_arn
+    destination_region                   = var.replication_source_config.destination_region
+    owner_translation                    = var.replication_source_config.owner_translation
+    replicate_delete_markers             = var.replication_source_config.replicate_delete_markers
+    replication_prefix                   = var.replication_source_config.replication_prefix
+  }
+
 }
 
 # Bucket policy to allow CloudFront to write to the logs bucket
@@ -41,8 +59,8 @@ data "aws_iam_policy_document" "cloudfront" {
       values   = [aws_cloudfront_distribution.default.arn]
     }
   }
-  # add the default policy
-  source_policy_documents = [module.s3.default_bucket_policy]
+  # add the default policy and replication policy if enabled
+  source_policy_documents = var.replication_source_config.enabled ? [module.s3.default_bucket_policy, module.s3.replication_source_bucket_policy] : [module.s3.default_bucket_policy]
 }
 
 resource "aws_s3_bucket_policy" "s3" {
@@ -54,7 +72,7 @@ resource "aws_s3_bucket_policy" "s3" {
 # Logs bucket for CF
 module "s3_logs" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.1.1"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.0.0"
   name        = "${lower(var.name)}-logs"
   environment = var.environment
   owner       = var.owner
@@ -65,6 +83,8 @@ module "s3_logs" {
   lifecycle_rule = {
     enabled = false # setting a separate policy below
   }
+  encryption_sse_algorithm = "SSE-KMS"
+  encryption_kms_key_id    = aws_kms_key.default.arn
 }
 
 # Add the ACL's required for CloudFront to be able to log
