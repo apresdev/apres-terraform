@@ -232,7 +232,7 @@ module "s3_destination" {
   source                   = "..."
   name                     = "destination-bucket"
   encryption_sse_algorithm = "SSE-S3"
-  encrypytion_kms_key_id   = "arn:aws:kms:us-east-1:888888888888:key/12345678-1234-1234-1234-123456789012"
+  encrypytion_kms_key_arn  = "arn:aws:kms:us-east-1:888888888888:key/12345678-1234-1234-1234-123456789012"
   # some variables skipped for brevity
   replication_destination_config = {
     enabled                 = true
