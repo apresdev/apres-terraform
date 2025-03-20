@@ -40,6 +40,7 @@ resource "aws_kms_key_policy" "default" {
         },
         Action = [
           "kms:Decrypt",
+          "kms:Encrypt",
           "kms:GenerateDataKey*",
         ],
         Resource = "*"
