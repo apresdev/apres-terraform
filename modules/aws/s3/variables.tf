@@ -111,7 +111,7 @@ variable "encryption_sse_algorithm" {
   }
 }
 
-variable "encryption_kms_key_id" {
+variable "encryption_kms_key_arn" {
   description = <<EOF
   The ARN of the KMS key to use for server-side encryption. If not provided,
   the default AWS managed key 'aws/s3' will be used.
