@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "cloudfront" {
     }
   }
   # add the default policy and replication policy if enabled
-  source_policy_documents = var.replication_destination_config.enabled ? [module.s3.default_bucket_policy, module.s3.replication_bucket_policy] : [module.s3.default_bucket_policy]
+  source_policy_documents = var.replication_destination_config.enabled ? [module.s3.replication_bucket_policy] : [module.s3.default_bucket_policy]
 }
 
 resource "aws_s3_bucket_policy" "s3" {
