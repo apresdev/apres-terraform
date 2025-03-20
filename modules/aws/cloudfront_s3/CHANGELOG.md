@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.4.1 - 2025-03-20
+
+Fix internal reference to S3 when cloudfront_s3 is the source of replication.
+
 ## 1.4.0 - 2025-03-19
 
 Add support for S3 bucket replication, and fix CloudFront logging.
