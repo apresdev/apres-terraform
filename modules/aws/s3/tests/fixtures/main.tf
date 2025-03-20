@@ -60,7 +60,7 @@ module "s3_destination" {
   application              = "UnitTests"
   component                = "S3"
   encryption_sse_algorithm = "SSE-KMS"
-  encryption_kms_key_id    = aws_kms_key.destination[0].arn
+  encryption_kms_key_arn   = aws_kms_key.destination[0].arn
   lifecycle_rule = {
     enabled = true
   }

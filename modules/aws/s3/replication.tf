@@ -1,7 +1,6 @@
 locals {
   # calculate the the KMS Key ARN used in this bucket, for replication purposes.
-  kms_key_postfix    = var.encryption_kms_key_id == "" ? "alias/aws/s3" : "key/${var.encryption_kms_key_id}"
-  source_kms_key_arn = "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${local.kms_key_postfix}"
+  source_kms_key_arn = var.encryption_kms_key_arn == "" ? "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:alias/aws/s3" : var.encryption_kms_key_arn
 
   owner_translation = var.replication_source_config.owner_translation && var.replication_source_config.destination_account_id != data.aws_caller_identity.current.account_id
 }
@@ -69,7 +68,7 @@ data "aws_iam_policy_document" "replication_source" {
     effect = "Allow"
     actions = [
       "kms:Decrypt",
-      "kms:GenerateDataKey"
+      "kms:GenerateDataKey*"
     ]
     condition {
       test     = "StringLike"
@@ -91,7 +90,7 @@ data "aws_iam_policy_document" "replication_source" {
     effect = "Allow"
     actions = [
       "kms:Encrypt",
-      "kms:GenerateDataKey"
+      "kms:GenerateDataKey*"
     ]
     condition {
       test     = "StringLike"
