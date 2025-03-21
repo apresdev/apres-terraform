@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.5.1 - 2025-03-21
+
+Add missing KMS key policy on destination bucket in replication situations.
+
 ## 1.5.0 - 2025-03-21
 
 Pick up S3 ARN fix, use distinct KMS keys for content and logging buckets.
