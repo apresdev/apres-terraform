@@ -2,7 +2,7 @@
 # Module for the S3 bucket
 module "s3" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.0.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.1.0"
   name        = lower(var.name)
   environment = var.environment
   owner       = var.owner
@@ -13,7 +13,7 @@ module "s3" {
   # Disable default policy, we'll add our own and include the default.
   set_default_bucket_policy = false
   encryption_sse_algorithm  = "SSE-KMS"
-  encryption_kms_key_id     = aws_kms_key.default.arn
+  encryption_kms_key_arn    = aws_kms_key.default.arn
   lifecycle_rule = {
     enabled                  = true
     old_versions_delete_days = 90
@@ -39,7 +39,6 @@ module "s3" {
     replicate_delete_markers             = var.replication_source_config.replicate_delete_markers
     replication_prefix                   = var.replication_source_config.replication_prefix
   }
-
 }
 
 # Bucket policy to allow CloudFront to write to the logs bucket
@@ -72,19 +71,19 @@ resource "aws_s3_bucket_policy" "s3" {
 # Logs bucket for CF
 module "s3_logs" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.0.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.1.0"
   name        = "${lower(var.name)}-logs"
   environment = var.environment
   owner       = var.owner
   application = var.application
   component   = "S3Logs"
   versioning  = true
-  mfa_delete  = false # TODO enable this later, see race condition.
+  mfa_delete  = false
   lifecycle_rule = {
     enabled = false # setting a separate policy below
   }
   encryption_sse_algorithm = "SSE-KMS"
-  encryption_kms_key_id    = aws_kms_key.default.arn
+  encryption_kms_key_arn   = aws_kms_key.logging.arn
 }
 
 # Add the ACL's required for CloudFront to be able to log
