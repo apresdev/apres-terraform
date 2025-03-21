@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.5.0 - 2025-03-21
+
+Pick up S3 ARN fix, use distinct KMS keys for content and logging buckets.
+
 ## 1.4.2 - 2025-03-20
 
 Fix bug for duplicate bucket policy for source replication.
