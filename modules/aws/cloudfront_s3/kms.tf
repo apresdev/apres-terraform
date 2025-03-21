@@ -1,3 +1,20 @@
+data "aws_iam_policy_document" "replication_destination" {
+  count = var.replication_destination_config.enabled ? 1 : 0
+  statement {
+    sid    = "Allow replication from ${var.replication_destination_config.source_bucket_account}"
+    effect = "Allow"
+    actions = [
+      "kms:GenerateDataKey*",
+      "kms:Encrypt"
+    ]
+    resources = ["*"]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.replication_destination_config.source_bucket_account}:root"]
+    }
+  }
+}
+
 data "aws_iam_policy_document" "default_kms_key" {
   #checkov:skip=CKV_AWS_356: KMS key needs a * for the resource.
   #checkov:skip=CKV_AWS_111: Not applicable for key policy.
@@ -33,6 +50,8 @@ data "aws_iam_policy_document" "default_kms_key" {
       values   = [aws_cloudfront_distribution.default.arn]
     }
   }
+  # add the kms policy to allow replication if enabled.
+  source_policy_documents = var.replication_destination_config.enabled ? [data.aws_iam_policy_document.replication_destination[0].json] : []
 }
 
 resource "aws_kms_key_policy" "default" {
