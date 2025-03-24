@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.7.0 - 2025-03-24
+
+Add support for defining profile fields at deployment time.
+
 ## 0.6.0 - 2025-03-06
 
 TODO Add your changelog message, without any linebreaks, keep the *Changelog:* at the beginning of the line. The message will be automatically written to CHANGELOG.md in your module.
