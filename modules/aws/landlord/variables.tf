@@ -209,3 +209,37 @@ variable "cognito_ses_source_arn" {
   type        = string
   default     = ""
 }
+
+variable "user_profile_fields" {
+  description = "List of profile field definitions for users"
+  type = list(object({
+    name                    = string
+    ui_name                 = string
+    format                  = string
+    max_len                 = number
+    min_len                 = number
+    prevent_empty           = optional(bool, false)
+    regex_validator         = optional(string, "")
+    invite_time_field       = optional(bool, false)
+    possible_values_url     = optional(string, "")
+    possible_values_jq_expr = optional(string, "")
+  }))
+  default = []
+}
+
+variable "tenant_profile_fields" {
+  description = "List of profile field definitions for tenants"
+  type = list(object({
+    name                    = string
+    ui_name                 = string
+    format                  = string
+    max_len                 = number
+    min_len                 = number
+    prevent_empty           = optional(bool, false)
+    regex_validator         = optional(string, "")
+    invite_time_field       = optional(bool, false)
+    possible_values_url     = optional(string, "")
+    possible_values_jq_expr = optional(string, "")
+  }))
+  default = []
+}
