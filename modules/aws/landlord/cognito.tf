@@ -1,7 +1,7 @@
 locals {
   sms_region            = var.sms_aws_region == "" ? data.aws_region.current.name : var.sms_aws_region
-  user_pool_name        = "${local.name}-default-user-pool"
-  user_pool_client_name = "${local.name}-default-user-pool-client"
+  user_pool_name        = var.override_user_pool_name == "" ? "${local.name}-default-user-pool" : var.override_user_pool_name
+  user_pool_client_name = var.override_user_pool_client_name == "" ? "${local.name}-default-user-pool-client" : var.override_user_pool_client_name
   default_email_message = format("{username} login here: %s with temporary password: {####}", var.app_url)
 }
 
