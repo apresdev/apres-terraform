@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.8.0 - 2025-03-25
+
+Add ability to override user pool / client names
+
 ## 0.7.0 - 2025-03-24
 
 Add support for defining profile fields at deployment time.
