@@ -243,3 +243,21 @@ variable "tenant_profile_fields" {
   }))
   default = []
 }
+
+variable "override_user_pool_name" {
+  description = <<EOF
+        If set, the name of the user pool will be set to this value. If not set, the name will be
+        generated based on the environment and application name.
+    EOF
+  type        = string
+  default     = ""
+}
+
+variable "override_user_pool_client_name" {
+  description = <<EOF
+        If set, the name of the user pool client will be set to this value. If not set, the name will be
+        generated based on the environment and application name.
+    EOF
+  type        = string
+  default     = ""
+}
