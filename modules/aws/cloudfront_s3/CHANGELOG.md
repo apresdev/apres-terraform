@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.5.2 - 2025-03-25
+
+Fix the KMS policy on the KMS key used for logging bucket so CloudFront can write logs.
+
 ## 1.5.1 - 2025-03-21
 
 Add missing KMS key policy on destination bucket in replication situations.

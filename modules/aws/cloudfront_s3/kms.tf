@@ -121,11 +121,6 @@ data "aws_iam_policy_document" "logging_kms_key" {
       "kms:GenerateDataKey*"
     ]
     resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values   = [aws_cloudfront_distribution.default.arn]
-    }
   }
 }
 
