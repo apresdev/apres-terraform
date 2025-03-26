@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.8.1 - 2025-03-26
+
+Upgrade Landlord image to latest
+
 ## 0.8.0 - 2025-03-25
 
 Add ability to override user pool / client names
