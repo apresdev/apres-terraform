@@ -4,7 +4,7 @@ This change log is automatically generated.
 
 ## 0.8.2 - 2025-03-26
 
-TODO Add your changelog message, without any linebreaks, keep the *Changelog:* at the beginning of the line. The message will be automatically written to CHANGELOG.md in your module.
+Upgrade lambda dependency
 
 ## 0.8.1 - 2025-03-26
 
