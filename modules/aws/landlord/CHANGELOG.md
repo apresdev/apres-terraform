@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.8.2 - 2025-03-26
+
+Upgrade lambda dependency
+
 ## 0.8.1 - 2025-03-26
 
 Upgrade Landlord image to latest
