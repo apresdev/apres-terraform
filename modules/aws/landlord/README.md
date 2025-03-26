@@ -311,7 +311,7 @@ Substitute:
 | <a name="module_landlord_cdc_topic"></a> [landlord\_cdc\_topic](#module\_landlord\_cdc\_topic) | git@github.com:apresdev/apres-terraform.git//modules/aws/sns | rel/sns/1.0.0 |
 | <a name="module_landlord_console_ecs"></a> [landlord\_console\_ecs](#module\_landlord\_console\_ecs) | git@github.com:apresdev/apres-terraform.git//modules/aws/ecs | rel/ecs/2.1.3 |
 | <a name="module_landlord_dynamo"></a> [landlord\_dynamo](#module\_landlord\_dynamo) | git@github.com:apresdev/apres-terraform.git//modules/aws/dynamodb | rel/dynamodb/1.0.0 |
-| <a name="module_landlord_pre_token_generation_lambda"></a> [landlord\_pre\_token\_generation\_lambda](#module\_landlord\_pre\_token\_generation\_lambda) | git::git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/0.6.0 |
+| <a name="module_landlord_pre_token_generation_lambda"></a> [landlord\_pre\_token\_generation\_lambda](#module\_landlord\_pre\_token\_generation\_lambda) | git::git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.0.0 |
 | <a name="module_landlord_sns_sqs_subscription"></a> [landlord\_sns\_sqs\_subscription](#module\_landlord\_sns\_sqs\_subscription) | git@github.com:apresdev/apres-terraform.git//modules/aws/sns_sqs_subscription | rel/sns_sqs_subscription/0.1.0 |
 | <a name="module_landlord_sync_queue"></a> [landlord\_sync\_queue](#module\_landlord\_sync\_queue) | git@github.com:apresdev/apres-terraform.git//modules/aws/sqs | rel/sqs/1.0.0 |
 | <a name="module_landlord_waf"></a> [landlord\_waf](#module\_landlord\_waf) | git@github.com:apresdev/apres-terraform.git//modules/aws/waf | rel/waf/1.1.0 |
