@@ -15,6 +15,7 @@ locals {
   account_id      = data.aws_caller_identity.current.account_id
   name            = module.apres_names.local_name
   artifact_bucket = "${local.account_id}-${lower(var.lambda_regional_environment)}-${local.region}-lambda-artifacts"
+  artifact_key    = "unsigned/${local.name}.zip"
 
   archive_path = "${path.module}/.build/${local.name}.zip"
 
