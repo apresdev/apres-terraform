@@ -61,9 +61,9 @@ resource "aws_lambda_function" "default" {
   kms_key_arn = data.aws_kms_alias.lambda_artifacts.target_key_arn
 
   # CKV_AWS_272: "Ensure AWS Lambda function is configured to validate code-signing"
-  code_signing_config_arn = data.aws_ssm_parameter.signing_config_arn.value
-  s3_bucket               = aws_signer_signing_job.default.signed_object[0].s3[0].bucket
-  s3_key                  = aws_signer_signing_job.default.signed_object[0].s3[0].key
+  code_signing_config_arn = var.disable_code_signing ? "" : data.aws_ssm_parameter.signing_config_arn[0].value
+  s3_bucket               = var.disable_code_signing ? local.artifact_bucket : aws_signer_signing_job.default[0].signed_object[0].s3[0].bucket
+  s3_key                  = var.disable_code_signing ? local.artifact_key : aws_signer_signing_job.default[0].signed_object[0].s3[0].key
 
   # CKV_AWS_45: "Ensure no hard-coded secrets exist in lambda environment"
   environment {
