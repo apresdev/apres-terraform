@@ -202,6 +202,16 @@ variable "code_signing_name_ssm_parameter" {
   default     = ""
 }
 
+variable "disable_code_signing" {
+  description = <<EOF
+     WARNING! This should never be used in a production setting, this argument is for testing purposes
+     only. Unsigned source is deleted from S3 after 30 days, meaning if you do use this in production
+     your Lambda will stop functioning after 30 days.
+  EOF
+  type        = bool
+  default     = false
+}
+
 # #########################################################################################################################################
 # Regional Lambda variables
 # #########################################################################################################################################
