@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.0 - 2025-03-27
+
+Add ability to disable code signing for testing purposes, specifically for LocalStack where code signing is not supported.
+
 ## 1.0.0 - 2025-03-07
 
 Change how source and zip files are managed to avoid race conditions.
