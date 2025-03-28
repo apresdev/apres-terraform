@@ -3,15 +3,14 @@
 # (See: https://developer.hashicorp.com/terraform/cloud-docs/run/install-software)
 module "lambda" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/0.3.0"
+  source = "git@github.com:apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.1.0"
 
   name          = var.name
   description   = "DynamoDB stream to SNS publisher"
-  binary_path   = local.binary_path
+  zip_file      = local.binary_path
   memory_size   = 128
   runtime       = "provided.al2023"
   handler       = "bootstrap"
-  skip_zip      = true
   architectures = [local.architecture]
 
   environment_variables = {
