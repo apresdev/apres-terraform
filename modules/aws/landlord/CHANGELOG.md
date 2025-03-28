@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.1 - 2025-03-28
+
+Upgrade to latest landlord image
+
 ## 0.9.0 - 2025-03-28
 
 Add support for scaling the number of ECS tasks.
