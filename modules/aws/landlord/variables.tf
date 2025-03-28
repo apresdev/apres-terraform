@@ -261,3 +261,27 @@ variable "override_user_pool_client_name" {
   type        = string
   default     = ""
 }
+
+variable "ecs_api_min_instances" {
+  description = "Minimum number of ECS running tasks for API"
+  type        = number
+  default     = 1
+}
+
+variable "ecs_api_max_instances" {
+  description = "Maximum number of ECS running tasks for API"
+  type        = number
+  default     = 5
+}
+
+variable "ecs_console_min_instances" {
+  description = "Minimum number of ECS running tasks for Console"
+  type        = number
+  default     = 1
+}
+
+variable "ecs_console_max_instances" {
+  description = "Maximum number of ECS running tasks for Console"
+  type        = number
+  default     = 5
+}
