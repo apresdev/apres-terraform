@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.0 - 2025-03-28
+
+Add support for scaling the number of ECS tasks.
+
 ## 0.8.2 - 2025-03-26
 
 Upgrade lambda dependency

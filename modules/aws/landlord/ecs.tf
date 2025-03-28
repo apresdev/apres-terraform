@@ -45,6 +45,9 @@ module "landlord_api_ecs" {
   }
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
+
+  ecs_autoscale_min_instances = var.ecs_api_min_instances
+  ecs_autoscale_max_instances = var.ecs_api_max_instances
 }
 
 module "landlord_console_ecs" {
@@ -82,4 +85,7 @@ module "landlord_console_ecs" {
   }
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
+
+  ecs_autoscale_min_instances = var.ecs_console_min_instances
+  ecs_autoscale_max_instances = var.ecs_console_max_instances
 }
