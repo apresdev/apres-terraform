@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.1 - 2025-03-28
+
+TODO Add your changelog message, without any linebreaks, keep the *Changelog:* at the beginning of the line. The message will be automatically written to CHANGELOG.md in your module.
+
 ## 0.9.0 - 2025-03-28
 
 Add support for scaling the number of ECS tasks.
