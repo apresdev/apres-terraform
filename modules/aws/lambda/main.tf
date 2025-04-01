@@ -64,6 +64,7 @@ resource "aws_lambda_function" "default" {
   code_signing_config_arn = var.disable_code_signing ? "" : data.aws_ssm_parameter.signing_config_arn[0].value
   s3_bucket               = var.disable_code_signing ? local.artifact_bucket : aws_signer_signing_job.default[0].signed_object[0].s3[0].bucket
   s3_key                  = var.disable_code_signing ? local.artifact_key : aws_signer_signing_job.default[0].signed_object[0].s3[0].key
+  source_code_hash        = var.disable_code_signing ? var.zip_file_hash : ""
 
   # CKV_AWS_45: "Ensure no hard-coded secrets exist in lambda environment"
   environment {
