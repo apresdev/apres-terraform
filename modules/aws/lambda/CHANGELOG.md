@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.2 - 2025-04-01
+
+Bug fix to add source hash in test situations.
+
 ## 1.1.1 - 2025-04-01
 
 Add the `invoke_arn` to the module outputs..
