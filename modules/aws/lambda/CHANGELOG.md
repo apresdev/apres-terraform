@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.1 - 2025-04-01
+
+Add the `invoke_arn` to the module outputs..
+
 ## 1.1.0 - 2025-03-27
 
 Add ability to disable code signing for testing purposes, specifically for LocalStack where code signing is not supported.
