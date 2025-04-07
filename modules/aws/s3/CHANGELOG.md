@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 4.2.0 - 2025-04-07
+
+Switch the flag used to determine if the replication source bucket is in a different account to a boolean to deal with terraform race conditions.
+
 ## 4.1.0 - 2025-03-20
 
 Fix the ARN for local bucket encryption when in replication scenarios, change argument to match actual usage.

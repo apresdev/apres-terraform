@@ -66,9 +66,9 @@ module "s3_destination" {
   }
   versioning = true
   replication_destination_config = {
-    enabled                 = true
-    source_bucket_account   = data.aws_caller_identity.current.account_id
-    source_bucket_arn       = lower("arn:aws:s3:::${data.aws_caller_identity.current.account_id}-${var.environment}-${data.aws_region.current.name}-${var.name}")
-    source_service_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.environment}-${var.name}-${data.aws_region.current.name}-ReplicationSource"
+    enabled                        = true
+    source_bucket_in_other_account = false # it's in the same account
+    source_bucket_arn              = lower("arn:aws:s3:::${data.aws_caller_identity.current.account_id}-${var.environment}-${data.aws_region.current.name}-${var.name}")
+    source_service_role_arn        = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.environment}-${var.name}-${data.aws_region.current.name}-ReplicationSource"
   }
 }

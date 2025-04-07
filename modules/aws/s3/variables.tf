@@ -246,7 +246,8 @@ variable "replication_destination_config" {
 
   Attributes:
   * enabled - set to true if this is the destination bucket, else replication will not be enabled.
-  * source_bucket_account - The AWS Account ID where the source bucket is homed.
+  * source_bucket_in_other_account - Set to true if the AWS Account ID of the source bucket is different from
+    the destination bucket.
   * source_bucket_arn - The ARN of the source bucket.
   * source_service_role_arn - The ARN of the service role that will be used to replicate objects. Note that
     depending on how the role was created, it could be two different patterns:
@@ -255,16 +256,16 @@ variable "replication_destination_config" {
     See the output `replication_source_iam_role` for the IAM role created by this module on the source bucket.
   EOF
   type = object({
-    enabled                 = bool
-    source_bucket_account   = string
-    source_bucket_arn       = string
-    source_service_role_arn = string
+    enabled                        = bool
+    source_bucket_in_other_account = bool
+    source_bucket_arn              = string
+    source_service_role_arn        = string
   })
   default = {
-    enabled                 = false
-    source_bucket_account   = ""
-    source_bucket_arn       = ""
-    source_service_role_arn = ""
+    enabled                        = false
+    source_bucket_in_other_account = false
+    source_bucket_arn              = ""
+    source_service_role_arn        = ""
   }
 }
 
