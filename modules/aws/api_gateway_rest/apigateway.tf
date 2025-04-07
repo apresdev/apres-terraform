@@ -108,6 +108,7 @@ resource "aws_api_gateway_domain_name" "default" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+  security_policy = "TLS_1_2"
 }
 
 resource "aws_api_gateway_base_path_mapping" "default" {
@@ -115,5 +116,6 @@ resource "aws_api_gateway_base_path_mapping" "default" {
   api_id      = aws_api_gateway_rest_api.default.id
   domain_name = aws_api_gateway_domain_name.default[0].domain_name
   stage_name  = aws_api_gateway_stage.default.stage_name
+  base_path   = var.base_path_mapping
 }
 
