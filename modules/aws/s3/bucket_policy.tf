@@ -1,7 +1,7 @@
 locals {
   # Only create the replication policy on the destination bucket if it's in a different account,
   # else it'll fail to create with a resource error
-  add_replication_policy = var.replication_destination_config.enabled && var.replication_destination_config.source_bucket_account != data.aws_caller_identity.current.account_id
+  add_replication_policy = var.replication_destination_config.enabled && var.replication_destination_config.source_bucket_in_other_account
 }
 
 data "aws_iam_policy_document" "replication_destination" {
