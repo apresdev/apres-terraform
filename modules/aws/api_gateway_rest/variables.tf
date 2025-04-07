@@ -181,3 +181,17 @@ variable "acm_certificate_arn" {
   type        = string
   default     = ""
 }
+
+variable "base_path_mapping" {
+  description = <<EOF
+    The base path mapping to use for the API Gateway, ignored if `domain_name` is not specified.
+
+    See the [AWS documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-mappings.html)
+    for details on how to use this.
+
+    If base_path_mapping is set to "*" and the `domain_name` is set to, for example, "api.example.com" and the
+    stage name is "v1", the stage name will be removed from the URL.
+  EOF
+  type        = string
+  default     = ""
+}

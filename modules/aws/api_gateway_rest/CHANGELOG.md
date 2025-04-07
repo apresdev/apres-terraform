@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.3.0 - 2025-04-07
+
+Add support for base path maps when using custom domains, and set security policy on custom domains to TLS 1.2.
+
 ## 1.2.1 - 2025-03-04
 
 Fix the certificate to use a regional one.
