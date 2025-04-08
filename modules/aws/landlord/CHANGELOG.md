@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.9.2 - 2025-04-08
+
+Update Landlord container to latest
+
 ## 0.9.1 - 2025-03-28
 
 Upgrade to latest landlord image
