@@ -14,7 +14,7 @@ locals {
   console_domain_name = "${lower(var.name)}.${var.hosted_zone_name}"
   api_domain_name     = "${lower(var.name)}-api.${var.hosted_zone_name}"
 
-  container_image_uri = "767397774077.dkr.ecr.us-east-2.amazonaws.com/landlord:8ab995053fe8f5e2e8c75fd2e7f61c0385083335"
+  container_image_uri = "767397774077.dkr.ecr.us-east-2.amazonaws.com/landlord:233af550f1e66e07b72579951529504ea7ab30e2"
 }
 
 module "apres_names" {
