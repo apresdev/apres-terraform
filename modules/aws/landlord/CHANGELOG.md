@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.10.0 - 2025-04-14
+
+Add `custom:user` claim for the Landlord user ID
+
 ## 0.9.2 - 2025-04-08
 
 Update Landlord container to latest

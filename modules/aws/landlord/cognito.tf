@@ -95,6 +95,20 @@ resource "aws_cognito_user_pool" "default" {
     attribute_data_type      = "String"
     developer_only_attribute = false
     mutable                  = true
+    name                     = "user"
+    required                 = false
+
+    string_attribute_constraints {
+      # String representation of a UUID in the form
+      # "123e4567-e89b-12d3-a456-426614174000"
+      max_length = 36
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
     name                     = "impersonate_tenant"
     required                 = false
 
