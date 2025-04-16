@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.3 - 2025-04-16
+
+Update latest Landlord API -- fixes UserID result
+
 ## 0.11.2 - 2025-04-16
 
 The custom:impersonate_user claim was added with the wrong length (32 not 36). And Cognito is so kind to make it impossible to change the length or even delete the claim once it has been configured.
