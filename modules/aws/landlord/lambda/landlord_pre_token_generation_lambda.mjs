@@ -13,6 +13,7 @@ export const handler = function(event, context) {
                     'custom:impersonate_group': userAttributes['custom:impersonate_group'],
                     'custom:impersonate_email': userAttributes['custom:impersonate_email'],
                     'custom:impersonate_sub': userAttributes['custom:impersonate_sub'],
+                    'custom:impersonate_user_id': userAttributes['custom:impersonate_user_id'],
                 },
             }
         }
