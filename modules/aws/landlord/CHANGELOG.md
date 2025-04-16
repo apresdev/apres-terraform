@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.1 - 2025-04-16
+
+Fix the missing definition for the impersonate_user field
+
 ## 0.11.0 - 2025-04-16
 
 Update to latest Landlord image. Includes the addition of impersonated tenant profile fields on RetrieveSubject
