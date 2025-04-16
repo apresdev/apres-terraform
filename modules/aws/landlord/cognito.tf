@@ -176,6 +176,22 @@ resource "aws_cognito_user_pool" "default" {
     }
   }
 
+  # DEPRECATED
+  # This impersonation claim was added with the wrong length (32 not 36).
+  # And Cognito is so kind to make it impossible to change the length or
+  # even delete the claim once it has been configured.
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "impersonate_user"
+    required                 = false
+
+    string_attribute_constraints {
+      max_length = 32
+    }
+  }
+
   user_pool_add_ons {
     advanced_security_mode = "AUDIT"
   }
