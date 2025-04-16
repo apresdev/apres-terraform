@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.0 - 2025-04-16
+
+Update to latest Landlord image. Includes the addition of impersonated tenant profile fields on RetrieveSubject
+
 ## 0.10.0 - 2025-04-14
 
 Add `custom:user` claim for the Landlord user ID
