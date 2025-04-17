@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.4 - 2025-04-17
+
+Update to latest permissions based on `landlord iam`
+
 ## 0.11.3 - 2025-04-16
 
 Update latest Landlord API -- fixes UserID result
