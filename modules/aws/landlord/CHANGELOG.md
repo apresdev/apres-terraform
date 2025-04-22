@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.5 - 2025-04-22
+
+Update Landlord to fix changing roles being properly reflected in AWS Cognito.
+
 ## 0.11.4 - 2025-04-17
 
 Update to latest permissions based on `landlord iam`
