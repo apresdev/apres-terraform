@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.8 - 2025-04-23
+
+Update AWS permissions for Landlord
+
 ## 0.11.7 - 2025-04-23
 
 Fix Landlord version.
