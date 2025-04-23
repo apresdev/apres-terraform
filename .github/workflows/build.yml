@@ -239,6 +239,10 @@ jobs:
           mkdir output
           echo '${{ steps.prev-version.outputs.result }}' > output/previous-version.txt
           echo '${{ steps.new-version.outputs.result }}' > output/new-version.txt
+          echo '# This file is auto-generated' > ${{ matrix.module_directory }}/module_version.tf
+          echo 'locals {' >> ${{ matrix.module_directory }}/module_version.tf
+          echo '  module_version = "${{ steps.new-version.outputs.result }}"' >> ${{ matrix.module_directory }}/module_version.tf
+          echo '}' >> ${{ matrix.module_directory }}/module_version.tf
 
       - name: Upload result artifacts
         uses: actions/upload-artifact@v4.4.0
@@ -262,7 +266,7 @@ jobs:
           commit_message: "Update ${{ matrix.module_name }} CHANGELOG"
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
-          file_pattern: ${{ matrix.module_directory }}/CHANGELOG.md
+          file_pattern: "${{ matrix.module_directory }}/CHANGELOG.md ${{ matrix.module_directory }}/module_version.tf"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
