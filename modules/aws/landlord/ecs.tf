@@ -42,6 +42,7 @@ module "landlord_api_ecs" {
     LANDLORD_DEFAULT_USER_POOL         = local.user_pool_name
     LANDLORD_USER_PROFILE_DEFINITION   = local.user_profile_fields_base64
     LANDLORD_TENANT_PROFILE_DEFINITION = local.tenant_profile_fields_base64
+    LANDLORD_TERRAFORM_MODULE_VERSION  = local.module_version
   }
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
