@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.9 - 2025-04-23
+
+Add support for passing the version of the terraform module to the Landlord container.
+
 ## 0.11.8 - 2025-04-23
 
 Update AWS permissions for Landlord

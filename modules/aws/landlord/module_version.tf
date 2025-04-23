@@ -1,4 +1,4 @@
-# This file is overwritten by the GitHub action
+# This file is auto-generated
 locals {
-  module_version = "N/A"
+  module_version = "0.11.9"
 }
