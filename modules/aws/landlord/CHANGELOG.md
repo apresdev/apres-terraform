@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.11.7 - 2025-04-23
+
+Fix Landlord version.
+
 ## 0.11.6 - 2025-04-23
 
 Landlord image was missing its embedded version leading it to display "N/A" for the version.
