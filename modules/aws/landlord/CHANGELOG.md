@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.0 - 2025-04-28
+
+Fix Terraform version in Landlord console container
+
 ## 0.11.9 - 2025-04-23
 
 Add support for passing the version of the terraform module to the Landlord container.
