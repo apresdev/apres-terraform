@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.13.0 - 2025-04-29
+
+Add TenantUser in the response to the InviteToTenant API request
+
 ## 0.12.0 - 2025-04-28
 
 Fix Terraform version in Landlord console container
