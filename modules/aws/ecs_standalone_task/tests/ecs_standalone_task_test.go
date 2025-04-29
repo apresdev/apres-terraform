@@ -90,26 +90,6 @@ func validateEcsTags(t *testing.T, ecsClient *ecs.Client, arn string, descriptio
 	assert.True(t, valid, fmt.Sprintf("Tags have invalid values for %s (%s): %v", description, arn, bad))
 }
 
-// getFirstTask retrieves the first running task to run checks against
-// func getFirstTask(t *testing.T, ecsClient *ecs.Client, tfOut *tfOutputs) *ecsTypes.Task {
-// 	tasksInput := &ecs.ListTasksInput{
-// 		Cluster:     &tfOut.ecsClusterName,
-// 		ServiceName: &tfOut.ecsServiceName,
-// 	}
-// 	listTasksResp, err := ecsClient.ListTasks(context.Background(), tasksInput)
-// 	assert.NoError(t, err, "Expected no error for ListTasks")
-// 	assert.Greater(t, len(listTasksResp.TaskArns), 0, "Expected at least one task running")
-
-// 	describeInput := &ecs.DescribeTasksInput{
-// 		Cluster: &tfOut.ecsClusterName,
-// 		Tasks:   []string{listTasksResp.TaskArns[0]},
-// 	}
-// 	taskResp, err := ecsClient.DescribeTasks(context.Background(), describeInput)
-// 	assert.NoError(t, err, "Expected no error for DescribeTasks")
-// 	assert.Greater(t, len(taskResp.Tasks), 0, "Expected at least one task running")
-// 	return &taskResp.Tasks[0]
-// }
-
 // Test ECS running on Fargate with no volumes or load balancer
 func TestStandaloneTask(t *testing.T) {
 	// Variables for the terraform module, includes a timestamp
