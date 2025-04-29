@@ -90,7 +90,7 @@ func validateEcsTags(t *testing.T, ecsClient *ecs.Client, arn string, descriptio
 	assert.True(t, valid, fmt.Sprintf("Tags have invalid values for %s (%s): %v", description, arn, bad))
 }
 
-// Test ECS running on Fargate with no volumes or load balancer
+// TestStandaloneTask tests creating a standalone ECS task and then running it.
 func TestStandaloneTask(t *testing.T) {
 	// Variables for the terraform module, includes a timestamp
 	name := getName()
@@ -141,7 +141,7 @@ func TestStandaloneTask(t *testing.T) {
 	// check environment variables on the first container
 	assert.Len(t, tdResp.TaskDefinition.ContainerDefinitions[0].Environment, 6, "Expected exactly six environment variable in container definition")
 
-	// The five standard plus an extra one for testing.
+	// check secrets
 	assert.Len(t, tdResp.TaskDefinition.ContainerDefinitions[0].Secrets, 1, "Expected exactly one secret in container definition")
 	assert.Equal(t, *tdResp.TaskDefinition.ContainerDefinitions[0].Secrets[0].Name, name, "Expected secret name to be %s", name)
 
