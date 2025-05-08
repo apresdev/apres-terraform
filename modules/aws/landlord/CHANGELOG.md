@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.13.1 - 2025-05-08
+
+Update the Landlord image to latest that includes new diagnostics and logging.
+
 ## 0.13.0 - 2025-04-29
 
 Add TenantUser in the response to the InviteToTenant API request
