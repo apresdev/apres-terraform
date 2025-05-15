@@ -1,0 +1,21 @@
+# See https://www.mkdocs.org/user-guide/configuration/
+site_name: Apres Test Hub
+theme: readthedocs
+# Need to set this for S3, since S3 won't serve index.html
+# for a directory.
+use_directory_urls: false
+docs_dir: build/docs
+nav:
+  - Introduction: 01-introduction.md
+  - Getting Started: 02-getting-started-prerequisites.md
+  - Account Structure: 03-getting-started-aws-account-structure.md
+  - AWS Bootstrap: 04-getting-started-part-1-aws-bootstrap.md
+  - Apres Foundations: 05-getting-started-part-2-apres-foundations.md
+  - Deploy Your Services: 06-getting-started-part-3-deploy-your-services.md
+  - Naming and Tagging Standards: 10-naming-and-tagging-standards.md
+  - Dependabot: 11-dependabot.md
+  - Terraform:
+     - ...
+plugins:
+  - search
+  - awesome-pages

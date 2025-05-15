@@ -2,7 +2,7 @@
 
 ## Overview
 
-This module will create an SNS subscription for a given SQS queue in accordance with best practices. 
+This module will create an SNS subscription for a given SQS queue in accordance with best practices.
 
 ### Enforced Best Practices
 

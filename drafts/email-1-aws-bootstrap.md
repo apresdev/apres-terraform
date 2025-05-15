@@ -2,15 +2,15 @@
 
 To prep for your upcoming Apres Installation session, please:
 
-* [ ] Ensure administrator access to your company's email provider, with the 
+* [ ] Ensure administrator access to your company's email provider, with the
   ability create new email accounts.
-* [ ] Ensure access to an appropriate credit card that will be used to 
+* [ ] Ensure access to an appropriate credit card that will be used to
   configure billing in Amazon Web Services (AWS).
-* [ ] Ensure access to your preferred multi-factor authentication (MFA) 
+* [ ] Ensure access to your preferred multi-factor authentication (MFA)
   technique. For options: [https://docs.aws.amazon.
   com/IAM/latest/UserGuide/avail-mfa-types-for-root.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/avail-mfa-types-for-root.html)
 
-The session should take 30-60 minutes.
+The session should be 30 to 60 minutes.
 
 On completion of the AWS Bootstrap, you will have:
 

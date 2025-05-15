@@ -2,7 +2,7 @@
 
 This module provides a lightweight module used to calculate AWS Resource names, an implmentation
 of the
-[Naming and Tagging Standards](../../../docs/naming-and-tagging-standards.md).
+[Naming and Tagging Standards](../../../docs/10-naming-and-tagging-standards.md).
 
 The `local_name` output should be used for almost all use cases. The `global_name` output can be used for S3 buckets
 and in a few other rare cases.

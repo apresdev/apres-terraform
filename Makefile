@@ -44,3 +44,27 @@ $1.update-readme:
 
 endef
 $(foreach target,$(TARGETS),$(eval $(call make-terraform-targets,$(target))))
+
+DOCS_VENV := ./build/venv
+
+.PHONY: docs
+docs: docs-setup
+	rm -rfv ./build/site
+	rm -rfv ./build/docs
+	mkdir -p ./build/docs
+	rsync -R `find ./docs -type f -name "*.md"` ./build
+	rsync -R `find ./modules -type f -name "*.md"` ./build/docs
+	. $(DOCS_VENV)/bin/activate && mkdocs build --site-dir ./build/site --config-file mkdocs.yml
+
+.PHONY: docs-setup
+docs-setup: requirements.txt $(DOCS_VENV)
+
+$(DOCS_VENV):
+	python -m venv $(DOCS_VENV)
+	$(DOCS_VENV)/bin/pip install --upgrade pip
+	$(DOCS_VENV)/bin/pip install -r requirements.txt
+	@echo "Virtual environment created and requirements installed."
+
+.PHONY: docs-clean
+docs-clean:
+	rm -rfv ./build

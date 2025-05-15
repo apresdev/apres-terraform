@@ -66,3 +66,5 @@ go.work
 .vscode/
 
 **/tf_generated/*
+
+build/

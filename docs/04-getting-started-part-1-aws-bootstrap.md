@@ -12,7 +12,7 @@
 8. [Enable Integration to your Identity Provider](#8-enable-integration-to-your-identity-provider)
 9. [Configure AWS Control Tower](#9-configure-aws-control-tower)
 
-## 1. Create Email Address(es) for your AWS Accounts
+## 1. Create Email Addresses for your AWS Accounts
 
 Each AWS account requires a unique email address, and you will be creating multiple AWS accounts. Apres
 recommends creating a single distribution list and the using the `+` syntax for each account. For example:
@@ -59,9 +59,13 @@ You have three options for enabling MFA, with detailed explanation in [this doc]
 2. Enabling a virtual MFA device
 3. Enabling a hardware TOPT token
 
-Which one you enable depends on your organization. A few key points when making the decision
-* Only trusted individuals should have access to the MFA device, it should not be shared with everyone.
-* Physical devices are very secure but depend on you having a secure location to store it. Most small organizations do not have this.
+Which one you enable depends on your organization. A few key points when
+making the decision:
+
+  * Only trusted individuals should have access to the MFA device, it should
+   not be shared with everyone.
+  * Physical devices are very secure but depend on you having a secure
+   location to store it. Most small organizations do not have this.
 
 ## 4. Select the primary (home) region
 
@@ -91,7 +95,7 @@ Follow the AWS documentation:
 
 If you have existing accounts you wish to add to your new AWS Organization, follow the [Inviting an AWS account to join your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_invites.html) steps.
 
-See [AWS Account Structure](./getting-started-aws-account-structure.md) for further discussion on account structure.
+See [AWS Account Structure](03-getting-started-aws-account-structure.md) for further discussion on account structure.
 
 ## 7. Enable IAM access to billing
 
@@ -115,12 +119,13 @@ This setup is highly dependent on your organization's IDP. Both AWS and the majo
 
 ## 9. Configure AWS Control Tower
 
-AWS Control Tower is a way to govern a multi-account environment. Ensure you are in the home region selected in Step 4! Follow the steps [Getting started with the AWS Control Tower from the console](https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-from-console.html) to enable Control Tower.
+AWS Control Tower is a way to govern a multi-account environment. Ensure you are in the home region selected in Step 4. Follow the steps [Getting started with the AWS Control Tower from the console](https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-from-console.html) to enable Control Tower.
 
 Notes:
-* Control Tower will set up two accounts `log archive` and `audit`. Apres
-  recommends using the defaults for these.
-* Step 2a is to review and select AWS regions. Apres recommends only enabling regions where you know your workloads will be deployed and disabling the rest. That will both prevent accidental deploys into those regions, and save cost on some tooling in the future.
+
+  * Control Tower will set up two accounts `log archive` and `audit`. Apres
+    recommends using the defaults for these.
+  * Step 2a is to review and select AWS regions. Apres recommends only enabling regions where you know your workloads will be deployed and disabling the rest. That will both prevent accidental deploys into those regions, and save cost on some tooling in the future.
 
 ### Control Tower VPCs
 
@@ -164,7 +169,7 @@ Create new AWS accounts in the OU's following the [Provision accounts with the A
 addresses, use the email address(es) created in [Step 1](#1-create-email-addresses-for-your-aws-accounts).
 
 A typical recommended OU structure, shown with AWS accounts and associated email addresses looks as follows, with
-a detailed explanation of the recommended accounts documented in [Recommended AWS Account Structure](./getting-started-aws-account-structure.md):
+a detailed explanation of the recommended accounts documented in [Recommended AWS Account Structure](03-getting-started-aws-account-structure.md):
 
 ```
 Org Root
@@ -186,7 +191,3 @@ Org Root
         - Prod (OU)
              - prod - aws+prod@yourdomain.com
 ```
-
-## Next Steps
-
-Continue to [Getting Started Part 2](./getting-started-part-2-apres-foundations.md)
