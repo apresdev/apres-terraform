@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.13.3 - 2025-05-16
+
+Fix race condition during invite using the REST API that can cause a "user not found" 500 error.
+
 ## 0.13.2 - 2025-05-14
 
 New testing and diagnostics for Landlord. No functional changes.
