@@ -292,17 +292,17 @@ document for details.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.86.0 |
-| <a name="provider_external"></a> [external](#provider\_external) | 2.3.4 |
-| <a name="provider_github"></a> [github](#provider\_github) | 6.5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.98.0 |
+| <a name="provider_external"></a> [external](#provider\_external) | 2.3.5 |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.6.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
-| <a name="module_dashboards-bucket"></a> [dashboards-bucket](#module\_dashboards-bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/3.1.1 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.0.0 |
+| <a name="module_dashboards-bucket"></a> [dashboards-bucket](#module\_dashboards-bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/4.2.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.1.2 |
 | <a name="module_lambda_scheduler"></a> [lambda\_scheduler](#module\_lambda\_scheduler) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_scheduler | rel/lambda_scheduler/0.1.0 |
 
 ## Resources
