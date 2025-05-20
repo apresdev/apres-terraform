@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.0 - 2025-05-20
+
+Update module dependency version for Lambda and S3, and update the AWS provider version to latest.
+
 ## 0.5.2 - 2025-03-11
 
 Fix missing attribute on provisioned dashboards.
