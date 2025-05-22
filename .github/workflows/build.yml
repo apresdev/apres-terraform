@@ -127,10 +127,8 @@ jobs:
                 continue;
               }
 
-
+              // Determine which module(s) are being updated.
               if (item.startsWith("modules")) {
-                //
-                if (item.includes("/tests/") || item.includes("/test/")) continue;
                 dir = path.dirname(item);
                 // dir at this point should start with "modules/aws/thing/..."
                 // Take the 2nd element else we end up with module names for embedded directories
