@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.13.4 - 2025-05-22
+
+--email and --user CLI aliases are now available alongside all --username flags
+
 ## 0.13.3 - 2025-05-16
 
 Fix race condition during invite using the REST API that can cause a "user not found" 500 error.
