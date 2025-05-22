@@ -42,6 +42,7 @@ type GrafanaTestSuite struct {
 	grafanaVersion   string
 	snsTopicARN      string
 	terraformOptions *terraform.Options
+	setupDone        bool
 }
 
 func TestGrafanaTestSuite(t *testing.T) {
@@ -53,6 +54,16 @@ func (s *GrafanaTestSuite) TearDownSuite() {
 }
 
 func (s *GrafanaTestSuite) SetupSuite() {
+	// if the terraform deploy fails, the test suite exits and the TearDownSuite is never called. One
+	// alternative is to use SetupTest/TearDownTest but that means the stack is created/destroyed for
+	// each test, which is slow and very expensive. So instead we use this, inspired by
+	// https://github.com/stretchr/testify/issues/1123
+	defer func() {
+		if !s.setupDone {
+			terraform.Destroy(s.T(), s.terraformOptions)
+		}
+	}()
+
 	s.ctx = context.Background()
 	s.awsRegion = "us-east-2"
 	now := time.Now().Unix()
@@ -92,6 +103,9 @@ func (s *GrafanaTestSuite) SetupSuite() {
 
 	// Create a Grafana client
 	s.createGrafanaClient(token, s.grafanaURL)
+
+	// Mark as done so the defer func doesn't destroy the stack
+	s.setupDone = true
 }
 
 func (s *GrafanaTestSuite) TestSSMConfig() {

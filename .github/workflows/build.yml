@@ -9,7 +9,7 @@
 name: Build and version Terraform Modules
 concurrency: #avoid concurrent runs on label events, might cause issues on super fast commits  ¯\_(ツ)_/¯
   group: ${{ github.head_ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   pull_request:
@@ -127,10 +127,8 @@ jobs:
                 continue;
               }
 
-
+              // Determine which module(s) are being updated.
               if (item.startsWith("modules")) {
-                //
-                if (item.includes("/tests/") || item.includes("/test/")) continue;
                 dir = path.dirname(item);
                 // dir at this point should start with "modules/aws/thing/..."
                 // Take the 2nd element else we end up with module names for embedded directories
