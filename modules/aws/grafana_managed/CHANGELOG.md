@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.1 - 2025-05-22
+
+Minor fix to unit tests, fix to destroy terraform stack if the initial apply fails.
+
 ## 0.6.0 - 2025-05-20
 
 Update module dependency version for Lambda and S3, and update the AWS provider version to latest.
