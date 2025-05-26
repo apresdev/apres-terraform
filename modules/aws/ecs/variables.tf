@@ -292,7 +292,7 @@ variable "container_secrets" {
     The kms_key_alias it the KMS key alias that was used to encrypt the secret.
 
     Secrets are stored with key/value pairs in Secret Manager. If you want the full JSON object as the
-    environment variable, the ARN should not incluce a key, for example:
+    environment variable, the ARN should not include a key, for example:
     ```
 {
   name          = "DATABASE_CONFIG"
