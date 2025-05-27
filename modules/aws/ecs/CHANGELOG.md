@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.4 - 2025-05-27
+
+Add a secret for signing and encrypting cookies
+
 ## 2.1.3 - 2025-02-05
 
 Fix volume bug for Fargate, updated docs, expose security group ID for consumption by other modules, remove redundant CloudWatch alarm and dashboard.

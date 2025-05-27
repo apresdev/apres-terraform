@@ -12,8 +12,8 @@ locals {
 
   cwl_log_group_name = var.cloudwatch_logs_group_name == "" ? "${lower(var.application)}/${lower(var.name)}-${lower(var.environment)}" : var.cloudwatch_logs_group_name
 
-  # Create a mountpoint, if it was passed in as a variable. Do this as a local because it's going
-  # into a jsonencode() in the task defintion.
+  # Create a mount point, if it was passed in as a variable. Do this as a local because it's going
+  # into a jsonencode() in the task definition.
   container_mountpoints = length(var.ephemeral_volumes) == 0 ? [] : [
     {
       sourceVolume  = var.ephemeral_volumes[0].name
@@ -41,7 +41,7 @@ locals {
     }
   ] : []
 
-  # If fargate, we need ephemeral strorage, so create it dynamically.
+  # If fargate, we need ephemeral storage, so create it dynamically.
   fargate_ephemeral_storage = var.deployment_target == "FARGATE" && length(var.ephemeral_volumes) > 0 ? [
     {
       size_in_gib = var.ephemeral_volumes[0].size_in_gb

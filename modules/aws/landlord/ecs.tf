@@ -12,6 +12,22 @@ locals {
   tenant_profile_fields_base64 = base64encode(local.tenant_profile_fields_json)
 }
 
+resource "random_bytes" "secure_cookie_key" {
+  length = 64
+}
+
+resource "aws_secretsmanager_secret" "secure_cookie_key" {
+  #checkov:skip=CKV_AWS_149:"Ensure that Secrets Manager secret is encrypted using KMS CMK"
+  #checkov:skip=CKV2_AWS_57:"Ensure Secrets Manager secrets should have automatic rotation enabled"
+  # We assume that the default KMS key for Secrets Manager is sufficient for our use case.
+  name = "landlord/${var.environment}/secure_cookie_key"
+}
+
+resource "aws_secretsmanager_secret_version" "secure_cookie_key" {
+  secret_id     = aws_secretsmanager_secret.secure_cookie_key.id
+  secret_string = random_bytes.secure_cookie_key.base64
+}
+
 module "landlord_api_ecs" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
   #checkov:skip=CKV_AWS_23:False positive
@@ -44,6 +60,14 @@ module "landlord_api_ecs" {
     LANDLORD_TENANT_PROFILE_DEFINITION = local.tenant_profile_fields_base64
     LANDLORD_TERRAFORM_MODULE_VERSION  = local.module_version
   }
+
+  container_secrets = [
+    {
+      name          = "LANDLORD_SECURE_COOKIE_KEY",
+      secret_arn    = aws_secretsmanager_secret_version.secure_cookie_key.arn
+      kms_key_alias = "aws/secretsmanager"
+    }
+  ]
 
   ecs_task_iam_policy_document = data.aws_iam_policy_document.ecs_task.json
 
