@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.14.0 - 2025-05-28
+
+Minor updates to docs.
+
 ## 0.13.4 - 2025-05-22
 
 --email and --user CLI aliases are now available alongside all --username flags
