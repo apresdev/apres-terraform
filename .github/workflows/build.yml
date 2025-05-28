@@ -13,7 +13,7 @@ concurrency: #avoid concurrent runs on label events, might cause issues on super
 
 on:
   pull_request:
-    # types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
       - modules/aws/**
       - modules/github/**
