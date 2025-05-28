@@ -6,26 +6,30 @@ and use it, see [https://github.com/apresdev/landlord](https://github.com/apresd
 ## Versioning
 
 Landlord versions are tied into this module. To bump the container version:
-1. Create a new branch of this module
+
+1. Create a new branch of this module.
 2. Update the `container_image_uri` in [main.tf](./main.tf) wiht the new tag.
 3. Copy the latest content of [landlord-openapi-ext.json](https://github.com/apresdev/landlord/tree/main/api) to
    [./api/landlord-openapi-ext.json](./api/landlord-openapi-ext.json).
-4. Commit the changes, open a new Pull Request, setting the appropriate versioning.
+4. Commit the changes, open a new Pull Request and set the appropriate version kind (major, minor, or patch).
 5. Once merged, consume the new module version in the deploying code.
 
-## TODO:
-* Include AWS permissions
-* Switch to using ARM64/Graviton
+## TODO
+
+* Include AWS permissions.
+* Switch to using ARM64/Graviton.
 * Once the API spec is a release artifact get it from there instead of copying it here.
 * Use versioning on the ECS container instead of a hash.
 
 ## AWS IAM Permissions
+
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
-Substitute:
-*  `${AWS::AccountId}` with the Account ID where this is deployed
-*  `${AWS::Region}` with the region where this is deployed, like `us-east-2`
-*  `${name}` with the name passed in as the `name` variable
-*  `${environment}` with the environment passed in as the `environment` variable
+Before using this snippet, you must substitute:
+
+*  `${AWS::AccountId}` with the Account ID where this is deployed.
+*  `${AWS::Region}` with the region where this is deployed, like `us-east-2`.
+*  `${name}` with the name passed in as the `name` variable.
+*  `${environment}` with the environment passed in as the `environment` variable.
 
 ```json
 {
