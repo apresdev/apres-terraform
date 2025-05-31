@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.14.1 - 2025-05-31
+
+Fix crash loop caused by missing environment variable.
+
 ## 0.14.0 - 2025-05-28
 
 Minor updates to docs.
