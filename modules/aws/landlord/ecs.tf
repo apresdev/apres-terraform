@@ -59,6 +59,7 @@ module "landlord_api_ecs" {
     LANDLORD_USER_PROFILE_DEFINITION   = local.user_profile_fields_base64
     LANDLORD_TENANT_PROFILE_DEFINITION = local.tenant_profile_fields_base64
     LANDLORD_TERRAFORM_MODULE_VERSION  = local.module_version
+    LANDLORD_SECURE_COOKIE_KEY         = aws_secretsmanager_secret_version.secure_cookie_key.secret_string
   }
 
   container_secrets = [
