@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.14.2 - 2025-06-03
+
+Landlord secure key for cookies is now deletable / recreatable
+
 ## 0.14.1 - 2025-05-31
 
 Fix crash loop caused by missing environment variable.
