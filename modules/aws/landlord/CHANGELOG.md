@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.14.3 - 2025-06-03
+
+Fix for container secrets.
+
 ## 0.14.2 - 2025-06-03
 
 Landlord secure key for cookies is now deletable / recreatable
