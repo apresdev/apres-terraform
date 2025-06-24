@@ -304,3 +304,40 @@ variable "replication_source_config" {
     replication_prefix       = ""
   }
 }
+
+variable "cloudfront_cache_lambda_config" {
+  description = <<EOF
+  List of Lambda@Edge associations for the CloudFront cache behavior. Each map must have:
+    - event_type: One of "viewer-request", "origin-request", "viewer-response", "origin-response"
+    - lambda_arn: ARN of the Lambda function (must be a valid Lambda function ARN)
+    - include_body: (optional) Boolean, whether to include the body, defaults to false
+  Example:
+    [
+      {
+        event_type   = "viewer-request"
+        lambda_arn   = "arn:aws:lambda:us-east-1:123456789012:function:my-function:1"
+        include_body = false
+      }
+    ]
+  EOF
+  type = list(object({
+    event_type   = string
+    lambda_arn   = string
+    include_body = optional(bool, false)
+  }))
+  default = []
+  validation {
+    condition = alltrue([
+      for assoc in var.cloudfront_cache_lambda_config :
+      contains(["viewer-request", "origin-request", "viewer-response", "origin-response"], assoc.event_type)
+    ])
+    error_message = "event_type must be one of: viewer-request, origin-request, viewer-response, origin-response."
+  }
+  validation {
+    condition = alltrue([
+      for assoc in var.cloudfront_cache_lambda_config :
+      can(regex("^arn:aws:lambda:[a-z0-9-]+:[0-9]{12}:function:[a-zA-Z0-9-_]+(:[0-9]+)?$", assoc.lambda_arn))
+    ])
+    error_message = "lambda_arn must be a valid Lambda function ARN."
+  }
+}
