@@ -88,6 +88,28 @@ resource "aws_cloudfront_distribution" "default" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+  dynamic "ordered_cache_behavior" {
+    for_each = length(var.cloudfront_cache_lambda_config) > 0 ? [1] : []
+    content {
+      path_pattern           = "*"
+      allowed_methods        = var.cloudfront_cache_allowed_methods
+      cached_methods         = var.cloudfront_cache_cached_methods
+      target_origin_id       = local.s3_origin_id
+      compress               = true
+      cache_policy_id        = aws_cloudfront_cache_policy.default.id
+      viewer_protocol_policy = "redirect-to-https"
+
+      dynamic "lambda_function_association" {
+        for_each = var.cloudfront_cache_lambda_config
+        content {
+          event_type   = lambda_function_association.value.event_type
+          lambda_arn   = lambda_function_association.value.lambda_arn
+          include_body = try(lambda_function_association.value.include_body, false)
+        }
+      }
+    }
+  }
+
   restrictions {
     geo_restriction {
       restriction_type = var.cloudfront_geo_restrictions_type
