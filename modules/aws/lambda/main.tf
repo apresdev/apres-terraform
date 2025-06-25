@@ -16,6 +16,7 @@ resource "aws_lambda_function" "default" {
   function_name = local.name
   role          = aws_iam_role.default.arn
   description   = var.description
+  region        = var.region
 
   architectures = var.architectures
   handler       = coalesce(var.handler, basename(local.artifact))

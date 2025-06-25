@@ -4,6 +4,7 @@ resource "aws_sqs_queue" "deadletter" {
   name              = "${local.name}-deadletter"
   fifo_queue        = false
   kms_master_key_id = "alias/apres/messaging"
+  region            = var.region
 
   tags = merge(
     local.tags,

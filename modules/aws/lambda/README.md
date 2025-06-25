@@ -271,22 +271,22 @@ The following best practices are suppress:
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0, < 2.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.89.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.0.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
-| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.1.0 |
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/2.0.0 |
+| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.2.0 |
 
 ## Resources
 
@@ -316,28 +316,29 @@ The following best practices are suppress:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
-| <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br/>  Valid values are ["x86\_64"] and ["arm64"].<br/>  Default is ["arm64"].<br/>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br/>  "arm64"<br/>]</pre> | no |
-| <a name="input_code_signing_arn_ssm_parameter"></a> [code\_signing\_arn\_ssm\_parameter](#input\_code\_signing\_arn\_ssm\_parameter) | Name of the SSM Parameter containing the code signing profile.<br/>  This should typically be left blank to use the default. | `string` | `""` | no |
-| <a name="input_code_signing_name_ssm_parameter"></a> [code\_signing\_name\_ssm\_parameter](#input\_code\_signing\_name\_ssm\_parameter) | Name of the SSM Parameter containing the ARN of the code signing config.<br/>    This should typically be left blank to use the default. | `string` | `""` | no |
+| <a name="input_architectures"></a> [architectures](#input\_architectures) | (Optional) Instruction set architecture for your Lambda function.<br>  Valid values are ["x86\_64"] and ["arm64"].<br>  Default is ["arm64"].<br>  Removing this attribute, function's architecture stay the same. | `list(string)` | <pre>[<br>  "arm64"<br>]</pre> | no |
+| <a name="input_code_signing_arn_ssm_parameter"></a> [code\_signing\_arn\_ssm\_parameter](#input\_code\_signing\_arn\_ssm\_parameter) | Name of the SSM Parameter containing the code signing profile.<br>  This should typically be left blank to use the default. | `string` | `""` | no |
+| <a name="input_code_signing_name_ssm_parameter"></a> [code\_signing\_name\_ssm\_parameter](#input\_code\_signing\_name\_ssm\_parameter) | Name of the SSM Parameter containing the ARN of the code signing config.<br>    This should typically be left blank to use the default. | `string` | `""` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"CloudWatchLogs"` | no |
 | <a name="input_description"></a> [description](#input\_description) | (Optional) Description of what your Lambda Function does. | `string` | `""` | no |
-| <a name="input_disable_code_signing"></a> [disable\_code\_signing](#input\_disable\_code\_signing) | WARNING! This should never be used in a production setting, this argument is for testing purposes<br/>     only. Unsigned source is deleted from S3 after 30 days, meaning if you do use this in production<br/>     your Lambda will stop functioning after 30 days. | `bool` | `false` | no |
+| <a name="input_disable_code_signing"></a> [disable\_code\_signing](#input\_disable\_code\_signing) | WARNING! This should never be used in a production setting, this argument is for testing purposes<br>     only. Unsigned source is deleted from S3 after 30 days, meaning if you do use this in production<br>     your Lambda will stop functioning after 30 days. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional) Map of environment variables that are accessible from the function code during execution.<br/>  If provided at least one key must be present. | `map(string)` | `null` | no |
-| <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.<br/>  This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB. | `number` | `512` | no |
+| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | (Optional) Map of environment variables that are accessible from the function code during execution.<br>  If provided at least one key must be present. | `map(string)` | `null` | no |
+| <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.<br>  This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB. | `number` | `512` | no |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | (Optional) Function entrypoint in your code. | `string` | `null` | no |
 | <a name="input_lambda_regional_environment"></a> [lambda\_regional\_environment](#input\_lambda\_regional\_environment) | Lambda Regional Environment Name, used to lookup regional code signing and S3 buckets. | `string` | `"WorkLoadConfig"` | no |
-| <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | (Optional) Amount of memory in MB your Lambda Function can use at runtime.<br/>  Defaults to 128. | `number` | `128` | no |
+| <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | (Optional) Amount of memory in MB your Lambda Function can use at runtime.<br>  Defaults to 128. | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the lambda function.  Used to name all dependent resources required by the function (e.g. DLQ, signing jobs, etc.) | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
-| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br/>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br/>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region to deploy to, using enhanced region support. Default is to use the provider configuration. | `string` | `""` | no |
+| <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
 | <a name="input_runtime"></a> [runtime](#input\_runtime) | Identifier of the function's runtime. | `string` | n/a | yes |
-| <a name="input_source_file"></a> [source\_file](#input\_source\_file) | The path of the lambda executable source file, such as a python script. The file will be zipped up and<br/>  uploaded to the S3 bucket for signing, and then used by the Lambda.<br/><br/>  This is mutually exclusive with the `zip_file` variable. If both are set, `source_file` will be used. | `string` | `""` | no |
-| <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Amount of time your Lambda Function has to run in seconds.<br/>  Defaults to 3 seconds. | `number` | `3` | no |
-| <a name="input_vpc"></a> [vpc](#input\_vpc) | Controls the lambda's VPC settings.<br/>    The enabled field controls whether the lambda runs in the private subnets of the VPC.  Defaults to false.<br/>    The environment\_tag is used to lookup the VPC based on the VPCs tag structure.  Required if enabled is true. | <pre>object({<br/>    enabled         = bool<br/>    environment_tag = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "environment_tag": null<br/>}</pre> | no |
-| <a name="input_zip_file"></a> [zip\_file](#input\_zip\_file) | The path of the a lambda executable zip file. This could contain any executable or archive that is supported<br/>  by the Lambda runtime. The file will be uploaded to the S3 bucket for signing, and then used by the Lambda.<br/><br/>  This is mutually exclusive with the `source_file` variable. If both are set, `source_file` will be used.<br/><br/>  If this is set, the `zip_file_hash` must also be included. | `string` | `""` | no |
-| <a name="input_zip_file_hash"></a> [zip\_file\_hash](#input\_zip\_file\_hash) | The hash, md5 preferred, of the `zip_file`. Because of ordering issues with Terraform, this module cannot<br/>    calculate the hash of the zip file itself using the Terraform md5file() function. If it did, the md5file()<br/>    function gets called before the terraform plan is generated, which will fail if the zip\_file is not already<br/>    on disk, like if it is downloaded using a terraform provider in the calling stack. | `string` | `""` | no |
+| <a name="input_source_file"></a> [source\_file](#input\_source\_file) | The path of the lambda executable source file, such as a python script. The file will be zipped up and<br>  uploaded to the S3 bucket for signing, and then used by the Lambda.<br><br>  This is mutually exclusive with the `zip_file` variable. If both are set, `source_file` will be used. | `string` | `""` | no |
+| <a name="input_timeout"></a> [timeout](#input\_timeout) | (Optional) Amount of time your Lambda Function has to run in seconds.<br>  Defaults to 3 seconds. | `number` | `3` | no |
+| <a name="input_vpc"></a> [vpc](#input\_vpc) | Controls the lambda's VPC settings.<br>    The enabled field controls whether the lambda runs in the private subnets of the VPC.  Defaults to false.<br>    The environment\_tag is used to lookup the VPC based on the VPCs tag structure.  Required if enabled is true. | <pre>object({<br>    enabled         = bool<br>    environment_tag = string<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "environment_tag": null<br>}</pre> | no |
+| <a name="input_zip_file"></a> [zip\_file](#input\_zip\_file) | The path of the a lambda executable zip file. This could contain any executable or archive that is supported<br>  by the Lambda runtime. The file will be uploaded to the S3 bucket for signing, and then used by the Lambda.<br><br>  This is mutually exclusive with the `source_file` variable. If both are set, `source_file` will be used.<br><br>  If this is set, the `zip_file_hash` must also be included. | `string` | `""` | no |
+| <a name="input_zip_file_hash"></a> [zip\_file\_hash](#input\_zip\_file\_hash) | The hash, md5 preferred, of the `zip_file`. Because of ordering issues with Terraform, this module cannot<br>    calculate the hash of the zip file itself using the Terraform md5file() function. If it did, the md5file()<br>    function gets called before the terraform plan is generated, which will fail if the zip\_file is not already<br>    on disk, like if it is downloaded using a terraform provider in the calling stack. | `string` | `""` | no |
 
 ## Outputs
 
@@ -349,6 +350,7 @@ The following best practices are suppress:
 | <a name="output_iam_role_name"></a> [iam\_role\_name](#output\_iam\_role\_name) | The name of the IAM role created for the lambda function |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | The ARN of the lambda function |
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | The name of the lambda function |
+| <a name="output_lambda_invoke_arn"></a> [lambda\_invoke\_arn](#output\_lambda\_invoke\_arn) | The ARN to be used for invoking Lambda Function from API Gateway - to be used in `aws_api_gateway_integration`'s `uri`. |
 | <a name="output_security_group_arn"></a> [security\_group\_arn](#output\_security\_group\_arn) | The ARN of the security group created for the lambda function if VPC attachment is used, else null. |
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | The ID of the security group created for the lambda function if VPC attachment is used, else null. |
 <!-- END_TF_DOCS -->

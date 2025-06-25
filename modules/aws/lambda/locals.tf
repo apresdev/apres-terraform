@@ -11,9 +11,10 @@ locals {
   )
 
   use_vpc         = var.vpc != null && var.vpc.enabled == true
-  region          = data.aws_region.current.name
   account_id      = data.aws_caller_identity.current.account_id
   name            = module.apres_names.local_name
+  # Need a region for the workload bucket, so either use the one passed in as destination or the current one.
+  region          = var.region == "" ? data.aws_region.current.region : var.region
   artifact_bucket = "${local.account_id}-${lower(var.lambda_regional_environment)}-${local.region}-lambda-artifacts"
   artifact_key    = "unsigned/${local.name}.zip"
 
@@ -28,7 +29,7 @@ locals {
 
 module "apres_names" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/1.0.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names?ref=rel/apres_names/2.0.0"
   name        = var.name
   environment = var.environment
 }

@@ -225,6 +225,11 @@ variable "lambda_regional_environment" {
   }
 }
 
+variable "region" {
+  description = "Region to deploy to, using enhanced region support. Default is to use the provider configuration."
+  type        = string
+  default     = ""
+}
 
 # BEGIN_COMMON_VARS
 variable "extra_tags" {

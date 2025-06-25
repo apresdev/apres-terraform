@@ -12,7 +12,7 @@ variable "enable_vpc" {
 
 variable "vpc_environment_tag" {
   type    = string
-  default = "Test"
+  default = "Dev"
 }
 
 variable "use_zip" {

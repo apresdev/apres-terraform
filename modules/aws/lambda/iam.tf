@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "default" {
       test     = "ArnEquals"
       variable = "lambda:SourceFunctionArn"
       values = [
-        "arn:aws:lambda:${local.region}:${local.account_id}:function:${local.name}"
+        "arn:aws:lambda:${var.region}:${local.account_id}:function:${local.name}"
       ]
     }
   }

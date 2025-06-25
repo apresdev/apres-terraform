@@ -4,6 +4,7 @@ resource "aws_s3_object" "unsigned" {
   bucket = local.artifact_bucket
   key    = local.artifact_key
   source = local.artifact
+  region = var.region
 
   tags = merge(
     local.tags,
@@ -40,6 +41,7 @@ moved {
 resource "aws_signer_signing_job" "default" {
   count        = var.disable_code_signing ? 0 : 1
   profile_name = data.aws_ssm_parameter.signing_profile_name[0].value
+  region       = var.region
 
   source {
     s3 {

@@ -8,6 +8,7 @@ resource "aws_security_group" "default" {
   name        = "${local.name}-Lambda-Function"
   description = "Security group for Lambda ${local.name}"
   vpc_id      = data.aws_vpc.default[0].id
+  region      = var.region
 
   egress {
     description = "Allow all traffic out"
