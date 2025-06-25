@@ -48,7 +48,7 @@ func setTfOpts(name string, environment string, awsAccountId string, awsRegion s
 			"name":           name,
 			"environment":    environment,
 			"aws_account_id": awsAccountId,
-			"aws_region":     awsRegion,
+			"region":     awsRegion,
 		},
 	}
 }
