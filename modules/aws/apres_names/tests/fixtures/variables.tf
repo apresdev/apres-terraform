@@ -22,7 +22,7 @@ variable "aws_account_id" {
   default     = ""
 }
 
-variable "aws_region" {
+variable "region" {
   description = "AWS Region. If not set, the current region will be used."
   type        = string
   default     = ""
