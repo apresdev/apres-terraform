@@ -22,20 +22,20 @@ The following permissions are required to use this module, shown as a Policy sni
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0, < 2.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.41.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.0.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/2.0.0 |
 
 ## Resources
 
@@ -57,6 +57,7 @@ The following permissions are required to use this module, shown as a Policy sni
 | <a name="input_name"></a> [name](#input\_name) | Description name of the CloudWatch Logs Group, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
 | <a name="input_path"></a> [path](#input\_path) | Path of the CloudWatch Logs Group, should be a path like /acme/blah | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Region to deploy to, using enhanced region support. Default is to use the provider configuration. | `string` | `""` | no |
 | <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | The number of days to retain the log events in the log group. Valid values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653. | `number` | `30` | no |
 
 ## Outputs
