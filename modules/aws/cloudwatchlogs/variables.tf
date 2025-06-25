@@ -86,3 +86,10 @@ variable "cwl_kms_alias_name" {
   type        = string
   default     = "alias/apres/cloudwatchlogs"
 }
+
+variable "region" {
+  description = "Region to deploy to, using enhanced region support. Default is to use the provider configuration."
+  type        = string
+  default     = ""
+
+}
