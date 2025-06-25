@@ -16,13 +16,13 @@ are external, they can be set as variables and used to calculate the global reso
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0, < 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.0.0 |
 
 ## Modules
 
@@ -40,9 +40,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | Twelve digit AWS Account ID. If not set, the current account will be used. | `string` | `""` | no |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region. If not set, the current region will be used. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name used to create resources | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | AWS Region. If not set, the current region will be used. | `string` | `""` | no |
 
 ## Outputs
 
