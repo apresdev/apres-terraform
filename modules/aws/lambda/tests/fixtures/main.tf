@@ -33,6 +33,8 @@ module "lambda" {
     "OTHER" : "true"
   }
 
+  is_lambda_at_edge = var.is_lambda_at_edge
+
   vpc = {
     enabled         = var.enable_vpc
     environment_tag = var.vpc_environment_tag

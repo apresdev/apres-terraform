@@ -73,6 +73,22 @@ The details of how the networking configuration works:
   security group attached, leaving the pre-existing ENI's with the old security group still attached. Worse, the
   new ENI's are never marked for deletion, and will remain in your AWS account until you manually delete them.
 
+# Lambda@Edge
+
+Lambda@Edge has some restrictions, which are enabled by setting the `is_lambda_at_edge` variable to true. The
+following changes are enforced:
+* the Lambda will be deployed in us-east-1, regardless of what `region` is set to.
+* the service principal `edgelambda.amazonaws.com` will be added to the IAM execution role.
+* VPC connectivity will be ignored.
+* Dead letter queues will not be created.
+* Environment variables will not be set, and additions passed in via the `environment_variables`
+  variable will be ignored.
+* ARM64 architecture is not supported, `architectures` must be set to `x86_64`. The developer
+  must ensure any binaries are compiled to the correct architecture, there is no preflight
+  check for this.
+
+See [Restrictions on Lambda@Edge](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-edge-function-restrictions.html) for more details.
+
 # AWS IAM Permissions
 
 The following permissions are required to use this module, shown as a Policy snippet in JSON.
@@ -286,7 +302,7 @@ The following best practices are suppress:
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/2.0.0 |
-| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.2.0 |
+| <a name="module_cloudwatch_log"></a> [cloudwatch\_log](#module\_cloudwatch\_log) | git@github.com:apresdev/apres-terraform.git//modules/aws/cloudwatchlogs | rel/cloudwatchlogs/1.2.1 |
 
 ## Resources
 
@@ -327,11 +343,12 @@ The following best practices are suppress:
 | <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | (Optional) The amount of Ephemeral storage (mounted as /tmp) to allocate for the Lambda Function in MB.<br>  This parameter is used to expand the total amount of Ephemeral storage available, beyond the default amount of 512MB. | `number` | `512` | no |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | (Optional) Function entrypoint in your code. | `string` | `null` | no |
+| <a name="input_is_lambda_at_edge"></a> [is\_lambda\_at\_edge](#input\_is\_lambda\_at\_edge) | Lambda@Edge has restrictions and limitations, setting this to true enables the restrictions so the Lambda can be used in a Lambda@Edge scenario. | `bool` | `false` | no |
 | <a name="input_lambda_regional_environment"></a> [lambda\_regional\_environment](#input\_lambda\_regional\_environment) | Lambda Regional Environment Name, used to lookup regional code signing and S3 buckets. | `string` | `"WorkLoadConfig"` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | (Optional) Amount of memory in MB your Lambda Function can use at runtime.<br>  Defaults to 128. | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the lambda function.  Used to name all dependent resources required by the function (e.g. DLQ, signing jobs, etc.) | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | `"Engineering"` | no |
-| <a name="input_region"></a> [region](#input\_region) | Region to deploy to, using enhanced region support. Default is to use the provider configuration. | `string` | `""` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region to deploy to, using enhanced region support. Default is to use the provider configuration.<br>  Note that if `is_lambda_at_edge` is set to true, this variable is ignored and the resources<br>  will be deployed to us-east-1, as required by AWS. | `string` | `""` | no |
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | (Optional) Amount of reserved concurrent executions for this lambda function.<br>  A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations.<br>  Defaults to Unreserved Concurrency Limits -1. | `number` | `-1` | no |
 | <a name="input_runtime"></a> [runtime](#input\_runtime) | Identifier of the function's runtime. | `string` | n/a | yes |
 | <a name="input_source_file"></a> [source\_file](#input\_source\_file) | The path of the lambda executable source file, such as a python script. The file will be zipped up and<br>  uploaded to the S3 bucket for signing, and then used by the Lambda.<br><br>  This is mutually exclusive with the `zip_file` variable. If both are set, `source_file` will be used. | `string` | `""` | no |

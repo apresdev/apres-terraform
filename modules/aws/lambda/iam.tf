@@ -1,3 +1,7 @@
+locals {
+  principals = var.is_lambda_at_edge ? ["lambda.amazonaws.com", "edgelambda.amazonaws.com"] : ["lambda.amazonaws.com"]
+}
+
 # This allows lambda to assume the IAM role.
 data "aws_iam_policy_document" "assume_role" {
 
@@ -7,7 +11,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     principals {
       type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
+      identifiers = local.principals
     }
 
     actions = ["sts:AssumeRole"]
@@ -46,17 +50,21 @@ data "aws_iam_policy_document" "default" {
     ]
   }
 
-  # Give the lambda function permission to send messages to the DLQ
-  statement {
-    effect = "Allow"
+  # Give the lambda function permission to send messages to the DLQ, if
+  # it's not Lambda@Edge
+  dynamic "statement" {
+    for_each = var.is_lambda_at_edge ? [] : [1]
+    content {
+      effect = "Allow"
 
-    actions = [
-      "sqs:SendMessage"
-    ]
+      actions = [
+        "sqs:SendMessage"
+      ]
 
-    resources = [
-      aws_sqs_queue.deadletter.arn
-    ]
+      resources = [
+        aws_sqs_queue.deadletter[0].arn
+      ]
+    }
   }
 
   #checkov:skip=CKV_AWS_111:Ensure IAM policies does not allow write access without constraints

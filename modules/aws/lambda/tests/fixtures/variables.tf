@@ -12,10 +12,15 @@ variable "enable_vpc" {
 
 variable "vpc_environment_tag" {
   type    = string
-  default = "Dev"
+  default = "Test"
 }
 
 variable "use_zip" {
+  type    = bool
+  default = false
+}
+
+variable "is_lambda_at_edge" {
   type    = bool
   default = false
 }

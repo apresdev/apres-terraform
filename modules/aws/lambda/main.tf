@@ -16,7 +16,7 @@ resource "aws_lambda_function" "default" {
   function_name = local.name
   role          = aws_iam_role.default.arn
   description   = var.description
-  region        = var.region
+  region        = local.region
 
   architectures = var.architectures
   handler       = coalesce(var.handler, basename(local.artifact))
@@ -54,8 +54,11 @@ resource "aws_lambda_function" "default" {
   }
 
   # CKV_AWS_116: "Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)"
-  dead_letter_config {
-    target_arn = aws_sqs_queue.deadletter.arn
+  dynamic "dead_letter_config" {
+    for_each = var.is_lambda_at_edge ? [] : [1]
+    content {
+      target_arn = aws_sqs_queue.deadletter[0].arn
+    }
   }
 
   # CKV_AWS_173: "Check encryption settings for Lambda environmental variable"
@@ -68,15 +71,18 @@ resource "aws_lambda_function" "default" {
   source_code_hash        = var.disable_code_signing ? var.zip_file_hash : ""
 
   # CKV_AWS_45: "Ensure no hard-coded secrets exist in lambda environment"
-  environment {
-    variables = merge({
-      AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id,
-      ENVIRONMENT    = var.environment,
-      APPLICATION    = var.application,
-      COMPONENT      = var.component,
-      },
-      var.environment_variables
-    )
+  dynamic "environment" {
+    for_each = var.is_lambda_at_edge ? [] : [1]
+    content {
+      variables = merge({
+        AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id,
+        ENVIRONMENT    = var.environment,
+        APPLICATION    = var.application,
+        COMPONENT      = var.component,
+        },
+        var.environment_variables
+      )
+    }
   }
 
   logging_config {
