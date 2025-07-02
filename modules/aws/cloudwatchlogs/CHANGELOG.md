@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.1 - 2025-07-02
+
+Fix region lookup for KMS key when in specifying a different region.
+
 ## 1.2.0 - 2025-06-25
 
 Upgrade AWS provider to v6 and add region support.
