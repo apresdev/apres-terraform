@@ -19,3 +19,8 @@ variable "use_zip" {
   type    = bool
   default = false
 }
+
+variable "is_lambda_at_edge" {
+  type    = bool
+  default = false
+}

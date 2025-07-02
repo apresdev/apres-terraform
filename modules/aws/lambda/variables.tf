@@ -225,6 +225,21 @@ variable "lambda_regional_environment" {
   }
 }
 
+variable "region" {
+  description = <<EOF
+  Region to deploy to, using enhanced region support. Default is to use the provider configuration.
+  Note that if `is_lambda_at_edge` is set to true, this variable is ignored and the resources
+  will be deployed to us-east-1, as required by AWS.
+  EOF
+  type        = string
+  default     = ""
+}
+
+variable "is_lambda_at_edge" {
+  description = "Lambda@Edge has restrictions and limitations, setting this to true enables the restrictions so the Lambda can be used in a Lambda@Edge scenario."
+  type        = bool
+  default     = false
+}
 
 # BEGIN_COMMON_VARS
 variable "extra_tags" {

@@ -34,10 +34,10 @@ output "security_group_arn" {
 
 output "deadletter_queue_id" {
   description = "The ID of the dead letter queue."
-  value       = aws_sqs_queue.deadletter.id
+  value       = var.is_lambda_at_edge ? null : aws_sqs_queue.deadletter[0].id
 }
 
 output "deadletter_queue_arn" {
   description = "The ARN of the dead letter queue."
-  value       = aws_sqs_queue.deadletter.arn
+  value       = var.is_lambda_at_edge ? null : aws_sqs_queue.deadletter[0].arn
 }
