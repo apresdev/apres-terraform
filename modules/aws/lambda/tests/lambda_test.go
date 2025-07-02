@@ -38,14 +38,59 @@ func (s *LambdaTestSuite) SetupSuite() {
 	// Define the AWS region we want to test in
 	s.awsRegion = "us-east-2"
 	s.environment = "UnitTest"
+}
 
-	// Terratest has a handy way to create clients, but it's SDK v1, and doesn't place nice with SSO,
-	// so we'll use the v2 SDK directly.
-	cfg, err := config.LoadDefaultConfig(s.ctx, config.WithRegion(s.awsRegion))
-	s.Require().NoError(err, "expected no error for LoadDefaultConfig creating AWS session")
+func (s *LambdaTestSuite) TestLambdaAtEdgeSourceFile() {
+	now := time.Now().Unix()
+	functionNameInput := fmt.Sprintf("test-%d", now)
+	// Terraform options
+	terraformOptions := &terraform.Options{
+		TerraformBinary: "tofu",
+		TerraformDir:    "./fixtures",
 
-	// Configure the AWS clients
+		// Variables to pass to our Terraform code using -var options
+		Vars: map[string]interface{}{
+			"name":              functionNameInput,
+			"environment":       s.environment,
+			"enable_vpc":        false,
+			"use_zip":           false,
+			"is_lambda_at_edge": true,
+		},
+	}
+
+	// At the end of the test, run `terraform destroy` to clean up any resources that were created
+	defer terraform.Destroy(s.T(), terraformOptions)
+	terraform.InitAndApply(s.T(), terraformOptions)
+
+	lambdaFunctionName := terraform.Output(s.T(), terraformOptions, "lambda_function_name")
+	lambdaFunctionArn := terraform.Output(s.T(), terraformOptions, "lambda_function_arn")
+	account := terraform.Output(s.T(), terraformOptions, "aws_account_id")
+
+	// Since this is Lambda@Edge which must be in us-east-1, recreate the lambda client
+	// with the correct region.
+	cfg, err := config.LoadDefaultConfig(s.ctx, config.WithRegion("us-east-1"))
+	s.Require().NoError(err)
 	s.lambda = lambda.NewFromConfig(cfg)
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Verify the outputs. Lambda@Edge must be us-east-1
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn, "us-east-1")
+
+	s.assertFunction(
+		lambdaFunctionArn,
+
+		// Assertions
+		mustNotHaveEnvironmentVariables,
+		mustHaveCodeSigning,
+		mustHaveTracingEnabled,
+		mustNotHaveDeadLetterQueue,
+		mustNotUseVpcByDefault,
+		mustHaveApresTags,
+		mustHaveLogGroup(lambdaFunctionName),
+		mustHaveX86Architecture,
+	)
+	s.assertInvokeFunction(lambdaFunctionArn)
 }
 
 func (s *LambdaTestSuite) TestLambdaNoVPCSourceFile() {
@@ -79,10 +124,14 @@ func (s *LambdaTestSuite) TestLambdaNoVPCSourceFile() {
 	lambdaFunctionArn := terraform.Output(s.T(), terraformOptions, "lambda_function_arn")
 	account := terraform.Output(s.T(), terraformOptions, "aws_account_id")
 
+	cfg, err := config.LoadDefaultConfig(s.ctx, config.WithRegion(s.awsRegion))
+	s.Require().NoError(err)
+	s.lambda = lambda.NewFromConfig(cfg)
+
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Verify the outputs.
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn)
+	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn, s.awsRegion)
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get the function attributes.
@@ -144,10 +193,13 @@ func (s *LambdaTestSuite) TestLambdaWithVPCZipFile() {
 	lambdaFunctionArn := terraform.Output(s.T(), terraformOptions, "lambda_function_arn")
 	account := terraform.Output(s.T(), terraformOptions, "aws_account_id")
 
+	cfg, err := config.LoadDefaultConfig(s.ctx, config.WithRegion(s.awsRegion))
+	s.Require().NoError(err)
+	s.lambda = lambda.NewFromConfig(cfg)
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Verify the outputs.
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn)
+	s.assertOutputs(account, functionNameInput, lambdaFunctionName, lambdaFunctionArn, s.awsRegion)
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get the function attributes.
@@ -179,11 +231,11 @@ func (s *LambdaTestSuite) TestLambdaWithVPCZipFile() {
 }
 
 // assertOutputs verifies that all output variables are set correctly.
-func (s *LambdaTestSuite) assertOutputs(account string, functionNameInput string, functionName string, functionArn string) {
+func (s *LambdaTestSuite) assertOutputs(account string, functionNameInput string, functionName string, functionArn string, region string) {
 	expectedFunctionName := fmt.Sprintf("%s-%s", s.environment, functionNameInput)
 	s.Assert().Equal(expectedFunctionName, functionName, "expected bucket name to match")
 
-	expectedTableArn := fmt.Sprintf("arn:aws:lambda:%s:%s:function:%s", s.awsRegion, account, expectedFunctionName)
+	expectedTableArn := fmt.Sprintf("arn:aws:lambda:%s:%s:function:%s", region, account, expectedFunctionName)
 	s.Assert().Equal(expectedTableArn, functionArn, "expected Table ARN to match")
 }
 
@@ -206,8 +258,8 @@ func (s *LambdaTestSuite) assertInvokeFunction(functionArn string) {
 		Payload:      []byte("[]"),
 	})
 
-	s.Require().NoError(err, "inoke function must pass")
-	s.Require().NotNil(resp, "inoke function response must not be nil")
+	s.Require().NoError(err, "invoke function must pass")
+	s.Require().NotNil(resp, "invoke function response must not be nil")
 
 	s.Assert().Equal(int32(200), resp.StatusCode, "function should return 200 OK")
 	s.Assert().Equal("{\"status\": 200, \"body\": \"success\"}", string(resp.Payload), "function should return 'success'")
@@ -220,6 +272,17 @@ type LambdaAssertion func(*testing.T, *lambda.GetFunctionOutput)
 func mustHaveEncryptedEnvironmentVariables(t *testing.T, output *lambda.GetFunctionOutput) {
 	require.NotNil(t, output.Configuration)
 	assert.NotEmpty(t, output.Configuration.KMSKeyArn, "must have a KMS key to encrypt environment variables")
+}
+
+func mustHaveX86Architecture(t *testing.T, output *lambda.GetFunctionOutput) {
+	require.NotNil(t, output.Configuration)
+	require.Len(t, output.Configuration.Architectures, 1)
+	require.Equal(t, types.ArchitectureX8664, output.Configuration.Architectures[0], "Lambda@Edge only supports x86_64 architecture")
+}
+
+func mustNotHaveEnvironmentVariables(t *testing.T, output *lambda.GetFunctionOutput) {
+	require.NotNil(t, output.Configuration)
+	assert.Empty(t, output.Configuration.Environment, "Lambda@Edge must not have environment variables")
 }
 
 // mustHaveCodeSigning ensures that the Lambda function's has code signing enabled
@@ -241,6 +304,11 @@ func mustHaveDeadLetterQueue(t *testing.T, output *lambda.GetFunctionOutput) {
 	require.NotNil(t, output.Configuration)
 	require.NotNil(t, output.Configuration.DeadLetterConfig)
 	assert.NotEmpty(t, output.Configuration.DeadLetterConfig.TargetArn, "must have a code signing job")
+}
+
+func mustNotHaveDeadLetterQueue(t *testing.T, output *lambda.GetFunctionOutput) {
+	require.NotNil(t, output.Configuration)
+	require.Nil(t, output.Configuration.DeadLetterConfig)
 }
 
 // mustHaveLogGroup ensures that the Lambda function has a log group setup
@@ -279,8 +347,6 @@ func mustUseVpc(t *testing.T, output *lambda.GetFunctionOutput) {
 // mustTags ensures that the Lambda function has the apres tags
 func mustHaveApresTags(t *testing.T, output *lambda.GetFunctionOutput) {
 	require.NotNil(t, output.Configuration)
-	require.NotNil(t, output.Configuration.DeadLetterConfig)
-	assert.NotEmpty(t, output.Configuration.DeadLetterConfig.TargetArn, "must have a code signing job")
 
 	// Tag structs are specific to the service, so convert to awstagging.TagItem
 	tags := make([]awstagging.TagItem, 0)
