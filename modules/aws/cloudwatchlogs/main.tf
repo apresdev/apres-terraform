@@ -9,7 +9,8 @@ locals {
       "managed-by"  = "Terraform"
     })
   )
-  kms_alias_arn = "arn:aws:kms:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${var.cwl_kms_alias_name}"
+  region        = var.region == "" ? data.aws_region.current.region : var.region
+  kms_alias_arn = "arn:aws:kms:${local.region}:${data.aws_caller_identity.current.account_id}:${var.cwl_kms_alias_name}"
 }
 
 module "apres_names" {
