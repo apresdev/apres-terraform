@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.0 - 2025-07-02
+
+Upgrade the AWS provider to v6 and add support for Lambda@Edge.
+
 ## 1.1.2 - 2025-04-01
 
 Bug fix to add source hash in test situations.
