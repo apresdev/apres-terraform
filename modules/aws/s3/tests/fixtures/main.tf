@@ -6,6 +6,8 @@ module "s3" {
   owner       = "Testing"
   application = "UnitTests"
   component   = "S3"
+  region      = data.aws_region.current.id
+  account_id  = data.aws_caller_identity.current.account_id
   lifecycle_rule = {
     enabled = true
   }
@@ -59,6 +61,8 @@ module "s3_destination" {
   owner                    = "Testing"
   application              = "UnitTests"
   component                = "S3"
+  region                   = data.aws_region.current.id
+  account_id               = data.aws_caller_identity.current.account_id
   encryption_sse_algorithm = "SSE-KMS"
   encryption_kms_key_arn   = aws_kms_key.destination[0].arn
   lifecycle_rule = {

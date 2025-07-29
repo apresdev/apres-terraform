@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 4.3.0 - 2025-07-29
+
+Add mandatory account and region variables, to prevent recreating buckets when Terraform or OpenTofu defers the lookup.
+
 ## 4.2.0 - 2025-04-07
 
 Switch the flag used to determine if the replication source bucket is in a different account to a boolean to deal with terraform race conditions.

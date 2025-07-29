@@ -9,7 +9,7 @@ locals {
       owner       = var.owner
     })
   )
-  bucket_name = "${data.aws_caller_identity.current.account_id}-${lower(var.environment)}-${data.aws_region.current.name}-${lower(var.name)}"
+  bucket_name = "${var.account_id}-${lower(var.environment)}-${var.region}-${lower(var.name)}"
 
   name = module.apres_names.local_name
 
