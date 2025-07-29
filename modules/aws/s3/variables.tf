@@ -317,3 +317,27 @@ variable "replication_source_config" {
     replication_prefix                   = ""
   }
 }
+
+variable "account_id" {
+  description = <<EOF
+    The 12 digit AWS Account ID where the module is deployed, used in the name of the bucket.
+    While ideally this module could use just the data source to lookup the Account ID, there are times
+    when Terraform or OpenTofu will defer looking up the Account ID until the apply phase, and mark
+    the bucket for replacement, which will result in data loss.
+  EOF
+  type        = string
+  validation {
+    condition     = can(regex("^\\d{12}$", var.account_id))
+    error_message = "The account_id must be exactly 12 digits."
+  }
+}
+
+variable "region" {
+  description = <<EOF
+    The AWS Region, like `us-east-2` where the module is deployed, used in the name of the bucket.
+    While ideally this module could use just the data source to lookup the region, there are times
+    when Terraform or OpenTofu will defer looking up the region until the apply phase, and mark
+    the bucket for replacement, which will result in data loss.
+  EOF
+  type        = string
+}
