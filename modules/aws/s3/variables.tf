@@ -327,7 +327,7 @@ variable "account_id" {
   EOF
   type        = string
   validation {
-    condition     = can(regex("^[0-9]+12$", var.account_id))
+    condition     = can(regex("^\\d{12}$", var.account_id))
     error_message = "The account_id must be exactly 12 digits."
   }
 }
