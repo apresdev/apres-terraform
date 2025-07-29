@@ -84,6 +84,9 @@ The following best practices ARE NOT implemented:
 
 ### 1.2.1. Simple bucket with all the defaults
 ```hcl
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "s3" {
   source       = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
   name         = "my-bucket"
@@ -91,12 +94,17 @@ module "s3" {
   application  = "MyApplication"
   component    = "Storage"
   owner        = "Engineering"
+  account      = data.aws_caller_identity.current.account_id
+  region       = data.aws_caller_identity.current.id
 }
 ```
 
 ### 1.2.2. Set Lifecycle Rules
 Delete objects after 365 days, do not transition to Intelligent Tiering
 ```hcl
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "s3" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
   name        = "my-bucket"
@@ -104,6 +112,8 @@ module "s3" {
   application = "MyApplication"
   component   = "Storage"
   owner       = "Engineering"
+  account     = data.aws_caller_identity.current.account_id
+  region      = data.aws_caller_identity.current.id
   lifecycle_rule = {
     enabled                                = true
     object_delete_days                     = 365
@@ -114,6 +124,9 @@ module "s3" {
 
 ### 1.2.3. Override the default LifeCycle Rule
 ```hcl
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "s3" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
   name        = "my-bucket"
@@ -121,6 +134,8 @@ module "s3" {
   application = "MyApplication"
   component   = "Storage"
   owner       = "Engineering"
+  account     = data.aws_caller_identity.current.account_id
+  region      = data.aws_caller_identity.current.id
   lifecycle_rule = {
     enabled = false
   }
@@ -140,6 +155,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
 
 ### 1.2.4. Allow pre-signed object uploads from the browser
 ```hcl
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "s3" {
   source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/3.0.0"
   name        = "my-bucket"
@@ -147,6 +165,8 @@ module "s3" {
   application = "MyApplication"
   component   = "Storage"
   owner       = "Engineering"
+  account     = data.aws_caller_identity.current.account_id
+  region      = data.aws_caller_identity.current.id
   cors_rules = [
     {
       allowed_methods = ["PUT"]
@@ -374,6 +394,7 @@ The following permissions are required to use this module, shown as a Policy sni
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_account_id"></a> [account\_id](#input\_account\_id) | The 12 digit AWS Account ID where the module is deployed, used in the name of the bucket.<br/>    While ideally this module could use just the data source to lookup the Account ID, there are times<br/>    when Terraform or OpenTofu will defer looking up the Account ID until the apply phase, and mark<br/>    the bucket for replacement, which will result in data loss. | `string` | n/a | yes |
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_cors_rules"></a> [cors\_rules](#input\_cors\_rules) | The cors\_rule configuration block supports the following arguments:<br/><br/>  allowed\_headers - (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.<br/>  allowed\_methods - (Required) Set of HTTP methods that you allow the origin to execute. Valid values are GET, PUT, HEAD, POST, and DELETE.<br/>  allowed\_origins - (Required) Set of origins you want customers to be able to access the bucket from.<br/>  expose\_headers - (Optional) Set of headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object). | <pre>list(object({<br/>    allowed_headers = optional(list(string), ["*"])<br/>    allowed_methods = list(string)<br/>    allowed_origins = list(string)<br/>    expose_headers  = optional(list(string), [])<br/>  }))</pre> | `[]` | no |
@@ -385,6 +406,7 @@ The following permissions are required to use this module, shown as a Policy sni
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Flag to indicate if MFA delete is enabled. While this should be set to true, there is a race condition<br/>  where the deploy fails to create bucket versioning if this is set to true. If you need this set to true, then<br/>  you'll need to deploy it in two steps. First create the bucket with mfa\_delete=false, then set mfa\_delete=true<br/>  and deploy again. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the bucket | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | The AWS Region, like `us-east-2` where the module is deployed, used in the name of the bucket.<br/>    While ideally this module could use just the data source to lookup the region, there are times<br/>    when Terraform or OpenTofu will defer looking up the region until the apply phase, and mark<br/>    the bucket for replacement, which will result in data loss. | `string` | n/a | yes |
 | <a name="input_replication_destination_config"></a> [replication\_destination\_config](#input\_replication\_destination\_config) | Object to configure the bucket as the destination of replication. All attributes are ignored if `enabled` is false.<br/><br/>  Attributes:<br/>  * enabled - set to true if this is the destination bucket, else replication will not be enabled.<br/>  * source\_bucket\_in\_other\_account - Set to true if the AWS Account ID of the source bucket is different from<br/>    the destination bucket.<br/>  * source\_bucket\_arn - The ARN of the source bucket.<br/>  * source\_service\_role\_arn - The ARN of the service role that will be used to replicate objects. Note that<br/>    depending on how the role was created, it could be two different patterns:<br/>    * arn:aws:iam::account-id:role/role-name - created with the CLI or via this module<br/>    * arn:aws:iam::account-id:role/service-role/role-name - created with the Console<br/>    See the output `replication_source_iam_role` for the IAM role created by this module on the source bucket. | <pre>object({<br/>    enabled                        = bool<br/>    source_bucket_in_other_account = bool<br/>    source_bucket_arn              = string<br/>    source_service_role_arn        = string<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "source_bucket_arn": "",<br/>  "source_bucket_in_other_account": false,<br/>  "source_service_role_arn": ""<br/>}</pre> | no |
 | <a name="input_replication_source_config"></a> [replication\_source\_config](#input\_replication\_source\_config) | Object to configure the bucket as the source of replication. All attributes are ignored if `enabled` is false.<br/>  Attributes:<br/>  * enabled - set to true if this is the source bucket, else replication will not be enabled.<br/>  * destination\_account\_id - The AWS Account ID where the destination bucket is homed.<br/>  * destination\_bucket\_arn - The ARN of the destination bucket.<br/>  * destination\_encryption\_sse\_algorithm - The encryption algorithm to use for encryption on the destination bucket.<br/>    This must match what the destination bucket is configured for. Options are "SSE-S3", "SSE-KMS", or "DSSE-KMS". See<br/>    the variable `encryption_sse_algorithm` for more information. Note that "SSE-S3" is not supported for cross-account<br/>    replication.<br/>  * destination\_kms\_key\_arn - The ARN of the KMS key to use for server-side encryption in the destination bucket. This<br/>    can be the Key or Alias ARN. If the encryption on the destination bucket is "SSE-KMS", and the destination bucket<br/>    is in a different AWS account, aliases cannot be used, or the replication will fail. You MUST<br/>    specify the KMS Key ARN, NOT an alias.<br/>  * destination\_region - The region of the destination bucket.<br/>  * owner\_translation - If true, ownership (AWS Account ID) of the object in the destination bucket will be set to the owner<br/>    of the destination bucket. If false, the owner of the object written in the destination bucket will be that<br/>    of the source bucket.<br/>  * replication\_prefix - The prefix to apply to the replication configuration, default is everything. Include wildcards<br/>    if necessary. For example "Tax/" or "Tax*" are both legitimate.<br/>  * replicate\_delete\_markers - Flag to indicate if delete markers should be replicated, which means objects<br/>    deleted in the source bucket will also be deleted in the destination bucket. | <pre>object({<br/>    enabled                              = bool<br/>    destination_account_id               = string<br/>    destination_bucket_arn               = string<br/>    destination_encryption_sse_algorithm = string<br/>    destination_kms_key_arn              = string<br/>    destination_region                   = string<br/>    owner_translation                    = bool<br/>    replicate_delete_markers             = bool<br/>    replication_prefix                   = string<br/>  })</pre> | <pre>{<br/>  "destination_account_id": "",<br/>  "destination_bucket_arn": "",<br/>  "destination_encryption_sse_algorithm": "",<br/>  "destination_kms_key_arn": "",<br/>  "destination_region": "",<br/>  "enabled": false,<br/>  "owner_translation": true,<br/>  "replicate_delete_markers": false,<br/>  "replication_prefix": ""<br/>}</pre> | no |
 | <a name="input_set_default_bucket_policy"></a> [set\_default\_bucket\_policy](#input\_set\_default\_bucket\_policy) | A bucket policy can only be set in one place, or it'll get overwritten. For some cases you may need to add statements<br/>  that include ARN's of other resources. If that's the case, set this to false, and then use the output<br/>  `default_bucket_policy` to include in your own policy.<br/><br/>  If replication is desired and this is set to false, you must include the `replication_bucket_policy` output in your<br/>  bucket policy as well, else replication will not succeed!<br/><br/>  For example, in your code:<pre>hcl<br/>    module "s3" {<br/>      # ...<br/>      set_default_bucket_policy = false<br/>    }<br/><br/>    data "aws_iam_policy_document" "default" {<br/>      # your statements here<br/>    }<br/><br/>    resource "aws_s3_bucket_policy" "default" {<br/>      bucket = module.s3.bucket_name<br/>      policy = data.aws_iam_policy_document.default.json<br/>      source_policy_documents = [ module.s3.default_bucket_policy ]<br/>    }</pre>The statement SID's must be unique, the SID used in the default policy is "DenyUnSecureCommunications". | `bool` | `true` | no |
