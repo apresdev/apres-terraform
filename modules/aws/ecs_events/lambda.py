@@ -1,17 +1,20 @@
 import boto3
 
-namespace = "Apres/ECS"
-metric_name = "TaskNonZeroExitCode"
+NAMESPACE = "Apres/ECS"
+METRIC_NAME = "TaskNonZeroExitCode"
 
 def lambda_handler(event, context):
+    """
+    Lambda function to process ECS Task State Change events and report non-zero exit codes to CloudWatch Metrics.
+    """
     if event['source'] != 'aws.ecs':
         raise ValueError('Function only supports input from events with a source type of: aws.ecs')
 
     if event['detail-type'] != 'ECS Task State Change':
-        print('This function only cares about events with a detail type of: "ECS Task State Change", ignoring event {}'.format(event['detail-type']))
+        print(f'This function only cares about events with a detail type of: "ECS Task State Change", ignoring event {event['detail-type']}')
         return {
             'status': 200,
-            'body': 'Ignoring event of type {}'.format(event['detail-type'])
+            'body': f'Ignoring event of type {event['detail-type']}'
         }
 
     # Get cluster and task ARNs and names
@@ -32,25 +35,23 @@ def lambda_handler(event, context):
     # exitCode is only there if the task has stopped. We get all events, so need to check if it's there
     # and ignore if it's not.
     try:
-      exit_code = response['tasks'][0]['containers'][0]['exitCode']
+        exit_code = response['tasks'][0]['containers'][0]['exitCode']
     except KeyError:
-        print('Exit code not found, ignoring this task {task} in cluster {cluster}'.format(
-            task=task_name, cluster=cluster_name))
+        print(f'Exit code not found, ignoring this task {task_name} in cluster {cluster_name}')
         return {
             'status': 200,
             'body': 'Ignoring event, could not find exitCode for task'
         }
 
     if exit_code != 0:
-        print('Task {task} in cluster {cluster} failed with exit code: {exit_code}'.format(
-            task=task_name, cluster=cluster_name, exit_code=exit_code))
+        print(f'Task {task_name} in cluster {cluster_name} failed with exit code: {exit_code}')
         # Set the counter with the cluster, task and service as dimensions
         # No need to increment, just add 1. CW will handle the increments.
         cw.put_metric_data(
-            Namespace=namespace,
+            Namespace=NAMESPACE,
             MetricData=[
                 {
-                    'MetricName': metric_name,
+                    'MetricName': METRIC_NAME,
                     'Dimensions': [
                         {
                             'Name': 'Cluster',
