@@ -14,7 +14,7 @@ module "lambda" {
   source = "../../"
 
   name    = var.name
-  runtime = "python3.9"
+  runtime = "python3.14"
   # if use_zip set this to empty string
   source_file = var.use_zip ? "" : "lambda.py"
   # if use_zip use these two variables

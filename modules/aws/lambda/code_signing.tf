@@ -19,10 +19,6 @@ resource "aws_s3_object" "unsigned" {
   # better than missing an upload.
   source_hash = local.artifact_hash
 
-  depends_on = [
-    data.archive_file.lambda
-  ]
-
   # Check to ensure we have a source of artifact, since we can't (yet) check that in the variable definition.
   lifecycle {
     precondition {
@@ -46,7 +42,7 @@ resource "aws_signer_signing_job" "default" {
   source {
     s3 {
       bucket  = local.artifact_bucket
-      key     = aws_s3_object.unsigned.id
+      key     = local.artifact_key
       version = aws_s3_object.unsigned.version_id
     }
   }
