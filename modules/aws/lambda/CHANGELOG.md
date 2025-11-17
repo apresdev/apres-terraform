@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.1 - 2025-11-17
+
+Fix bug in ordering when using a source_file instead of a zip_file.
+
 ## 1.2.0 - 2025-07-02
 
 Upgrade the AWS provider to v6 and add support for Lambda@Edge.
