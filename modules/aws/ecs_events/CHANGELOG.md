@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.0 - 2025-11-17
+
+Bump Lambda runtime version to Python 3.14, supported until 2029.
+
 ## 0.3.1 - 2024-12-02
 
 Minor tweak to address race condition when deploying to a new account.
