@@ -129,6 +129,30 @@ variable "accounts" {
   }
 }
 
+variable "deployed_account" {
+  description = <<EOF
+    The 12 digit AWS Account ID where the module is deployed. In certain cases the module
+    used to create the S3 buckets used in this stack will defer looking up the account until the
+    apply phase, causing the bucket to be marked for replacement, which will result in data loss.
+    The only workaround is to specify the account id where the stack is deployed here.
+  EOF
+  type        = string
+  validation {
+    condition     = can(regex("^\\d{12}$", var.deployed_account))
+    error_message = "The account_id must be exactly 12 digits."
+  }
+}
+
+variable "deployed_region" {
+  description = <<EOF
+    The AWS Region, like `us-east-2` where the module is deployed. In certain cases the module
+    used to create the S3 buckets used in this stack will defer looking up the region until the
+    apply phase, causing the bucket to be marked for replacement, which will result in data loss.
+    The only workaround is to specify the region here.
+  EOF
+  type        = string
+}
+
 variable "regions" {
   description = <<EOF
     List of regions in which Grafana should look for CloudWatch alarms.

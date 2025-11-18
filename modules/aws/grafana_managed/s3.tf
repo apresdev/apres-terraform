@@ -1,6 +1,6 @@
 module "dashboards-bucket" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.2.0"
+  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.0"
   name        = "grafana-dashboards"
   environment = var.environment
   versioning  = true
@@ -11,6 +11,9 @@ module "dashboards-bucket" {
   lifecycle_rule = {
     enabled = false
   }
+
+  region     = var.deployed_region
+  account_id = var.deployed_account
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "default" {
