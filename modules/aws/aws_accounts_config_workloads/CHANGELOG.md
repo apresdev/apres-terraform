@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.3 - 2025-11-18
+
+Bump dependancy versions for bug fixes and deprecated Lambda versions.
+
 ## 0.12.2 - 2025-02-10
 
 Bump S3 module and AWS provider version to deal with bug in the provider.
