@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.7.0 - 2025-11-18
+
+Include account and region as variables, as a workaround to prevent S3 bucket recreation.
+
 ## 0.6.1 - 2025-05-22
 
 Minor fix to unit tests, fix to destroy terraform stack if the initial apply fails.
