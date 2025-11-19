@@ -1,3 +1,9 @@
+# Current Identity
+data "aws_caller_identity" "current" {}
+
+# Current Region
+data "aws_region" "current" {}
+
 module "grafana" {
   source = "../../"
 
@@ -23,6 +29,9 @@ module "grafana" {
   # Need the depends_on so the cloudwatch alarm gets created first, and can
   # be found by the configurator
   depends_on = [module.cloudwatch_alarm]
+
+  deployed_account = data.aws_caller_identity.current.account_id
+  deployed_region  = data.aws_region.current.id
 }
 
 module "cloudwatch_alarm" {
