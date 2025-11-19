@@ -139,6 +139,12 @@ module "lambda_scheduler" {
   schedule_expression = "cron(0 0/1 * * ? *)"
 }
 
+# Add a delay between the Lambda creation and the first invocation to allow IAM to catch up,
+# also wait foor the scheduler since there's more lambda permissions created there.
+resource "time_sleep" "lambda_iam_delay" {
+  depends_on      = [aws_iam_role_policy.lambda, module.lambda_scheduler]
+  create_duration = "15s"
+}
 
 # This invokes the Lambda for initial configuration.
 resource "aws_lambda_invocation" "grafana_configurator" {
@@ -152,5 +158,7 @@ resource "aws_lambda_invocation" "grafana_configurator" {
   triggers = {
     api_token = aws_grafana_workspace_service_account_token.default.key
   }
+
+  depends_on = [time_sleep.lambda_iam_delay]
 }
 
