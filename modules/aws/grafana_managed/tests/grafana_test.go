@@ -50,7 +50,7 @@ func TestGrafanaTestSuite(t *testing.T) {
 }
 
 func (s *GrafanaTestSuite) TearDownSuite() {
-	defer terraform.Destroy(s.T(), s.terraformOptions)
+   defer terraform.Destroy(s.T(), s.terraformOptions)
 }
 
 func (s *GrafanaTestSuite) SetupSuite() {

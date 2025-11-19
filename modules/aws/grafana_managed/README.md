@@ -10,6 +10,9 @@ This module depends on having GitHub access to the
 [apresdev/lambda-grafana-configurator](https://github.com/apresdev/lambda-grafana-configurator/) repo. If
 developing locally see [Local Development](#local-development).
 
+IAM: arn:aws:ssm:us-east-2:381491850865:parameter/apres/grafana/Test1763575884-Grafana-config
+CWL: arn:aws:ssm:us-east-2:381491850865:parameter/apres/grafana/Test1763575884-Grafana-config
+
 ## Warning!
 
 The module creates a service account and an API token, which is used to backup the dashboards you create. The token
@@ -285,16 +288,17 @@ document for details.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, <2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.86.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.21.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | >= 6.2.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.98.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.21.0 |
 | <a name="provider_external"></a> [external](#provider\_external) | 2.3.5 |
-| <a name="provider_github"></a> [github](#provider\_github) | 6.6.0 |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.8.2 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.13.1 |
 
 ## Modules
 
@@ -302,7 +306,7 @@ document for details.
 |------|--------|---------|
 | <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
 | <a name="module_dashboards-bucket"></a> [dashboards-bucket](#module\_dashboards-bucket) | git@github.com:apresdev/apres-terraform.git//modules/aws/s3 | rel/s3/4.3.0 |
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.1.2 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda | rel/lambda/1.2.1 |
 | <a name="module_lambda_scheduler"></a> [lambda\_scheduler](#module\_lambda\_scheduler) | git@github.com:apresdev/apres-terraform.git//modules/aws/lambda_scheduler | rel/lambda_scheduler/0.1.0 |
 
 ## Resources
@@ -328,6 +332,7 @@ document for details.
 | [aws_sns_topic_policy.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_policy) | resource |
 | [aws_sns_topic_subscription.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [aws_ssm_parameter.grafana_config](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [time_sleep.lambda_iam_delay](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.grafana_custom_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
