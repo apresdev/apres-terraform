@@ -42,3 +42,10 @@ in which case the developer will want to do the following:
 
 See the [rds/tests/Makefile](./modules/aws/rds/tests/Makefile) as an example. The RDS test needs to build
 a Lambda locally first before running tests.
+
+### Testing in AWS
+
+Originally this repo was running tests using [Gruntwork's Terratest](https://terratest.gruntwork.io/), but the AWS accounts have since been shutdown. The [terraform.mk](./terraform.mk) Makefile has targets for running tests in AWS,
+but they are not currently being used. If you want to run tests in AWS, you will need to set up your own AWS accounts and credentials. Then modify the [terraform.mk](./terraform.mk) and uncomment lines 98 and 102, and lines 86-100 in
+[.github/workflows/tf-modules-workflow.yml](./.github/workflows/tf-modules-workflow.yml) to enable running tests in AWS.
+There may be tweaks required in the tests to match your AWS account setup.

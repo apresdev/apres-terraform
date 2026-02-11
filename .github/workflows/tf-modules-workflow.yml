@@ -83,18 +83,18 @@ jobs:
         with:
           go-version: 1.21
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::381491850865:role/GitHubActionsDeployerRole-apresdev-apres-terraform
-          role-session-name: GitHub_AWS_OIDC_apresdev-apres-terraform
-          aws-region: us-east-2
-          # Need a longer duration for testing, set to 8 hours matching the IAM role.
-          role-duration-seconds: 28800
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeployerRole-apresdev-apres-terraform
+      #     role-session-name: GitHub_AWS_OIDC_apresdev-apres-terraform
+      #     aws-region: us-east-2
+      #     # Need a longer duration for testing, set to 8 hours matching the IAM role.
+      #     role-duration-seconds: 28800
 
 
-      - name: Run terratest
-        if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.APRESDEV_RTKMHART_TOKEN }}
-        run: make test
+      # - name: Run terratest
+      #   if: ${{ hashFiles(format('{0}/tests', inputs.module_directory)) != '' }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.APRESDEV_RTKMHART_TOKEN }}
+      #   run: make test
