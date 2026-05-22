@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.2 - 2026-05-22
+
+Update AWS provider lock file to 6.46.0
+
 ## 0.3.1 - 2026-05-22
 
 Switched source from SSH to HTTPS
