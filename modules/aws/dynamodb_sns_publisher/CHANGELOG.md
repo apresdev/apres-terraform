@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.5 - 2026-05-22
+
+Add missing region/account_id for s3 module and update lambda interface
+
 ## 0.2.4 - 2026-05-22
 
 Update module source refs to use clean git:: HTTPS versions

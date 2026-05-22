@@ -7,11 +7,11 @@ module "lambda" {
 
   name          = var.name
   description   = "DynamoDB stream to SNS publisher"
-  binary_path   = local.binary_path
+  zip_file      = local.binary_path
+  zip_file_hash = data.external.artifact_download.result.md5
   memory_size   = 128
   runtime       = "provided.al2023"
   handler       = "bootstrap"
-  skip_zip      = true
   architectures = [local.architecture]
 
   environment_variables = {

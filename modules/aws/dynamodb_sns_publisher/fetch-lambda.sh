@@ -10,7 +10,7 @@ version_file=`dirname $binary_path`/version.txt
 md5sum_file="${binary_path}.md5sum"
 
 download() {
-    # Remove any existing binaries    
+    # Remove any existing binaries
     rm -f ${binary_path}
 
     # Download the latest binary
@@ -22,12 +22,13 @@ download() {
         ${asset_url}  > /dev/null 2> /dev/null
 
     # Save the current version
-    echo $version > $version_file    
+    echo $version > $version_file
 
     # Save the current md5sum
     md5sum ${binary_path} > $md5sum_file
 
-    echo '{ "download": "true" }'
+    md5=$(md5sum ${binary_path} | awk '{print $1}')
+    echo "{ \"download\": \"true\", \"md5\": \"${md5}\" }"
     exit 0
 }
 
@@ -42,10 +43,11 @@ if [ -f $version_file ] && [ -f $md5sum_file ] && [ -f $binary_path ]; then
         download
     fi
 else
-    download    
+    download
 fi
 
 # Return a JSON result, needed for the "external" terraform resource
-echo '{ "download": "false" }'
+md5=$(md5sum ${binary_path} | awk '{print $1}')
+echo "{ \"download\": \"false\", \"md5\": \"${md5}\" }"
 
 exit 0
