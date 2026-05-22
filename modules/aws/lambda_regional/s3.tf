@@ -5,7 +5,9 @@ module "s3_artifacts" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
   source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.2"
 
-  name = "lambda-artifacts"
+  name       = "lambda-artifacts"
+  region     = data.aws_region.current.name
+  account_id = data.aws_caller_identity.current.account_id
 
   environment = var.environment
   component   = var.component
