@@ -8,7 +8,7 @@ module "alerting" {
   count = local.enable_chat_alerts ? 1 : 0
   # Use remote source so we can keep versioning correctly, even though the module is in the same repo.
   #checkov:skip=CKV_TF_1: Explicitly using versions, not a hash.
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/alerting?ref=rel/alerting/2.1.2"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/alerting?ref=rel/alerting/2.1.3"
   name        = "costmanagement"
   environment = var.environment
   application = var.application
