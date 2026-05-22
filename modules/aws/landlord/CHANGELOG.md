@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.14.4 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.14.3 - 2025-06-03
 
 Fix for container secrets.

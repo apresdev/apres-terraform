@@ -1,6 +1,6 @@
 module "acm_public_cert_console" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/acm_public_cert?ref=rel/acm_public_cert/2.0.0"
+  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/acm_public_cert?ref=rel/acm_public_cert/2.0.1"
   application = var.application
   environment = var.environment
   component   = var.component
@@ -10,7 +10,7 @@ module "acm_public_cert_console" {
 
 module "acm_public_cert_api" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/acm_public_cert?ref=rel/acm_public_cert/2.0.0"
+  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/acm_public_cert?ref=rel/acm_public_cert/2.0.1"
   application = var.application
   environment = var.environment
   component   = var.component
