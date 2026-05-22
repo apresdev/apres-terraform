@@ -35,7 +35,7 @@ module "ecs_standalone_task" {
   environment = var.environment
   # This container is built by apresdev/terraform-test-support and is a simple
   # task that runs for 10 seconds and exits with a non-zero code.
-  container_image_uri        = "767397774077.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3"
+  container_image_uri        = "123456789012.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3"
   vpc_environment_tag        = var.vpc_environment_tag
   container_cpu_architecture = "ARM64"
   ephemeral_volumes          = local.volumes
