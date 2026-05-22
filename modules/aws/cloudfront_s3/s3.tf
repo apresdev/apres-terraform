@@ -5,6 +5,8 @@ module "s3" {
   source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.2"
   name        = lower(var.name)
   environment = var.environment
+  region      = data.aws_region.current.name
+  account_id  = data.aws_caller_identity.current.account_id
   owner       = var.owner
   application = var.application
   component   = "S3"
@@ -74,6 +76,8 @@ module "s3_logs" {
   source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.2"
   name        = "${lower(var.name)}-logs"
   environment = var.environment
+  region      = data.aws_region.current.name
+  account_id  = data.aws_caller_identity.current.account_id
   owner       = var.owner
   application = var.application
   component   = "S3Logs"
