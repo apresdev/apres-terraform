@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.2.0 - 2024-08-12
 
 Remove GuardDuty config, it has moved to the security_tools_regional module.
