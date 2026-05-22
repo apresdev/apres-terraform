@@ -158,13 +158,13 @@ KMS resource stanza cannot be further limited due to how the KMS key IDs are gen
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.80.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.46.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git@github.com:apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/1.0.0 |
+| <a name="module_apres_names"></a> [apres\_names](#module\_apres\_names) | git::https://github.com/apresdev/apres-terraform.git//modules/aws/apres_names | rel/apres_names/2.0.1 |
 
 ## Resources
 
@@ -193,16 +193,16 @@ KMS resource stanza cannot be further limited due to how the KMS key IDs are gen
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | Application name, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_chatbot_msteams_config"></a> [chatbot\_msteams\_config](#input\_chatbot\_msteams\_config) | A list of configuration objects for Slack channels. See the "Channel Configuration" section<br/>    in the README for more details.<br/><br/>    The SNS topic names will be prefixed with "apres-alerting-" and postfixed with the name. | <pre>list(object({<br/>    name                = string<br/>    publishing_services = list(string)<br/>    msteams_channel_id  = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_chatbot_slack_config"></a> [chatbot\_slack\_config](#input\_chatbot\_slack\_config) | A list of configuration objects for Slack channels. See the "Channel Configuration" section<br/>    in the README for more details.<br/><br/>    The SNS topic names will be prefixed with "apres-alerting-" and postfixed with the name. | <pre>list(object({<br/>    name                = string<br/>    publishing_services = list(string)<br/>    slack_channel_id    = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_chatbot_msteams_config"></a> [chatbot\_msteams\_config](#input\_chatbot\_msteams\_config) | A list of configuration objects for Slack channels. See the "Channel Configuration" section<br>    in the README for more details.<br><br>    The SNS topic names will be prefixed with "apres-alerting-" and postfixed with the name. | <pre>list(object({<br>    name                = string<br>    publishing_services = list(string)<br>    msteams_channel_id  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_chatbot_slack_config"></a> [chatbot\_slack\_config](#input\_chatbot\_slack\_config) | A list of configuration objects for Slack channels. See the "Channel Configuration" section<br>    in the README for more details.<br><br>    The SNS topic names will be prefixed with "apres-alerting-" and postfixed with the name. | <pre>list(object({<br>    name                = string<br>    publishing_services = list(string)<br>    slack_channel_id    = string<br>  }))</pre> | `[]` | no |
 | <a name="input_component"></a> [component](#input\_component) | Component name, used for tagging AWS resources. | `string` | `"Alerting"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment Name, used for naming and tagging AWS resources. | `string` | n/a | yes |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Extra tags to be applied to all resources. | `map(string)` | `{}` | no |
-| <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams "Team ID" for notifications. This is displayed in the AWS Console. If not set,<br/>    Teams integration will not be enabled. | `string` | `""` | no |
+| <a name="input_msteams_team_id"></a> [msteams\_team\_id](#input\_msteams\_team\_id) | The Microsoft Teams "Team ID" for notifications. This is displayed in the AWS Console. If not set,<br>    Teams integration will not be enabled. | `string` | `""` | no |
 | <a name="input_msteams_tenant_id"></a> [msteams\_tenant\_id](#input\_msteams\_tenant\_id) | The Microsoft Teams Tenant ID for notifications. This is displayed in the AWS Console" | `string` | `""` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name appended to the SNS topic, and used to identify other resources. | `string` | n/a | yes |
 | <a name="input_owner"></a> [owner](#input\_owner) | Owner of the resources, used for tagging AWS resources. | `string` | n/a | yes |
-| <a name="input_slack_workspace_id"></a> [slack\_workspace\_id](#input\_slack\_workspace\_id) | The Slack workspace ID for notifications,<br/>  see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID on how to find it.<br/><br/>  If not set, Slack integration will not be enabled. | `string` | `""` | no |
+| <a name="input_slack_workspace_id"></a> [slack\_workspace\_id](#input\_slack\_workspace\_id) | The Slack workspace ID for notifications,<br>  see https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID on how to find it.<br><br>  If not set, Slack integration will not be enabled. | `string` | `""` | no |
 
 ## Outputs
 
