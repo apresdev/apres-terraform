@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 4.3.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 4.3.0 - 2025-07-29
 
 Add mandatory account and region variables, to prevent recreating buckets when Terraform or OpenTofu defers the lookup.
