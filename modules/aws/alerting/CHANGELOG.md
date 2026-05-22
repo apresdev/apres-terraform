@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.2 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 2.1.1 - 2024-12-09
 
 Fix bug in outputs.
