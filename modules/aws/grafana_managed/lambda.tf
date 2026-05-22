@@ -85,7 +85,7 @@ resource "aws_iam_role_policy" "lambda" {
 
 module "lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.2"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.2"
 
   name        = "Grafana"
   environment = var.environment
@@ -124,7 +124,7 @@ module "lambda" {
 
 module "lambda_scheduler" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/lambda_scheduler?ref=rel/lambda_scheduler/0.1.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda_scheduler?ref=rel/lambda_scheduler/0.1.1"
 
   name        = var.name
   application = var.application

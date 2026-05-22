@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.4.2 - 2026-05-22
+
+Add git:: prefix to HTTPS module sources
+
 ## 2.4.1 - 2026-05-22
 
 Switched source from SSH to HTTPS
