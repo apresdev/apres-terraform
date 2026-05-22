@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.3 - 2026-05-22
+
+Update AWS provider lock file to 6.46.0
+
 ## 0.2.2 - 2026-05-22
 
 Add git:: prefix to HTTPS module sources
