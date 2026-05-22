@@ -5,7 +5,7 @@
 module "cwa_cpu_utilization" {
   count = var.create_cloudwatch_alarms ? var.number_cluster_instances : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-CPUUtilization-${count.index}"
@@ -33,7 +33,7 @@ module "cwa_cpu_utilization" {
 module "cwa_acu_utilization" {
   count = var.create_cloudwatch_alarms && var.serverless ? var.number_cluster_instances : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-ACUUtilization-${count.index}"
@@ -61,7 +61,7 @@ module "cwa_acu_utilization" {
 module "cwa_freeable_memory" {
   count = var.create_cloudwatch_alarms ? var.number_cluster_instances : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-FreeableMemory-${count.index}"
@@ -89,7 +89,7 @@ module "cwa_freeable_memory" {
 module "cwa_read_latency" {
   count = var.create_cloudwatch_alarms ? var.number_cluster_instances : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-ReadLatency-${count.index}"
@@ -117,7 +117,7 @@ module "cwa_read_latency" {
 module "cwa_write_latency" {
   count = var.create_cloudwatch_alarms ? var.number_cluster_instances : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-WriteLatency-${count.index}"
@@ -145,7 +145,7 @@ module "cwa_write_latency" {
 module "cwa_buffer_cache_hit_ratio" {
   count = var.create_cloudwatch_alarms ? 1 : 0
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
 
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${local.name}-BufferCacheHitRatio"
