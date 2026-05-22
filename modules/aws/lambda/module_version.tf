@@ -1,4 +1,4 @@
 # This file is auto-generated
 locals {
-  module_version = "1.2.2"
+  module_version = "1.2.3"
 }

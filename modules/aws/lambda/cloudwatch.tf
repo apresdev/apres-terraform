@@ -1,6 +1,6 @@
 module "cloudwatch_log" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.2.2"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.2.2"
 
   name              = local.name
   path              = local.log_group
