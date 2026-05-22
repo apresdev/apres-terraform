@@ -2,7 +2,7 @@
 # Module for the S3 bucket
 module "s3" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.1.0"
+  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.1"
   name        = lower(var.name)
   environment = var.environment
   owner       = var.owner
@@ -71,7 +71,7 @@ resource "aws_s3_bucket_policy" "s3" {
 # Logs bucket for CF
 module "s3_logs" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git@github.com:apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.1.0"
+  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.1"
   name        = "${lower(var.name)}-logs"
   environment = var.environment
   owner       = var.owner
