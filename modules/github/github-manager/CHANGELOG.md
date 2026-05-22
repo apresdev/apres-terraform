@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.4 - 2026-05-22
+
+Update GitHub provider lock file
+
 ## 1.1.3 - 2024-12-23
 
 Bug fix for calculating dependencies when creating new repos.
