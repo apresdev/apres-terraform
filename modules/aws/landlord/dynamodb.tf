@@ -1,6 +1,6 @@
 module "landlord_dynamo" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source           = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/dynamodb?ref=rel/dynamodb/1.0.1"
+  source           = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/dynamodb?ref=rel/dynamodb/1.0.2"
   environment      = var.environment
   application      = var.application
   component        = var.component
@@ -40,7 +40,7 @@ module "landlord_dynamo" {
 # Create an SNS topic where all DynamoDB CDC events will be published to.
 module "landlord_cdc_topic" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/sns?ref=rel/sns/1.0.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/sns?ref=rel/sns/1.0.2"
 
   name         = "${var.name}-cdc"
   display_name = "Landlord Change Data Capture"
@@ -54,7 +54,7 @@ module "landlord_cdc_topic" {
 # Create an SQS queue for all DynamoDB CDC events.
 module "landlord_sync_queue" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/sqs?ref=rel/sqs/1.0.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/sqs?ref=rel/sqs/1.0.2"
 
   name = "${var.name}-cdc-sync"
 
@@ -68,7 +68,7 @@ module "landlord_sync_queue" {
 module "landlord_cdc_publisher" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
   #checkov:skip=CKV_AWS_382:False positive, CDC lambda needs egress on 0/0.
-  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/dynamodb_sns_publisher?ref=rel/dynamodb_sns_publisher/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/dynamodb_sns_publisher?ref=rel/dynamodb_sns_publisher/0.2.2"
 
   name       = "${var.name}-publish"
   topic_arn  = module.landlord_cdc_topic.topic_arn

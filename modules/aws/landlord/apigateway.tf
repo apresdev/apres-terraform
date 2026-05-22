@@ -1,7 +1,7 @@
 module "landlord_api_gateway" {
   #checkov:skip=CKV_AWS_206:Ignoring TLS policy in API Gateway
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source                 = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/api_gateway_rest?ref=rel/api_gateway_rest/1.3.1"
+  source                 = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/api_gateway_rest?ref=rel/api_gateway_rest/1.3.2"
   api_version            = "v1"
   openapi_spec_file_path = "${path.module}/api/landlord-openapi-ext.json"
   application            = var.application

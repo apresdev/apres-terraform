@@ -35,7 +35,7 @@ module "landlord_api_ecs" {
   #checkov:skip=CKV_AWS_23:False positive
   #checkov:skip=CKV_AWS_2:Load balancer protocol is HTTPS
   #checkov:skip=CKV_AWS_103:LB default is TLS 1.2
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs?ref=rel/ecs/2.1.4"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs?ref=rel/ecs/2.1.5"
   name        = "${var.name}-API"
   application = var.application
   component   = var.component
@@ -82,7 +82,7 @@ module "landlord_console_ecs" {
   #checkov:skip=CKV_AWS_23:False positive
   #checkov:skip=CKV_AWS_2:Load balancer protocol is HTTPS
   #checkov:skip=CKV_AWS_103:LB default is TLS 1.2
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs?ref=rel/ecs/2.1.4"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs?ref=rel/ecs/2.1.5"
   name        = "${var.name}-Console"
   application = var.application
   component   = var.component
