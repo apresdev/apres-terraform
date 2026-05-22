@@ -13,13 +13,13 @@ module "messaging_regional" {
 
 module "lambda_regional" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda_regional?ref=rel/lambda_regional/0.3.3"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda_regional?ref=rel/lambda_regional/0.3.4"
   environment = "WorkloadConfig"
 }
 
 module "ecs_events" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.4.1"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/ecs_events?ref=rel/ecs_events/0.4.2"
   name        = "ECSEvents"
   environment = "WorkloadConfig"
   application = "ECSEvents"
