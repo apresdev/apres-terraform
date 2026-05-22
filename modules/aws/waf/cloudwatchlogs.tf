@@ -1,7 +1,7 @@
 
 module "cwl_waf" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.2.2"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatchlogs?ref=rel/cloudwatchlogs/1.2.2"
   name        = "${var.name}-waf"
   environment = var.environment
   application = var.application
