@@ -1,6 +1,6 @@
 module "costmanagement" {
   #checkov:skip=CKV_TF_1: Not using a commit hash because we're using a tag
-  source                      = "https://github.com/apresdev/apres-terraform.git//modules/aws/cost_management?ref=rel/cost_management/1.1.2"
+  source                      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cost_management?ref=rel/cost_management/1.1.2"
   frequency                   = var.cost_anomaly_alerts_frequency
   anomaly_alert_on_dollars    = var.cost_anomaly_alert_on_dollars
   anomaly_alert_on_percentage = var.cost_anomaly_alert_on_percentage
@@ -25,14 +25,14 @@ locals {
 
 module "security_tools_delegator" {
   #checkov:skip=CKV_TF_1: Not using a commit hash because we're using a tag
-  source           = "https://github.com/apresdev/apres-terraform.git//modules/aws/security_tools_delegator?ref=rel/security_tools_delegator/0.4.1"
+  source           = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/security_tools_delegator?ref=rel/security_tools_delegator/0.4.1"
   audit_account_id = local.audit_account_id
   primary_region   = var.primary_region
 }
 
 module "aws_accounts_config_global" {
   #checkov:skip=CKV_TF_1: Not using a commit hash because we're using a tag
-  source = "https://github.com/apresdev/apres-terraform.git//modules/aws/aws_accounts_config_global?ref=rel/aws_accounts_config_global/0.3.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/aws_accounts_config_global?ref=rel/aws_accounts_config_global/0.3.1"
 }
 
 resource "aws_iam_organizations_features" "example" {
