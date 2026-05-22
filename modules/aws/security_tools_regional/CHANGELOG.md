@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.4 - 2026-05-22
+
+Update AWS provider lock file to 6.46.0
+
 ## 0.4.3 - 2024-12-11
 
 Update permissions required to deploy in README.
