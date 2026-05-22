@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.4.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.4.0 - 2025-11-17
 
 Bump Lambda runtime version to Python 3.14, supported until 2029.
