@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.6.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.6.0 - 2025-06-24
 
 Add support for Lambda@Edge for Cloudfront.

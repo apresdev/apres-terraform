@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.1.4 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 2.1.4 - 2025-05-27
 
 Add a secret for signing and encrypting cookies

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.3.0 - 2024-11-28
 
 Change name of variable to match what is being used elsewhere.

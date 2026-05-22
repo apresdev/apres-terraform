@@ -3,11 +3,11 @@
     "id": "ca030999-98f3-ece8-b645-7884400cf9db",
     "detail-type": "ECS Task State Change",
     "source": "aws.ecs",
-    "account": "533267011653",
+    "account": "123456789012",
     "time": "2024-10-15T22:22:50Z",
     "region": "us-east-2",
     "resources": [
-        "arn:aws:ecs:us-east-2:533267011653:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e"
+        "arn:aws:ecs:us-east-2:123456789012:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e"
     ],
     "detail": {
         "attachments": [
@@ -18,7 +18,7 @@
                 "details": [
                     {
                         "name": "subnetId",
-                        "value": "subnet-0ba6cd0e5961de7dc"
+                        "value": "subnet-0example0000000"
                     }
                 ]
             }
@@ -30,14 +30,14 @@
             }
         ],
         "availabilityZone": "us-east-2c",
-        "clusterArn": "arn:aws:ecs:us-east-2:533267011653:cluster/goodbyeworld-UnitTestEnv",
+        "clusterArn": "arn:aws:ecs:us-east-2:123456789012:cluster/goodbyeworld-UnitTestEnv",
         "containers": [
             {
-                "containerArn": "arn:aws:ecs:us-east-2:533267011653:container/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e/2a84e525-14a8-405e-b13a-cf42e0022767",
+                "containerArn": "arn:aws:ecs:us-east-2:123456789012:container/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e/2a84e525-14a8-405e-b13a-cf42e0022767",
                 "lastStatus": "PENDING",
                 "name": "goodbyeworld-UnitTestEnv",
-                "image": "767397774077.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3",
-                "taskArn": "arn:aws:ecs:us-east-2:533267011653:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e",
+                "image": "123456789012.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3",
+                "taskArn": "arn:aws:ecs:us-east-2:123456789012:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e",
                 "networkInterfaces": [],
                 "cpu": "256",
                 "memory": "512"
@@ -63,8 +63,8 @@
         },
         "platformVersion": "1.4.0",
         "startedBy": "ecs-svc/1192532060254517525",
-        "taskArn": "arn:aws:ecs:us-east-2:533267011653:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e",
-        "taskDefinitionArn": "arn:aws:ecs:us-east-2:533267011653:task-definition/goodbyeworld-UnitTestEnv:1",
+        "taskArn": "arn:aws:ecs:us-east-2:123456789012:task/goodbyeworld-UnitTestEnv/2a4c82814de8431399f28ef6d8583e4e",
+        "taskDefinitionArn": "arn:aws:ecs:us-east-2:123456789012:task-definition/goodbyeworld-UnitTestEnv:1",
         "updatedAt": "2024-10-15T22:22:50.056Z",
         "version": 1
     }

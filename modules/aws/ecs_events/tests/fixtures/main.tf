@@ -13,7 +13,7 @@ module "goodbyeworld" {
   component                  = var.component
   deployment_target          = "FARGATE"
   container_cpu_architecture = "ARM64"
-  container_image_uri        = "767397774077.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3"
+  container_image_uri        = "123456789012.dkr.ecr.us-east-2.amazonaws.com/apres-goodbye-world:497b35d65db375ef32e07de7a3940ce1ed2269b3"
   create_load_balancer       = false
 }
 

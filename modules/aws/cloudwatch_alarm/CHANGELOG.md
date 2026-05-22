@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.2.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.2.0 - 2025-03-05
 
 Remove two options from treat_missing_data that cannot be supported in Grafana Alerts, update docs.

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.0.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 2.0.0 - 2025-06-25
 
 Update AWS provider to v6, change variable name from aws_region to region to match the updated provider.

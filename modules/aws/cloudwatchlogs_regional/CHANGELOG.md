@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.2 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.2.1 - 2024-11-29
 
 Replace deprecated managed_policy_arn attribute with a policy attachment.

@@ -74,9 +74,9 @@ func (s *GrafanaTestSuite) SetupSuite() {
 	s.Require().NoError(err, "expected no error for LoadDefaultConfig creating AWS session")
 	s.awsConfig = cfg
 	s.accounts = map[string]string{
-		"Test": "381491850865",
-		"Dev":  "590184099330",
-		//"Sandbox": "533267011653",
+		"Test": "111111111111",
+		"Dev":  "222222222222",
+		//"Sandbox": "333333333333",
 	}
 	s.terraformOptions = &terraform.Options{
 		TerraformDir: "./fixtures",

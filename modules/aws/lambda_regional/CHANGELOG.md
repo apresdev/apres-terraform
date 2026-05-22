@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.3.3 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.3.2 - 2025-02-10
 
 Bump S3 module and AWS provider version to deal with bug in the provider.

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 2.4.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 2.4.0 - 2025-02-11
 
 The NAT image name was based on Amazon Linux 2, but should be using Amazon Linux 2023. The Amazon Linux 2 image is no longer available.

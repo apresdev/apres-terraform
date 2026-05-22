@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.3.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.3.0 - 2025-04-07
 
 Add support for base path maps when using custom domains, and set security policy on custom domains to TLS 1.2.

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.1.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.1.0 - 2024-10-30
 
 Update names to match naming standards. Make the association optional for later reuse in the cloudfront_s3 module.

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.6.2 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.7.0 - 2025-11-18
 
 Include account and region as variables, as a workaround to prevent S3 bucket recreation.

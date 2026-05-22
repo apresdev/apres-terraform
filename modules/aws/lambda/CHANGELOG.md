@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.2.2 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.2.1 - 2025-11-17
 
 Fix bug in ordering when using a source_file instead of a zip_file.

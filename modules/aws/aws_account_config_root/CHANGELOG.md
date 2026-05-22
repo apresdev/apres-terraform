@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.0.0 - 2025-03-10
 
 Fix bug in contacts when number of AWS accounts in an organization changes.

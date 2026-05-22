@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 0.12.4 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 0.12.3 - 2025-11-18
 
 Bump dependancy versions for bug fixes and deprecated Lambda versions.
