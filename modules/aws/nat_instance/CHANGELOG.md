@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.3.1 - 2026-05-22
+
+Switched source from SSH to HTTPS
+
 ## 1.3.0 - 2024-12-16
 
 Switch interface security group attachment to facilitate replacement.
