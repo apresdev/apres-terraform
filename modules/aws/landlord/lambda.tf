@@ -3,7 +3,7 @@
 # claim, and any impersonation claims.
 module "landlord_pre_token_generation_lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source      = "https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.2"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.2"
   name        = "${var.name}-token"
   environment = var.environment
   source_file = "${path.module}/lambda/landlord_pre_token_generation_lambda.mjs"
