@@ -1,7 +1,7 @@
 # This metric is emitted by the ecs_events terraform module.
 module "cloudwatch_alarm" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.1"
+  source = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cloudwatch_alarm?ref=rel/cloudwatch_alarm/0.2.2"
   # the generated alarm name will become ${var.enviroment}-${var.name}-${var.severity}
   name        = "${var.name}-TaskCrashLoop"
   environment = var.environment
