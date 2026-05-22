@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+COMMIT=false
+if [[ "${1:-}" == "--commit" ]]; then
+  COMMIT=true
+  shift
+fi
+
 if [[ $# -ne 3 ]]; then
-  echo "Usage: $0 <module_path> <major|minor|patch> <changelog_message>" >&2
+  echo "Usage: $0 [--commit] <module_path> <major|minor|patch> <changelog_message>" >&2
   echo "Example: $0 aws/alerting minor \"Add support for SNS topic filtering\"" >&2
+  echo "  --commit  Stage the version files and commit+tag alongside any already-staged changes" >&2
   exit 1
 fi
 
@@ -63,10 +70,15 @@ else
     "$NEW_VERSION" "$TODAY" "$CHANGELOG_MESSAGE" > "$CHANGELOG_FILE"
 fi
 
-git add "${MODULE_DIRECTORY}/module_version.tf" "${MODULE_DIRECTORY}/CHANGELOG.md"
-git commit -m "Update ${MODULE_NAME} CHANGELOG"
-
 TAG_NAME="rel/${MODULE_NAME}/${NEW_VERSION}"
-git tag "$TAG_NAME"
-echo "Created tag: $TAG_NAME"
-echo "Done. Push with: git push && git push --tags"
+
+if [[ "$COMMIT" == true ]]; then
+  git add "${MODULE_DIRECTORY}/module_version.tf" "${MODULE_DIRECTORY}/CHANGELOG.md"
+  git commit -m "Bump ${MODULE_NAME} to ${NEW_VERSION}"
+  git tag "$TAG_NAME"
+  echo "Created tag: $TAG_NAME"
+  echo "Done. Push with: git push && git push --tags"
+else
+  echo "Updated ${MODULE_DIRECTORY}/module_version.tf and CHANGELOG.md"
+  echo "Stage your changes and commit, then tag with: git tag ${TAG_NAME}"
+fi
