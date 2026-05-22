@@ -1,6 +1,6 @@
 module "dashboards-bucket" {
   #checkov:skip=CKV_TF_1: No hash specified, that's ok because we are using the version.
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.1"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/s3?ref=rel/s3/4.3.2"
   name        = "grafana-dashboards"
   environment = var.environment
   versioning  = true
