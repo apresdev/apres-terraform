@@ -46,12 +46,6 @@ jobs:
         id: fmt
         run: make format-check
 
-      # Setup GitHub Credentials for Terraform/Tofu to import modules from apresdev/apres-terraform
-      - name: Setup GitHub Creds
-        uses: de-vri-es/setup-git-credentials@v2
-        with:
-          credentials: https://x-access-token:${{ secrets.APRESDEV_RTKMHART_TOKEN }}@github.com
-
       - name: Set up Python 3.8 for Checkov
         uses: actions/setup-python@v4
         with:
