@@ -16,14 +16,5 @@ updates:
       - "/modules/github/*"
     schedule:
       interval: "daily"
-    registries: # point dependabot to use the PAT
-      - github-octocat
     labels:
       - "patch-version" # this repo uses semantic versioning, honor that.
-
-registries:
-  github-octocat:
-    type: git
-    url: https://github.com
-    username: x-access-token
-    password: ${{secrets.APRESDEV_RTKMHART_TOKEN}}
