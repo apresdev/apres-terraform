@@ -1,6 +1,6 @@
 module "costmanagement" {
   #checkov:skip=CKV_TF_1: Not using a commit hash because we're using a tag
-  source                      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cost_management?ref=rel/cost_management/1.1.3"
+  source                      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/cost_management?ref=rel/cost_management/1.1.4"
   frequency                   = var.cost_anomaly_alerts_frequency
   anomaly_alert_on_dollars    = var.cost_anomaly_alert_on_dollars
   anomaly_alert_on_percentage = var.cost_anomaly_alert_on_percentage

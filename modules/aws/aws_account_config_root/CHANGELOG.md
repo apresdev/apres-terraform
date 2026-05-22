@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.0.4 - 2026-05-22
+
+Update module source refs to use clean git:: HTTPS versions
+
 ## 1.0.3 - 2026-05-22
 
 Update module source refs to use git:: HTTPS versions
