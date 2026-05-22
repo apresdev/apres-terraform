@@ -27,7 +27,7 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 
 module "lambda" {
   #checkov:skip=CKV_TF_1:False positive, we are not using a hash because we use the tagged version.
-  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.2"
+  source      = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.3"
   name        = var.name
   environment = var.environment
   application = var.application
