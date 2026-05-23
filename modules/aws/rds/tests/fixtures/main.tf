@@ -35,8 +35,8 @@ module "lambda" {
   source        = "git::https://github.com/apresdev/apres-terraform.git//modules/aws/lambda?ref=rel/lambda/1.2.4"
   name          = var.name
   runtime       = "provided.al2023"
-  binary_path   = "rdslambda/rdslambda.zip"
-  skip_zip      = true
+  zip_file      = "rdslambda/rdslambda.zip"
+  zip_file_hash = ""
   handler       = "bootstrap"
   architectures = ["arm64"]
   environment   = var.environment

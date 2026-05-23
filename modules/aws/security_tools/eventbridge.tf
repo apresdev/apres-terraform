@@ -27,7 +27,8 @@ resource "aws_cloudwatch_event_rule" "security_hub" {
 }
 
 resource "aws_cloudwatch_event_target" "security_hub" {
+  count     = local.alerting_enabled ? 1 : 0
   rule      = aws_cloudwatch_event_rule.security_hub.name
   target_id = "SendToSNS"
-  arn       = module.alerting.sns_topic_arn
+  arn       = module.alerting[0].sns_topic_arns[0]
 }
