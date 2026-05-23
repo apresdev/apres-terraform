@@ -25,10 +25,10 @@ module "s3" {
     allowed_origins = ["*"]
   }] : []
   replication_destination_config = {
-    enabled                 = var.replication_destination_config.enabled
-    source_bucket_account   = var.replication_destination_config.source_bucket_account
-    source_bucket_arn       = var.replication_destination_config.source_bucket_arn
-    source_service_role_arn = var.replication_destination_config.source_service_role_arn
+    enabled                        = var.replication_destination_config.enabled
+    source_bucket_in_other_account = var.replication_destination_config.source_bucket_account != "" && var.replication_destination_config.source_bucket_account != data.aws_caller_identity.current.account_id
+    source_bucket_arn              = var.replication_destination_config.source_bucket_arn
+    source_service_role_arn        = var.replication_destination_config.source_service_role_arn
   }
   replication_source_config = {
     enabled                              = var.replication_source_config.enabled

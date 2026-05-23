@@ -7,7 +7,7 @@ module "lambda" {
   component   = "LambdaTest"
 
   runtime       = "python3.9"
-  binary_path   = "lambda.py"
+  source_file   = "lambda.py"
   handler       = "lambda.lambda_handler"
   architectures = ["x86_64"]
 }

@@ -2,6 +2,10 @@
 
 This change log is automatically generated.
 
+## 1.6.6 - 2026-05-22
+
+Fix replication_destination_config to use source_bucket_in_other_account
+
 ## 1.6.5 - 2026-05-22
 
 Add missing region/account_id for s3 module and update lambda interface
